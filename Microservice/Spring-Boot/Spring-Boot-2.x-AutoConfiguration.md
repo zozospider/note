@@ -469,10 +469,257 @@ hello Bean: Hello Bean
 | `@Conditional` | 编程条件装配 | 4.0 |
 
 ### Spring 条件装配 -> 实现方式: 配置方式(@Profile)
-> * 自定义 `@EnableHelloImportSelector`
+> * 自定义 `@Profile`
+
+> 1. 定义计算服务接口
+
+```java
+/**
+ * 计算服务
+ *
+ * @author zozo
+ * @since 1.0
+ */
+public interface CalculateService {
+
+    /**
+     * 求多个整数的和
+     * @return 累加值
+     */
+    Integer sum(Integer... values);
+
+}
+```
+
+> 2. 定义接口实现（Java7）
+
+```java
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
+
+/**
+ * Java 7 for 循环实现 {@link CalculateService}
+ *
+ * @author zozo
+ * @since 1.0
+ */
+@Profile("Java7")
+@Service
+public class Java7CalculateServiceImpl implements CalculateService {
+
+    @Override
+    public Integer sum(Integer... values) {
+        System.out.println("Java 7 for 循环实现求和");
+        int sum = 0;
+        for (int i = 0; i < values.length; i++) {
+            sum += values[i];
+        }
+        return sum;
+    }
+
+}
+```
+
+> 3. 定义接口实现（Java8）
+
+```java
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
+
+import java.util.stream.Stream;
+
+/**
+ * Java 8 Lambda 实现 {@link CalculateService}
+ *
+ * @author zozo
+ * @since 1.0
+ */
+@Profile("Java8")
+@Service
+public class Java8CalculateServiceImpl implements CalculateService {
+
+    @Override
+    public Integer sum(Integer... values) {
+        System.out.println("Java 8 Lambda 实现求和");
+        int sum = Stream.of(values).reduce(0, Integer::sum);
+        return sum;
+    }
+
+}
+```
+
+> 4. 引用 & 结果
+
+```java
+import com.imooc.diveinspringboot.configuration.service.CalculateService;
+import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
+
+/**
+ * {@link CalculateService} 引导类
+ *
+ * @author zozo
+ * @since 1.0
+ */
+@SpringBootApplication(scanBasePackages = "com.imooc.diveinspringboot.configuration.service")
+public class CalculateServiceBootstrap {
+
+    public static void main(String[] args) {
+
+        ConfigurableApplicationContext context = new SpringApplicationBuilder(CalculateServiceBootstrap.class)
+                .web(WebApplicationType.NONE)
+                .profiles("Java8") // 配置方式条件装配
+                .run(args);
+
+        // 查找 Bean
+        CalculateService calculateService = context.getBean(CalculateService.class);
+
+        System.out.println("calculateService sum(1...10): " +
+                calculateService.sum(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+
+        // 关闭上下文
+        context.close();
+
+    }
+
+}
+```
+```
+Java 7 for 循环实现求和
+calculateService sum(1...10): 55
+Java 8 Lambda 实现求和
+calculateService sum(1...10): 55
+```
 
 ### Spring 条件装配 -> 实现方式: 编程方式(@Conditional)
+> * 自定义 `@Conditional`
 
+> 1. 定义注解 `@ConditionalOnSystemProperty`，指定 `@Conditional` 为 `OnSystemPropertyCondition.class`
 
-aaa
-bbb
+```java
+import org.springframework.context.annotation.Conditional;
+
+import java.lang.annotation.*;
+
+/**
+ * Java 系统属性 条件判断
+ *
+ * @author zozo
+ * @since 1.0
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Documented
+@Conditional(OnSystemPropertyCondition.class)
+public @interface ConditionalOnSystemProperty {
+
+    /**
+     * Java 系统属性名
+     *
+     * @return
+     */
+    String name();
+
+    /**
+     * Java 系统属性值
+     *
+     * @return
+     */
+    String value();
+
+}
+```
+
+> 2. `OnSystemPropertyCondition` 实现 `Condition`，重写 `matches` 方法
+
+```java
+import org.springframework.context.annotation.Condition;
+import org.springframework.context.annotation.ConditionContext;
+import org.springframework.core.type.AnnotatedTypeMetadata;
+
+import java.util.Map;
+
+/**
+ * 系统属性 条件判断
+ *
+ * @author zozo
+ * @since 1.0
+ */
+public class OnSystemPropertyCondition implements Condition {
+
+    /**
+     * 是否匹配，匹配 True 才满足装配的条件
+     *
+     * @param context  Spring 上下文
+     * @param metadata 元信息，包含 ConditionalOnSystemProperty name 和 value 值
+     * @return 是否匹配
+     */
+    @Override
+    public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+
+        // 获取 ConditionalOnSystemProperty 的元信息
+        Map<String, Object> attributes = metadata.getAnnotationAttributes(ConditionalOnSystemProperty.class.getName());
+
+        // 注解条件 name
+        String propertyName = String.valueOf(attributes.get("name"));
+        // 注解条件 value
+        String propertyValue = String.valueOf(attributes.get("value"));
+
+        System.out.println("propertyName: " + propertyName + ", propertyValue: " + propertyValue);
+
+        // 系统自带 value
+        String javaPropertyValue = System.getProperty(propertyName);
+
+        System.out.println("javaPropertyValue: " + javaPropertyValue);
+
+        // 注解条件 name 对应的 value 和 系统自带 name 对应 value 是否相等
+        return javaPropertyValue.equals(propertyValue);
+
+    }
+
+}
+```
+
+> 3. 引导 & 运行结果
+> 只有 `OnSystemPropertyCondition` 中的 `matches` 方法返回 `true` （即注解的 `propertyValue` 等于系统的 `javaPropertyValue`）时，才可成功装配 `Hello Bean(String.class)`。
+
+```java
+import com.imooc.diveinspringboot.configuration.condition.ConditionalOnSystemProperty;
+import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
+
+public class ConditionalOnSystemPropertyBootstrap {
+
+    @Bean
+    @ConditionalOnSystemProperty(name = "user.name", value = "Administrator")
+    public String hello() {
+        return "Hello Bean";
+    }
+
+    public static void main(String[] args) {
+
+        ConfigurableApplicationContext context = new SpringApplicationBuilder(ConditionalOnSystemPropertyBootstrap.class)
+                .web(WebApplicationType.NONE)
+                .run(args);
+
+        // 查找 Bean（ConditionalOnSystemProperty条件满足才可用）
+        String hello = context.getBean("hello", String.class);
+
+        System.out.println("hello Bean: " + hello);
+
+        // 关闭上下文
+        context.close();
+    }
+
+}
+```
+```
+propertyName: user.name, propertyValue: Administrator
+javaPropertyValue: Administrator
+hello Bean: Hello Bean
+```
+
