@@ -73,8 +73,10 @@ public class AppConfig {
 ```
 
 ### Spring 模式注解装配 -> 自定义
-> 定义注解 `@FirstLevelRepository` ，从 `@Repository` 派生，其中， `@Repository` 从 `@Component` 派生。
+
+> 1. 定义注解 `@FirstLevelRepository` ，从 `@Repository` 派生，其中， `@Repository` 从 `@Component` 派生。
 > `@FirstLevelRepository` > `@Repository` > `@Component`
+
 ```java
 import org.springframework.stereotype.Repository;
 
@@ -96,8 +98,10 @@ public @interface FirstLevelRepository {
 
 }
 ```
-> 定义注解 `@SecondLevelRepository` ，从 `@FirstLevelRepository` 派生。
+
+> 2. 定义注解 `@SecondLevelRepository` ，从 `@FirstLevelRepository` 派生。
 > `@SecondLevelRepository` > `@FirstLevelRepository` > `@Repository` > `@Component`
+
 ```java
 import org.springframework.stereotype.Repository;
 
@@ -119,7 +123,9 @@ public @interface SecondLevelRepository {
 
 }
 ```
-> 定义类引用注解 `@FirstLevelRepository`
+
+> 3. 定义类引用注解 `@FirstLevelRepository` 。
+
 ```java
 package com.imooc.diveinspringboot.configuration.repository;
 
@@ -130,7 +136,9 @@ public class MyFirstLevelRepository {
 
 }
 ```
-> 定义类引用注解 `@SecondLevelRepository`
+
+> 4. 定义类引用注解 `@SecondLevelRepository` 。
+
 ```java
 package com.imooc.diveinspringboot.configuration.repository;
 
@@ -142,7 +150,10 @@ public class MySecondLevelRepository {
 }
 
 ```
-> 启动类，通过 `@ComponentScan` 扫描所有引用了注解 `@Component` 或其派生的类，并获取类的实体。
+
+> 5. 启动类 & 运行结果
+> 通过 `@ComponentScan` 扫描所有引用了注解 `@Component` 或其派生的类，并获取类的实体。
+
 ```java
 import com.imooc.diveinspringboot.configuration.repository.MyFirstLevelRepository;
 import com.imooc.diveinspringboot.configuration.repository.MySecondLevelRepository;
@@ -173,6 +184,10 @@ public class RepositoryBootstrap {
 
 }
 ```
+```
+myFirstLevelRepository Bean: com.imooc.diveinspringboot.configuration.repository.MyFirstLevelRepository@4d02f94e
+mySecondLevelRepository Bean: com.imooc.diveinspringboot.configuration.repository.MySecondLevelRepository@2b48a640
+```
 
 ## Spring 模式 @Enable 模块装配
 > Spring Framework 3.1 开始支持 `@Enable` 模块装配，即将具有相同领域的功能组件集合，组合成一个独立的单元。
@@ -201,7 +216,11 @@ public class RepositoryBootstrap {
 |  | `@EnableCircuitBreaker` | 服务熔断模块 |
 
 ### Spring 模式 @Enable 模块装配 -> 实现方式: 注解驱动(Configuration @since 3.0)
-> * Spring Framework `@EnableWebMvc` 导入 `DelegatingWebMvcConfiguration`
+
+> * Spring Framework
+
+> 1. `@EnableWebMvc` 导入 `DelegatingWebMvcConfiguration` 。
+
 ```java
 package org.springframework.web.servlet.config.annotation;
 
@@ -221,7 +240,9 @@ public @interface EnableWebMvc {
 
 }
 ```
-> `DelegatingWebMvcConfiguration` 添加 `@Configuration` 注解
+
+> 2. `DelegatingWebMvcConfiguration` 添加 `@Configuration` 注解。
+
 ```java
 @Configuration
 public class DelegatingWebMvcConfiguration extends WebMvcConfigurationSupport {
@@ -244,7 +265,11 @@ public class DelegatingWebMvcConfiguration extends WebMvcConfigurationSupport {
 
 }
 ```
-> * 自定义 `@EnableHelloConfiguration` 导入 `HelloConfiguration`
+
+> * 自定义
+
+> 1. `@EnableHelloConfiguration` 导入 `HelloConfiguration` 。
+
 ```java
 import com.imooc.diveinspringboot.configuration.configuration.HelloConfiguration;
 import org.springframework.context.annotation.Import;
@@ -265,7 +290,9 @@ public @interface EnableHelloConfiguration {
 
 }
 ```
-> `HelloConfiguration` 添加 `@Configuration` 注解
+
+> 2. `HelloConfiguration` 添加 `@Configuration` 注解。
+
 ```java
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -286,7 +313,9 @@ public class HelloConfiguration {
 
 }
 ```
-> 引用 & 运行结果
+
+> 3. 引用 & 运行结果。
+
 ```java
 import com.imooc.diveinspringboot.configuration.annotation.EnableHelloConfiguration;
 import org.springframework.boot.WebApplicationType;
@@ -319,7 +348,11 @@ hello Bean: Hello Bean
 ```
 
 ### Spring 模式 @Enable 模块装配 -> 实现方式: 接口编程(ImportSelector @since 3.1)
-> * Spring Framework `@EnableCaching` 导入 `CachingConfigurationSelector`
+
+> * Spring Framework
+
+> 1. `@EnableCaching` 导入 `CachingConfigurationSelector` 。
+
 ```java
 package org.springframework.cache.annotation;
 
@@ -347,7 +380,9 @@ public @interface EnableCaching {
 
 }
 ```
-> `CachingConfigurationSelector` 继承 `AdviceModeImportSelector` 实现 `ImportSelector` 接口
+
+> 2. `CachingConfigurationSelector` 继承 `AdviceModeImportSelector` 实现 `ImportSelector` 接口。
+
 ```java
 public class CachingConfigurationSelector extends AdviceModeImportSelector<EnableCaching> {
 
@@ -386,7 +421,10 @@ public class CachingConfigurationSelector extends AdviceModeImportSelector<Enabl
 }
 ```
 
-> * 自定义 `@EnableHelloImportSelector` 导入 `HelloImportSelector`
+> * 自定义
+
+> 1. `@EnableHelloImportSelector` 导入 `HelloImportSelector` 。
+
 ```java
 import com.imooc.diveinspringboot.configuration.configuration.HelloImportSelector;
 import org.springframework.context.annotation.Import;
@@ -407,7 +445,9 @@ public @interface EnableHelloImportSelector {
 
 }
 ```
-> `HelloImportSelector` 实现 `ImportSelector` 接口
+
+> 2. `HelloImportSelector` 实现 `ImportSelector` 接口。
+
 ```java
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.type.AnnotationMetadata;
@@ -427,7 +467,9 @@ public class HelloImportSelector implements ImportSelector {
 
 }
 ```
-> 引用 & 运行结果
+
+> 3. 引用 & 运行结果。
+
 ```java
 import com.imooc.diveinspringboot.configuration.annotation.EnableHelloImportSelector;
 import org.springframework.boot.WebApplicationType;
@@ -469,6 +511,7 @@ hello Bean: Hello Bean
 | `@Conditional` | 编程条件装配 | 4.0 |
 
 ### Spring 条件装配 -> 实现方式: 配置方式(@Profile)
+
 > * 自定义 `@Profile`
 
 > 1. 定义计算服务接口
@@ -550,6 +593,7 @@ public class Java8CalculateServiceImpl implements CalculateService {
 ```
 
 > 4. 引用 & 结果
+> 指定 `profiles` 参数为 `Java7` 或 `Java8`，装配对应的 `Bean` 。
 
 ```java
 import com.imooc.diveinspringboot.configuration.service.CalculateService;
@@ -595,9 +639,10 @@ calculateService sum(1...10): 55
 ```
 
 ### Spring 条件装配 -> 实现方式: 编程方式(@Conditional)
+
 > * 自定义 `@Conditional`
 
-> 1. 定义注解 `@ConditionalOnSystemProperty`，指定 `@Conditional` 为 `OnSystemPropertyCondition.class`
+> 1. 定义注解 `@ConditionalOnSystemProperty`，指定 `@Conditional` 为 `OnSystemPropertyCondition.class` 。
 
 ```java
 import org.springframework.context.annotation.Conditional;
@@ -633,7 +678,7 @@ public @interface ConditionalOnSystemProperty {
 }
 ```
 
-> 2. `OnSystemPropertyCondition` 实现 `Condition`，重写 `matches` 方法
+> 2. `OnSystemPropertyCondition` 实现 `Condition`，重写 `matches` 方法。
 
 ```java
 import org.springframework.context.annotation.Condition;
@@ -683,7 +728,7 @@ public class OnSystemPropertyCondition implements Condition {
 }
 ```
 
-> 3. 引导 & 运行结果
+> 3. 引导 & 运行结果。
 > 只有 `OnSystemPropertyCondition` 中的 `matches` 方法返回 `true` （即注解的 `propertyValue` 等于系统的 `javaPropertyValue`）时，才可成功装配 `Hello Bean(String.class)`。
 
 ```java
