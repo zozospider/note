@@ -217,7 +217,7 @@ mySecondLevelRepository Bean: com.imooc.diveinspringboot.configuration.repositor
 
 ### Spring 模式 @Enable 模块装配 -> 实现方式: 注解驱动(Configuration @since 3.0)
 
-> * Spring Framework
+> * Spring Framework 实现
 
 > 1. `@EnableWebMvc` 导入 `DelegatingWebMvcConfiguration` 。
 
@@ -349,7 +349,7 @@ hello Bean: Hello Bean
 
 ### Spring 模式 @Enable 模块装配 -> 实现方式: 接口编程(ImportSelector @since 3.1)
 
-> * Spring Framework
+> * Spring Framework 实现
 
 > 1. `@EnableCaching` 导入 `CachingConfigurationSelector` 。
 
@@ -421,7 +421,7 @@ public class CachingConfigurationSelector extends AdviceModeImportSelector<Enabl
 }
 ```
 
-> * 自定义
+> * 自定义实现
 
 > 1. `@EnableHelloImportSelector` 导入 `HelloImportSelector` 。
 
@@ -512,7 +512,7 @@ hello Bean: Hello Bean
 
 ### Spring 条件装配 -> 实现方式: 配置方式(@Profile)
 
-> * 自定义 `@Profile`
+> * 自定义 `@Profile` 实现
 
 > 1. 定义计算服务接口
 
@@ -640,7 +640,7 @@ calculateService sum(1...10): 55
 
 ### Spring 条件装配 -> 实现方式: 编程方式(@Conditional)
 
-> * 自定义 `@Conditional`
+> * 自定义 `@Conditional` 实现
 
 > 1. 定义注解 `@ConditionalOnSystemProperty`，指定 `@Conditional` 为 `OnSystemPropertyCondition.class` 。
 
@@ -769,3 +769,101 @@ javaPropertyValue: Administrator
 hello Bean: Hello Bean
 ```
 
+## Spring Boot 自动装配
+> Spring Boot 基于约定大于配置原则，实现 Spring 组件自动装配目的。
+
+### Spring Boot 自动装配 -> 底层装配技术
+> * Spring 模式注解装配
+> * Spring @Enable 模块装配
+> * Spring 条件装配
+> * Spring 工厂加载机制（`SpringFactoriesLoader` & `spring.factories`）
+
+### Spring Boot 自动装配 -> 举例（SpringFactoriesLoader）
+
+> * Spring Boot 实现
+
+> 1. `org.springframework.core.io.support.SpringFactoriesLoader`
+
+```java
+public abstract class SpringFactoriesLoader {
+
+    public static final String FACTORIES_RESOURCE_LOCATION = "META-INF/spring.factories";
+
+    public static <T> List<T> loadFactories(Class<T> factoryClass, @Nullable ClassLoader classLoader) {
+        Assert.notNull(factoryClass, "'factoryClass' must not be null");
+        ClassLoader classLoaderToUse = classLoader;
+        if (classLoaderToUse == null) {
+            classLoaderToUse = SpringFactoriesLoader.class.getClassLoader();
+        }
+        List<String> factoryNames = loadFactoryNames(factoryClass, classLoaderToUse);
+        if (logger.isTraceEnabled()) {
+            logger.trace("Loaded [" + factoryClass.getName() + "] names: " + factoryNames);
+        }
+        List<T> result = new ArrayList<>(factoryNames.size());
+        for (String factoryName : factoryNames) {
+            result.add(instantiateFactory(factoryName, factoryClass, classLoaderToUse));
+        }
+        AnnotationAwareOrderComparator.sort(result);
+        return result;
+    }
+
+    ...
+
+}
+```
+
+> 2. `spring-boot-autoconfigure-2.0.5.RELEASE.jar!/META-INF/spring.factories`
+
+```properties
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration,\
+org.springframework.boot.autoconfigure.aop.AopAutoConfiguration,\
+...
+org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration,\
+org.springframework.boot.autoconfigure.cloud.CloudAutoConfiguration,\
+...
+org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration,\
+...
+org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration,\
+...
+org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration,\
+...
+org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration,\
+...
+org.springframework.boot.autoconfigure.data.solr.SolrRepositoriesAutoConfiguration,\
+org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration,\
+...
+org.springframework.boot.autoconfigure.http.codec.CodecsAutoConfiguration,\
+...
+org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,\
+org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration,\
+...
+org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration,\
+...
+org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfiguration,\
+...
+org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration,\
+org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration,\
+...
+org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration,\
+...
+org.springframework.boot.autoconfigure.web.reactive.WebFluxAutoConfiguration,\
+...
+org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration,\
+org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration,\
+...
+```
+
+### Spring Boot 自动装配 -> 自定义实现
+
+> * 自定义实现，步骤如下：
+> 1. 激活自动装配 `@EnableAutoConfiguration`
+> 2. 实现自动装配 `xxxAutoConfiguration`
+> 3. 配置自动装配 `META-INF/spring.factories`
+
+> 1. 激活自动装配
+
+```java
+
+```
