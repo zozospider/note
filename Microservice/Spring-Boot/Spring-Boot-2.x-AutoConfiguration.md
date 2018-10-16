@@ -1,11 +1,11 @@
 # Spring Boot 2.x AutoConfiguration
 
 ## Document & Code
-> [Spring Boot Reference Guide](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/)
-> [Github: zozospider/note-microservice-spring-boot](https://github.com/zozospider/note-microservice-spring-boot)
+> * [Spring Boot Reference Guide](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/)
+> * [Github: zozospider/note-microservice-spring-boot](https://github.com/zozospider/note-microservice-spring-boot)
 
 ## Spring 模式注解装配
-> [Spring Annotation Programming Model](https://github.com/spring-projects/spring-framework/wiki/Spring-Annotation-Programming-Model#stereotype-annotations)
+> * [Spring Annotation Programming Model](https://github.com/spring-projects/spring-framework/wiki/Spring-Annotation-Programming-Model#stereotype-annotations)
 
 > * A stereotype annotation is an annotation that is used to declare the role that a component plays within the application. For example, the `@Repository` annotation in the Spring Framework is a marker for any class that fulfills the role or stereotype of a repository (also known as Data Access Object or DAO).
 > * `@Component` is a generic stereotype for any Spring-managed component. Any component annotated with `@Component` is a candidate for component scanning. Similarly, any component annotated with an annotation that is itself meta-annotated with `@Component` is also a candidate for component scanning. For example, `@Service` is meta-annotated with `@Component`.
@@ -24,7 +24,7 @@
 | `@Configuration` | 配置类模式注解 | 3.0 |
 
 ### Spring 模式注解装配 -> 装配方式: @ComponentScan & <context:component-scan>
-> [Spring Framework 5.1.0 Classpath Scanning and Managed Components](https://docs.spring.io/spring/docs/5.1.0.RELEASE/spring-framework-reference/core.html#beans-classpath-scanning)
+> * [Spring Framework 5.1.0 Classpath Scanning and Managed Components](https://docs.spring.io/spring/docs/5.1.0.RELEASE/spring-framework-reference/core.html#beans-classpath-scanning)
 
 > * 要自动检测这些类并注册相应的bean，您需要将 `@ComponentScan` 添加到 `@Configuration` 类。
 
