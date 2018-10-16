@@ -900,7 +900,7 @@ public class EnableHelloConfigurationBootstrap {
 ```
 
 > 2. 实现自动装配 `HelloAutoConfiguration` 。
-> 通过 Spring 模式注解，Spring @Enable 模块装配，Spring 条件装配实现。
+> 通过 Spring 模式注解，Spring @Enable 模块装配，Spring 条件装配实现（相关实现类见上文）。
 
 ```java
 
