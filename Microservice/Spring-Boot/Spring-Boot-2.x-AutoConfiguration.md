@@ -1,5 +1,9 @@
 # Spring Boot 2.x AutoConfiguration
 
+## Document & Code
+> [Spring Boot Reference Guide](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/)
+> [Github: zozospider/note-microservice-spring-boot](https://github.com/zozospider/note-microservice-spring-boot)
+
 ## Spring 模式注解装配
 > [Spring Annotation Programming Model](https://github.com/spring-projects/spring-framework/wiki/Spring-Annotation-Programming-Model#stereotype-annotations)
 
