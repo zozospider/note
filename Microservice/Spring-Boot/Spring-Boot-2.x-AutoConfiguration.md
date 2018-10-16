@@ -22,7 +22,8 @@
 ### Spring 模式注解装配 -> 装配方式: @ComponentScan & <context:component-scan>
 > [Spring Framework 5.1.0 Classpath Scanning and Managed Components](https://docs.spring.io/spring/docs/5.1.0.RELEASE/spring-framework-reference/core.html#beans-classpath-scanning)
 
-> * 要自动检测这些类并注册相应的bean，您需要将 `@ComponentScan` 添加到 `@Configuration` 类
+> * 要自动检测这些类并注册相应的bean，您需要将 `@ComponentScan` 添加到 `@Configuration` 类。
+
 ```java
 @Configuration
 @ComponentScan(basePackages = "org.example")
@@ -30,7 +31,9 @@ public class AppConfig  {
     ...
 }
 ```
-> 等价xml
+
+> 等价xml。
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -50,7 +53,8 @@ public class AppConfig  {
 </beans>
 ```
 
-> * 以下示例显示忽略所有@Repository注释并使用“存根”存储库的配置
+> * 以下示例显示忽略所有@Repository注释并使用“存根”存储库的配置。
+
 ```java
 @Configuration
 @ComponentScan(basePackages = "org.example",
@@ -60,7 +64,9 @@ public class AppConfig {
     ...
 }
 ```
-> 等价xml
+
+> 等价xml。
+
 ```xml
 <beans>
     <context:component-scan base-package="org.example">
