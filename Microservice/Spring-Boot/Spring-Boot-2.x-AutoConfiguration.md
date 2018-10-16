@@ -941,5 +941,3 @@ propertyName: user.name, propertyValue: Administrator
 javaPropertyValue: Administrator
 hello Bean: Hello Bean
 ```
-
-aaa
