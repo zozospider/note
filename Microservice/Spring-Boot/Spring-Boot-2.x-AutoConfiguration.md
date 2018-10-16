@@ -862,8 +862,80 @@ org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration,\
 > 2. 实现自动装配 `xxxAutoConfiguration`
 > 3. 配置自动装配 `META-INF/spring.factories`
 
-> 1. 激活自动装配
+> 1. 激活自动装配，注解 `@EnableAutoConfiguration` 。
+
+```java
+import com.imooc.diveinspringboot.configuration.annotation.EnableHelloConfiguration;
+import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
+
+/**
+ * {@link EnableAutoConfiguration} 引导类
+ *
+ * @author zozo
+ * @since 1.0
+ */
+@EnableHelloConfiguration
+public class EnableHelloConfigurationBootstrap {
+
+    public static void main(String[] args) {
+
+        ConfigurableApplicationContext context = new SpringApplicationBuilder(EnableHelloConfigurationBootstrap.class)
+                .web(WebApplicationType.NONE)
+                .run(args);
+
+        // 查找 Bean
+        String hello = context.getBean("hello", String.class);
+
+        System.out.println("hello Bean: " + hello);
+
+        // 关闭上下文
+        context.close();
+
+    }
+
+}
+```
+
+> 2. 实现自动装配 `HelloAutoConfiguration` 。
+> 通过 Spring 模式注解，Spring @Enable 模块装配，Spring 条件装配实现。
 
 ```java
 
+import com.imooc.diveinspringboot.configuration.annotation.EnableHelloImportSelector;
+import com.imooc.diveinspringboot.configuration.condition.ConditionalOnSystemProperty;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * Hello 自动装配
+ *
+ * @author zozo
+ * @since 1.0
+ */
+@Configuration // Spring 模式注解
+@EnableHelloImportSelector // Spring @Enable 模块装配
+@ConditionalOnSystemProperty(name = "user.name", value = "Administrator") // Spring 条件装配
+public class HelloAutoConfiguration {
+
+}
+```
+
+> 3. 配置自动装配 `~\dive-in-spring-boot\src\main\resources\META-INF\spring.factories` 。
+
+```properties
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.imooc.diveinspringboot.configuration.configuration.HelloAutoConfiguration
+```
+
+> 4. 运行结果。
+
+```
+propertyName: user.name, propertyValue: Administrator
+javaPropertyValue: Administrator
+propertyName: user.name, propertyValue: Administrator
+javaPropertyValue: Administrator
+hello Bean: Hello Bean
 ```
