@@ -930,6 +930,8 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.imooc.diveinspringboot.configuration.configuration.HelloAutoConfiguration
 ```
 
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-AutoConfiguration/autoconfiguration-springfactories.png)
+
 > 4. 运行结果。
 
 ```
