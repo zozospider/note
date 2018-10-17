@@ -148,7 +148,7 @@ public class SpringApplication {
 	...
 
 	private WebApplicationType deduceWebApplicationType() {
-		// org.springframework.web.reactive.DispatcherHandler 存在
+		// 如果 org.springframework.web.reactive.DispatcherHandler 存在
 		// 且 org.springframework.web.servlet.DispatcherServlet 不存在
 		// 且 org.glassfish.jersey.server.ResourceConfig 不存在
 		// 则为 Web Reactive 类型
@@ -157,7 +157,7 @@ public class SpringApplication {
 				&& !ClassUtils.isPresent(JERSEY_WEB_ENVIRONMENT_CLASS, null)) {
 			return WebApplicationType.REACTIVE;
 		}
-		// javax.servlet.Servlet 不存在
+		// 如果 javax.servlet.Servlet 不存在
 		// 且 org.springframework.web.context.ConfigurableWebApplicationContext 不存在
 		// 则为非 Web 类型
 		for (String className : WEB_ENVIRONMENT_CLASSES) {
@@ -208,3 +208,213 @@ public class SpringApplication {
 ```
 
 
+## 加载应用上下文初始器(`ApplicationContextInitializer`)
+> 利用 Spring 工厂加载机制，实例化 `ApplicationContextInitializer` 的具体实现类，并对具体实现类的执行顺序进行排序。
+
+> * Spring Boot 举例
+
+> 1. `spring-boot-autoconfigure-2.0.5.RELEASE.jar!\META-INF\spring.factories` 文件中配置 `ApplicationContextInitializer` 的具体实现类。
+
+```properties
+# Initializers
+org.springframework.context.ApplicationContextInitializer=\
+org.springframework.boot.autoconfigure.SharedMetadataReaderFactoryContextInitializer,\
+org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener
+```
+
+> 2. 利用 Spring 工厂加载 `SpringFactoriesLoader`，实例化 `ApplicationContextInitializer` 的具体实现类。
+
+```java
+package org.springframework.core.io.support;
+
+...
+
+public abstract class SpringFactoriesLoader {
+
+	// The location to look for factories（查找本地的 factories 文件）
+	// <p>Can be present in multiple JAR files.（包括 JAR 文件里的）
+	public static final String FACTORIES_RESOURCE_LOCATION = "META-INF/spring.factories";
+
+	...
+
+	// 加载 factories 文件配置的具体实现类
+	public static <T> List<T> loadFactories(Class<T> factoryClass, @Nullable ClassLoader classLoader) {
+		Assert.notNull(factoryClass, "'factoryClass' must not be null");
+		ClassLoader classLoaderToUse = classLoader;
+		if (classLoaderToUse == null) {
+			classLoaderToUse = SpringFactoriesLoader.class.getClassLoader();
+		}
+		List<String> factoryNames = loadFactoryNames(factoryClass, classLoaderToUse);
+		if (logger.isTraceEnabled()) {
+			logger.trace("Loaded [" + factoryClass.getName() + "] names: " + factoryNames);
+		}
+		List<T> result = new ArrayList<>(factoryNames.size());
+		for (String factoryName : factoryNames) {
+			result.add(instantiateFactory(factoryName, factoryClass, classLoaderToUse));
+		}
+		// 对具体的实现类进行排序
+		AnnotationAwareOrderComparator.sort(result);
+		return result;
+	}
+
+	...
+
+}
+```
+
+> 3. `AnnotationAwareOrderComparator` 对具体的实现类进行排序。判断方式如下：
+> 31. 具体实现类是否实现 `Ordered` 接口
+> 32. 具体实现类是否注解 `@Order`
+> 如果存在则排序生效，否则按照默认规则排序。
+
+```java
+package org.springframework.core.annotation;
+
+...
+
+public class AnnotationAwareOrderComparator extends OrderComparator {
+
+	...
+
+	@Override
+	@Nullable
+	protected Integer findOrder(Object obj) {
+		// Check for regular Ordered interface
+		Integer order = super.findOrder(obj);
+		if (order != null) {
+			return order;
+		}
+
+		// Check for @Order and @Priority on various kinds of elements
+		if (obj instanceof Class) {
+			return OrderUtils.getOrder((Class<?>) obj);
+		}
+		else if (obj instanceof Method) {
+			Order ann = AnnotationUtils.findAnnotation((Method) obj, Order.class);
+			if (ann != null) {
+				return ann.value();
+			}
+		}
+		else if (obj instanceof AnnotatedElement) {
+			Order ann = AnnotationUtils.getAnnotation((AnnotatedElement) obj, Order.class);
+			if (ann != null) {
+				return ann.value();
+			}
+		}
+		else {
+			order = OrderUtils.getOrder(obj.getClass());
+			if (order == null && obj instanceof DecoratingProxy) {
+				order = OrderUtils.getOrder(((DecoratingProxy) obj).getDecoratedClass());
+			}
+		}
+
+		return order;
+	}
+
+	...
+
+}
+```
+
+> * 自定义
+
+> 1. 新建 `resources\META-INF\spring.factories` ，指定 `ApplicationContextInitializer` 实现的具体类。
+
+```properties
+# Initializers
+org.springframework.context.ApplicationContextInitializer=\
+com.zozospider.springapplication.context.FirstApplicationContextInitializer,\
+com.zozospider.springapplication.context.SecondApplicationContextInitializer
+```
+
+> 2. 创建 `FirstApplicationContextInitializer` ，实现 `ApplicationContextInitializer` 接口，并注解 `Order` 进行排序，指定为高级别。
+
+```java
+package com.zozospider.springapplication.context;
+
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+
+/**
+ * FirstApplicationContextInitializer
+ *
+ * @param <C>
+ * @author zozo
+ * @since 1.0
+ */
+@Order(Ordered.HIGHEST_PRECEDENCE) // 进行排序，并指定为高级别
+public class FirstApplicationContextInitializer<C extends ConfigurableApplicationContext>
+        implements ApplicationContextInitializer<C> {
+
+    @Override
+    public void initialize(C applicationContext) {
+        System.out.println("First ApplicationContextInitializer: " + applicationContext.getId());
+    }
+
+}
+```
+
+> 3. 创建 `SecondApplicationContextInitializer` ，实现 `ApplicationContextInitializer` 接口和 `Ordered` 接口，并重写 `Ordered` 接口的 `getOrder()` 方法，指定为低级别。
+
+```java
+package com.zozospider.springapplication.context;
+
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.Ordered;
+
+/**
+ * SecondApplicationContextInitializer
+ *
+ * @author zozo
+ * @since 1.0
+ */
+public class SecondApplicationContextInitializer implements ApplicationContextInitializer, Ordered {
+
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        System.out.println("Second ApplicationContextInitializer: " + applicationContext.getId());
+    }
+
+    /**
+     * 实现 Ordered 接口，进行排序，并指定为低级别
+     *
+     * @return
+     */
+    @Override
+    public int getOrder() {
+        return Ordered.LOWEST_PRECEDENCE;
+    }
+
+}
+```
+
+> 4. 运行 `SpringApplicationBootstrap` & 运行结果。
+
+```java
+package com.zozospider.springapplication;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+/**
+ * {@link SpringApplication} 引导类
+ *
+ * @author zozo
+ * @since 1.0
+ */
+@SpringBootApplication
+public class SpringApplicationBootstrap {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SpringApplicationBootstrap.class, args);
+    }
+
+}
+```
+```
+First ApplicationContextInitializer: org.springframework.context.annotation.AnnotationConfigApplicationContext@473b46c3
+Second ApplicationContextInitializer: application
+```
