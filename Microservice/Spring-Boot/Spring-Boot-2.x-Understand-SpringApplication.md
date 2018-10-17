@@ -132,3 +132,79 @@ public class SpringApplicationBootstrap3 {
 Bean: com.zozospider.springapplication.SpringApplicationBootstrap3$ApplicationConfiguration$$EnhancerBySpringCGLIB$$b75f6e8c@4d518b32
 ```
 
+## 推断 Web 应用类型
+> `SpringApplication` 通过判断 `ClassPath` 中是否存在相关实现类来推断 Web 应用的类型。类型如下：
+> 1. Web Reactive: `WebApplicationType.REACTIVE`
+> 2. Web Servlet: `WebApplicationType.SERVLET`
+> 3. 非 Web: `WebApplicationType.NONE`
+
+```java
+package org.springframework.boot;
+
+...
+
+public class SpringApplication {
+
+	...
+
+	private WebApplicationType deduceWebApplicationType() {
+		// org.springframework.web.reactive.DispatcherHandler 存在
+		// 且 org.springframework.web.servlet.DispatcherServlet 不存在
+		// 且 org.glassfish.jersey.server.ResourceConfig 不存在
+		// 则为 Web Reactive 类型
+		if (ClassUtils.isPresent(REACTIVE_WEB_ENVIRONMENT_CLASS, null)
+				&& !ClassUtils.isPresent(MVC_WEB_ENVIRONMENT_CLASS, null)
+				&& !ClassUtils.isPresent(JERSEY_WEB_ENVIRONMENT_CLASS, null)) {
+			return WebApplicationType.REACTIVE;
+		}
+		// javax.servlet.Servlet 不存在
+		// 且 org.springframework.web.context.ConfigurableWebApplicationContext 不存在
+		// 则为非 Web 类型
+		for (String className : WEB_ENVIRONMENT_CLASSES) {
+			if (!ClassUtils.isPresent(className, null)) {
+				return WebApplicationType.NONE;
+			}
+		}
+		// 以上两个条件都不满足
+		// 则为 Web Servlet 类型
+		return WebApplicationType.SERVLET;
+	}
+
+	...
+
+}
+```
+
+## 推断引导类(Main Class)
+> 根据 Main 线程执行堆栈判断实际的引导类（通过异常堆栈信息判断是否存在 `main` 方法）。
+
+```java
+package org.springframework.boot;
+
+...
+
+public class SpringApplication {
+
+	...
+
+	private Class<?> deduceMainApplicationClass() {
+		try {
+			StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
+			for (StackTraceElement stackTraceElement : stackTrace) {
+				if ("main".equals(stackTraceElement.getMethodName())) {
+					return Class.forName(stackTraceElement.getClassName());
+				}
+			}
+		}
+		catch (ClassNotFoundException ex) {
+			// Swallow and continue
+		}
+		return null;
+	}
+
+	...
+
+}
+```
+
+
