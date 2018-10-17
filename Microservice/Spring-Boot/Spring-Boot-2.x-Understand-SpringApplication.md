@@ -327,6 +327,8 @@ com.zozospider.springapplication.context.FirstApplicationContextInitializer,\
 com.zozospider.springapplication.context.SecondApplicationContextInitializer
 ```
 
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Understand-SpringApplication/springapplication-springfactories.png)
+
 > 2. 创建 `FirstApplicationContextInitializer` ，实现 `ApplicationContextInitializer` 接口，并注解 `Order` 进行排序，指定为高级别。
 
 ```java
