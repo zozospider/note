@@ -1,5 +1,7 @@
 # Spring Boot 2.x AutoConfiguration
 
+[TOC] 
+
 ## Document & Code
 > * [Spring Boot Reference Guide](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/)
 > * [Github: zozospider/note-microservice-spring-boot](https://github.com/zozospider/note-microservice-spring-boot)

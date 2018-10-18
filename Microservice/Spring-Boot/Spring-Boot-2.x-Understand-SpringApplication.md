@@ -1,5 +1,7 @@
 # Spring Boot 2.x Understand SpringApplication
 
+[TOC] 
+
 ## Document & Code
 > * [SpringApplication](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-spring-application)
 > * [Github: zozospider/note-microservice-spring-boot](https://github.com/zozospider/note-microservice-spring-boot)
