@@ -1,7 +1,7 @@
-# Spring Boot 2.x Understand SpringApplication
+# Spring Boot 2.x Understand Spring Application
 
 - [Document & Code](#document--code)
-- [SpingApplication](#spingapplication)
+- [Sping Application](#sping-application)
 - [Customizing Spring Application](#customizing-spring-application)
 - [Fluent Builder API](#fluent-builder-api)
 - [Local Bootstrap Test](#local-bootstrap-test)
@@ -13,9 +13,10 @@
 > * [docs.spring.io: SpringApplication](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-spring-application)
 > * [github.com: zozospider/note-microservice-spring-boot](https://github.com/zozospider/note-microservice-spring-boot)
 
-## SpingApplication
-> * SpingApplication 基本使用
+## Sping Application
+> * **SpingApplication 基本使用**
 > * [docs.spring.io](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-spring-application)
+
 > * The `SpringApplication` class provides a convenient way to bootstrap a Spring application that is started from a main() method. In many situations, you can delegate to the static `SpringApplication.run` method, as shown in the following example:
 
 ```java
@@ -25,8 +26,9 @@ public static void main(String[] args) {
 ```
 
 ## Customizing Spring Application
-> * 自定义 SpringApplication
+> * **自定义 SpringApplication**
 > * [docs.spring.io](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-customizing-spring-application)
+
 > * If the SpringApplication defaults are not to your taste, you can instead create a local instance and customize it. For example, to turn off the banner, you could write:
 
 ```java
@@ -38,8 +40,9 @@ public static void main(String[] args) {
 ```
 
 ## Fluent Builder API
-> * 流式构建
+> * **流式构建**
 > * [docs.spring.io](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-fluent-builder-api)
+
 > * If you need to build an `ApplicationContext` hierarchy (multiple contexts with a parent/child relationship) or if you prefer using a “fluent” builder API, you can use the `SpringApplicationBuilder`.
 > * The `SpringApplicationBuilder` lets you chain together multiple method calls and includes `parent` and `child` methods that let you create a hierarchy, as shown in the following example:
 
@@ -52,7 +55,8 @@ new SpringApplicationBuilder()
 ```
 
 ## Local Bootstrap Test
-> * 本地启动测试
+> * **本地启动测试**
+
 > 1. 通过 `SpringApplication.run(Class<?> primarySource, String... args)` 指定本类为 `primarySource` 参数。
 
 ```java
@@ -149,7 +153,8 @@ Bean: com.zozospider.springapplication.SpringApplicationBootstrap3$ApplicationCo
 ```
 
 ## Deduce Web Application Type
-> * 推断 Web 应用类型
+> * **推断 Web 应用类型**
+
 > `SpringApplication` 通过判断 `ClassPath` 中是否存在相关实现类来推断 Web 应用的类型。类型如下：
 > 1. Web Reactive: `WebApplicationType.REACTIVE`
 > 2. Web Servlet: `WebApplicationType.SERVLET`
@@ -193,7 +198,8 @@ public class SpringApplication {
 ```
 
 ## Deduce Main Application Class
-> * 推断引导类(Main Class)
+> * **推断引导类(Main Class)**
+
 > * 根据 Main 线程执行堆栈判断实际的引导类（通过异常堆栈信息判断是否存在 `main` 方法）。
 
 ```java
@@ -226,10 +232,12 @@ public class SpringApplication {
 ```
 
 ## Load Application Context Initializer
-> * 加载应用上下文初始器 `ApplicationContextInitializer`
+> * **加载应用上下文初始器 `ApplicationContextInitializer`**
+
 > * 利用 Spring 工厂加载机制，实例化 `ApplicationContextInitializer` 的具体实现类，并对具体实现类的执行顺序进行排序。
 
-> * Spring Boot 举例
+### Spring Boot Example
+> * **Spring Boot 举例**
 
 > 1. `spring-boot-autoconfigure-2.0.5.RELEASE.jar!\META-INF\spring.factories` 文件中配置 `ApplicationContextInitializer` 的具体实现类。
 
@@ -334,7 +342,8 @@ public class AnnotationAwareOrderComparator extends OrderComparator {
 }
 ```
 
-> * 自定义
+### Customizing
+> * **自定义**
 
 > 1. 新建 `resources\META-INF\spring.factories` ，指定 `ApplicationContextInitializer` 实现的具体类。
 
