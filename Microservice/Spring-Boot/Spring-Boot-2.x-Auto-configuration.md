@@ -1,4 +1,4 @@
-# Spring Boot 2.x AutoConfiguration
+# Spring Boot 2.x Auto-configuration
 
 - [Document & Code](#document--code)
 - [Spring Annotation Programming Model](#spring-annotation-programming-model)
