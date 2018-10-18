@@ -27,8 +27,8 @@
 > * [Github: zozospider/note-microservice-spring-boot](https://github.com/zozospider/note-microservice-spring-boot)
 
 ## Spring Annotation Programming Model
-> * **Spring 模式注解装配**
-> * [Spring Annotation Programming Model](https://github.com/spring-projects/spring-framework/wiki/Spring-Annotation-Programming-Model#stereotype-annotations)
+> **Spring 模式注解装配**
+> [Spring Annotation Programming Model](https://github.com/spring-projects/spring-framework/wiki/Spring-Annotation-Programming-Model#stereotype-annotations)
 
 > * A stereotype annotation is an annotation that is used to declare the role that a component plays within the application. For example, the `@Repository` annotation in the Spring Framework is a marker for any class that fulfills the role or stereotype of a repository (also known as Data Access Object or DAO).
 > * `@Component` is a generic stereotype for any Spring-managed component. Any component annotated with `@Component` is a candidate for component scanning. Similarly, any component annotated with an annotation that is itself meta-annotated with `@Component` is also a candidate for component scanning. For example, `@Service` is meta-annotated with `@Component`.
@@ -48,8 +48,8 @@
 | `@Configuration` | 配置类模式注解 | 3.0 |
 
 ### Classpath Scanning and Managed Components
-> * **Spring 模式注解装配 -> 装配方式: @ComponentScan & <context:component-scan>**
-> * [Spring Framework 5.1.0 Classpath Scanning and Managed Components](https://docs.spring.io/spring/docs/5.1.0.RELEASE/spring-framework-reference/core.html#beans-classpath-scanning)
+> **Spring 模式注解装配 -> 装配方式: @ComponentScan & <context:component-scan>**
+> [Spring Framework 5.1.0 Classpath Scanning and Managed Components](https://docs.spring.io/spring/docs/5.1.0.RELEASE/spring-framework-reference/core.html#beans-classpath-scanning)
 
 > * 要自动检测这些类并注册相应的bean，您需要将 `@ComponentScan` 添加到 `@Configuration` 类。
 
@@ -108,7 +108,7 @@ public class AppConfig {
 ```
 
 ### Customizing
-> * **Spring 模式注解装配 -> 自定义**
+> **Spring 模式注解装配 -> 自定义**
 
 > 1. 定义注解 `@FirstLevelRepository` ，从 `@Repository` 派生，其中， `@Repository` 从 `@Component` 派生。
 > `@FirstLevelRepository` > `@Repository` > `@Component`
@@ -226,7 +226,7 @@ mySecondLevelRepository Bean: com.imooc.diveinspringboot.configuration.repositor
 ```
 
 ## The @Enable Annotation
-> * **Spring 模式 @Enable 模块装配**
+> **Spring 模式 @Enable 模块装配**
 
 > Spring Framework 3.1 开始支持 `@Enable` 模块装配，即将具有相同领域的功能组件集合，组合成一个独立的单元。
 
@@ -255,10 +255,10 @@ mySecondLevelRepository Bean: com.imooc.diveinspringboot.configuration.repositor
 |  | `@EnableCircuitBreaker` | 服务熔断模块 |
 
 ### Annotation
-> * **Spring 模式 @Enable 模块装配 -> 实现方式: 注解驱动(Configuration @since 3.0)**
+> **Spring 模式 @Enable 模块装配 -> 实现方式: 注解驱动(Configuration @since 3.0)**
 
 #### Spring Framework Example
-> * **Spring Framework 实现**
+> **Spring Framework 实现**
 
 > 1. `@EnableWebMvc` 导入 `DelegatingWebMvcConfiguration` 。
 
@@ -308,7 +308,7 @@ public class DelegatingWebMvcConfiguration extends WebMvcConfigurationSupport {
 ```
 
 #### Customizing
-> * **自定义**
+> **自定义**
 
 > 1. `@EnableHelloConfiguration` 导入 `HelloConfiguration` 。
 
@@ -390,10 +390,10 @@ hello Bean: Hello Bean
 ```
 
 ### Programming ImportSelector
-> * **Spring 模式 @Enable 模块装配 -> 实现方式: 接口编程(ImportSelector @since 3.1)**
+> **Spring 模式 @Enable 模块装配 -> 实现方式: 接口编程(ImportSelector @since 3.1)**
 
 #### Spring Framework Example
-> * **Spring Framework 实现**
+> **Spring Framework 实现**
 
 > 1. `@EnableCaching` 导入 `CachingConfigurationSelector` 。
 
@@ -466,7 +466,7 @@ public class CachingConfigurationSelector extends AdviceModeImportSelector<Enabl
 ```
 
 #### Customizing
-> * **自定义实现**
+> **自定义实现**
 
 > 1. `@EnableHelloImportSelector` 导入 `HelloImportSelector` 。
 
@@ -546,12 +546,12 @@ hello Bean: Hello Bean
 ```
 
 ## Conditionally Configuration
-> * **Spring 条件装配**
+> **Spring 条件装配**
 
 > Spring Framework 3.1 支持，允许在 Bean 装配时增加前置条件判断。
 
 ### Example
-> * **Spring 条件装配 -> 举例**
+> **Spring 条件装配 -> 举例**
 
 | Spring 注解 | 场景说明 | 起始版本 |
 | :--- | :--- | :--- |
@@ -559,7 +559,7 @@ hello Bean: Hello Bean
 | `@Conditional` | 编程条件装配 | 4.0 |
 
 ### @Profile annotation
-> * **Spring 条件装配 -> 实现方式: 配置方式(@Profile)**
+> **Spring 条件装配 -> 实现方式: 配置方式(@Profile)**
 
 > * 自定义 `@Profile` 实现
 
@@ -688,7 +688,7 @@ calculateService sum(1...10): 55
 ```
 
 ### @Conditional annotation
-> * **Spring 条件装配 -> 实现方式: 编程方式(@Conditional)**
+> **Spring 条件装配 -> 实现方式: 编程方式(@Conditional)**
 
 > * 自定义 `@Conditional` 实现
 
@@ -820,12 +820,12 @@ hello Bean: Hello Bean
 ```
 
 ## Auto-configuration
-> * **Spring Boot 自动装配**
+> **Spring Boot 自动装配**
 
 > Spring Boot 基于约定大于配置原则，实现 Spring 组件自动装配目的。
 
 ### Realize by
-> * **Spring Boot 自动装配 -> 底层装配技术**
+> **Spring Boot 自动装配 -> 底层装配技术**
 
 > * Spring 模式注解装配
 > * Spring @Enable 模块装配
@@ -833,7 +833,7 @@ hello Bean: Hello Bean
 > * Spring 工厂加载机制（`SpringFactoriesLoader` & `spring.factories`）
 
 ### Example
-> * **Spring Boot 自动装配 -> 举例（SpringFactoriesLoader）**
+> **Spring Boot 自动装配 -> 举例（SpringFactoriesLoader）**
 
 > * Spring Boot 实现
 
@@ -911,7 +911,7 @@ org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration,\
 ```
 
 ### Customizing
-> * **Spring Boot 自动装配 -> 自定义实现**
+> **Spring Boot 自动装配 -> 自定义实现**
 
 > * 自定义实现，步骤如下：
 > 1. 激活自动装配 `@EnableAutoConfiguration`
