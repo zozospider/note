@@ -3,7 +3,7 @@
 [TOC] 
 
 - [Spring Boot 2.x Understand SpringApplication](#spring-boot-2x-understand-springapplication)
-      * [Document &amp; Code](#document--code)
+  * [Document &amp; Code](#document--code)
   * [Document & Code](#document---code)
   * [Spring 模式注解装配](#spring-------)
 
