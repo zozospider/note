@@ -26,9 +26,11 @@
 > * [Spring Boot Reference Guide](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/)
 > * [Github: zozospider/note-microservice-spring-boot](https://github.com/zozospider/note-microservice-spring-boot)
 
+---
+
 ## Spring Annotation Programming Model
 > **Spring 模式注解装配**
-> [Spring Annotation Programming Model](https://github.com/spring-projects/spring-framework/wiki/Spring-Annotation-Programming-Model#stereotype-annotations)
+> > [Spring Annotation Programming Model](https://github.com/spring-projects/spring-framework/wiki/Spring-Annotation-Programming-Model#stereotype-annotations)
 
 > * A stereotype annotation is an annotation that is used to declare the role that a component plays within the application. For example, the `@Repository` annotation in the Spring Framework is a marker for any class that fulfills the role or stereotype of a repository (also known as Data Access Object or DAO).
 > * `@Component` is a generic stereotype for any Spring-managed component. Any component annotated with `@Component` is a candidate for component scanning. Similarly, any component annotated with an annotation that is itself meta-annotated with `@Component` is also a candidate for component scanning. For example, `@Service` is meta-annotated with `@Component`.
@@ -37,7 +39,7 @@
 > * `@Component`作为一种由Spring容器托管的通用模式组件，任何被`@Component`标准的组件均为组件扫描的候选对象。类似地，凡是被`@Component`元标注（meta-annotated）的注解，如`@Service`，当任何组件标注它时，也被视作组件扫描的候选对象。
 
 ### Example
-> * **举例**
+> **举例**
 
 | Spring Framework 注解 | 场景说明 | 起始版本 |
 | :--- | :--- | :--- |
@@ -49,7 +51,7 @@
 
 ### Classpath Scanning and Managed Components
 > **Spring 模式注解装配 -> 装配方式: @ComponentScan & <context:component-scan>**
-> [Spring Framework 5.1.0 Classpath Scanning and Managed Components](https://docs.spring.io/spring/docs/5.1.0.RELEASE/spring-framework-reference/core.html#beans-classpath-scanning)
+> > [Spring Framework 5.1.0 Classpath Scanning and Managed Components](https://docs.spring.io/spring/docs/5.1.0.RELEASE/spring-framework-reference/core.html#beans-classpath-scanning)
 
 > * 要自动检测这些类并注册相应的bean，您需要将 `@ComponentScan` 添加到 `@Configuration` 类。
 
@@ -225,13 +227,15 @@ myFirstLevelRepository Bean: com.imooc.diveinspringboot.configuration.repository
 mySecondLevelRepository Bean: com.imooc.diveinspringboot.configuration.repository.MySecondLevelRepository@2b48a640
 ```
 
+---
+
 ## The @Enable Annotation
 > **Spring 模式 @Enable 模块装配**
 
 > Spring Framework 3.1 开始支持 `@Enable` 模块装配，即将具有相同领域的功能组件集合，组合成一个独立的单元。
 
 ### Example
-> * **Spring 模式 @Enable 模块装配 -> 举例**
+> **Spring 模式 @Enable 模块装配 -> 举例**
 
 | 框架实现 | `@Enable` 注解模块 | 激活模块 |
 | :--- | :--- | :--- |
@@ -545,6 +549,8 @@ public class EnableHelloImportSelectorBootstrap {
 hello Bean: Hello Bean
 ```
 
+---
+
 ## Conditionally Configuration
 > **Spring 条件装配**
 
@@ -818,6 +824,8 @@ propertyName: user.name, propertyValue: Administrator
 javaPropertyValue: Administrator
 hello Bean: Hello Bean
 ```
+
+---
 
 ## Auto-configuration
 > **Spring Boot 自动装配**
