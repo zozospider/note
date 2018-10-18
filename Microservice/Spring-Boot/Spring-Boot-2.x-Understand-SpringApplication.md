@@ -1,22 +1,21 @@
 # Spring Boot 2.x Understand SpringApplication
 
-[TOC] 
-
-- [Spring Boot 2.x Understand SpringApplication](#spring-boot-2x-understand-springapplication)
-  * [Document &amp; Code](#document--code)
-  * [SpingApplication 基本使用 < a href=" " rel="nofollow">more</ a>](#spingapplication-基本使用-more)
-  * [自定义 SpringApplication < a href="https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-customizing-spring-application" rel="nofollow">more</ a>](#自定义-springapplication-more)
-  * [流式构建(Fluent Builder API) < a href="https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-fluent-builder-api" rel="nofollow">more</ a>](#流式构建fluent-builder-api-more)
-  * [本地启动测试](#本地启动测试)
-  * [推断 Web 应用类型](#推断-web-应用类型)
-  * [推断引导类(Main Class)](#推断引导类main-class)
-  * [加载应用上下文初始器(ApplicationContextInitializer)](#加载应用上下文初始器applicationcontextinitializer)
+- [Document & Code](#document--code)
+- [SpingApplication](#spingapplication)
+- [Customizing Spring Application](#customizing-spring-application)
+- [Fluent Builder API](#fluent-builder-api)
+- [Local Bootstrap Test](#local-bootstrap-test)
+- [Deduce Web Application Type](#deduce-web-application-type)
+- [Deduce Main Application Class](#deduce-main-application-class)
+- [Load Application Context Initializer](#load-application-context-initializer)
 
 ## Document & Code
-> * [SpringApplication](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-spring-application)
-> * [Github: zozospider/note-microservice-spring-boot](https://github.com/zozospider/note-microservice-spring-boot)
+> * [docs.spring.io: SpringApplication](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-spring-application)
+> * [github.com: zozospider/note-microservice-spring-boot](https://github.com/zozospider/note-microservice-spring-boot)
 
-## SpingApplication 基本使用 [more](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-spring-application)
+## SpingApplication
+> * SpingApplication 基本使用
+> * [docs.spring.io](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-spring-application)
 > * The `SpringApplication` class provides a convenient way to bootstrap a Spring application that is started from a main() method. In many situations, you can delegate to the static `SpringApplication.run` method, as shown in the following example:
 
 ```java
@@ -25,7 +24,9 @@ public static void main(String[] args) {
 }
 ```
 
-## 自定义 SpringApplication [more](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-customizing-spring-application)
+## Customizing Spring Application
+> * 自定义 SpringApplication
+> * [docs.spring.io](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-customizing-spring-application)
 > * If the SpringApplication defaults are not to your taste, you can instead create a local instance and customize it. For example, to turn off the banner, you could write:
 
 ```java
@@ -36,7 +37,9 @@ public static void main(String[] args) {
 }
 ```
 
-## 流式构建(Fluent Builder API) [more](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-fluent-builder-api)
+## Fluent Builder API
+> * 流式构建
+> * [docs.spring.io](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-fluent-builder-api)
 > * If you need to build an `ApplicationContext` hierarchy (multiple contexts with a parent/child relationship) or if you prefer using a “fluent” builder API, you can use the `SpringApplicationBuilder`.
 > * The `SpringApplicationBuilder` lets you chain together multiple method calls and includes `parent` and `child` methods that let you create a hierarchy, as shown in the following example:
 
@@ -48,7 +51,8 @@ new SpringApplicationBuilder()
 		.run(args);
 ```
 
-## 本地启动测试
+## Local Bootstrap Test
+> * 本地启动测试
 > 1. 通过 `SpringApplication.run(Class<?> primarySource, String... args)` 指定本类为 `primarySource` 参数。
 
 ```java
@@ -144,7 +148,8 @@ public class SpringApplicationBootstrap3 {
 Bean: com.zozospider.springapplication.SpringApplicationBootstrap3$ApplicationConfiguration$$EnhancerBySpringCGLIB$$b75f6e8c@4d518b32
 ```
 
-## 推断 Web 应用类型
+## Deduce Web Application Type
+> * 推断 Web 应用类型
 > `SpringApplication` 通过判断 `ClassPath` 中是否存在相关实现类来推断 Web 应用的类型。类型如下：
 > 1. Web Reactive: `WebApplicationType.REACTIVE`
 > 2. Web Servlet: `WebApplicationType.SERVLET`
@@ -187,8 +192,9 @@ public class SpringApplication {
 }
 ```
 
-## 推断引导类(Main Class)
-> 根据 Main 线程执行堆栈判断实际的引导类（通过异常堆栈信息判断是否存在 `main` 方法）。
+## Deduce Main Application Class
+> * 推断引导类(Main Class)
+> * 根据 Main 线程执行堆栈判断实际的引导类（通过异常堆栈信息判断是否存在 `main` 方法）。
 
 ```java
 package org.springframework.boot;
@@ -219,9 +225,9 @@ public class SpringApplication {
 }
 ```
 
-
-## 加载应用上下文初始器(`ApplicationContextInitializer`)
-> 利用 Spring 工厂加载机制，实例化 `ApplicationContextInitializer` 的具体实现类，并对具体实现类的执行顺序进行排序。
+## Load Application Context Initializer
+> * 加载应用上下文初始器 `ApplicationContextInitializer`
+> * 利用 Spring 工厂加载机制，实例化 `ApplicationContextInitializer` 的具体实现类，并对具体实现类的执行顺序进行排序。
 
 > * Spring Boot 举例
 
