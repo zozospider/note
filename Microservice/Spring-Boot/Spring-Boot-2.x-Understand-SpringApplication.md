@@ -2,6 +2,16 @@
 
 [TOC] 
 
+* [Spring Boot 2.x Understand SpringApplication](#spring-boot-2x-understand-springapplication)
+      * [Document &amp; Code](#document--code)
+      * [SpingApplication 基本使用 < a href=" " rel="nofollow">more</ a>](#spingapplication-基本使用-more)
+      * [自定义 SpringApplication < a href="https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-customizing-spring-application" rel="nofollow">more</ a>](#自定义-springapplication-more)
+      * [流式构建(Fluent Builder API) < a href="https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-fluent-builder-api" rel="nofollow">more</ a>](#流式构建fluent-builder-api-more)
+      * [本地启动测试](#本地启动测试)
+      * [推断 Web 应用类型](#推断-web-应用类型)
+      * [推断引导类(Main Class)](#推断引导类main-class)
+      * [加载应用上下文初始器(ApplicationContextInitializer)](#加载应用上下文初始器applicationcontextinitializer)
+
 ## Document & Code
 > * [SpringApplication](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-spring-application)
 > * [Github: zozospider/note-microservice-spring-boot](https://github.com/zozospider/note-microservice-spring-boot)
