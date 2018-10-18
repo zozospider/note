@@ -2,7 +2,7 @@
 
 [TOC] 
 
-* [Spring Boot 2.x Understand SpringApplication](#spring-boot-2x-understand-springapplication)
+- [Spring Boot 2.x Understand SpringApplication](#spring-boot-2x-understand-springapplication)
       * [Document &amp; Code](#document--code)
       * [SpingApplication 基本使用 < a href=" " rel="nofollow">more</ a>](#spingapplication-基本使用-more)
       * [自定义 SpringApplication < a href="https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-customizing-spring-application" rel="nofollow">more</ a>](#自定义-springapplication-more)
