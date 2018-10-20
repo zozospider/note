@@ -449,7 +449,7 @@ public class AnnotationAwareOrderComparator extends OrderComparator {
 > 1. 新建 `resources\META-INF\spring.factories` ，指定 `ApplicationContextInitializer` 实现的具体类。
 
 ```properties
-# Initializers
+# Initializers (copy from spring-boot-autoconfigure-2.0.5.RELEASE.jar!/META-INF/spring.factories)
 org.springframework.context.ApplicationContextInitializer=\
 com.zozospider.springapplication.context.FirstApplicationContextInitializer,\
 com.zozospider.springapplication.context.SecondApplicationContextInitializer
@@ -711,7 +711,7 @@ public class AnnotationAwareOrderComparator extends OrderComparator {
 > 1. 新建 `resources\META-INF\spring.factories` ，指定 `ApplicationListener` 实现的具体类。
 
 ```properties
-# Application Listeners
+# Application Listeners (copy from spring-boot-autoconfigure-2.0.5.RELEASE.jar!/META-INF/spring.factories)
 org.springframework.context.ApplicationListener=\
 com.zozospider.springapplication.listener.FirstApplicationListener,\
 com.zozospider.springapplication.listener.SecondApplicationListener
@@ -818,7 +818,8 @@ Second ApplicationListener: application, timestamp: 1539954515281
 ## Spring Application Run Listeners
 > **SpringApplication运行监听器**
 
-### Spring Framework
+### Spring Framework Example
+> **Spring 框架运行监听器举例**
 
 ```java
 package com.zozospider.springapplication;
@@ -866,6 +867,259 @@ public class SpringFrameworkEventBootstrap {
 监听到事件: org.springframework.context.PayloadApplicationEvent[source=org.springframework.context.annotation.AnnotationConfigApplicationContext@5f5a92bb: startup date [Sat Oct 20 14:26:38 CST 2018]; root of context hierarchy]
 监听到事件: com.zozospider.springapplication.SpringFrameworkEventBootstrap$1[source=Hello Application Event]
 监听到事件: org.springframework.context.event.ContextClosedEvent[source=org.springframework.context.annotation.AnnotationConfigApplicationContext@5f5a92bb: startup date [Sat Oct 20 14:26:38 CST 2018]; root of context hierarchy]
+```
+
+### Spring Boot Run Listeners Example
+> **Spring Boot 运行监听器举例**
+
+> 1. `spring-boot-2.0.5.RELEASE.jar!/META-INF/spring.factories` 文件中配置 `SpringApplicationRunListener` 的具体实现类。
+
+```properties
+# Run Listeners
+org.springframework.boot.SpringApplicationRunListener=\
+org.springframework.boot.context.event.EventPublishingRunListener
+```
+
+> 2. 利用 Spring 工厂加载 `SpringFactoriesLoader`，实例化 `EventPublishingRunListener` 的具体实现类。
+
+> * `SpringApplication` 运行时调用 `SpringApplicationRunListeners` 。
+
+```java
+package org.springframework.boot;
+
+...
+
+public class SpringApplication {
+
+	...
+
+	/**
+	 * Run the Spring application, creating and refreshing a new
+	 * {@link ApplicationContext}.
+	 * @param args the application arguments (usually passed from a Java main method)
+	 * @return a running {@link ApplicationContext}
+	 */
+	public ConfigurableApplicationContext run(String... args) {
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
+		ConfigurableApplicationContext context = null;
+		Collection<SpringBootExceptionReporter> exceptionReporters = new ArrayList<>();
+		configureHeadlessProperty();
+		SpringApplicationRunListeners listeners = getRunListeners(args);
+		listeners.starting();
+		
+		...
+
+	}
+
+	private SpringApplicationRunListeners getRunListeners(String[] args) {
+		Class<?>[] types = new Class<?>[] { SpringApplication.class, String[].class };
+		return new SpringApplicationRunListeners(logger, getSpringFactoriesInstances(
+				SpringApplicationRunListener.class, types, this, args));
+	}
+
+	...
+
+}
+```
+> * `SpringApplicationRunListeners` 装载所有实例化的 `SpringApplicationRunListener` ，并统一调用。
+```java
+package org.springframework.boot;
+
+...
+
+class SpringApplicationRunListeners {
+	
+	...
+
+	private final List<SpringApplicationRunListener> listeners;
+
+	SpringApplicationRunListeners(Log log,
+			Collection<? extends SpringApplicationRunListener> listeners) {
+		this.log = log;
+		this.listeners = new ArrayList<>(listeners);
+	}
+
+	public void starting() {
+		for (SpringApplicationRunListener listener : this.listeners) {
+			listener.starting();
+		}
+	}
+
+	public void environmentPrepared(ConfigurableEnvironment environment) {
+		for (SpringApplicationRunListener listener : this.listeners) {
+			listener.environmentPrepared(environment);
+		}
+	}
+
+	...
+
+}
+```
+> * `SpringApplicationRunListener` 接口，定义实现类需要实现的方法。
+```java
+public interface SpringApplicationRunListener {
+
+	// Called immediately when the run method has first started. Can be used for very early initialization.
+	// Spring 应用刚启动
+	void starting();
+
+	// Called once the environment has been prepared, but before the {@link ApplicationContext} has been created.
+	// ConfigurableEnvironment 准备妥当，允许将其调整。
+	void environmentPrepared(ConfigurableEnvironment environment);
+
+	// Called once the {@link ApplicationContext} has been created and prepared, but before sources have been loaded.
+	// ConfigurableApplicationContext 准备妥当，允许将其调整
+	void contextPrepared(ConfigurableApplicationContext context);
+
+	// Called once the application context has been loaded but before it has been refreshed.
+	// ConfigurableApplicationContext 已装载，但仍未启动。
+	void contextLoaded(ConfigurableApplicationContext context);
+
+	// The context has been refreshed and the application has started but {@link CommandLineRunner CommandLineRunners} and {@link  ApplicationRunner ApplicationRunners} have not been called.
+	// ConfigurableApplicationContext 已启动，此时 Spring Bean 已初始化完成。
+	void started(ConfigurableApplicationContext context);
+
+	// Called immediately before the run method finishes, when the application context has been refreshed and all {@link CommandLineRunner CommandLineRunners} and {@link ApplicationRunner ApplicationRunners} have been called.
+	// Spring 应用正在运行。
+	void running(ConfigurableApplicationContext context);
+
+	// Called when a failure occurs when running the application.
+	// Spring 应用运行失败。
+	void failed(ConfigurableApplicationContext context, Throwable exception);
+
+}
+```
+> * `EventPublishingRunListener` 实现 `SpringApplicationRunListener` 接口。
+```java
+package org.springframework.boot.context.event;
+
+...
+
+public class EventPublishingRunListener implements SpringApplicationRunListener, Ordered {
+
+	...
+
+	@Override
+	public void starting() {
+		this.initialMulticaster.multicastEvent(
+				new ApplicationStartingEvent(this.application, this.args));
+	}
+
+	@Override
+	public void environmentPrepared(ConfigurableEnvironment environment) {
+		this.initialMulticaster.multicastEvent(new ApplicationEnvironmentPreparedEvent(
+				this.application, this.args, environment));
+	}
+
+	...
+
+}
+```
+
+### Spring Boot Run Listeners Customizing
+> **Spring Boot 运行监听器自定义**
+
+> 1. 新建 `resources\META-INF\spring.factories` ，指定 `SpringApplicationRunListener` 实现的具体类。
+
+```properties
+# Run Listeners (copy from spring-boot-2.0.5.RELEASE.jar!/META-INF/spring.factories)
+org.springframework.boot.SpringApplicationRunListener=\
+com.zozospider.springapplication.run.HelloRunListener
+```
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Understand-SpringApplication/springapplication-springfactories3.png)
+
+> 2. 创建 `HelloRunListener` ，实现 `SpringApplicationRunListener` 接口。
+
+```java
+package com.zozospider.springapplication.run;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.SpringApplicationRunListener;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
+
+/**
+ * Hello {@link SpringApplicationRunListener}
+ *
+ * @author zozo
+ * @since 1.0
+ */
+public class HelloRunListener implements SpringApplicationRunListener {
+
+    public HelloRunListener(SpringApplication application, String[] args) {
+
+    }
+
+    @Override
+    public void starting() {
+        System.out.println("HelloRunListener starting()...");
+    }
+
+    @Override
+    public void environmentPrepared(ConfigurableEnvironment environment) {
+
+    }
+
+    @Override
+    public void contextPrepared(ConfigurableApplicationContext context) {
+
+    }
+
+    @Override
+    public void contextLoaded(ConfigurableApplicationContext context) {
+
+    }
+
+    @Override
+    public void started(ConfigurableApplicationContext context) {
+
+    }
+
+    @Override
+    public void running(ConfigurableApplicationContext context) {
+
+    }
+
+    @Override
+    public void failed(ConfigurableApplicationContext context, Throwable exception) {
+
+    }
+
+}
+```
+> 3. 运行 `SpringApplicationBootstrap` & 运行结果（ web 和非 web 应用都可以）。
+
+```java
+package com.zozospider.springapplication;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+/**
+ * {@link SpringApplication} 引导类
+ *
+ * @author zozo
+ * @since 1.0
+ */
+@SpringBootApplication
+public class SpringApplicationBootstrap {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SpringApplicationBootstrap.class, args);
+    }
+
+}
+```
+```
+HelloRunListener starting()...
+
+(以上四行为 Load Application Context Initializer 和 Application Listeners 自定义运行结果)
+First ApplicationContextInitializer: org.springframework.context.annotation.AnnotationConfigApplicationContext@21507a04
+Second ApplicationContextInitializer: application
+First ApplicationListener: application, timestamp: 1540020038631
+Second ApplicationListener: application, timestamp: 1540020038631
 ```
 
 
