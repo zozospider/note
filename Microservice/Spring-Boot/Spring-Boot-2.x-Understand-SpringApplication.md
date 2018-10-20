@@ -8,6 +8,15 @@
 - [Deduce Web Application Type](#deduce-web-application-type)
 - [Deduce Main Application Class](#deduce-main-application-class)
 - [Load Application Context Initializer](#load-application-context-initializer)
+  - [Spring Boot Example](#spring-boot-example)
+  - [Customizing](#customizing)
+- [Application Listeners](#application-listeners)
+  - [Spring Boot Example](#spring-boot-example-1)
+  - [Customizing](#customizing-1)
+- [Spring Application Run Listeners](#spring-application-run-listeners)
+  - [Spring Framework Example](#spring-framework-example)
+  - [Spring Boot Run Listeners Example](#spring-boot-run-listeners-example)
+  - [Spring Boot Run Listeners Customizing](#spring-boot-run-listeners-customizing)
 
 ---
 
