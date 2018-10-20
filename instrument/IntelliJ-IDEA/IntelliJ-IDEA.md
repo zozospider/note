@@ -8,3 +8,7 @@
 ## Open
 > 1. 打开: File > Settings > Appearance & Behavior > System Settings
 > 2. 去掉勾选: Startup/Shutdown > Reopen last project on startup
+
+## Keymap Refrence
+> Help > Keymap Refrence
+

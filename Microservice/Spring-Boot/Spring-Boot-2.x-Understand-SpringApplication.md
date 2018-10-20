@@ -815,5 +815,57 @@ First ApplicationListener: application, timestamp: 1539954515281
 Second ApplicationListener: application, timestamp: 1539954515281
 ```
 
+## Spring Application Run Listeners
+> **SpringApplication运行监听器**
+
+### Spring Framework
+
+```java
+package com.zozospider.springapplication;
+
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+/**
+ * Spring Framework 事件引导类
+ *
+ * @author zozo
+ * @since 1.0
+ */
+public class SpringFrameworkEventBootstrap {
+
+    public static void main(String[] args) {
+
+        // 创建上下文
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+
+        // 注册应用事件监听器
+        context.addApplicationListener(event -> {
+            System.out.println("监听到事件: " + event);
+        });
+
+        // 启动上下文
+        context.refresh();
+
+        context.publishEvent("Hello Event 1");
+        context.publishEvent("Hello Event 2");
+        context.publishEvent(new ApplicationEvent("Hello Application Event") {
+
+        });
+
+        // 关闭上下文
+        context.close();
+
+    }
+
+}
+```
+```
+监听到事件: org.springframework.context.event.ContextRefreshedEvent[source=org.springframework.context.annotation.AnnotationConfigApplicationContext@5f5a92bb: startup date [Sat Oct 20 14:26:38 CST 2018]; root of context hierarchy]
+监听到事件: org.springframework.context.PayloadApplicationEvent[source=org.springframework.context.annotation.AnnotationConfigApplicationContext@5f5a92bb: startup date [Sat Oct 20 14:26:38 CST 2018]; root of context hierarchy]
+监听到事件: org.springframework.context.PayloadApplicationEvent[source=org.springframework.context.annotation.AnnotationConfigApplicationContext@5f5a92bb: startup date [Sat Oct 20 14:26:38 CST 2018]; root of context hierarchy]
+监听到事件: com.zozospider.springapplication.SpringFrameworkEventBootstrap$1[source=Hello Application Event]
+监听到事件: org.springframework.context.event.ContextClosedEvent[source=org.springframework.context.annotation.AnnotationConfigApplicationContext@5f5a92bb: startup date [Sat Oct 20 14:26:38 CST 2018]; root of context hierarchy]
+```
 
 
