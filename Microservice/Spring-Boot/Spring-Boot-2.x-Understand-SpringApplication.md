@@ -1375,3 +1375,179 @@ Second ApplicationContextInitializer: application
 First ApplicationListener: application, timestamp: 1540020038631
 Second ApplicationListener: application, timestamp: 1540020038631
 ```
+
+## ConfigurableApplicationContext
+> **创建 Spring 应用上下文**
+
+> 根据准备阶段推断出的 Web 应用类型，创建对应的 `ConfigurableApplicationContext` 实例。
+> * Web Reactive: `AnnotationConfigReactiveWebServerApplicationContext`
+> * Web Servlet: `AnnotationConfigServletWebServerApplicationContext`
+> * 非 Web: `AnnotationConfigApplicationContext`
+
+> 根据准备阶段推断出的 Web 应用类型，创建对应的 `ConfigurableEnvironment` 实例。
+> * Web Reactive: `StandardEnvironment`
+> * Web Servlet: `StandardServletEnvironment`
+> * 非 Web: `StandardEnvironment`
+
+> `SpringApplication` 运行时，根据 Web 应用类型，创建对应的 `ApplicationContext`
+
+```java
+package org.springframework.boot;
+
+...
+
+public class SpringApplication {
+
+	...
+
+	public ConfigurableApplicationContext run(String... args) {
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
+		ConfigurableApplicationContext context = null;
+		Collection<SpringBootExceptionReporter> exceptionReporters = new ArrayList<>();
+		configureHeadlessProperty();
+		SpringApplicationRunListeners listeners = getRunListeners(args);
+		listeners.starting();
+		try {
+			ApplicationArguments applicationArguments = new DefaultApplicationArguments(
+					args);
+			// 根据 Web 应用类型，创建对应的 `ConfigurableEnvironment` 的实例
+			ConfigurableEnvironment environment = prepareEnvironment(listeners,
+					applicationArguments);
+			configureIgnoreBeanInfo(environment);
+			Banner printedBanner = printBanner(environment);
+			// 根据 Web 应用类型，创建对应的 `ConfigurableApplicationContext` 的实例
+			context = createApplicationContext();
+			exceptionReporters = getSpringFactoriesInstances(
+					SpringBootExceptionReporter.class,
+					new Class[] { ConfigurableApplicationContext.class }, context);
+			prepareContext(context, environment, listeners, applicationArguments,
+					printedBanner);
+			refreshContext(context);
+			afterRefresh(context, applicationArguments);
+			stopWatch.stop();
+			if (this.logStartupInfo) {
+				new StartupInfoLogger(this.mainApplicationClass)
+						.logStarted(getApplicationLog(), stopWatch);
+			}
+			listeners.started(context);
+			callRunners(context, applicationArguments);
+		}
+		catch (Throwable ex) {
+			handleRunFailure(context, ex, exceptionReporters, listeners);
+			throw new IllegalStateException(ex);
+		}
+
+		try {
+			listeners.running(context);
+		}
+		catch (Throwable ex) {
+			handleRunFailure(context, ex, exceptionReporters, null);
+			throw new IllegalStateException(ex);
+		}
+		return context;
+	}
+
+	...
+
+	// 根据 Web 应用类型，创建对应的 `ConfigurableEnvironment` 的实例
+	private ConfigurableEnvironment prepareEnvironment(
+			SpringApplicationRunListeners listeners,
+			ApplicationArguments applicationArguments) {
+		// Create and configure the environment
+		ConfigurableEnvironment environment = getOrCreateEnvironment();
+		configureEnvironment(environment, applicationArguments.getSourceArgs());
+		listeners.environmentPrepared(environment);
+		bindToSpringApplication(environment);
+		if (!this.isCustomEnvironment) {
+			environment = new EnvironmentConverter(getClassLoader())
+					.convertEnvironmentIfNecessary(environment, deduceEnvironmentClass());
+		}
+		ConfigurationPropertySources.attach(environment);
+		return environment;
+	}
+
+	...
+
+	private ConfigurableEnvironment getOrCreateEnvironment() {
+		if (this.environment != null) {
+			return this.environment;
+		}
+		switch (this.webApplicationType) {
+		case SERVLET:
+			return new StandardServletEnvironment();
+		case REACTIVE:
+			return new StandardReactiveWebEnvironment();
+		default:
+			return new StandardEnvironment();
+		}
+	}
+
+	...
+
+	// 根据 Web 应用类型，创建对应的 `ConfigurableApplicationContext` 的实例
+	protected ConfigurableApplicationContext createApplicationContext() {
+		Class<?> contextClass = this.applicationContextClass;
+		if (contextClass == null) {
+			try {
+				switch (this.webApplicationType) {
+				// org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext
+				case SERVLET:
+					contextClass = Class.forName(DEFAULT_WEB_CONTEXT_CLASS);
+					break;
+				// org.springframework.boot.web.reactive.context.AnnotationConfigReactiveWebServerApplicationContext
+				case REACTIVE:
+					contextClass = Class.forName(DEFAULT_REACTIVE_WEB_CONTEXT_CLASS);
+					break;
+				// org.springframework.context.annotation.AnnotationConfigApplicationContext
+				default:
+					contextClass = Class.forName(DEFAULT_CONTEXT_CLASS);
+				}
+			}
+			catch (ClassNotFoundException ex) {
+				throw new IllegalStateException(
+						"Unable create a default ApplicationContext, "
+								+ "please specify an ApplicationContextClass",
+						ex);
+			}
+		}
+		return (ConfigurableApplicationContext) BeanUtils.instantiateClass(contextClass);
+	}
+
+	...
+
+}
+```
+
+> 测试
+
+```java
+package com.zozospider.springapplication;
+
+import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
+
+public class SpringApplicationContextBootstrap {
+
+    public static void main(String[] args) {
+
+        ConfigurableApplicationContext context = new SpringApplicationBuilder(SpringApplicationContextBootstrap.class)
+                .web(WebApplicationType.NONE)
+                .run(args);
+
+        System.out.println("ConfigurableApplicationContext: " + context.getClass().getName());
+        System.out.println("ConfigurableApplicationContext getEnvironment: "+ context.getEnvironment().getClass().getName());
+
+        // 关闭上下文
+        context.close();
+
+    }
+
+}
+```
+```
+// 以下为 .web(WebApplicationType.NONE)
+ConfigurableApplicationContext: org.springframework.context.annotation.AnnotationConfigApplicationContext
+ConfigurableApplicationContext getEnvironment: org.springframework.core.env.StandardEnvironment
+```
