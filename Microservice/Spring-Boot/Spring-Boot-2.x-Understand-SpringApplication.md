@@ -565,12 +565,25 @@ Second ApplicationContextInitializer: application
 
 ### Spring Boot Example
 > **Spring Boot 举例**
-> 1. `spring-boot-autoconfigure-2.0.5.RELEASE.jar!\META-INF\spring.factories` 文件中配置 `ApplicationListener` 的具体实现类。
+> 1. `spring-boot-autoconfigure-2.0.5.RELEASE.jar!\META-INF\spring.factories` 和 `spring-boot-2.0.5.RELEASE.jar!/META-INF/spring.factories` 文件中配置 `ApplicationListener` 的具体实现类。
 
 ```properties
 # Application Listeners
 org.springframework.context.ApplicationListener=\
 org.springframework.boot.autoconfigure.BackgroundPreinitializer
+```
+```properties
+# Application Listeners
+org.springframework.context.ApplicationListener=\
+org.springframework.boot.ClearCachesApplicationListener,\
+org.springframework.boot.builder.ParentContextCloserApplicationListener,\
+org.springframework.boot.context.FileEncodingApplicationListener,\
+org.springframework.boot.context.config.AnsiOutputApplicationListener,\
+org.springframework.boot.context.config.ConfigFileApplicationListener,\
+org.springframework.boot.context.config.DelegatingApplicationListener,\
+org.springframework.boot.context.logging.ClasspathLoggingApplicationListener,\
+org.springframework.boot.context.logging.LoggingApplicationListener,\
+org.springframework.boot.liquibase.LiquibaseServiceLocatorApplicationListener
 ```
 
 > 2. 利用 Spring 工厂加载 `SpringFactoriesLoader`，实例化 `ApplicationListener` 的具体实现类。
@@ -714,21 +727,106 @@ public class AnnotationAwareOrderComparator extends OrderComparator {
 }
 ```
 
+> 4. `ApplicationListener` 接口，定义实现类需要实现的方法。
+
+```java
+package org.springframework.context;
+
+...
+
+@FunctionalInterface
+public interface ApplicationListener<E extends ApplicationEvent> extends EventListener {
+
+	/**
+	 * Handle an application event.
+	 * @param event the event to respond to
+	 */
+	void onApplicationEvent(E event);
+
+}
+```
+
+> 5. `BackgroundPreinitializer` 和 `ConfigFileApplicationListener` 等具体实现类实现 `ApplicationListener` 接口，并指定排序。
+
+```java
+package org.springframework.boot.autoconfigure;
+
+...
+
+@Order(LoggingApplicationListener.DEFAULT_ORDER + 1)
+public class BackgroundPreinitializer
+		implements ApplicationListener<SpringApplicationEvent> {
+
+	@Override
+	public void onApplicationEvent(SpringApplicationEvent event) {
+		if (event instanceof ApplicationStartingEvent
+				&& preinitializationStarted.compareAndSet(false, true)) {
+			performPreinitialization();
+		}
+		if ((event instanceof ApplicationReadyEvent
+				|| event instanceof ApplicationFailedEvent)
+				&& preinitializationStarted.get()) {
+			try {
+				preinitializationComplete.await();
+			}
+			catch (InterruptedException ex) {
+				Thread.currentThread().interrupt();
+			}
+		}
+	}
+
+	...
+
+}
+```
+```java
+package org.springframework.boot.context.config;
+
+...
+
+public class ConfigFileApplicationListener
+		implements EnvironmentPostProcessor, SmartApplicationListener, Ordered {
+
+	...
+
+	@Override
+	public void onApplicationEvent(ApplicationEvent event) {
+		if (event instanceof ApplicationEnvironmentPreparedEvent) {
+			onApplicationEnvironmentPreparedEvent(
+					(ApplicationEnvironmentPreparedEvent) event);
+		}
+		if (event instanceof ApplicationPreparedEvent) {
+			onApplicationPreparedEvent(event);
+		}
+	}
+
+	...
+
+}
+```
+
 ### Customizing
 > **自定义**
 
 > 1. 新建 `resources\META-INF\spring.factories` ，指定 `ApplicationListener` 实现的具体类。
 
 ```properties
-# Application Listeners (copy from spring-boot-autoconfigure-2.0.5.RELEASE.jar!/META-INF/spring.factories)
+# Application Listeners (copy from spring-boot-autoconfigure-2.0.5.RELEASE.jar!/META-INF/spring.factories and spring-boot-2.0.5.RELEASE.jar!/META-INF/spring.factories)
 org.springframework.context.ApplicationListener=\
 com.zozospider.springapplication.listener.FirstApplicationListener,\
-com.zozospider.springapplication.listener.SecondApplicationListener
+com.zozospider.springapplication.listener.SecondApplicationListener,\
+com.zozospider.springapplication.listener.BeforeConfigFileApplicationListener,\
+com.zozospider.springapplication.listener.AfterConfigFileApplicationListener
+```
+
+> 2. 新建 `resources/application.properties`，配置 `name` key 和对应的 value。
+```properties
+name = zozospider
 ```
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Understand-SpringApplication/springapplication-springfactories2.png)
 
-> 2. 创建 `FirstApplicationListener` ，实现 `ApplicationListener<ContextRefreshedEvent>` 接口，并注解 `Order` 进行排序，指定为高级别。
+> 3. 创建 `FirstApplicationListener` ，实现 `ApplicationListener<ContextRefreshedEvent>` 接口，并注解 `Order` 进行排序，指定为高级别。
 
 ```java
 package com.zozospider.springapplication.listener;
@@ -756,7 +854,7 @@ public class FirstApplicationListener implements ApplicationListener<ContextRefr
 }
 ```
 
-> 3. 创建 `SecondApplicationListener` ，实现 `ApplicationListener<ContextRefreshedEvent>` 接口和 `Ordered` 接口，并重写 `Ordered` 接口的 `getOrder()` 方法，指定为低级别。
+> 4. 创建 `SecondApplicationListener` ，实现 `ApplicationListener<ContextRefreshedEvent>` 接口和 `Ordered` 接口，并重写 `Ordered` 接口的 `getOrder()` 方法，指定为低级别。
 
 ```java
 package com.zozospider.springapplication.listener;
@@ -792,7 +890,151 @@ public class SecondApplicationListener implements ApplicationListener<ContextRef
 }
 ```
 
-> 4. 运行 `SpringApplicationBootstrap` & 运行结果（ web 和非 web 应用都可以）。
+> 5. 创建 `BeforeConfigFileApplicationListener` ，实现 `ApplicationListener<ContextRefreshedEvent>` 接口和 `Ordered` 接口，并重写 `Ordered` 接口的 `getOrder()` 方法，指定为比 `ConfigFileApplicationListener` 优先级更高。
+
+```java
+package com.zozospider.springapplication.listener;
+
+import org.springframework.boot.context.config.ConfigFileApplicationListener;
+import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
+import org.springframework.boot.context.event.ApplicationPreparedEvent;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.event.SmartApplicationListener;
+import org.springframework.core.Ordered;
+import org.springframework.core.env.ConfigurableEnvironment;
+
+/**
+ * Before {@link ConfigFileApplicationListener} 实现
+ *
+ * @zozo
+ * @since 1.0
+ */
+public class BeforeConfigFileApplicationListener implements SmartApplicationListener, Ordered {
+
+    /**
+     * 参考 ConfigFileApplicationListener 实现
+     * @param eventType
+     * @return
+     */
+    @Override
+    public boolean supportsEventType(Class<? extends ApplicationEvent> eventType) {
+        return ApplicationEnvironmentPreparedEvent.class.isAssignableFrom(eventType)
+                || ApplicationPreparedEvent.class.isAssignableFrom(eventType);
+    }
+
+    /**
+     * 参考 ConfigFileApplicationListener 实现
+     * @param aClass
+     * @return
+     */
+    @Override
+    public boolean supportsSourceType(Class<?> aClass) {
+        return true;
+    }
+
+    /**
+     * 参考 ConfigFileApplicationListener 实现，并试图获取 application.properties 中配置的 name 对应的值。
+     * @param event
+     */
+    @Override
+    public void onApplicationEvent(ApplicationEvent event) {
+        if (event instanceof ApplicationEnvironmentPreparedEvent) {
+            ApplicationEnvironmentPreparedEvent preparedEvent = (ApplicationEnvironmentPreparedEvent) event;
+            ConfigurableEnvironment environment = preparedEvent.getEnvironment();
+            String name = environment.getProperty("name");
+            System.out.println("Before environment getProperty name: " + name);
+        }
+        if (event instanceof ApplicationPreparedEvent) {
+
+        }
+    }
+
+    /**
+     * 比 ConfigFileApplicationListener 优先级更高
+     *
+     * @return
+     */
+    @Override
+    public int getOrder() {
+        return ConfigFileApplicationListener.DEFAULT_ORDER - 1;
+    }
+
+}
+```
+
+> 6. 创建 `AfterConfigFileApplicationListener` ，实现 `ApplicationListener<ContextRefreshedEvent>` 接口和 `Ordered` 接口，并重写 `Ordered` 接口的 `getOrder()` 方法，指定为比 `ConfigFileApplicationListener` 优先级更低。
+
+```java
+package com.zozospider.springapplication.listener;
+
+import org.springframework.boot.context.config.ConfigFileApplicationListener;
+import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
+import org.springframework.boot.context.event.ApplicationPreparedEvent;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.event.SmartApplicationListener;
+import org.springframework.core.Ordered;
+import org.springframework.core.env.ConfigurableEnvironment;
+
+/**
+ * After {@link ConfigFileApplicationListener} 实现
+ *
+ * @zozo
+ * @since 1.0
+ */
+public class AfterConfigFileApplicationListener implements SmartApplicationListener, Ordered {
+
+    /**
+     * 参考 ConfigFileApplicationListener 实现
+     * @param eventType
+     * @return
+     */
+    @Override
+    public boolean supportsEventType(Class<? extends ApplicationEvent> eventType) {
+        return ApplicationEnvironmentPreparedEvent.class.isAssignableFrom(eventType)
+                || ApplicationPreparedEvent.class.isAssignableFrom(eventType);
+    }
+
+    /**
+     * 参考 ConfigFileApplicationListener 实现
+     * @param aClass
+     * @return
+     */
+    @Override
+    public boolean supportsSourceType(Class<?> aClass) {
+        return true;
+    }
+
+    /**
+     * 参考 ConfigFileApplicationListener 实现，并试图获取 application.properties 中配置的 name 对应的值。
+     * @param event
+     */
+    @Override
+    public void onApplicationEvent(ApplicationEvent event) {
+        if (event instanceof ApplicationEnvironmentPreparedEvent) {
+            ApplicationEnvironmentPreparedEvent preparedEvent = (ApplicationEnvironmentPreparedEvent) event;
+            ConfigurableEnvironment environment = preparedEvent.getEnvironment();
+            String name = environment.getProperty("name");
+            System.out.println("After environment getProperty name: " + name);
+        }
+        if (event instanceof ApplicationPreparedEvent) {
+
+        }
+    }
+
+    /**
+     * 比 ConfigFileApplicationListener 优先级更低
+     *
+     * @return
+     */
+    @Override
+    public int getOrder() {
+        return ConfigFileApplicationListener.DEFAULT_ORDER + 1;
+    }
+
+}
+```
+
+> 7. 运行 `SpringApplicationBootstrap` & 运行结果（ web 和非 web 应用都可以）。
 
 ```java
 package com.zozospider.springapplication;
@@ -816,16 +1058,19 @@ public class SpringApplicationBootstrap {
 }
 ```
 ```
+Before environment getProperty name: null
+After environment getProperty name: zozospider
+
+(以下两行为 Load Application Context Initializer 自定义运行结果)
 First ApplicationContextInitializer: org.springframework.context.annotation.AnnotationConfigApplicationContext@75c072cb
 Second ApplicationContextInitializer: application
-(以上两行为 Load Application Context Initializer 自定义运行结果)
 
 First ApplicationListener: application, timestamp: 1539954515281
 Second ApplicationListener: application, timestamp: 1539954515281
 ```
 
 ## Spring Application Run Listeners
-> **SpringApplication运行监听器**
+> **SpringApplication 运行监听器**
 
 ### Spring Framework Example
 > **Spring 框架运行监听器举例**
@@ -1130,5 +1375,3 @@ Second ApplicationContextInitializer: application
 First ApplicationListener: application, timestamp: 1540020038631
 Second ApplicationListener: application, timestamp: 1540020038631
 ```
-
-
