@@ -193,3 +193,152 @@ Hello
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Process-IDEA-Debugger.png)
 
+> 4. 访问 http://localhost:8080/ ，核心步骤如下，参考[Spring Framework Web MVC Process](#spring-framework-web-mvc-process)的交互流程图。
+
+> * 经过 `DispatcherServlet` 的方法 `doDispatch` 。
+
+```java
+package org.springframework.web.servlet;
+
+...
+
+public class DispatcherServlet extends FrameworkServlet {
+
+    ...
+
+    protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpServletRequest processedRequest = request;
+        HandlerExecutionChain mappedHandler = null;
+        boolean multipartRequestParsed = false;
+
+        WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);
+
+        ...
+
+    }
+
+    ...
+
+}
+```
+
+> * 经过 `DispatcherServlet` 的方法 `getHandler` 。
+
+```java
+package org.springframework.web.servlet;
+
+...
+
+public class DispatcherServlet extends FrameworkServlet {
+
+    ...
+
+    @Nullable
+    protected HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
+        if (this.handlerMappings != null) {
+            for (HandlerMapping hm : this.handlerMappings) {
+                if (logger.isTraceEnabled()) {
+                    logger.trace(
+                            "Testing handler map [" + hm + "] in DispatcherServlet with name '" + getServletName() + "'");
+                }
+                HandlerExecutionChain handler = hm.getHandler(request);
+                if (handler != null) {
+                    return handler;
+                }
+            }
+        }
+        return null;
+    }
+
+    ...
+
+}
+```
+
+> * 经过 `DispatcherServlet` 的方法 `getHandlerAdapter` 。
+
+```java
+package org.springframework.web.servlet;
+
+...
+
+public class DispatcherServlet extends FrameworkServlet {
+
+    ...
+
+    protected HandlerAdapter getHandlerAdapter(Object handler) throws ServletException {
+        if (this.handlerAdapters != null) {
+            for (HandlerAdapter ha : this.handlerAdapters) {
+                if (logger.isTraceEnabled()) {
+                    logger.trace("Testing handler adapter [" + ha + "]");
+                }
+                if (ha.supports(handler)) {
+                    return ha;
+                }
+            }
+        }
+        throw new ServletException("No adapter for handler [" + handler +
+                "]: The DispatcherServlet configuration needs to include a HandlerAdapter that supports this handler");
+    }
+
+    ...
+
+}
+```
+
+> * 经过 `HelloController` 的方法 `index` 。
+
+```java
+package com.zozospider.springwebmvc.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * Hello {@link Controller}
+ *
+ * @author zozo
+ * @since 1.0
+ */
+@Controller
+public class HelloController {
+
+    @RequestMapping("")
+    public String index() {
+        return "index";
+    }
+
+}
+```
+
+> * 经过 `DispatcherServlet` 的方法 `resolveViewName` 。
+
+```java
+package org.springframework.web.servlet;
+
+...
+
+public class DispatcherServlet extends FrameworkServlet {
+
+    ...
+
+    @Nullable
+    protected View resolveViewName(String viewName, @Nullable Map<String, Object> model,
+            Locale locale, HttpServletRequest request) throws Exception {
+
+        if (this.viewResolvers != null) {
+            for (ViewResolver viewResolver : this.viewResolvers) {
+                View view = viewResolver.resolveViewName(viewName, locale);
+                if (view != null) {
+                    return view;
+                }
+            }
+        }
+        return null;
+    }
+
+    ...
+
+}
+```
+
