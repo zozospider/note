@@ -22,6 +22,8 @@
   - [Example](#example-3)
   - [Customizing](#customizing-3)
 
+---
+
 ## Document & Code
 > * [Spring Boot Reference Guide](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/)
 > * [Github: zozospider/note-microservice-spring-boot](https://github.com/zozospider/note-microservice-spring-boot)
@@ -1005,3 +1007,5 @@ propertyName: user.name, propertyValue: Administrator
 javaPropertyValue: Administrator
 hello Bean: Hello Bean
 ```
+
+---

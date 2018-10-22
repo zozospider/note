@@ -559,6 +559,8 @@ First ApplicationContextInitializer: org.springframework.context.annotation.Anno
 Second ApplicationContextInitializer: application
 ```
 
+---
+
 ## Application Listeners
 > **加载应用事件监听器 `ApplicationListener`**
 
@@ -1070,6 +1072,8 @@ First ApplicationListener: application, timestamp: 1539954515281
 Second ApplicationListener: application, timestamp: 1539954515281
 ```
 
+---
+
 ## Spring Application Run Listeners
 > **SpringApplication 运行监听器**
 
@@ -1377,6 +1381,8 @@ First ApplicationListener: application, timestamp: 1540020038631
 Second ApplicationListener: application, timestamp: 1540020038631
 ```
 
+---
+
 ## ConfigurableApplicationContext
 > **创建 Spring 应用上下文**
 
@@ -1552,3 +1558,5 @@ public class SpringApplicationContextBootstrap {
 ConfigurableApplicationContext: org.springframework.context.annotation.AnnotationConfigApplicationContext
 ConfigurableApplicationContext getEnvironment: org.springframework.core.env.StandardEnvironment
 ```
+
+---
