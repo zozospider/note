@@ -182,6 +182,7 @@ Hello
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Process-process.png)
 
 ### Core
+> **Spring Web MVC 流程-核心组件**
 
 | 组件 Bean 类型 | 说明 |
 | :--- | :--- |
@@ -193,6 +194,7 @@ Hello
 | `MultipartResolver` | ? |
 
 ### Debugger
+> **Spring Web MVC 流程-调试**
 
 > 1. 调试准备，IDEA 配置 Remote Debugger。
 
@@ -354,4 +356,134 @@ public class DispatcherServlet extends FrameworkServlet {
 
 }
 ```
+
+## Spring Framework Web MVC Annotation
+> **Spring Web MVC 注解**
+
+> Spring Framework Web MVC 也可采用注解方式实现。
+
+### Demo
+> **Spring Web MVC 注解-框架案例**
+
+> 1. 注释 `app-context.xml` 中配置的自动注入。
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.zozospider.springwebmvc"/>
+
+    <!--<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"/>
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>-->
+
+</beans>
+```
+
+> 2. 新建 `WebMvcConfig` 注解 `@Configuration` 和 `@EnableWebMvc`，并指定 `ViewResolver`( `viewResolver()` 逻辑在 Spring 启动时执行)。
+
+```java
+package com.zozospider.springwebmvc.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
+
+@Configuration
+@EnableWebMvc
+public class WebMvcConfig {
+
+    /*<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>*/
+
+    @Bean
+    public ViewResolver viewResolver() {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setViewClass(JstlView.class);
+        viewResolver.setPrefix("/WEB-INF/jsp/");
+        viewResolver.setSuffix(".jsp");
+        return viewResolver;
+    }
+
+}
+```
+
+> 3. 此时访问 http://localhost:8080/ 可展示页面。
+
+> 4. 实现 `WebMvcConfigurer` 接口，添加拦截器( `registry.addInterceptor(...)` 逻辑在 Spring 启动时执行，且在 `viewResolver()` 之前)。
+
+```java
+package com.zozospider.springwebmvc.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@Configuration
+@EnableWebMvc
+public class WebMvcConfig implements WebMvcConfigurer {
+
+    /*<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>*/
+
+    @Bean
+    public ViewResolver viewResolver() {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setViewClass(JstlView.class);
+        viewResolver.setPrefix("/WEB-INF/jsp/");
+        viewResolver.setSuffix(".jsp");
+        return viewResolver;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new HandlerInterceptor() {
+            @Override
+            public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+                System.out.println("WebMvcConfigurer addInterceptors preHandle 拦截...");
+                return true;
+            }
+        });
+    }
+}
+```
+
+> 5. 再次访问 http://localhost:8080/ ，核心步骤如下，参考[Spring Framework Web MVC Process](#spring-framework-web-mvc-process)的交互流程图。
+
+> * 经过 `DispatcherServlet` 的方法 `doDispatch` 。
+> * 经过 `DispatcherServlet` 的方法 `getHandler` 。
+> * 经过 `DispatcherServlet` 的方法 `getHandlerAdapter` 。
+> * 经过 `WebMvcConfig` 的方法 `addInterceptors` 监听的方法 `preHandle`。
+> * 经过 `HelloController` 的方法 `index` 。
+> * 经过 `DispatcherServlet` 的方法 `resolveViewName` 。
+
+### View Demo
+> **Spring Web MVC 注解-视图案例**
 

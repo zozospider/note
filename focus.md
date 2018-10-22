@@ -26,8 +26,8 @@
 | Monday, October 22 | Spring Boot | imooc 第4章 Web MVC 核心 |
 |  |  |  |
 | **Sunday, October 21** | Spring Boot | imooc 第4章 Web MVC 核心, imooc 第4章 Web MVC 核心 |
-| **Saturday, October 20** | Spring Boot | |
-| Friday, October 19 | Spring Boot | imooc 第4章 Web MVC 核心 |
+| **Saturday, October 20** | Spring Boot | | |
+| Friday, October 19 | Spring Boot | imooc 第4章 Web MVC 核心 | done |
 | Thursday, October 18 | Spring Boot | imooc 第3章 理解 SpringApplication | done |
 | Wednesday, October 17 | Spring Boot | imooc 第3章 理解 SpringApplication | done |
 | Tuesday, October 16 | Spring Boot | imooc 第3章 理解 SpringApplication | done |
