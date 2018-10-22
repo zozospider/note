@@ -181,7 +181,7 @@ Hello
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Process-process.png)
 
-> 1. 调试准备，IDEA 配置 Remote Debug。
+> 1. 调试准备，IDEA 配置 Remote Debugger。
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Process-IDEA-Remote.png)
 
@@ -189,7 +189,7 @@ Hello
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Process-IDEA-Terminal.png)
 
-> 3. 启动 Remote Debug，即可开始调试。
+> 3. 启动 Remote Debugger，即可开始调试。
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Process-IDEA-Debugger.png)
 
