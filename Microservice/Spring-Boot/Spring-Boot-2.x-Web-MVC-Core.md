@@ -8,9 +8,9 @@
 > **前端总控制器**
 > * [DispatcherServlet API](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/servlet/DispatcherServlet.html)
 
-![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Servlet.png)
-![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Front-Controller.png)
-![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Web-MVC.png)
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/DispatcherServlet-Servlet.png)
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/DispatcherServlet-Front-Controller.png)
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/DispatcherServlet-Spring-Web-MVC.png)
 
 ## Spring Framework Web MVC Demo
 > **Spring Web MVC框架案例**
@@ -164,19 +164,32 @@ Hello
 6. 编译执行。
 > Maven: spring-mvc > Lifecycle > clean > compile > package ，得到 `spring-webmvc/target/spring-webmvc-0.0.1-SNAPSHOT-war-exec.jar` 文件。
 
-![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/spring-webmvc-idea.png)
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Demo-IDEA.png)
 
 7. 运行。
 > 进入 Terminal > 执行 `java -jar` 命令运行 `spring-webmvc-0.0.1-SNAPSHOT-war-exec.jar`
 
-![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/spring-webmvc-idea-terminal.png)
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Demo-IDEA-Terminal.png)
 
 8. 访问。
 > 浏览器访问 `http://localhost:8080/`
 
-![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/spring-webmvc-idea-hello.png)
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Demo-Chrome-hello.png)
 
 ## Spring Framework Web MVC Process
 > **Spring Web MVC 流程**
 
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Process-process.png)
+
+> 1. 调试准备，IDEA 配置 Remote Debug。
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Process-IDEA-remote.png)
+
+> 2. 进入 Terminal > 执行命令 `java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -jar spring-webmvc-0.0.1-SNAPSHOT-war-exec.jar` 
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Process-IDEA-Terminal.png)
+
+> 3. 启动 Remote Debug，即可开始调试。
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Process-IDEA-Debugger.png)
 
