@@ -183,7 +183,7 @@ Hello
 
 > 1. 调试准备，IDEA 配置 Remote Debug。
 
-![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Process-IDEA-remote.png)
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Process-IDEA-Remote.png)
 
 > 2. 进入 Terminal > 执行命令 `java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -jar spring-webmvc-0.0.1-SNAPSHOT-war-exec.jar` 
 
