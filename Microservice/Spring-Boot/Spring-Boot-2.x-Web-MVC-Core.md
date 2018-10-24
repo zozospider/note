@@ -9,6 +9,8 @@
 - [Spring Framework Web MVC Annotation](#spring-framework-web-mvc-annotation)
   - [Demo](#demo)
   - [View Demo](#view-demo)
+- [Spring Framework Web MVC Auto Configuration](#spring-framework-web-mvc-auto-configuration)
+  - [Demo-1](#demo-1)
 
 ---
 
@@ -728,7 +730,7 @@ onException: Required int parameter 'name' is not present
 ## Spring Framework Web MVC Auto Configuration
 > **Spring Web Mvc 自动装配**
 
-### Demo
+### Demo-1
 > **实现自动装配案例**
 
 > 工程整体结构如下:
