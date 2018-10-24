@@ -189,7 +189,7 @@ Hello
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Demo-IDEA-Terminal.png)
 
 8. 访问。
-> 浏览器访问 `http://localhost:8080/`
+> 浏览器访问 http://localhost:8080/
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Demo-Chrome-hello.png)
 
@@ -227,7 +227,7 @@ Hello
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Process-IDEA-Debugger.png)
 
-> 4. 访问 http://localhost:8080/ ，核心步骤如下，参考[Spring Framework Web MVC Process](#spring-framework-web-mvc-process)的交互流程图。
+> 4. 浏览器访问 http://localhost:8080/ ，核心步骤如下，参考[Spring Framework Web MVC Process](#spring-framework-web-mvc-process)的交互流程图。
 
 > * 经过 `DispatcherServlet` 的方法 `doDispatch` 。
 
@@ -444,7 +444,7 @@ public class WebMvcConfig {
 }
 ```
 
-> 3. 此时访问 http://localhost:8080/ 可展示页面。
+> 3. 此时浏览器访问 http://localhost:8080/ 可展示页面。
 
 > 4. 实现 `WebMvcConfigurer` 接口，添加拦截器( `registry.addInterceptor(...)` 逻辑在 Spring 启动时执行，且在 `viewResolver()` 之前)。
 
@@ -496,7 +496,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 }
 ```
 
-> 5. 再次访问 http://localhost:8080/ ，核心步骤如下，参考[Spring Framework Web MVC Process](#spring-framework-web-mvc-process)的交互流程图。
+> 5. 再次浏览器访问 http://localhost:8080/ ，核心步骤如下，参考[Spring Framework Web MVC Process](#spring-framework-web-mvc-process)的交互流程图。
 
 > * 经过 `DispatcherServlet` 的方法 `doDispatch` 。
 > * 经过 `DispatcherServlet` 的方法 `getHandler` 。
@@ -508,7 +508,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 ### View Demo
 > **Spring Web MVC 注解-视图案例**
 
-> * 1. `Controller`
+> 1. `Controller`
 
 ```java
 package com.zozospider.springwebmvc.controller;
@@ -567,7 +567,7 @@ public class HelloController {
 }
 ```
 
-> * 2. `jsp`
+> 2. `jsp`
 
 ```jsp
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
@@ -579,7 +579,7 @@ public class HelloController {
 </jsp:root>
 ```
 
-> * 3. 访问 http://localhost:8080/ ，
+> 3. 浏览器访问 http://localhost:8080/ ，
 
 ```
 Hello RequestHeader Accept-Language: zh-CN,zh;q=0.9
@@ -588,7 +588,7 @@ Hello RequestHeader Host: localhost:8080
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Annotation-Chrome-hello.png)
 
-> * 4. `WorldController`
+> 4. `WorldController`
 
 ```java
 package com.zozospider.springwebmvc.controller;
@@ -625,7 +625,7 @@ public class WorldController {
 }
 ```
 
-> * 5. `WorldControllerAdvice`
+> 5. `WorldControllerAdvice`
 
 ```java
 package com.zozospider.springwebmvc.controller;
@@ -666,7 +666,7 @@ public class WorldControllerAdvice {
 }
 ```
 
-> * 6. 访问 http://localhost:8080/world
+> 6. 浏览器访问 http://localhost:8080/world
 
 ```
 World RequestHeader Accept-Language: zh-CN,zh;q=0.9
@@ -675,7 +675,7 @@ World RequestHeader Host: localhost:8080
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Annotation-Chrome-world.png)
 
-> * 7. `ExceptionController`
+> 7. `ExceptionController`
 
 ```java
 package com.zozospider.springwebmvc.controller;
@@ -717,11 +717,184 @@ public class ExceptionController {
 }
 ```
 
-> * 8. 访问 http://localhost:8080/ex
+> 8. 浏览器访问 http://localhost:8080/ex
 
 ```
 onException: Required int parameter 'name' is not present
 ```
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Annotation-Chrome-ex.png)
+
+## Spring Framework Web MVC Auto Configuration
+> **Spring Web Mvc 自动装配**
+
+### Demo
+> **实现自动装配案例**
+
+> 工程整体结构如下:
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Auto-Configuration-IDEA.png)
+
+> 1. 注释 `web.xml`
+
+```xml
+<web-app>
+
+    <!--<servlet>
+        <servlet-name>app</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/app-context.xml</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>app</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>-->
+
+</web-app>
+```
+
+2. 注释 `app-context.xml`
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--<context:component-scan base-package="com.zozospider.springwebmvc"/>-->
+
+    <!--<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"/>
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>-->
+
+</beans>
+```
+
+> 3. 新建 `DispatcherServletConfiguration`
+
+```java
+package com.zozospider.springwebmvc.config;
+
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.servlet.DispatcherServlet;
+
+/**
+ * {@link DispatcherServlet} 配置类
+ *
+ * @author zozo
+ * @since 1.0
+ */
+@ComponentScan(basePackages = "com.zozospider.springwebmvc")
+public class DispatcherServletConfiguration {
+
+    /*<context:component-scan base-package="com.zozospider.springwebmvc"/>*/
+
+}
+```
+
+> 4. 新建 `WebMvcConfig` （上文已配置[Demo](#demo)）
+
+```java
+package com.zozospider.springwebmvc.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@Configuration
+@EnableWebMvc
+public class WebMvcConfig implements WebMvcConfigurer {
+
+    /*<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>*/
+
+    @Bean
+    public ViewResolver viewResolver() {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setViewClass(JstlView.class);
+        viewResolver.setPrefix("/WEB-INF/jsp/");
+        viewResolver.setSuffix(".jsp");
+        return viewResolver;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new HandlerInterceptor() {
+            @Override
+            public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+                System.out.println("WebMvcConfigurer addInterceptors preHandle 拦截...");
+                return true;
+            }
+        });
+    }
+}
+```
+
+> 5. 新建 `DefaultAnnotationConfigDispatcherServletInitializer`
+
+```java
+package com.zozospider.springwebmvc.servlet.support;
+
+import com.zozospider.springwebmvc.config.DispatcherServletConfiguration;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+/**
+ * Spring Web MVC 自动装配 默认实现
+ *
+ * @author zozo
+ * @since 1.0
+ */
+public class DefaultAnnotationConfigDispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+    // web.xml
+    @Override
+    protected Class<?>[] getRootConfigClasses() {
+        return new Class[0];
+    }
+
+    // DispatcherServlet配置类（com.zozospider.springwebmvc.config.DispatcherServletConfiguration）
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return new Class[]{DispatcherServletConfiguration.class};
+    }
+
+    /*<servlet-mapping>
+        <servlet-name>app</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>*/
+    @Override
+    protected String[] getServletMappings() {
+        return new String[]{"/"};
+    }
+
+}
+```
+
+> 6. 编译打包并启动项目，浏览器访问 http://localhost:8080/
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Auto-Configuration-Chrome-hello.png)
 
