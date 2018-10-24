@@ -508,3 +508,169 @@ public class WebMvcConfig implements WebMvcConfigurer {
 ### View Demo
 > **Spring Web MVC 注解-视图案例**
 
+> * 1. `Controller`
+
+```java
+package com.zozospider.springwebmvc.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * Hello {@link Controller}
+ *
+ * @author zozo
+ * @since 1.0
+ */
+@Controller
+public class HelloController {
+
+    /**
+     * Request 入口
+     * @param host 请求参数（可选项）
+     * @param model
+     * @return
+     */
+    @RequestMapping("")
+    public String index(@RequestHeader("Host") String host,
+                        Model model) {
+        System.out.println("Hello RequestHeader Host: " + host);
+        // 与 @ModelAttribute(name) 等同
+        model.addAttribute("msg", "Hello msg");
+        return "index";
+    }
+
+    /**
+     * @ModelAttribute(name) 等同于 model.addAttribute(attributeName, attributeValue);
+     * @return attributeValue
+     */
+    @ModelAttribute("message")
+    public String message() {
+        return "Hello message";
+    }
+
+    /**
+     * @ModelAttribute(name) 等同于 model.addAttribute(attributeName, attributeValue);
+     * @param acceptLanguage 请求参数（可选项）
+     * @return attributeValue
+     */
+    @ModelAttribute("acceptLanguageReturn")
+    public String acceptLanguageReturn(@RequestHeader("Accept-Language") String acceptLanguage) {
+        System.out.println("Hello RequestHeader Accept-Language: " + acceptLanguage);
+        return acceptLanguage;
+    }
+
+}
+```
+
+> * 2. `jsp`
+
+```jsp
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <body>
+        <msg>${msg}</msg>
+        <message>${message}</message>
+        <acceptLanguageReturn>${acceptLanguageReturn}</acceptLanguageReturn>
+    </body>
+</jsp:root>
+```
+
+> * 3. 访问 http://localhost:8080/ ，
+
+```
+Hello RequestHeader Accept-Language: zh-CN,zh;q=0.9
+Hello RequestHeader Host: localhost:8080
+```
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Annotation-Chrome-hello.png)
+
+> * 4. `WorldController`
+
+```java
+package com.zozospider.springwebmvc.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * World {@link Controller}
+ *
+ * @author zozo
+ * @since 1.0
+ */
+@Controller
+public class WorldController {
+
+    /**
+     * Request 入口
+     * @param host 请求参数（可选项）
+     * @param model
+     * @return
+     */
+    @RequestMapping("/world")
+    public String world(@RequestHeader("Host") String host,
+                        Model model) {
+        System.out.println("World RequestHeader Host: " + host);
+        // 与 @ModelAttribute(name) 等同
+        model.addAttribute("msg", "World msg");
+        return "world";
+    }
+
+}
+```
+
+> * 5. `WorldControllerAdvice`
+
+```java
+package com.zozospider.springwebmvc.controller;
+
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestHeader;
+
+/**
+ * {@link WorldController} 通知
+ *
+ * @author zozo
+ * @since 1.0
+ */
+@ControllerAdvice(assignableTypes = WorldController.class)
+public class WorldControllerAdvice {
+
+    /**
+     * @ModelAttribute(name) 等同于 model.addAttribute(attributeName, attributeValue);
+     * @return attributeValue
+     */
+    @ModelAttribute("message")
+    public String message() {
+        return "World message";
+    }
+
+    /**
+     * @ModelAttribute(name) 等同于 model.addAttribute(attributeName, attributeValue);
+     * @param acceptLanguage 请求参数（可选项）
+     * @return attributeValue
+     */
+    @ModelAttribute("acceptLanguageReturn")
+    public String acceptLanguageReturn(@RequestHeader("Accept-Language") String acceptLanguage) {
+        System.out.println("World RequestHeader Accept-Language: " + acceptLanguage);
+        return acceptLanguage;
+    }
+
+}
+```
+
+> * 6. 访问 http://localhost:8080/world ，
+
+```
+World RequestHeader Accept-Language: zh-CN,zh;q=0.9
+World RequestHeader Host: localhost:8080
+```
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Annotation-Chrome-world.png)
