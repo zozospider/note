@@ -666,7 +666,7 @@ public class WorldControllerAdvice {
 }
 ```
 
-> * 6. 访问 http://localhost:8080/world ，
+> * 6. 访问 http://localhost:8080/world
 
 ```
 World RequestHeader Accept-Language: zh-CN,zh;q=0.9
@@ -674,3 +674,54 @@ World RequestHeader Host: localhost:8080
 ```
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Annotation-Chrome-world.png)
+
+> * 7. `ExceptionController`
+
+```java
+package com.zozospider.springwebmvc.controller;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+/**
+ * {@link ExceptionHandler} demo
+ *
+ * @author zozo
+ * @since 1.0
+ */
+@Controller
+public class ExceptionController {
+
+    @RequestMapping("/ex")
+    public String ex(@RequestParam int name,
+                        Model model) {
+        System.out.println("ex");
+        return "ex";
+    }
+
+    /**
+     * 发生异常时处理
+     * @param throwable 异常类型
+     * @return 返回实体对象
+     */
+    @ExceptionHandler(Throwable.class)
+    public ResponseEntity<String> onException(Throwable throwable) {
+        System.out.println("onException: " + throwable.getMessage());
+        return ResponseEntity.ok("ex error: " + throwable.getMessage());
+    }
+
+}
+```
+
+> * 8. 访问 http://localhost:8080/ex
+
+```
+onException: Required int parameter 'name' is not present
+```
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Annotation-Chrome-ex.png)
+
