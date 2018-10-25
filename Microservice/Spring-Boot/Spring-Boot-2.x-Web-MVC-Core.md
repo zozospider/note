@@ -11,6 +11,8 @@
   - [View Demo](#view-demo)
 - [Spring Framework Web MVC Auto Configuration](#spring-framework-web-mvc-auto-configuration)
   - [Demo-1](#demo-1)
+- [Spring Framework vs Spring Boot](#spring-framework-vs-spring-boot)
+  - [Spring Boot Web MVC demo](#spring-boot-web-mvc-demo)
 
 ---
 
