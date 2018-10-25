@@ -727,6 +727,8 @@ onException: Required int parameter 'name' is not present
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Annotation-Chrome-ex.png)
 
+---
+
 ## Spring Framework Web MVC Auto Configuration
 > **Spring Web Mvc 自动装配**
 
@@ -900,3 +902,249 @@ public class DefaultAnnotationConfigDispatcherServletInitializer extends Abstrac
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Auto-Configuration-Chrome-hello.png)
 
+---
+
+## Spring Framework vs Spring Boot
+> **Spring Boot简化**
+
+| Spring Framework | Spring Boot |
+| :--- | :--- |
+| `org.springframework.web.servlet.DispatcherServlet` | `org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration` |
+| `org.springframework.web.servlet.config.annotation.EnableWebMvc` | `org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration` | 
+| Servlet 容器 | `org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration` |
+
+### Spring Boot Web MVC demo
+> **Spring Boot Web MVC 案例**
+
+> 工程整体结构如下:
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-vs-Spring-Boot-IDEA.png)
+
+> 1. 新建 `pom.xml`。
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>note-microservice-spring-boot</artifactId>
+        <groupId>com.zozospider</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>spring-boot-webmvc</artifactId>
+    <packaging>war</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+
+        <!-- Tomcat JSP 依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+```
+
+> 2. 新建 `SpringBootWebMvcBootstrap`。
+
+```java
+package com.zozospider.springbootwebmvc.bootstrap;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+/**
+ * Spring Boot Web MVC 引导类
+ *
+ * @author zozo
+ * @since 1.0
+ */
+@SpringBootApplication(scanBasePackages = "com.zozospider.springbootwebmvc")
+public class SpringBootWebMvcBootstrap {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SpringBootWebMvcBootstrap.class, args);
+    }
+
+}
+```
+
+> 3. 新建 `WebMvcConfig` 。
+> * 此时需要注释 `@EnableWebMvc`，才能利用 Spring Boot 的自动装配，详情见下文 `WebMvcAutoConfiguration` 的 `@ConditionalOnMissingBean` 注解。
+
+```java
+package com.zozospider.springbootwebmvc.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@Configuration
+// @EnableWebMvc
+public class WebMvcConfig implements WebMvcConfigurer {
+
+    /*<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>*/
+
+    /*@Bean
+    public ViewResolver viewResolver() {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setViewClass(JstlView.class);
+        viewResolver.setPrefix("/WEB-INF/jsp/");
+        viewResolver.setSuffix(".jsp");
+        return viewResolver;
+    }*/
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new HandlerInterceptor() {
+            @Override
+            public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+                System.out.println("WebMvcConfigurer addInterceptors preHandle 拦截...");
+                return true;
+            }
+        });
+    }
+
+}
+```
+
+> 3. 新建 `application.properties` 。
+
+```properties
+spring.mvc.view.prefix = /WEB-INF/jsp/
+spring.mvc.view.suffix = .jsp
+```
+
+> 4. Spring Boot 启动时通过 `WebMvcAutoConfiguration` 实现自动装配。
+> * `WebMvcAutoConfiguration` 通过 `@ConditionalOnMissingBean` 条件判断没有 `@EnableWebMvc` 注解时，才加载自动装配的 Bean。否则加载注解了 `@EnableWebMvc` 的类逻辑。
+> * `WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter` 通过 `mvcProperties` 属性，读取 `application.properties` 中的配置。
+
+> * 以下为 `WebMvcAutoConfiguration` 相关代码:
+
+```java
+package org.springframework.boot.autoconfigure.web.servlet;
+
+...
+
+@Configuration
+// 条件装配
+@ConditionalOnWebApplication(type = Type.SERVLET)
+// 条件装配
+@ConditionalOnClass({ Servlet.class, DispatcherServlet.class, WebMvcConfigurer.class })
+// 条件装配
+@ConditionalOnMissingBean(WebMvcConfigurationSupport.class)
+// 绝对顺序
+@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE + 10)
+// 相对顺序
+@AutoConfigureAfter({ DispatcherServletAutoConfiguration.class,
+		ValidationAutoConfiguration.class })
+public class WebMvcAutoConfiguration {
+
+    ...
+
+    @Configuration
+	@Import(EnableWebMvcConfiguration.class)
+	@EnableConfigurationProperties({ WebMvcProperties.class, ResourceProperties.class })
+	@Order(0)
+	public static class WebMvcAutoConfigurationAdapter
+			implements WebMvcConfigurer, ResourceLoaderAware {
+        
+        ...
+
+        private final WebMvcProperties mvcProperties;
+
+        ...
+
+        @Bean
+		@ConditionalOnMissingBean
+		public InternalResourceViewResolver defaultViewResolver() {
+			InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+			resolver.setPrefix(this.mvcProperties.getView().getPrefix());
+			resolver.setSuffix(this.mvcProperties.getView().getSuffix());
+			return resolver;
+		}
+
+        ...
+
+    }
+
+    ...
+
+}
+```
+> * 以下为 `WebMvcProperties` 相关代码:
+```java
+package org.springframework.boot.autoconfigure.web.servlet;
+
+...
+
+@ConfigurationProperties(prefix = "spring.mvc")
+public class WebMvcProperties {
+
+    ...
+
+    private final View view = new View();
+
+    ...
+
+    public static class View {
+
+        private String prefix;
+
+        private String suffix;
+
+        ...
+
+    }
+
+    ...
+
+}
+```
+
+> 5. 浏览器访问 http://localhost:8080/
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-vs-Spring-Boot-Chrome-hello.png)
+
+---
