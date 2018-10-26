@@ -9,6 +9,7 @@
 > * [github.com: zozospider/note/Microservice/Spring-Boot/Spring-Boot-2.x-Auto-configuration](https://github.com/zozospider/note/blob/master/Microservice/Spring-Boot/Spring-Boot-2.x-Auto-configuration.md)
 > * [github.com: zozospider/note/Microservice/Spring-Boot/Spring-Boot-2.x-Understand-SpringApplication](https://github.com/zozospider/note/blob/master/Microservice/Spring-Boot/Spring-Boot-2.x-Understand-SpringApplication.md)
 > * [github.com: zozospider/note/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core](https://github.com/zozospider/note/blob/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core.md)
+> * [github.com: zozospider/note/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-View](https://github.com/zozospider/note/blob/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-VIew.md)
 
 > * [github.com: zozospider/note-microservice-spring-boot](https://github.com/zozospider/note-microservice-spring-boot)
 
