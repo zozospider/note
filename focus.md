@@ -22,7 +22,7 @@
 | Friday, October 26 | Spring Boot | imooc 第6章 Web MVC REST 应用 |
 | Thursday, October 25 | Spring Boot | imooc 第5章 Web MVC 视图应用 |
 | Wednesday, October 24 | Spring Boot | imooc 第5章 Web MVC 视图应用 |
-| Tuesday, October 23 | Spring Boot | imooc 第5章 Web MVC 视图应用 |
+| Tuesday, October 23 | Spring Boot | imooc 第5章 Web MVC 视图应用 | done |
 | Monday, October 22 | Spring Boot | imooc 第4章 Web MVC 核心 | done |
 |  |  |  |
 | **Sunday, October 21** | Spring Boot | imooc 第4章 Web MVC 核心, imooc 第4章 Web MVC 核心 | done |

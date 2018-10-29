@@ -151,7 +151,7 @@
 </beans>
 ```
 
-> 4. 新建 `HelloController` 。
+> 4. 新建 `HelloController.java` 。
 
 ```java
 package com.zozospider.springwebmvc.controller;
@@ -233,7 +233,7 @@ Hello
 
 > 4. 浏览器访问 http://localhost:8080/ ，核心步骤如下，参考[Spring Framework Web MVC Process](#spring-framework-web-mvc-process)的交互流程图。
 
-> * 经过 `DispatcherServlet` 的方法 `doDispatch` 。
+> * 经过 `DispatcherServlet.java` 的方法 `doDispatch` 。
 
 ```java
 package org.springframework.web.servlet;
@@ -260,7 +260,7 @@ public class DispatcherServlet extends FrameworkServlet {
 }
 ```
 
-> * 经过 `DispatcherServlet` 的方法 `getHandler` 。
+> * 经过 `DispatcherServlet.java` 的方法 `getHandler` 。
 
 ```java
 package org.springframework.web.servlet;
@@ -293,7 +293,7 @@ public class DispatcherServlet extends FrameworkServlet {
 }
 ```
 
-> * 经过 `DispatcherServlet` 的方法 `getHandlerAdapter` 。
+> * 经过 `DispatcherServlet.java` 的方法 `getHandlerAdapter` 。
 
 ```java
 package org.springframework.web.servlet;
@@ -324,7 +324,7 @@ public class DispatcherServlet extends FrameworkServlet {
 }
 ```
 
-> * 经过 `HelloController` 的方法 `index` 。
+> * 经过 `HelloController.java` 的方法 `index` 。
 
 ```java
 package com.zozospider.springwebmvc.controller;
@@ -349,7 +349,7 @@ public class HelloController {
 }
 ```
 
-> * 经过 `DispatcherServlet` 的方法 `resolveViewName` 。
+> * 经过 `DispatcherServlet.java` 的方法 `resolveViewName` 。
 
 ```java
 package org.springframework.web.servlet;
@@ -414,7 +414,7 @@ public class DispatcherServlet extends FrameworkServlet {
 </beans>
 ```
 
-> 2. 新建 `WebMvcConfig` 注解 `@Configuration` 和 `@EnableWebMvc`，并指定 `ViewResolver`( `viewResolver()` 逻辑在 Spring 启动时执行)。
+> 2. 新建 `WebMvcConfig.java` 注解 `@Configuration` 和 `@EnableWebMvc`，并指定 `ViewResolver`( `viewResolver()` 逻辑在 Spring 启动时执行)。
 
 ```java
 package com.zozospider.springwebmvc.config;
@@ -450,7 +450,7 @@ public class WebMvcConfig {
 
 > 3. 此时浏览器访问 http://localhost:8080/ 可展示页面。
 
-> 4. 实现 `WebMvcConfigurer` 接口，添加拦截器( `registry.addInterceptor(...)` 逻辑在 Spring 启动时执行，且在 `viewResolver()` 之前)。
+> 4. 实现 `WebMvcConfigurer.java` 接口，添加拦截器( `registry.addInterceptor(...)` 逻辑在 Spring 启动时执行，且在 `viewResolver()` 之前)。
 
 ```java
 package com.zozospider.springwebmvc.config;
@@ -502,17 +502,17 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 > 5. 再次浏览器访问 http://localhost:8080/ ，核心步骤如下，参考[Spring Framework Web MVC Process](#spring-framework-web-mvc-process)的交互流程图。
 
-> * 经过 `DispatcherServlet` 的方法 `doDispatch` 。
-> * 经过 `DispatcherServlet` 的方法 `getHandler` 。
-> * 经过 `DispatcherServlet` 的方法 `getHandlerAdapter` 。
-> * 经过 `WebMvcConfig` 的方法 `addInterceptors` 监听的方法 `preHandle`。
-> * 经过 `HelloController` 的方法 `index` 。
-> * 经过 `DispatcherServlet` 的方法 `resolveViewName` 。
+> * 经过 `DispatcherServlet.java` 的方法 `doDispatch` 。
+> * 经过 `DispatcherServlet.java` 的方法 `getHandler` 。
+> * 经过 `DispatcherServlet.java` 的方法 `getHandlerAdapter` 。
+> * 经过 `WebMvcConfig.java` 的方法 `addInterceptors` 监听的方法 `preHandle`。
+> * 经过 `HelloController.java` 的方法 `index` 。
+> * 经过 `DispatcherServlet.java` 的方法 `resolveViewName` 。
 
 ### View Demo
 > **Spring Web MVC 注解-视图案例**
 
-> 1. `Controller`
+> 1. `Controller.java`
 
 ```java
 package com.zozospider.springwebmvc.controller;
@@ -571,7 +571,7 @@ public class HelloController {
 }
 ```
 
-> 2. `jsp`
+> 2. `index.jsp`
 
 ```jsp
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
@@ -592,7 +592,7 @@ Hello RequestHeader Host: localhost:8080
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Annotation-Chrome-hello.png)
 
-> 4. `WorldController`
+> 4. `WorldController.java`
 
 ```java
 package com.zozospider.springwebmvc.controller;
@@ -629,7 +629,7 @@ public class WorldController {
 }
 ```
 
-> 5. `WorldControllerAdvice`
+> 5. `WorldControllerAdvice.java`
 
 ```java
 package com.zozospider.springwebmvc.controller;
@@ -679,7 +679,7 @@ World RequestHeader Host: localhost:8080
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Core/Spring-Framework-Web-MVC-Annotation-Chrome-world.png)
 
-> 7. `ExceptionController`
+> 7. `ExceptionController.java`
 
 ```java
 package com.zozospider.springwebmvc.controller;
@@ -788,7 +788,7 @@ onException: Required int parameter 'name' is not present
 </beans>
 ```
 
-> 3. 新建 `DispatcherServletConfiguration`
+> 3. 新建 `DispatcherServletConfiguration.java`
 
 ```java
 package com.zozospider.springwebmvc.config;
@@ -810,7 +810,7 @@ public class DispatcherServletConfiguration {
 }
 ```
 
-> 4. 新建 `WebMvcConfig` （上文已配置[Demo](#demo)）
+> 4. 新建 `WebMvcConfig.java` （上文已配置[Demo](#demo)）
 
 ```java
 package com.zozospider.springwebmvc.config;
@@ -860,7 +860,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 }
 ```
 
-> 5. 新建 `DefaultAnnotationConfigDispatcherServletInitializer`
+> 5. 新建 `DefaultAnnotationConfigDispatcherServletInitializer.java`
 
 ```java
 package com.zozospider.springwebmvc.servlet.support;
@@ -980,7 +980,7 @@ public class DefaultAnnotationConfigDispatcherServletInitializer extends Abstrac
 </project>
 ```
 
-> 2. 新建 `SpringBootWebMvcBootstrap`。
+> 2. 新建 `SpringBootWebMvcBootstrap.java`
 
 ```java
 package com.zozospider.springbootwebmvc.bootstrap;
@@ -1004,7 +1004,7 @@ public class SpringBootWebMvcBootstrap {
 }
 ```
 
-> 3. 新建 `WebMvcConfig` 。
+> 3. 新建 `WebMvcConfig.java` 。
 > * 此时需要注释 `@EnableWebMvc`，才能利用 Spring Boot 的自动装配，详情见下文 `WebMvcAutoConfiguration` 的 `@ConditionalOnMissingBean` 注解。
 
 ```java
@@ -1115,7 +1115,7 @@ public class WebMvcAutoConfiguration {
 
 }
 ```
-> * 以下为 `WebMvcProperties` 相关代码:
+> * 以下为 `WebMvcProperties.java` 相关代码:
 ```java
 package org.springframework.boot.autoconfigure.web.servlet;
 
