@@ -13,6 +13,6 @@
 > * [../Design-Patterns-模式-抽象工厂模式](https://github.com/zozospider/note/blob/master/base/Design-Patterns/Design-Patterns-模式-抽象工厂模式.md)
 > * [../Design-Patterns-模式-简单工厂模式](https://github.com/zozospider/note/blob/master/base/Design-Patterns/Design-Patterns-模式-简单工厂模式.md)
 
-> * [github.com: zozospider/note-base-design-patterns](https://github.com/zozospider/note-base-design-patterns)
+> * [code: zozospider/note-base-design-patterns](https://github.com/zozospider/note-base-design-patterns)
 
 ---

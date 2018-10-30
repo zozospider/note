@@ -25,9 +25,9 @@
 ---
 
 ## Document & Code
-> * [github.com: zozospider/note/Microservice/Spring-Boot/Spring-Boot-2.x](https://github.com/zozospider/note/blob/master/Microservice/Spring-Boot/Spring-Boot-2.x.md)
+> * [../Spring-Boot-2.x](https://github.com/zozospider/note/blob/master/Microservice/Spring-Boot/Spring-Boot-2.x.md)
 
-> * [Github: zozospider/note-microservice-spring-boot](https://github.com/zozospider/note-microservice-spring-boot)
+> * [code: zozospider/note-microservice-spring-boot](https://github.com/zozospider/note-microservice-spring-boot)
 
 > * [Spring Boot Reference Guide](https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/)
 
