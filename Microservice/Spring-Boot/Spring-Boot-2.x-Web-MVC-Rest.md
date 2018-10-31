@@ -80,4 +80,124 @@
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Rest/Spring-Framework-Web-MVC-Rest-process.png)
 
+> 新建一个 `HelloRestController` 的接口
 
+```java
+package com.zozospider.springbootrest.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * Hello {@link RestController} 实现
+ *
+ * @author zozo
+ * @since 1.0
+ */
+@RestController
+public class HelloRestController {
+
+    @GetMapping(value = "hello")
+    public String hello(@RequestParam(required = false) String msg) {
+        System.out.println("msg: " + msg);
+        return "hello: " + msg;
+    }
+
+}
+```
+
+> 访问 http://localhost:8080/hello?msg=abc ，具体流程如下：
+
+> 1. `DispatcherServlet` 类的 `initHandlerMappings(ApplicationContext context)` 方法。
+
+```java
+package org.springframework.web.servlet;
+
+...
+
+public class DispatcherServlet extends FrameworkServlet {
+
+    ...
+
+    private void initHandlerMappings(ApplicationContext context) {
+		this.handlerMappings = null;
+
+		if (this.detectAllHandlerMappings) {
+			// Find all HandlerMappings in the ApplicationContext, including ancestor contexts.
+			Map<String, HandlerMapping> matchingBeans =
+					BeanFactoryUtils.beansOfTypeIncludingAncestors(context, HandlerMapping.class, true, false);
+			if (!matchingBeans.isEmpty()) {
+				this.handlerMappings = new ArrayList<>(matchingBeans.values());
+				// We keep HandlerMappings in sorted order.
+				AnnotationAwareOrderComparator.sort(this.handlerMappings);
+			}
+		}
+		else {
+			try {
+				HandlerMapping hm = context.getBean(HANDLER_MAPPING_BEAN_NAME, HandlerMapping.class);
+				this.handlerMappings = Collections.singletonList(hm);
+			}
+			catch (NoSuchBeanDefinitionException ex) {
+				// Ignore, we'll add a default HandlerMapping later.
+			}
+		}
+
+		// Ensure we have at least one HandlerMapping, by registering
+		// a default HandlerMapping if no other mappings are found.
+		if (this.handlerMappings == null) {
+			this.handlerMappings = getDefaultStrategies(context, HandlerMapping.class);
+			if (logger.isDebugEnabled()) {
+				logger.debug("No HandlerMappings found in servlet '" + getServletName() + "': using default");
+			}
+		}
+	}
+
+    ...
+
+}
+```
+
+> 2. `DispatcherServlet` 类的 `doDispatch(HttpServletRequest request, HttpServletResponse response)` 方法。
+
+
+
+DispatcherServlet 类
+    1. initHandlerMappings
+    2. doDispatch
+        3. 调用 getHandler 方法
+        4. 调用 getHandlerAdapter 方法
+        5. 执行 handle 方法
+            AbstractHandlerMethodAdapter 类
+                    handle
+                        6. 执行 handleInternal 方法
+                            RequestMappingHandlerAdapter 类
+                                7. 执行 handleInternal 方法
+                                8. 执行 invokeHandlerMethod 方法
+                                    ServletInvocableHandlerMethod 类
+                                        执行 invokeAndHandle 方法
+                                            InvocableHandlerMethod 类
+                                                执行 invokeForRequest 方法
+                                                    执行 getMethodArgumentValues 方法
+                                                        执行 resolveProvidedArgument 方法
+                                                        执行 supportsParameter 方法
+                                                            HandlerMethodArgumentResolverComposite 类
+                                                                执行 supportsParameter 方法
+                                                                    执行 getArgumentResolver 方法
+                                                        执行 resolveArgument 方法
+                                                            HandlerMethodArgumentResolverComposite 类
+                                                                执行 resolveArgument 方法
+                                                                    执行 resolveArgument 方法
+                                                                        AbstractNamedValueMethodArgumentResolver 类
+                                                                            执行  resolveArgument 方法
+                                                执行 doInvoke 方法
+                                                    执行 invoke 方法
+                                                        Method 类
+                                                            9. 执行 invoke 方法（类，方法参数带上）
+                                                                HelloRestController 类
+                                                                    执行 hello 方法
+                                        执行 handleReturnValue 方法
+                                            执行 handleReturnValue 方法
+                                                HandlerMethodReturnValueHandlerComposite 类
+                                                    执行 handleReturnValue 方法
+                                                        执行 selectHandler 方法
