@@ -75,3 +75,9 @@
 |  | `CorsFilter` | 资源跨域拦截器 | 4.2 + |
 |  | `WebMvcConfigurer#addCorsMappings` | 注册资源跨域信息 | 4.2 + |
 
+### process
+> **Spring Framework Web MVC Rest 处理流程**
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/Microservice/Spring-Boot/Spring-Boot-2.x-Web-MVC-Rest/Spring-Framework-Web-MVC-Rest-process.png)
+
+
