@@ -45,7 +45,7 @@
 > **Spring Framework Web MVC Rest 支持**
 
 | 范围 | 注解 | 说明 | Spring Framework 版本 |
-| :--- | :--- | :--- |
+| :--- | :--- | :--- | :--- |
 | 定义 | `@Controller` | 应用控制器注解声明，Spring 模式注解 | 2.5 + |
 |  | `@RestController` | 等效于 `@Controller` + `@ResponseBody` | 4.0 + |
 |  |  |  |  |
