@@ -70,6 +70,7 @@
 > * Ambari
 
 ## store
+> * Spring Data
 > * MySQL
 > * Redis
 > * Elasticsearch
@@ -86,9 +87,11 @@
 > * Flink
 > * Pulsar
 
-## monitoring test view
+## monitoring security test view
 > * Ambari
 > * Zabbix
+> * Spring Security
+> * Shiro
 > * Kibana
 > * Echarts
 
