@@ -1,9 +1,10 @@
-**ZooKeeper book 一致性协议**
+- [x] ZooKeeper book 一致性协议
 
 ---
 
 # Document & Code
-> * [../Zookeeper-book](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book.md)
+
+* [../Zookeeper-book](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book.md)
 
 ---
 
@@ -85,7 +86,8 @@
 事务一旦提交，就是永久性的，及时宕机。
 
 ## CAP
-> 一个分布式系统不可能同时满足：一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance），最多只能同时满足两项。
+
+一个分布式系统不可能同时满足：一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance），最多只能同时满足两项。
 
 ### 1. 一致性（Consistency）
 
