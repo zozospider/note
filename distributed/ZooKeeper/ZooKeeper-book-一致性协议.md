@@ -48,8 +48,9 @@
 
 ### 3. 三态
 
-* 每次请求与响应状态，分为，成功、失败、超时。
-* 网络是不可靠的，可能发送过程失败，可能响应过程失败，无法确定当前请求是否被成功处理。
+每次请求与响应状态，分为，成功、失败、超时。
+
+网络是不可靠的，可能发送过程失败，可能响应过程失败，无法确定当前请求是否被成功处理。
 
 ### 4. 节点故障
 
@@ -103,8 +104,9 @@
 
 ## BASE
 
-* BASE：基本可用（Basically Available）、软状态（Soft state）、最终一致性（Eventually consistent）。
-* BASE是对CAP中一致性和可用性权衡的结果。核心思想是，即使无法做到强一致性（Strong consistency），但是每个应用都可以根据自身业务特点，采用适当的方式使系统达到最终一致性（Eventual consistency）。
+BASE：基本可用（Basically Available）、软状态（Soft state）、最终一致性（Eventually consistent）。
+
+BASE是对CAP中一致性和可用性权衡的结果。核心思想是，即使无法做到强一致性（Strong consistency），但是每个应用都可以根据自身业务特点，采用适当的方式使系统达到最终一致性（Eventual consistency）。
 
 ### 1. 基本可用（Basically Available）
 
