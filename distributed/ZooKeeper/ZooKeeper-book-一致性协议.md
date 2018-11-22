@@ -72,9 +72,11 @@
 > 一个分布式系统不可能同时满足：一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance），最多只能同时满足两项。
 
 > 1. 一致性（Consistency）
+
 在分布式系统中，如果可以做到针对一个数据的更新操作执行成功后，所有的用户都可以读取到最新的值，那么认为其具有强一致性（严格一致性）。
 
 > 2. 可用性（Availability）
+
 对于用户的每一个操作总是能够在有限的时间内返回结果（7*24小时）。
 
 > 3. 分区容错性（Partition tolerance）
