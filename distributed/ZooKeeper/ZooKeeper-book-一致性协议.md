@@ -1,7 +1,3 @@
-<i class="icon-list"></i> ZooKeeper book 一致性协议
-
----
-
 # Document & Code
 
 * [../Zookeeper-book](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book.md)
