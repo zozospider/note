@@ -1,4 +1,4 @@
-- [x] ZooKeeper book 一致性协议
+<i class="icon-list"></i> ZooKeeper book 一致性协议
 
 ---
 
