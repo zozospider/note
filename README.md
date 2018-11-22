@@ -22,84 +22,84 @@
 # skill
 
 ## base
-> * English
-> * data structures
-> * algorithm
-> * Design Patterns
-> * Linux
-> * concept
+* English
+* data structures
+* algorithm
+* Design Patterns
+* Linux
+* concept
 
 ## data
-> * XML & JSON & Protobuf & Avro & Thrift
-> * Regular Expression
+* XML & JSON & Protobuf & Avro & Thrift
+* Regular Expression
 
 ## language
-> * C
-> * Go
-> * Python
-> * Scala
-> * Kotlin
-> * ECMA Script 6
-> * Nodejs
-> * TypeScript
+* C
+* Go
+* Python
+* Scala
+* Kotlin
+* ECMA Script 6
+* Nodejs
+* TypeScript
 
 ## Java
-> * Java
-> * Java Annotations
-> * Java Reflection
-> * JDK
-> * JVM
-> * JMX
-> * JConsole
+* Java
+* Java Annotations
+* Java Reflection
+* JDK
+* JVM
+* JMX
+* JConsole
 
 ## network
-> * TCP & UDP & HTTP & HTTPS & HTTP/2 & WebSocket
-> * Java network programming
-> * Netty
+* TCP & UDP & HTTP & HTTPS & HTTP/2 & WebSocket
+* Java network programming
+* Netty
 
 ## Concurrent
-> * Java concurrency programming
-> * Disruptor
+* Java concurrency programming
+* Disruptor
 
 ## Microservice
-> * Spring
-> * Spring Boot
-> * Spring Cloud
-> * Spring Cloud Data Flow
+* Spring
+* Spring Boot
+* Spring Cloud
+* Spring Cloud Data Flow
 
 ## distributed
-> * ZooKeeper
-> * Hadoop
-> * Ambari
+* ZooKeeper
+* Hadoop
+* Ambari
 
 ## store
-> * Spring Data
-> * MySQL
-> * Redis
-> * Elasticsearch
-> * MongoDB
-> * HBase
-> * Hadoop HDFS
+* Spring Data
+* MySQL
+* Redis
+* Elasticsearch
+* MongoDB
+* HBase
+* Hadoop HDFS
 
 ## stream
-> * Kafka
-> * Flume
-> * Logstash
-> * Storm
-> * Spark Streaming
-> * Flink
-> * Pulsar
+* Kafka
+* Flume
+* Logstash
+* Storm
+* Spark Streaming
+* Flink
+* Pulsar
 
 ## monitoring security test view
-> * Ambari
-> * Zabbix
-> * Spring Security
-> * Shiro
-> * Kibana
-> * Echarts
+* Ambari
+* Zabbix
+* Spring Security
+* Shiro
+* Kibana
+* Echarts
 
 ## instrument
-> * Maven
-> * Git
-> * IntelliJ IDEA
-> * Mac
+* Maven
+* Git
+* IntelliJ IDEA
+* Mac
