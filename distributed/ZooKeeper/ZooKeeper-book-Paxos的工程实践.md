@@ -48,7 +48,7 @@ Chubby 集群，通过投票，过半投票的服务器作为 Master。Mster 通
 
 Chubby 集群中每个服务器使用 Paxos 协议从 Master 服务器同步数据。在实际运行中，只有 Master 服务器才能写数据库。
 
-Chubby 客户端如何定位 Master 服务器：Chubby 客户端通过 DNS 获取 Chubby 服务器列表。逐个询问是否为 Chubby Master，非 Master 服务器会将 Master 标识反馈给客户端，这样客户端就可以快速定位 Chubby Master。
+Chubby 客户端如何定位 Chubby Master 服务器：Chubby 客户端通过 DNS 获取 Chubby 服务器列表。逐个询问是否为 Chubby Master，非 Master 服务器会将 Master 标识反馈给客户端，这样客户端就可以快速定位 Chubby Master。
 
 Chubby 客户端的读写：Chubby 客户端获取 Chubby Master 后，所有读写都在该 Chubby Master 上。写请求，Chubby Master 会采用一致性协议广播给所有服务器，过半服务器接受了写请求后，再响应给客户端。读请求，不需要广播，Chubby Master 单独处理。
 
@@ -59,6 +59,22 @@ Chubby Master 服务器崩溃怎么办：其他服务器在 Master 租期到期�
 怎么更新或加入新机器：更新 DNS 列表，Chubby Master 会轮询 DNS 列表，然后将集群数据库中的地址列表更新，其他服务器通过复制获取到最新列表。
 
 ### 目录与文件
+
+`/ls/foo/wombat/pouch`：
+* ls: 所有 Chubby 节点共有的前缀，表示锁服务（Lock Service）。
+* foo: Chubby 集群名字。
+* wombat/pouch: 业务节点名字。
+
+数据节点指 Chubby 的文件或目录，每个数据节点分为持久节点和临时节点。
+* 持久节点: 需要显式调用接口 API 来删除。
+* 临时节点: 生命周期和客户端会话绑定，客户端会话失效后自动删除，可用来进行客户端会话有效性的判断。
+
+每个数据节点包含元数据信息，包括：
+* a. 用于权限控制的访问控制列表（ACL）信息。
+* b. 实例编号（标识 Chubby 创建该数据节点的顺序，创建时间晚的数据节点，编号一定大于之前创建的）
+* c. 文件内容编号（只针对文件，用于标识文件内容的变化情况，内容被写入时增加）
+* d. 锁编号（标识节点锁状态变更情况，在节点锁由自由状态（free）变为持有状态（held）时增加）
+* e. ACL 编号（标识节点的 ACL 信息变更，在节点的 ACL 配置信息被写入时增加）
 
 ### 锁与锁序列器
 
