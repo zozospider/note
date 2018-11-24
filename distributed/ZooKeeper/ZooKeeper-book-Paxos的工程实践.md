@@ -123,26 +123,81 @@ Master 收到客户端发送的 KeepAlive 请求，会将该请求阻塞，等�
 Chubby Master 有一个会话租期计时器，如果 Master 故障，计时器会停止，新的 Master 产生后，计时器继续。相当于延长了客户端的会话租期。
 
 故障恢复执行流程：
-* a. Master 维持会话租期 "lease M1"，客户端维持会话租期 "lease C1"，客户端发送的 KeepAlive 被 Master 阻塞。
-* b. Master 反馈 KeepAlive 响应 2，开始会话租期 "lease M2"，客户端收到 KeepAlive 后，开始新的会话租期 "lease C2"，并发送新的 KeepAlive 请求 3。
-* c. Master 故障，无法响应客户端的 KeepAlive 请求 3，然后客户端的会话租期 "lease C2" 过期，清空本地缓存，进入宽限期等待，阻塞应用程序对它的调用请求，并通知上层应用一个 "jeopardy" 事件。
-* d. 选举出新 Master，为该客户端初始化新会话租期 "lease M3"，客户端发送 KeepAlive 请求 4，Master 检测到该客户端的 Master 周期号过期了，在客户端发送 KeepAlive 请求 5 时，返回最近的 Master 周期号。
-* e. 客户端携带最新的 Master 周期号发送 KeepAlive 请求 6，后续会话恢复正常。
+* 1. Master 维持会话租期 "lease M1"，客户端维持会话租期 "lease C1"，客户端发送的 KeepAlive 被 Master 阻塞。
+* 2. Master 反馈 KeepAlive 响应 2，开始会话租期 "lease M2"，客户端收到 KeepAlive 后，开始新的会话租期 "lease C2"，并发送新的 KeepAlive 请求 3。
+* 3. Master 故障，无法响应客户端的 KeepAlive 请求 3，然后客户端的会话租期 "lease C2" 过期，清空本地缓存，进入宽限期等待，阻塞应用程序对它的调用请求，并通知上层应用一个 "jeopardy" 事件。
+* 4. 选举出新 Master，为该客户端初始化新会话租期 "lease M3"，客户端发送 KeepAlive 请求 4，Master 检测到该客户端的 Master 周期号过期了，在客户端发送 KeepAlive 请求 5 时，返回最近的 Master 周期号。
+* 5. 客户端携带最新的 Master 周期号发送 KeepAlive 请求 6，后续会话恢复正常。
 
 新 Master 产生后的处理：
-* a. 确定 Master 周期，拒绝携带其他 Master 周期的客户端请求，并告知新 Master 周期。
-* b. 响应客户端的 Master 寻址。
-* c. 根据会话和锁信息构建服务器内存状态。处理客户端的 KeepAlive 请求。
-* d. 发送 "Master 故障切换" 事件给每一个会话，客户端收到后，清空本地缓存，警告上层应用。Master 等待直到每一个会话都应答了该切换事件。
-* e. 处理所有请求。
+* 1. 确定 Master 周期，拒绝携带其他 Master 周期的客户端请求，并告知新 Master 周期。
+* 2. 响应客户端的 Master 寻址。
+* 3. 根据会话和锁信息构建服务器内存状态。处理客户端的 KeepAlive 请求。
+* 4. 发送 "Master 故障切换" 事件给每一个会话，客户端收到后，清空本地缓存，警告上层应用。Master 等待直到每一个会话都应答了该切换事件。
+* 5. 处理所有请求。
 
 ## Paxos 协议实现
+
+Chubby 服务端架构分为三层：
+* a. 容错日志系统（Fault-Tolerant Log）：保证集群所有机器的日志完全一致，并具有容错性。 
+* b. 容错数据库（Fault-Tolerant DB）：Key-Value 数据库，通过容错日志系统保证一致性和容错性。
+* c. 分布式锁服务和小文件存储服务
+
+Paxos 算法的作用就在于保证集群内各个副本节点的日志能够保证一致。
+
+### 算法实现
+
+...
 
 ---
 
 # Hypertable
 
+Hypertable 是一个使用 C++ 开发的开源、高性能、可伸缩的数据库。
+
+以 Google BigTable 论文为基础知道，和 HBase 分布式模型相似。目的是构建一个针对分布式海量数据的高并发数据库。
+
 ## 概述
 
+只支持基本的增、删、改、查，不支持事务处理和关联查询。少量数据的查询性能和吞吐量不如传统数据库。
+
+相比传统数据库的优势：
+* a. 支持高并发。
+* b. 支持海量数据管理。
+* c. 可水平扩展。
+* d. 可用性高，容错性好，节点失效不影响数据完整性。
+
+Hypertable 核心组件包括 DFS Broker、RangeServer、Master、Hyperspace。
+
+### DFS Broker
+
+用于衔接 Hypertable 和底层分布式文件系统的抽象层。所有对文件系统的读写操作，都是通过 DFS Broker 完成。
+
+可以接入的分布式文件系统包括：HDFS、MapR、Ceph、KFS 等。
+
+### RangeServer
+
+对外提供服务的组件，负责数据读写。
+
+对每一张表按主键切分，形成多个 Range。每个 Range 由一个 RangeServer 管理（调用 DFS Broker 进行数据读写）。多个 RangeServer 由 Master 管理。
+
+### Master
+
+管理：创建表、删除表、表空间变更。
+
+检测 RangeServer 工作状态。RangeServer 宕机后，重新分配 Range。
+
+### Hyperspace
+
+类似 Google Chubby，提供高效、可靠的在分布式锁服务，元数据管理，主机选举服务。保证数据一致性。
+
 ## 算法实现
+
+Hyperspace 集群选举一个服务器作为 Active Server（真正对外服务），其余为 Standby Server。Active Server 和 Standby Server 进行数据和状态同步。
+
+Active Server 选举过程：服务器事务日志更新时间最新的为 Active Server，其余 Standby Server 进行数据同步（即下文的 BDB 同步）。
+
+Master 连上 Hyperspace 集群任意一台服务器后，如果为 Standby Server，会告知 Active Server 地址，Master 再重新连接 Active Server。
+
+Hyperspace 集群底层通过 BDB 集群实现分布式数据一致性。对于 Master 发送给 Hyperspace 的事务请求，Hyperspace 会发送到 BDB 的主节点。（如： 5 台 Hyperspace 集群中的 Active Server 处理建表请求时，需要获得 3 台以上 BDB 服务器同意才能写入）
 
