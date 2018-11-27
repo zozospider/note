@@ -30,7 +30,7 @@ Using config: /home/centos/app/zookeeper/zookeeper-3.4.13/bin/../conf/zoo.cfg
 Starting zookeeper ... STARTED
 ```
 
-然后，启动客户端，客户端连接成功后，可以进行一系列操作，如 `ls`，以下为部分记录：
+然后，启动客户端，客户端连接成功后，可以进行一系列操作，如 `ls`，客户端通过 `Ctrl + C` 可断开连接，以下为部分记录：
 ```
 [centos@VM_0_6_centos bin]$ ./zkCli.sh
 Connecting to localhost:2181
@@ -65,7 +65,9 @@ WatchedEvent state:SyncConnected type:None path:null
 [quota]
 [zk: localhost:2181(CONNECTED) 2] ls /zookeeper/quota
 []
-[zk: localhost:2181(CONNECTED) 3]
+[zk: localhost:2181(CONNECTED) 3] [centos@VM_0_6_centos bin]$ pwd
+/home/centos/app/zookeeper/zookeeper-3.4.13/bin
+[centos@VM_0_6_centos bin]$
 ```
 
 # ZooKeeper 的作用体现
