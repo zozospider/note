@@ -9,6 +9,7 @@
 - [distributed](https://github.com/zozospider/note/tree/master/distributed)
   - [ZooKeeper](https://github.com/zozospider/note/tree/master/distributed/ZooKeeper)
     - [ZooKeeper-book](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book.md)
+    - [ZooKeeper-video](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-video.md)
 - [instrument](https://github.com/zozospider/note/tree/master/instrument)
   - [Git](https://github.com/zozospider/note/tree/master/instrument/Git)
     - [Git](https://github.com/zozospider/note/blob/master/instrument/Git/Git.md)
