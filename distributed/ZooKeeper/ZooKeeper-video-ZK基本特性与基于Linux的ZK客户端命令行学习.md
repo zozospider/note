@@ -418,7 +418,7 @@ numChildren = 0
 
 统一资源配置：ZooKeeper 集群维护一份配置文件，并在集群内保持同步。客户端在连接集群中任意节点时，对该配置文件进行 watch，如果该配置发生变化，会在集群内相互同步，同时客户端会监控到文件变化，就可以进行相应处理。
 
-# ACL 权限详解，ACL 的构成: scheme 与 id
+# ACL 权限详解
 
 ACL(access control lists): 权限控制列表
 
@@ -430,14 +430,14 @@ ACL(access control lists): 权限控制列表
 
 相关命令包括：`setAcl path acl`, `addauth scheme auth`, `getAcl path`。
 
-## ACL 构成
+# ACL 的构成
 
 ACL 权限格式为：`scheme:id:permissions`：
 * scheme: 采用哪种权限机制
 * id: 允许访问的用户
 * permissioins: 权限组合
 
-### scheme 分类
+## ACL 的构成: scheme
 
 * world: world 下只有一个 id，即 anyone。格式：`world:anyone:[permissions]`。
 * auth: 认证登录，需要有权限的注册用户（明文注册，明文登录），格式：`auth:user:password:[permissions]`。
@@ -445,6 +445,6 @@ ACL 权限格式为：`scheme:id:permissions`：
 * ip: 限制 ip 进行访问，格式：`ip:ip:[permissions]`。例如：`ip:192.168.1.1:[permissions]`。
 * super: 代表超级管理员，需要在 `./bin/zkServer.sh` 中配置 super user。
 
-# ACL 的构成: permissions
+## ACL 的构成: permissions
 
 
