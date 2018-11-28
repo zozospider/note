@@ -432,12 +432,12 @@ ACL(access control lists): 权限控制列表
 
 ## ACL 构成
 
-以 `scheme:id:permissions` 格式构成：
+ACL 权限格式为：`scheme:id:permissions`：
 * scheme: 采用哪种权限机制
 * id: 允许访问的用户
 * permissioins: 权限组合
 
-### scheme
+### scheme 分类
 
 * world: world 下只有一个 id，即 anyone。格式：`world:anyone:[permissions]`。
 * auth: 认证登录，需要有权限的注册用户（明文注册，明文登录），格式：`auth:user:password:[permissions]`。
