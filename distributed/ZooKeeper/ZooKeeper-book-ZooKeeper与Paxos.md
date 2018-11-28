@@ -86,6 +86,7 @@ ZooKeeper 采用 ACL 策略进行权限控制。
 
 # 二. ZooKeeper 的 ZAB 协议
 
+参考 [ZooKeeper ZAB协议](https://www.jianshu.com/p/3fec1f8bfc5f)
 
 
 ## ZAB 协议
