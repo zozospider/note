@@ -422,5 +422,29 @@ numChildren = 0
 
 ACL(access control lists): 权限控制列表
 
+## ACL 命令行
+
+* getAcl: 获取某个节点的 ACL 权限信息。
+* secAcl: 设置某个节点的 ACL 权限。
+* addAuth: 输入认证授权信息，注册时输入明文密码登录，密码在 ZooKeep 内部是加密存储。
+
+相关命令包括：`setAcl path acl`, `addauth scheme auth`, `getAcl path`。
+
+## ACL 构成
+
+以 `scheme:id:permissions` 格式构成：
+* scheme: 采用哪种权限机制
+* id: 允许访问的用户
+* permissioins: 权限组合
+
+### scheme
+
+* world: world 下只有一个 id，即 anyone。格式：`world:anyone:[permissions]`。
+* auth: 认证登录，需要有权限的注册用户（明文注册，明文登录），格式：`auth:user:password:[permissions]`。
+* digest: 认证登录，需要有权限的注册用户（密文注册，明文登录），格式：`digest:user:BASE64(SHA1(password)):[permission]`。
+* ip: 限制 ip 进行访问，格式：`ip:ip:[permissions]`。例如：`ip:192.168.1.1:[permissions]`。
+* super: 代表超级管理员，需要在 `./bin/zkServer.sh` 中配置 super user。
+
+# ACL 的构成: permissions
 
 
