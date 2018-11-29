@@ -447,4 +447,49 @@ ACL 权限格式为：`scheme:id:permissions`：
 
 ## ACL 的构成: permissions
 
+权限字符串缩写：`crdwa`：
+* CREATE: 创建子节点
+* READ: 获取节点/子节点
+* DELETE: 删除子节点
+* WRITE: 设置节点数据
+* ADMIN: 设置权限
+
+# ACL 命令行 world 讲解
+
+`world:anyone:cdrwa`：该权限为创建节点后的默认权限。表示所有人都可以对节点进行任何操作。
+
+```
+[zk: localhost:2181(CONNECTED) 2] create /acc 111
+Created /acc
+[zk: localhost:2181(CONNECTED) 4] getAcl /acc
+'world,'anyone
+: cdrwa
+```
+
+通过 `setAcl /acc world:anyone:crwa` 设置所有人对 `/acc` 的子节点具有创建、读取、设置节点数据、设置权限。但是没有删除子节点权限。
+
+```
+[zk: localhost:2181(CONNECTED) 5] setAcl /acc world:anyone:crwa
+cZxid = 0x21
+ctime = Thu Nov 29 12:30:44 CST 2018
+mZxid = 0x21
+mtime = Thu Nov 29 12:30:44 CST 2018
+pZxid = 0x21
+cversion = 0
+dataVersion = 0
+aclVersion = 1
+ephemeralOwner = 0x0
+dataLength = 3
+numChildren = 0
+[zk: localhost:2181(CONNECTED) 6] getAcl /acc   
+'world,'anyone
+: crwa
+[zk: localhost:2181(CONNECTED) 7] create /acc/abc 123
+Created /acc/abc
+[zk: localhost:2181(CONNECTED) 8] delete /acc/abc
+Authentication is not valid : /acc/abc
+```
+
+# ACL 命令行 auth 讲解
+
 
