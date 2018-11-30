@@ -100,7 +100,16 @@ server.3=127.0.0.1:2889:3889
 [centos@VM_0_6_centos bin]$ ./zkServer.sh start
 ```
 
-6. 连接服务端，创建文件后可同步到多个 node，且文件信息一致，表示集群搭建成功。
+6. 检查服务是否正常：
+
+过四字命令检查：echo [command] | nc [ip] [port]
+```
+echo stat | nc 127.0.0.1 2181
+echo stat | nc 127.0.0.1 2182
+echo stat | nc 127.0.0.1 2183
+```
+
+7. 客户端连接某个服务端，创建文件后可同步到多个 node，且文件信息一致，表示集群搭建成功。
 ```
 [centos@VM_0_6_centos bin]$ ./zkCli.sh -server 127.0.0.1:2181
 
@@ -150,12 +159,86 @@ numChildren = 0
 
 搭建步骤如下：
 
-1. 
+1. 在每个节点上，创建 `ZooKeeper` 文件夹，并解压 ZooKeeper 安装包。
 
+同时添加 `zookeeper-3.4.13-data` 和 `zookeeper-3.4.13-data-log` 作为 `conf/zoo.cfg` 中的 `dataDir` 和 `dataLogDir` 配置：
 
-2. 
+以下为某一个节点上的文件目录：
+```
+[zozo@VM_0_3_centos zookeeper]$ ll
+总用量 36376
+drwxr-xr-x 10 zozo zozo     4096 7月   1 07:36 zookeeper-3.4.13
+drwxrwxr-x  2 zozo zozo     4096 11月 30 21:05 zookeeper-3.4.13-data
+drwxrwxr-x  2 zozo zozo     4096 11月 30 21:05 zookeeper-3.4.13-data-log
+-rw-r--r--  1 zozo zozo 37191810 11月 30 20:46 zookeeper-3.4.13.tar.gz
+```
 
+2. 在 dataDir 文件夹下创建对应的 myid。
 
-3. 
+以下为第 1 台节点：
+```
+[centos@VM_0_6_centos zookeeper]$ echo "1" > zookeeper-3.4.13-data/myid
+```
+
+以下为第 2 台节点：
+```
+[centos@VM_0_6_centos zookeeper]$ echo "2" > zookeeper-3.4.13-data/myid
+```
+
+以下为第 3 台节点：
+```
+[centos@VM_0_6_centos zookeeper]$ echo "3" > zookeeper-3.4.13-data/myid
+```
+
+3. 配置 zoo.cfg
+
+以下为第 1/2/3 台节点配置（相同配置）：
+```
+tickTime=2000
+initLimit=10
+syncLimit=5
+dataDir=/home/zozo/app/zookeeper/zookeeper-3.4.13-data
+dataLogDir=/home/zozo/app/zookeeper/zookeeper-3.4.13-data-log
+clientPort=2181
+4lw.commands.whitelist=*
+server.1=172.16.0.6:2888:3888
+server.2=172.16.0.17:2888:3888
+server.3=172.16.0.3:2888:3888
+```
+
+4. 启动每一个 ZooKeeper 服务：
+```
+[centos@VM_0_6_centos bin]$ ./zkServer.sh start
+[centos@VM_0_6_centos bin]$ ./zkServer.sh start
+[centos@VM_0_6_centos bin]$ ./zkServer.sh start
+```
+
+5. 检查服务是否正常：
+
+过四字命令检查：echo [command] | nc [ip] [port]
+```
+echo stat | nc 172.16.0.6 2181
+echo stat | nc 172.16.0.17 2181
+echo stat | nc 172.16.0.3 2181
+```
+
+6. 客户端连接某个服务端，创建文件后可同步到多个 node，且文件信息一致，表示集群搭建成功。
+```
+[zozo@VM_0_6_centos bin]$ ./zkCli.sh -server 172.16.0.6:2181
+[zk: 172.16.0.6:2181(CONNECTED) 0] ls /
+[zookeeper]
+[zk: 172.16.0.6:2181(CONNECTED) 3] create /dist 123
+Created /dist
+[zk: 172.16.0.6:2181(CONNECTED) 4] ls /
+[dist, zookeeper]
+
+[zozo@VM_0_6_centos bin]$ ./zkCli.sh -server 172.16.0.17:2181
+[zk: 172.16.0.6:2181(CONNECTED) 4] ls /
+[dist, zookeeper]
+
+[zozo@VM_0_6_centos bin]$ ./zkCli.sh -server 172.16.0.3:2181
+[zk: 172.16.0.6:2181(CONNECTED) 4] ls /
+[dist, zookeeper]
+```
 
 
