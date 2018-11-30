@@ -3,6 +3,8 @@
 - [base](https://github.com/zozospider/note/tree/master/base)
   - [Design-Patterns](https://github.com/zozospider/note/tree/master/base/Design-Patterns)
     - [Design-Patterns](https://github.com/zozospider/note/blob/master/base/Design-Patterns/Design-Patterns.md)
+  - [Linux](https://github.com/zozospider/note/tree/master/base/Linux)
+    - [Design-Patterns](https://github.com/zozospider/note/blob/master/base/Linux/Linux-command.md)
 - [Microservice](https://github.com/zozospider/note/tree/master/Microservice)
   - [Spring-Boot](https://github.com/zozospider/note/tree/master/Microservice/Spring-Boot)
     - [Spring-Boot-2.x](https://github.com/zozospider/note/blob/master/Microservice/Spring-Boot/Spring-Boot-2.x.md)
