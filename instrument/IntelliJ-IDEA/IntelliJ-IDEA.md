@@ -12,3 +12,9 @@
 ## Keymap Refrence
 > Help > Keymap Refrence
 
+## 无法下载源码
+
+在项目根目录下手动执行如下命令：
+```
+mvn dependency:resolve -Dclassifier=sources
+```
