@@ -50,7 +50,7 @@ mvn dependency:resolve -Dclassifier=sources
 /.nb-gradle/
 ```
 
-如果 .idea 已经被 Git 跟踪，之后再加入 .gitignore 后是没有作用的，此时需要清空 .idea 的 Git 缓存，在项目更目录 下输入如下命令：
+如果 .idea 已经被 Git 跟踪，之后再加入 .gitignore 后是没有作用的，此时需要清空 .idea 的 Git 缓存，在项目更目录下输入如下命令：
 ```
 bogon:note-distributed-zookeeper-video zoz$ git rm -r --cached .idea
 rm '.idea/uiDesigner.xml'
