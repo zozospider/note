@@ -18,3 +18,41 @@
 ```
 mvn dependency:resolve -Dclassifier=sources
 ```
+
+## Git 忽略 .idea 文件
+
+加入 `.gitignore` 文件
+```
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+```
+
+如果 .idea 已经被 Git 跟踪，之后再加入 .gitignore 后是没有作用的，此时需要清空 .idea 的 Git 缓存，在项目更目录 下输入如下命令：
+```
+bogon:note-distributed-zookeeper-video zoz$ git rm -r --cached .idea
+rm '.idea/uiDesigner.xml'
+bogon:note-distributed-zookeeper-video zoz$ 
+```
