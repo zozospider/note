@@ -6,6 +6,7 @@
   - [Linux](https://github.com/zozospider/note/tree/master/base/Linux)
     - [Linux-command](https://github.com/zozospider/note/blob/master/base/Linux/Linux-command.md)
     - [Linux-env](https://github.com/zozospider/note/blob/master/base/Linux/Linux-env.md)
+    - [Linux-shell](https://github.com/zozospider/note/blob/master/base/Linux/Linux-shell.md)
 - [Microservice](https://github.com/zozospider/note/tree/master/Microservice)
   - [Spring-Boot](https://github.com/zozospider/note/tree/master/Microservice/Spring-Boot)
     - [Spring-Boot-2.x](https://github.com/zozospider/note/blob/master/Microservice/Spring-Boot/Spring-Boot-2.x.md)
