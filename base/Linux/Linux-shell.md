@@ -4,6 +4,9 @@
 if [ -x FILE ]; then
   echo "true"
 fi
+if [ ! -x FILE ]; then
+  echo "false"
+fi
 ```
 
 以上 Shell 中的 if 用于判断条件是否成立，条件有以下多种表现方式：
