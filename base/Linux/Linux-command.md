@@ -75,3 +75,40 @@ scp user@remote_ip:/remote_path/file /local_path
 scp -r user@remote_ip:/remote_path/remote_dir /local_path/local_dir
 ```
 
+# 解压 & 压缩 
+
+## tar 命令
+
+以下为 tar 命令参数：
+* `-x`: 解压
+* `-c`: 压缩
+* `-t`: 查看
+
+* `-z`: 有 gzip 属性的文件（`*.tar.gz` / `*.tgz`）
+* `-v`: 显示过程
+
+* `-f`: 在最后且必须
+
+## 常用
+
+以下为常用格式的解压 & 压缩命令：
+
+`*.tar`
+```
+tar xf File.tar
+tar cf File.tar Dir
+```
+
+`*.tar.gz` / `*.tgz`
+```
+tar xzf File.tar.gz
+tar xzf File.tar.gz -C Dir
+tar czf File.tar.gz Dir
+```
+
+`*.zip`
+```
+unzip File.zip
+zip File.zip Dir
+```
+
