@@ -19,6 +19,11 @@
 mvn dependency:resolve -Dclassifier=sources
 ```
 
+## 文件编码
+
+默认采用系统默认编码，修改方式为：
+> File > Settings > Editor > File Encodings
+
 ## Git 忽略 .idea 文件
 
 加入 `.gitignore` 文件
