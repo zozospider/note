@@ -104,6 +104,7 @@ tar cf File.tar Dir
 tar xzf File.tar.gz
 tar xzf File.tar.gz -C Dir
 tar czf File.tar.gz Dir
+tar czf File.tar.gz --exclude=tomcat/logs --exclude=tomcat/libs --exclude=tomcat/xiaoshan.txt Dir
 ```
 
 `*.zip`
