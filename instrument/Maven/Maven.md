@@ -34,3 +34,21 @@
     <plugin>
 <build>
 ```
+
+## 导出依赖的 jar 包
+
+pom.xml 所在目录执行以下命令：
+```
+mvn dependency:copy-dependencies
+```
+
+导出到自定义目录中：
+```
+mvn dependency:copy-dependencies -DoutputDirectory=lib
+```
+
+设置依赖级别（通常使用 compile 级别）：
+```
+mvn dependency:copy-dependencies -DoutputDirectory=lib -DincludeScope=compile
+```
+
