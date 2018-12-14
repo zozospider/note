@@ -4,8 +4,6 @@
 
 * [ZooKeeper学习笔记](https://my.oschina.net/xianggao?tab=newest&catalogId=3412352)
 
+* [Zookeeper客户端Curator使用详解](https://www.jianshu.com/p/70151fc0ef5d)
+
 ---
-
-# 建立客户端与 ZooKeeper 服务端的连接
-
-
