@@ -6,4 +6,6 @@
 
 * [Zookeeper客户端Curator使用详解](https://www.jianshu.com/p/70151fc0ef5d)
 
+* [code: zozospider/note-distributed-zookeeper-video](https://github.com/zozospider/note-distributed-zookeeper-video)
+
 ---
