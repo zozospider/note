@@ -16,4 +16,6 @@
 * [code: zozospider/note-base-design-patterns](https://github.com/zozospider/note-base-design-patterns)
 
 * [设计模式](http://www.runoob.com/design-pattern/design-pattern-tutorial.html)
+* [设计模式](https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/设计模式.md)
+* [Java开发中的23种设计模式详解](https://www.jianshu.com/p/b96b37e8b760)
 ---
