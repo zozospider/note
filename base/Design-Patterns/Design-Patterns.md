@@ -15,4 +15,5 @@
 
 * [code: zozospider/note-base-design-patterns](https://github.com/zozospider/note-base-design-patterns)
 
+* [设计模式](http://www.runoob.com/design-pattern/design-pattern-tutorial.html)
 ---
