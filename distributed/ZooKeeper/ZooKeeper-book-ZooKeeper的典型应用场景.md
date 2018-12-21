@@ -8,6 +8,43 @@
 
 ## 数据发布/订阅
 
+发布/订阅系统一般有两种模式：
+* 推（Push）模式：服务端主动将数据更新发送给所有订阅的客户端。
+* 拉（Pull）模式：客户端主动请求服务端获取最新数据，通常采用定时轮询拉取方式。
+
+ZooKeeper 采用推（Push）拉（Pull）结合。客户端向服务端注册关注的节点，一旦该节点变化，服务端会向注册客户端发送 Watcher 事件通知（推），客户端收到通知后，需要主动到服务端获取最新数据（拉）。
+
+数据一般为机器列表，运行时的开关配置，数据库配置等全局配置。具有以下特性：
+* 数据量较小
+* 数据在运行时会发生变化
+* 集群中配置一致，各机器共享
+
+### 示例
+
+该示例为 `数据库切换` 场景，客户端从 ZooKeeper 获取数据库配置，在 ZooKeeper 的数据库配置发生变化的时候，客户端需要作出相应更新。
+
+1. 配置存储
+
+一般存储在 ZooKeeper 的 `/configer/app1/database_config` 节点，内容如下：
+```properties
+#DBCP
+dbcp.driverClassName=com.mysql.jdbc.Driver
+dbcp.dbJDBCUrl=jdbc:mysql://1.1.1.1:3306/app1
+dbcp.characterEncording=utf-8
+dbcp.username=xiaoming
+dbcp.password=123456
+dbcp.maxActive=30
+dbcp.maxIdle=10
+dbcp.maxWait=10000
+```
+
+2. 配置获取
+
+集群中每台机器在启动阶段，首先从 ZooKeeper 读取数据库配置，同时，在该节点上注册一个数据变更的 Watcher 监听。
+
+3. 配置变更
+
+数据库配置变更后，对 ZooKeeper 配置节点内容进行更新。此时 ZooKeeper 会将变更通知发送到注册的客户端，客户端接收到通知后，重新获取最新数据。
 
 ## 负载均衡
 
