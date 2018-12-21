@@ -1,30 +1,28 @@
-# IntelliJ IDEA
-
-## Documentation
+# Documentation
 > * [mac激活](https://www.jianshu.com/p/3c87487e7121)
 > * [提交代码到Github](https://github.com/FatliTalk/blog/issues/11)
 > * [提交代码到Github-2](https://blog.csdn.net/rongxiang111/article/details/78120126)
 
-## Open
+# Open
 > 1. 打开: File > Settings > Appearance & Behavior > System Settings
 > 2. 去掉勾选: Startup/Shutdown > Reopen last project on startup
 
-## Keymap Refrence
+# Keymap Refrence
 > Help > Keymap Refrence
 
-## 无法下载源码
+# 无法下载源码
 
 在项目根目录下手动执行如下命令：
 ```
 mvn dependency:resolve -Dclassifier=sources
 ```
 
-## 文件编码
+# 文件编码
 
 默认采用系统默认编码，修改方式为：
 > File > Settings > Editor > File Encodings
 
-## Git 忽略 .idea 文件
+# Git 忽略 .idea 文件
 
 加入 `.gitignore` 文件
 ```
