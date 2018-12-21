@@ -50,7 +50,7 @@
 * Scala
 * Kotlin
 * ECMA Script 6
-* Nodejs
+* Node.js
 * TypeScript
 
 ## Java
