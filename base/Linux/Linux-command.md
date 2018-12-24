@@ -113,3 +113,10 @@ unzip File.zip
 zip File.zip Dir
 ```
 
+# 文件编码
+
+如需查看文件编码，执行以下命令：
+```
+enca file
+```
+
