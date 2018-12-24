@@ -10,5 +10,7 @@
 * [../使用ZooKeeper](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book-使用ZooKeeper.md)
 * [../ZooKeeper的典型应用场景](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book-ZooKeeper的典型应用场景.md)
 
+* [code: zozospider/note-distributed-zookeeper-video](https://github.com/zozospider/note-distributed-zookeeper-video)
+
 ---
 
