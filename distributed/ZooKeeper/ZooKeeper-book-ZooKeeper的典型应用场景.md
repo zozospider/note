@@ -185,9 +185,31 @@ ZooKeeper 通过对节点数据的监听，每台机器以临时节点的方式�
 
 可参考 [code: zozospider/note-distributed-zookeeper-video/zookeeper-curator/src/main/java/com/zozospider/zookeepercurator/lock](https://github.com/zozospider/note-distributed-zookeeper-video/tree/master/zookeeper-curator/src/main/java/com/zozospider/zookeepercurator/lock)
 
-对于分布式系统中多个任务操作一个共享资源，那么需要保证彼此之间不干扰。
+对于分布式系统中多个任务操作一个共享资源，那么需要保证彼此之间不干扰。可分为排他锁和共享锁。
 
-排他锁
+### 排他锁
+
+排他锁成为写锁或独占锁。在同一时间，只允许一个事务 T1 对资源 O1 进行读取和更新。其他事务需要等到 T1 释放锁。
+
+1. 定义锁
+
+ZooKeeper 使用一个数据节点如 `/exclusive_lock/lock` 来定义一个锁。
+
+2. 获取锁
+
+客户端试图通过调用 create() 接口，创建临时节点 `/exclusive_lock/lock`。如果创建成功的客户端则获取到了锁。没有创建成功的客户端需要对 `/exclusive_lock` 注册子节点变更 Watcher 监听。
+
+3. 释放锁
+
+以下两种情况会释放锁：
+* 获取到锁的客户端发生异常宕机，临时节点被 ZooKeeper 移除。
+* 获取到锁的客户端完成业务逻辑后，主动删除临时节点。
+
+临时节点 `/exclusive_lock/lock` 被移除后，ZooKeeper 会通知注册了监听并在等待的客户端，这些客户端会再次执行获取锁逻辑。
+
+### 共享锁
+
+
 
 ## 分布式队列
 
