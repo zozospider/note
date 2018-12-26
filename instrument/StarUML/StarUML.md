@@ -11,6 +11,6 @@ thank you for evaluating StarUML. This is unregister evaluation version.Although
 
 虽然是收费的，但是可以无限试用，如果需要破解，参考以下内容：
 
-[StarUML 3.0.2 破解](https://blog.csdn.net/Psychosis_patient/article/details/83305751)
-[StarUML for Mac的安装与破解](https://blog.csdn.net/chao2016/article/details/81077470)
-[Start Uml 3.0.2破解](https://www.jianshu.com/p/53197ac82dc6)
+* [StarUML 3.0.2 破解](https://blog.csdn.net/Psychosis_patient/article/details/83305751)
+* [StarUML for Mac的安装与破解](https://blog.csdn.net/chao2016/article/details/81077470)
+* [Start Uml 3.0.2破解](https://www.jianshu.com/p/53197ac82dc6)
