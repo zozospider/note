@@ -274,6 +274,44 @@ ZooKeeper 使用临时节点如 `/shared_lock/[Hostname]-R-xxxxx` 或 `/shared_l
 
 ## Hadoop
 
+Hadoop 是 Apache 开源的一个大型分布式计算框架。包括 HDFS, MapReduce, YARN。
+
+在 Hadoop 中，ZooKeeper 主要用于以下两个方面:
+
+1. 实现 Hadoop Common 的 HA(High Availability) 模块，HDFS 的 NameNode 和 YARN 的 ResourceManager 都是基于 Hadoop Common 来实现 HA 功能的。
+
+2. 为 YARN 存储应用的运行状态。
+
+### YARN 介绍
+
+YARN 是 Hadoop 为了提高计算节点 Master(JT) 的拓展性，同时为了支持多计算模型和提供资源的细粒度调度而引入的分布式调度框架。可支持如 MapReduce, Tez, Spark, Storm, Imlala, Open MPI 等。
+
+YARN 主要由以下四部分组成:
+* ResourceManager(RM): 核心，作为全局的资源管理器，负责整个系统的资源管理和分配。
+* NodeManager(NM)
+* ApplicationMaster(AM)
+* Container
+
+### ResourceManager(RM) 单点问题
+
+为了解决 ResourceManager(RM) 单点问题，YARN 设计了一套 Active/Standby 模式的 ResourceManager HA 架构。
+
+在运行期间，会有多个 ResourceManager 并存，其中只有一个是 Active 状态，另外为 Standby 状态，当 Active 节点无法工作时，Standby 节点会选举出新的 Active 节点。
+
+以下为涉及到 ZooKeeper 的相关概念:
+
+1. 主备切换
+
+Hadoop Common 包中位于 org.apache.hadoop.ha 中的 ActiveStandbyElector 组件（封装了 ResourceManager 和 ZooKeeper 的通信交互），用来确定 ResourceManager 的状态为 Active 或 Standby（HDFS 的 NameNode 和 ResourceManager 模块也是使用该组件来实现各自的 HA）。
+
+具体步骤如下:
+* a. 创建锁节点: 所有 ResourceManager 节点启动时，竞争去写 ZooKeeper 临时节点 `yarn-leader-election/pseudo-yarn-rm-cluster/ActiveStandbyElectorLock`，最终创建成功的节点为 Active 状态，其他为 Standby 状态。
+* b. 注册 Watcher 监听: 所有 Standby 节点会向 `yarn-leader-election/pseudo-yarn-rm-cluster/ActiveStandbyElectorLock` 注册一个节点变更的 Watcher 监听。
+* c. 主备切换: 当 Active 节点重启或挂掉时，临时节点被删除，其他 Standby 节点收到 ZooKeeper 的变更通知，然后重复步骤 a。
+
+2. Fencing（隔离）
+
+3. ResourceManager 状态存储
 
 ## HBase
 
