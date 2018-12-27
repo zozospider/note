@@ -367,9 +367,9 @@ HBase 客户端需要指明 ZooKeeper 集群地址和对应的 HBase 根节点�
 
 ## 2.3 Kafka
 
-Kafka 是 LinkedIn 开源的分布式消息系统，目前为 Apache 顶级项目，由 Scala 开发。
+Kafka 是 LinkedIn 开源的分布式消息系统，目前为 Apache 顶级项目，由 Scala 开发。是一个吞吐量极高的消息系统，是发布与订阅模式系统，没有 "中心主节点" 概念，所有服务器都是对等的。
 
-Kafka 是一个吞吐量极高的消息系统，是发布与订阅模式系统，没有 "中心主节点" 概念，所有服务器都是对等的。
+Kafka 使用 ZooKeeper 作为分布式协调框架，很好的将消息生产、消息存储、消息消费有机地结合起来。同时能够在生产者、Broker、消费者等组件无状态的情况下，建立起了生产者消费者订阅关系。并实现了生产者和消费者的负载均衡。
 
 ### 2.3.1 术语介绍
 
@@ -383,27 +383,58 @@ Kafka 是一个吞吐量极高的消息系统，是发布与订阅模式系统�
 
 ### 2.3.2 Broker 注册
 
-
+ZooKeeper 负责管理所有 Broker。ZooKeeper 上有一个 `Broker 节点`（`/broker/ids`），在 Broker 启动时，会创建自己的临时节点（`/broker/ids/[0...n]`），其中的全局唯一数据称为 `Broker ID`，每个 Broker 会将自己的 IP 和 port 等信息写入该节点。
 
 ### 2.3.3 Topic 注册
 
+同一个 Topic 消息会分成多个 Partition，这些对应关系，由 ZooKeeper 的 `/brokers/topics` 节点记录，该节点称为 `Topic 节点`。每一个 Topic 都以 `brokers/topics/[topic]` 的形式记录，如 `brokers/topics/login` 或 `brokers/topics/search`。
+
+Broker 启动后，会在 Topic 节点下注册 Broker ID，并写入当前 Broker 存储该 Topic 的分区数。如 `brokers/topics/login/3->2` 表示为编号为 3 的 Broker ID 服务器，对名称为 login 的 Topic 提供了 2 个分区。该节点也为临时节点。
+
 ### 2.3.4 生产者负载均衡
+
+同一个 Topic 的消息会被分区部署到不同 Broker 服务器上。所以生产者需要将消息负载发送到多个 Broker 上。
+
+Kafka 支持以下两种生产者负载均衡方式:
 
 > __四层负载均衡__
 
+根据生产者的 IP 和 port 来确定关联的 Broker。
+
+* 优势: 逻辑简单，只需维护和 Broker 单个 TCP 链接。
+* 劣势: 不是真正的负载均衡，每个生产者消息量和每个 Broker 消息存储不一样，接收总数不均匀。另外，生产者也无法感知 Broker 的新增删除。
+
 > __使用 ZooKeeper 进行负载均衡__
+
+每个 Broker 启动时，完成注册，注册一些如 "有哪些可订阅的 Topic"。生产者通过该节点变化感知 Broker 服务器列表的变更。
+
+生产者会对 ZooKeeper 上的如 "Broker 新增减少"、"Topic 新增减少"、"Broker 和 Topic 关系变化" 等事件注册 Watcher 监听，这样就可以实现动态负载均衡。
 
 ### 2.3.5 消费者负载均衡
 
+多个消费者需要进行负载均衡，合理的从 Broker 服务器接收消息。
+
+不同消费者分组消费特定 Topic 消息，互不干扰。每个消费者分组中包含多个消费者，每条消息只会发送给分组中的一个消费者。
+
 > __消息分区与消费者关系__
+
+每个消费者分组都有一个全局唯一 `Group ID`，每个消费者都有一个 `Consumer ID`，通常采用如 `Hostname:UUID` 形式。
+
+每个消息分区只能有一个消费者消费，因此，ZooKeeper 需要记录分区与消费者的关系。每个消费者一旦确定对一个分区的消费权利，那么需要将 Consumer ID 写入对应消费的分区的临时节点上，如 `/consumers/[group_id]/owners/[topic]/[broker_id-partition_id]`，其中 `[broker_id-partition_id]` 表示某个 Broker 上的某个分区，节点数据内容则为消费该分区的 Consumer ID。
 
 > __消息消费进度 Offset 记录__
 
+消费者在指定分区进行消费时，需要定时将分区消息的消费进度（即 Offset）记录到 ZooKeeper 上。以便该消费者重启或其他消费者接管该分区后，能够获取之前进度。
+
+ZooKeeper 记录 Offset 到节点路径为 `/consumers/[group_id]/offsets/[topic]/[broker_id-partition_id]`，节点数据内容则为 Offset 值。
+
 > __消费者注册__
 
-> __负载均衡算法__
-
-
+消费者服务器加入消费者分组过程如下:
+* a. 注册到消费者分组: 消费者服务器启动时，创建临时节点如 `/consumers/[group_id]/ids/[consumer_id]`。然后将自己订阅的 Topic 信息写入该节点。
+* b. 注册监听消费者分组中的消费者: 消费者需要对 `/consumers/[group_id]/ids` 注册子节点变化的 Watcher 监听，一旦同分组下有消费者变化，触发消费者负载均衡。
+* c. 注册监听 Broker 服务器: 消费者需要对 `/broker/ids/[0...n]` 注册节点变化的 Watcher 监听，如果 Broker 服务器列表变化，根据情况决定是否进行消费者负载均衡。
+* d. 进行消费者负载均衡: 让同一个 Topic 下不同分区的消息均衡的被多个消费者消费（通过一套特殊的消费者负载均衡算法）。
 
 ---
 
