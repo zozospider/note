@@ -247,8 +247,27 @@ ZooKeeper 使用临时节点如 `/shared_lock/[Hostname]-R-xxxxx` 或 `/shared_l
 
 ## 分布式队列
 
+### 分布式屏障
 
+可参考 [code: zozospider/note-distributed-zookeeper-video/zookeeper-curator/src/main/java/com/zozospider/zookeepercurator/barrier](https://github.com/zozospider/note-distributed-zookeeper-video/tree/master/zookeeper-curator/src/main/java/com/zozospider/zookeepercurator/barrier)
 
+规定了一个队列的元素必须都聚集后才能统一进行安排，比如在大规模分布式并行计算时，最后的合并计算需要基于很多并行计算的子节点。
+
+步骤如下:
+
+1. 定义一个 ZooKeeper `/queue_barrier` 节点，并设置数据为 `10`。
+
+2. 客户端在 ZooKeeper `/queue_barrier` 节点下创建临时节点，如 `/queue_barrier/192.168.0.1`。
+
+3. 调用 `getData()` 获取 `/queue_barrier` 节点数据内容: `10`。
+
+4. 调用 `getChildren` 获取 `/queue_barrier` 节点的所有子节点，并注册对子节点列表的 Watcher 监听。
+
+5. 统计子节点个数，如果到达 10 个，就往下执行业务逻辑。否则，就等待。
+
+6. 接受到 Watcher 通知后，重复步骤 4。
+
+---
 
 # 二. ZooKeeper在大型分布式系统中的应用
 
