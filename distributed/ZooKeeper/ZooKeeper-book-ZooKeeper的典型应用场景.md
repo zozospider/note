@@ -300,7 +300,11 @@ Hadoop Common 包中位于 org.apache.hadoop.ha 中的 ActiveStandbyElector 组�
 
 > __Fencing（隔离）__
 
+如果 ResourceManager1 为 Active 状态，但是由于负载过高（GC 占用时间长或 CPU 负载高）或网络闪断，无法对外提供服务，产生 `假死`，此时 ZooKeeper 认为 ResourceManager1 挂了，ResourceManager2 切换为 Active 状态。而 ResourceManager1 依然认为自己为 Active，产生 `脑裂`。如何解决呢？
 
+YARN 引入 Fencing 机制，通过 ZooKeeper 的 ACL 权限控制，某个 RM 创建的节点必须携带 ZooKeeper 的 ACL 信息，以防止其他 RM 更新。
+
+比如 RM1 为 Active 状态，出现假死后，ZooKeeper 将其移除，此时 RM2 创建节点，并切换为 Active。RM1 恢复后试图更新 ZooKeeper 数据，但是失败了，于是就将自己切换为 Standby 状态。
 
 > __ResourceManager 状态存储__
 
