@@ -308,8 +308,35 @@ YARN 引入 Fencing 机制，通过 ZooKeeper 的 ACL 权限控制，某个 RM �
 
 > __ResourceManager 状态存储__
 
+`RMStateStore` 能够存储一些 ResourceManager 的内部状态信息（大部分不需要持久化）。提供以下三种存储方案:
+* 基于内存，一般用于日常开发。
+* 基于文件系统，如 HDFS。
+* 基于 ZooKeeper。
+
+因为存储量不大，官方建议基于 ZooKeeper 实现。存储在 `/rmstore` 根节点上。
+
 
 ## 2.2 HBase
+
+全称 Hadoop Database，是 Google Bigtable 的开源实现，是一个基于 Hadoop 文件系统设计的面向海量数据的高可靠性、高性能、面向列、可伸缩的分布式存储系统。对数据的写入具有强一致性。
+
+ZooKeeper 是 HBase 的核心组件。
+
+### 2.2.1 系统冗错
+
+
+
+### 2.2.2 RootRegion 管理
+
+### 2.2.3 Region 状态管理
+
+### 2.2.4 分布式 SplitLog 任务管理
+
+### 2.2.5 Replication 管理
+
+### 2.2.6 ZooKeeper 部署
+
+### 小结
 
 
 ## 2.3 Kafka
