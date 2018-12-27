@@ -1,5 +1,6 @@
 
 # Documentation
+
 * [大白话解释 Git 和 GitHub](http://blog.jobbole.com/111187/)
 * [GitHub](https://github.com/)
 * [搬进 GitHub](http://gitbeijing.com/)
@@ -9,4 +10,3 @@
 * [GitHub Wiki TOC generator](https://ecotrust-canada.github.io/markdown-toc/)
 
 ---
-

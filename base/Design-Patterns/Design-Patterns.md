@@ -1,8 +1,6 @@
-# Design Patterns
 
----
+# Document & Code
 
-## Document & Code
 * [../Design-Patterns-原则-开闭原则](https://github.com/zozospider/note/blob/master/base/Design-Patterns/Design-Patterns-原则-开闭原则.md)
 * [../Design-Patterns-原则-依赖倒置原则](https://github.com/zozospider/note/blob/master/base/Design-Patterns/Design-Patterns-原则-依赖倒置原则.md)
 * [../Design-Patterns-原则-单一职责原则](https://github.com/zozospider/note/blob/master/base/Design-Patterns/Design-Patterns-原则-单一职责原则.md)
@@ -18,4 +16,5 @@
 * [设计模式](http://www.runoob.com/design-pattern/design-pattern-tutorial.html)
 * [设计模式](https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/设计模式.md)
 * [Java开发中的23种设计模式详解](https://www.jianshu.com/p/b96b37e8b760)
+
 ---
