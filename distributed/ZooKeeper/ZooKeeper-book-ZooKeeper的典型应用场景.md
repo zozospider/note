@@ -338,11 +338,19 @@ RootRegion 自身位置记录在 ZooKeeper 上（默认 `/hbase/root-region-serv
 
 Region 是数据的物理切片，每个 Region 记录了全局数据的一小部分。不同 Region 之间数据不重复。
 
-由于系统故障、负载均衡、配置修改、Region 分裂合并等会引起 Region 经常变更。Region 移动会经历 Offline 和 online 过程。Offline 期间数据不能被访问，且 Region 的这个状态变更必须让全局知晓。高达 10 万级别的 Region 状态管理需要依靠 ZooKeeper。
+由于系统故障、负载均衡、配置修改、Region 分裂合并等会引起 Region 经常变更。Region 移动会经历 Offline 和 online 过程。Offline 期间数据不能被访问，且 Region 的这个状态变更必须让全局知晓。高达 10 万级别的 Region 状态管理需要依靠 ZooKeeper 实现。
 
 ### 2.2.4 分布式 SplitLog 任务管理
 
+当某个 RegionServer 挂掉时，部分数据还未持久化到 HFile 中。所以需要从 HLog 中恢复内存中的数据。
+
+HMaster 遍历该 RegionServer 的 HLog，并按 Region 切分小块到新地址下，并进行数据的 Replay。
+
+由于 RegionServer 数据量大，HLog 的任务分配给多个 RegionServer 处理，此时，HMaster 会在 ZooKeeper 上创建一个 splitlog 节点（默认 `/hbase/splitlog`），并将哪个 RegionServer 处理哪个 Region 等信息以列表的方式存放到该节点。然后各个 RegionServer 自行到该节点上领取任务并反馈结果。
+
 ### 2.2.5 Replication 管理
+
+
 
 ### 2.2.6 ZooKeeper 部署
 
