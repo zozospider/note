@@ -320,7 +320,9 @@ YARN 引入 Fencing 机制，通过 ZooKeeper 的 ACL 权限控制，某个 RM �
 
 全称 Hadoop Database，是 Google Bigtable 的开源实现，是一个基于 Hadoop 文件系统设计的面向海量数据的高可靠性、高性能、面向列、可伸缩的分布式存储系统。对数据的写入具有强一致性。
 
-ZooKeeper 是 HBase 的核心组件。
+ZooKeeper 是 HBase 的核心组件。应用场景包括: 系统冗错、RootRegion 管理、Region 状态管理、分布式 SplitLog 任务管理、Replication 管理、HMaster 的 ActiveMaster 选举、BackupMaster 的实时接管、Table 的 enable/disable 状态记录、几乎所有的元数据存储等。
+
+HBase 中所有对 ZooKeeper 的操作都封装在 org.apache.hadoop.hbase.zookeeper 包中。
 
 ### 2.2.1 系统冗错
 
@@ -350,11 +352,17 @@ HMaster 遍历该 RegionServer 的 HLog，并按 Region 切分小块到新地址
 
 ### 2.2.5 Replication 管理
 
+Replication 为 HBase 实现实时的主备同步功能，使 HBase 拥有了容灾和分流功能，加强了 HBase 的可用性。
 
+实现方式是在 ZooKeeper 上记录 replication 节点（默认 `hbase/replication`），把不同的 RegionServer 服务器对应的 HLog 文件记录到相应节点上，HMaster 会将新增数据推送到 Slave 集群，并将推送信息记录到 ZooKeeper（`断点信息`）。
+
+当服务器挂掉时，HMaster 根据 ZooKeeper 记录的断点信息来协调复制。
 
 ### 2.2.6 ZooKeeper 部署
 
-### 小结
+`hbase-env.sh` 中可以选择自带的 ZooKeeper，还是外部的 ZooKeeper。一般建议后者，这样多个 HBase 集群可服用同一套 ZooKeeper 集群。需要注意，此时要为每个 HBase 集群指明对应的 ZooKeeper 根节点配置确保互不干扰。
+
+HBase 客户端需要指明 ZooKeeper 集群地址和对应的 HBase 根节点配置。
 
 
 ## 2.3 Kafka
