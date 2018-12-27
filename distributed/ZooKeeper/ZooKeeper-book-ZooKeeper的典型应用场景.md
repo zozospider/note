@@ -260,6 +260,7 @@ ZooKeeper 使用临时节点如 `/shared_lock/[Hostname]-R-xxxxx` 或 `/shared_l
 - f. 接受到 Watcher 通知后，重复步骤 4。
 
 ---
+---
 
 # 二. ZooKeeper在大型分布式系统中的应用
 
