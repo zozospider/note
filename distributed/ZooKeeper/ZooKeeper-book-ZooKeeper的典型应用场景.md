@@ -24,7 +24,7 @@ ZooKeeper 采用推（Push）拉（Pull）结合。客户端向服务端注册�
 
 该示例为 `数据库切换` 场景，客户端从 ZooKeeper 获取数据库配置，在 ZooKeeper 的数据库配置发生变化的时候，客户端需要作出相应更新。
 
-1. 配置存储
+* 1. 配置存储
 
 一般存储在 ZooKeeper 的 `/configer/app1/database_config` 节点，内容如下：
 ```properties
@@ -39,11 +39,11 @@ dbcp.maxIdle=10
 dbcp.maxWait=10000
 ```
 
-2. 配置获取
+* 2. 配置获取
 
 集群中每台机器在启动阶段，首先从 ZooKeeper 读取数据库配置，同时，在该节点上注册一个数据变更的 Watcher 监听。
 
-3. 配置变更
+* 3. 配置变更
 
 数据库配置变更后，对 ZooKeeper 配置节点内容进行更新。此时 ZooKeeper 会将变更通知发送到注册的客户端，客户端接收到通知后，重新获取最新数据。
 
@@ -55,13 +55,13 @@ dbcp.maxWait=10000
 
 该示例为 `自动化 DNS 服务` 场景。
 
-1. 域名注册
+* 1. 域名注册
 
 每个服务在启动时，会把自己的域名信息注册到 Register 服务中。例如 A 机器提供 serviceA.xxx.com 服务，它就通过一个 Rest 请求向 Register 发送一个请求: "serviceA.xxx.com -> 192.168.0.1:8080"。
 
 Register 服务获取到数据后，将其写入到 ZooKeeper 对应节点上。
 
-2. 域名解析
+* 2. 域名解析
 
 客户端在使用该域名时，会向 Dispatcher 发出域名解析请求。
 
@@ -77,11 +77,11 @@ Dispatcher 服务收到请求后，会从 ZooKeeper 指定节点上获取对应 
 
 以下为使用 ZooKeeper 生成唯一 ID 的步骤：
 
-1. 所有客户端都会根据自己的任务类型，通过 create() 创建一个顺序节点，例如 `job-` 节点。
+* 1. 所有客户端都会根据自己的任务类型，通过 create() 创建一个顺序节点，例如 `job-` 节点。
 
-2. 因为每个数据节点都可以维护一份子节点的顺序序列，自动以后缀的形式添加一个序号。所以，创建完毕后，create() 接口会返回一个完整的节点名，如 `job-0000000003`。
+* 2. 因为每个数据节点都可以维护一份子节点的顺序序列，自动以后缀的形式添加一个序号。所以，创建完毕后，create() 接口会返回一个完整的节点名，如 `job-0000000003`。
 
-3. 客户端拿到返回值后，拼接上 type 类型，如 `type2-job-0000000003`，就可以作为全局唯一 ID 了。
+* 3. 客户端拿到返回值后，拼接上 type 类型，如 `type2-job-0000000003`，就可以作为全局唯一 ID 了。
 
 ## 分布式协调/通知
 
@@ -97,17 +97,17 @@ Dispatcher 服务收到请求后，会从 ZooKeeper 指定节点上获取对应 
 
 通过使用 ZooKeeper 实现机器间通信，可省去底层网络通信工作，降低系统耦合性。
 
-1. 心跳检测
+* 1. 心跳检测
 
 分布式系统机器之间需要检测彼此是否存在。传统方式，是通过主机之间是否可 PING 通，或者彼此建立 TCP 连接。
 
 通过 ZooKeeper，可以让不同机器在 ZooKeeper 同一个节点下创建临时节点，根据临时节点判断相互是否存活。这种方式也使得系统之间不需要直接相连，减少了耦合。
 
-2. 工作进度汇报
+* 2. 工作进度汇报
 
 对于任务分发，在 ZooKeeper 上选择一个节点，每个执行任务的客户端在该节点下创建子节点，并将自己的任务执行进度实时写到临时节点上。这样中心系统能够获取到各客户端的执行情况。
 
-3. 系统调度
+* 3. 系统调度
 
 对于系统调度，管理人员通过控制台操作，对 ZooKeeper 上的节点数据进行操作，数据变更通知到订阅的客户端。
 
@@ -135,25 +135,25 @@ ZooKeeper 通过对节点数据的监听，每台机器以临时节点的方式�
 
 该系统需要关注一下几个问题。
 
-1. 注册收集器机器
+* 1. 注册收集器机器
 
 收集器机器启动时需要在 ZooKeeper 根节点 `/logs/collector` 下创建持久节点 `/logs/collector/[Hostname]`，之所以创建持久节点，是为了保证机器断开或挂掉后，保存的状态数据不丢。
 
-2. 任务分发
+* 2. 任务分发
 
 系统将不同的日志源机器列表写入到收集器机器创建的节点上，使得每个收集器都对应日志源机器列表。
 
-3. 状态汇报
+* 3. 状态汇报
 
 收集器机器需要创建自己节点的子节点 `/logs/collector/host1/status`，定期写入状态信息（如日志收集进度）。
 
-4. 动态分配
+* 4. 动态分配
 
 一旦系统检测到有收集器机器变更，就对任务进行重新分配，包括全局动态分配和局部动态分配：
 * 全局动态分配: 根据最新的收集器机器列表，对所有日志源机器进行重新分配。该方式存在的问题是，少量机器变更会引起全部重新分配。
 * 局部动态分配: 收集器机器会汇报自己的负载（当前收集器的综合评估），这样，在发生收集器机器变更时，系统会将任务分配到负载低的机器。
 
-5. 轮询监听
+* 5. 轮询监听
 
 对于节点状态的变更，采用系统主动轮询的方式（有延时），避免在大量节点情况下通知机制造成的大量消息。
 
@@ -170,11 +170,11 @@ ZooKeeper 通过对节点数据的监听，每台机器以临时节点的方式�
 
 ZooKeeper 通过对节点数据的监听，每台机器以临时节点的方式进行数据收集，可以对集群进行灵活的检测和处理。
 
-1. 机器上下线
+* 1. 机器上下线
 
 每台机器上部署一个基于 ZooKeeper 实现的 Agent，该 Agent 部署后，首先向 ZooKeeper 指定节点注册，即创建 `/XAE/machine/[Hostname]`。监控 `/XAE/machine` 的系统即会收到上线通知。下线也如此。
 
-2. 机器监控
+* 2. 机器监控
 
 运行过程中，Agent 定时将主机信息写入 ZooKeeper 指定节点，监控中心通过订阅这些节点获取信息。
 
@@ -192,7 +192,7 @@ ZooKeeper 通过对节点数据的监听，每台机器以临时节点的方式�
 
 排他锁称为写锁或独占锁。在同一时间，只允许一个事务 T1 对资源 O1 进行读取和更新。其他事务需要等到 T1 释放锁。
 
-1. 定义锁
+* * 1. 定义锁
 
 ZooKeeper 使用一个临时节点如 `/exclusive_lock/lock` 来定义一个锁。
 
@@ -200,7 +200,7 @@ ZooKeeper 使用一个临时节点如 `/exclusive_lock/lock` 来定义一个锁�
 
 客户端通过调用 create() 接口，试图创建临时节点 `/exclusive_lock/lock`。如果创建成功的客户端则获取到了锁。没有创建成功的客户端需要对 `/exclusive_lock` 注册子节点变更 Watcher 监听。
 
-3. 释放锁
+* 3. 释放锁
 
 以下两种情况会释放锁：
 * 获取到锁的客户端发生异常宕机，临时节点被 ZooKeeper 移除。
@@ -212,11 +212,11 @@ ZooKeeper 使用一个临时节点如 `/exclusive_lock/lock` 来定义一个锁�
 
 共享锁称为读锁。不同事务可以同时对同一个数据对象进行读取，但是，只能在没有任何事务进行读写的情况下更新。
 
-1. 定义锁
+* 1. 定义锁
 
 ZooKeeper 使用临时节点如 `/shared_lock/[Hostname]-R-xxxxx` 或 `/shared_lock/[Hostname]-W-xxxxx` 来定义读或写请求锁。
 
-2. 获取锁
+* 2. 获取锁
 
 客户端创建临时节点 `/shared_lock/192.168.0.1-R-0000000001` 或 `/shared_lock/192.168.0.1-W-0000000001` 来定义读或写请求锁。
 
@@ -227,7 +227,7 @@ ZooKeeper 使用临时节点如 `/shared_lock/[Hostname]-R-xxxxx` 或 `/shared_l
 * c. 如果是写请求: 自己必须是所有节点中最小的节点。
 * d. 收到 Watcher 监听后，重复步骤。
 
-4. 释放锁
+* 4. 释放锁
 
 以下两种情况会释放锁：
 * 获取到锁的客户端发生异常宕机，临时节点被 ZooKeeper 移除。
@@ -256,17 +256,17 @@ ZooKeeper 使用临时节点如 `/shared_lock/[Hostname]-R-xxxxx` 或 `/shared_l
 
 步骤如下:
 
-1. 定义一个 ZooKeeper `/queue_barrier` 节点，并设置数据为 `10`。
+* 1. 定义一个 ZooKeeper `/queue_barrier` 节点，并设置数据为 `10`。
 
-2. 客户端在 ZooKeeper `/queue_barrier` 节点下创建临时节点，如 `/queue_barrier/192.168.0.1`。
+* 2. 客户端在 ZooKeeper `/queue_barrier` 节点下创建临时节点，如 `/queue_barrier/192.168.0.1`。
 
-3. 调用 `getData()` 获取 `/queue_barrier` 节点数据内容: `10`。
+* 3. 调用 `getData()` 获取 `/queue_barrier` 节点数据内容: `10`。
 
-4. 调用 `getChildren` 获取 `/queue_barrier` 节点的所有子节点，并注册对子节点列表的 Watcher 监听。
+* 4. 调用 `getChildren` 获取 `/queue_barrier` 节点的所有子节点，并注册对子节点列表的 Watcher 监听。
 
-5. 统计子节点个数，如果到达 10 个，就往下执行业务逻辑。否则，就等待。
+* 5. 统计子节点个数，如果到达 10 个，就往下执行业务逻辑。否则，就等待。
 
-6. 接受到 Watcher 通知后，重复步骤 4。
+* 6. 接受到 Watcher 通知后，重复步骤 4。
 
 ---
 
@@ -278,9 +278,9 @@ Hadoop 是 Apache 开源的一个大型分布式计算框架。包括 HDFS, MapR
 
 在 Hadoop 中，ZooKeeper 主要用于以下两个方面:
 
-1. 实现 Hadoop Common 的 HA(High Availability) 模块，HDFS 的 NameNode 和 YARN 的 ResourceManager 都是基于 Hadoop Common 来实现 HA 功能的。
+* 1. 实现 Hadoop Common 的 HA(High Availability) 模块，HDFS 的 NameNode 和 YARN 的 ResourceManager 都是基于 Hadoop Common 来实现 HA 功能的。
 
-2. 为 YARN 存储应用的运行状态。
+* 2. 为 YARN 存储应用的运行状态。
 
 ### YARN 介绍
 
@@ -300,7 +300,7 @@ YARN 主要由以下四部分组成:
 
 以下为涉及到 ZooKeeper 的相关概念:
 
-1. 主备切换
+* 1. 主备切换
 
 Hadoop Common 包中位于 org.apache.hadoop.ha 中的 ActiveStandbyElector 组件（封装了 ResourceManager 和 ZooKeeper 的通信交互），用来确定 ResourceManager 的状态为 Active 或 Standby（HDFS 的 NameNode 和 ResourceManager 模块也是使用该组件来实现各自的 HA）。
 
@@ -309,9 +309,9 @@ Hadoop Common 包中位于 org.apache.hadoop.ha 中的 ActiveStandbyElector 组�
 * b. 注册 Watcher 监听: 所有 Standby 节点会向 `yarn-leader-election/pseudo-yarn-rm-cluster/ActiveStandbyElectorLock` 注册一个节点变更的 Watcher 监听。
 * c. 主备切换: 当 Active 节点重启或挂掉时，临时节点被删除，其他 Standby 节点收到 ZooKeeper 的变更通知，然后重复步骤 a。
 
-2. Fencing（隔离）
+* 2. Fencing（隔离）
 
-3. ResourceManager 状态存储
+* 3. ResourceManager 状态存储
 
 ## HBase
 
