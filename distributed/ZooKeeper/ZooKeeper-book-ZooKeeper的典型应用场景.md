@@ -5,9 +5,9 @@
 
 ---
 
-# 一. 典型应用场景及实现
+# 一 典型应用场景及实现
 
-## 数据发布/订阅
+## 1.1 数据发布/订阅
 
 发布/订阅系统一般有两种模式：
 * 推（Push）模式：服务端主动将数据更新发送给所有订阅的客户端。
@@ -20,11 +20,11 @@ ZooKeeper 采用推（Push）拉（Pull）结合。客户端向服务端注册�
 * 数据在运行时会发生变化
 * 集群中配置一致，各机器共享
 
-### ZooKeeper 应用示例
+### 1.1.1 ZooKeeper 应用示例
 
 该示例为 `数据库切换` 场景，客户端从 ZooKeeper 获取数据库配置，在 ZooKeeper 的数据库配置发生变化的时候，客户端需要作出相应更新。
 
-* 1. 配置存储
+1. 配置存储
 
 一般存储在 ZooKeeper 的 `/configer/app1/database_config` 节点，内容如下：
 ```properties
@@ -47,31 +47,31 @@ dbcp.maxWait=10000
 
 数据库配置变更后，对 ZooKeeper 配置节点内容进行更新。此时 ZooKeeper 会将变更通知发送到注册的客户端，客户端接收到通知后，重新获取最新数据。
 
-## 负载均衡
+## 1.2 负载均衡
 
 用来对多个计算机、网络连接、CPU、磁盘驱动或其他资源进行分配负载，以达到优化资源使用、最大化吞吐率、最小化响应时间和避免过载的目的。分为硬件负载均衡和软件负载均衡。
 
-### ZooKeeper 应用示例
+### 1.2.1 ZooKeeper 应用示例
 
 该示例为 `自动化 DNS 服务` 场景。
 
-* 1. 域名注册
+1. 域名注册
 
 每个服务在启动时，会把自己的域名信息注册到 Register 服务中。例如 A 机器提供 serviceA.xxx.com 服务，它就通过一个 Rest 请求向 Register 发送一个请求: "serviceA.xxx.com -> 192.168.0.1:8080"。
 
 Register 服务获取到数据后，将其写入到 ZooKeeper 对应节点上。
 
-* 2. 域名解析
+2. 域名解析
 
 客户端在使用该域名时，会向 Dispatcher 发出域名解析请求。
 
 Dispatcher 服务收到请求后，会从 ZooKeeper 指定节点上获取对应 IP:PORT 数据列表，通过一定策略选取其中一个返回给前端应用。
 
-## 命名服务
+## 1.3 命名服务
 
 被命名的实体可以是集群中的机器、提供的服务地址或远程对象等，统称为名字（Name）。比如 RPC 中的服务地址列表，通过使用命名服务，客户端能够根据名字获取资源的实体、服务地址和提供者信息。
 
-### ZooKeeper 应用实例
+### 1.3.1 ZooKeeper 应用实例
 
 该示例为 `全局唯一 ID` 场景。
 
@@ -83,15 +83,15 @@ Dispatcher 服务收到请求后，会从 ZooKeeper 指定节点上获取对应 
 
 * 3. 客户端拿到返回值后，拼接上 type 类型，如 `type2-job-0000000003`，就可以作为全局唯一 ID 了。
 
-## 分布式协调/通知
+## 1.4 分布式协调/通知
 
 基于 ZooKeeper 实现分布式协调和通知功能，通常的做法是不同的客户端都对 ZooKeeper 上同一个数据节点进行 Watcher 注册，监听数据变化，如果本身或子节点发生变化，则做出相应处理。
 
-### ZooKeeper 应用实例
+### 1.4.1 ZooKeeper 应用实例
 
 该示例为 `MySQL 数据复制总线`，是一个实时数据复制框架，用于在不同 MySQL 数据实例之间进行异步数据复制和数据变化通知。该示例较为复杂，详情请参考 `《从 Paxos 到 ZooKeeper》 - 6.1.4 分布式协调/通知`。
 
-### 分布式系统机器间通信
+### 1.4.2 分布式系统机器间通信
 
 大部分分布式系统，机器间的通信包括心跳检测、工作进度汇报、系统调度。
 
@@ -112,7 +112,7 @@ Dispatcher 服务收到请求后，会从 ZooKeeper 指定节点上获取对应 
 对于系统调度，管理人员通过控制台操作，对 ZooKeeper 上的节点数据进行操作，数据变更通知到订阅的客户端。
 
 
-## 集群管理
+## 1.5 集群管理
 
 集群管理包括集群监控（对集群运行时状态的收集）和集群控制（对集群进行操作和控制）。
 
@@ -127,7 +127,7 @@ Dispatcher 服务收到请求后，会从 ZooKeeper 指定节点上获取对应 
 
 ZooKeeper 通过对节点数据的监听，每台机器以临时节点的方式进行数据收集，可以对集群进行灵活的检测和处理。
 
-### ZooKeeper 应用示例: 分布式日志收集系统
+### 1.5.1 ZooKeeper 应用示例: 分布式日志收集系统
 
 日志收集系统分为日志源机器、收集器机器。
 * 日志源机器: 就是日志产生的应用机器，每天都在变化（扩容、迁移、硬件问题、网络问题）。
@@ -157,7 +157,7 @@ ZooKeeper 通过对节点数据的监听，每台机器以临时节点的方式�
 
 对于节点状态的变更，采用系统主动轮询的方式（有延时），避免在大量节点情况下通知机制造成的大量消息。
 
-### ZooKeeper 应用示例: 在线云主机管理
+### 1.5.2 ZooKeeper 应用示例: 在线云主机管理
 
 虚拟主机提供商需要对集群进行监控。经常遇到如下需求：
 * 想知道当前有多少机器在工作？
@@ -178,17 +178,17 @@ ZooKeeper 通过对节点数据的监听，每台机器以临时节点的方式�
 
 运行过程中，Agent 定时将主机信息写入 ZooKeeper 指定节点，监控中心通过订阅这些节点获取信息。
 
-## Master 选举
+## 1.6 Master 选举
 
 可参考 [code: zozospider/note-distributed-zookeeper-video/zookeeper-curator/src/main/java/com/zozospider/zookeepercurator/leader](https://github.com/zozospider/note-distributed-zookeeper-video/tree/master/zookeeper-curator/src/main/java/com/zozospider/zookeepercurator/leader)
 
-## 分布式锁
+## 1.7 分布式锁
 
 可参考 [code: zozospider/note-distributed-zookeeper-video/zookeeper-curator/src/main/java/com/zozospider/zookeepercurator/lock](https://github.com/zozospider/note-distributed-zookeeper-video/tree/master/zookeeper-curator/src/main/java/com/zozospider/zookeepercurator/lock)
 
 对于分布式系统中多个任务操作一个共享资源，那么需要保证彼此之间不干扰。可分为排他锁和共享锁。
 
-### 排他锁
+### 1.7.1 排他锁
 
 排他锁称为写锁或独占锁。在同一时间，只允许一个事务 T1 对资源 O1 进行读取和更新。其他事务需要等到 T1 释放锁。
 
@@ -208,15 +208,15 @@ ZooKeeper 使用一个临时节点如 `/exclusive_lock/lock` 来定义一个锁�
 
 临时节点 `/exclusive_lock/lock` 被移除后，ZooKeeper 会通知注册了监听并在等待的客户端，这些客户端会再次执行获取锁逻辑。
 
-### 共享锁
+### 1.7.2 共享锁
 
 共享锁称为读锁。不同事务可以同时对同一个数据对象进行读取，但是，只能在没有任何事务进行读写的情况下更新。
 
-__1. 定义锁__
+1. 定义锁
 
 ZooKeeper 使用临时节点如 `/shared_lock/[Hostname]-R-xxxxx` 或 `/shared_lock/[Hostname]-W-xxxxx` 来定义读或写请求锁。
 
-**2. 获取锁**
+2. 获取锁
 
 客户端创建临时节点 `/shared_lock/192.168.0.1-R-0000000001` 或 `/shared_lock/192.168.0.1-W-0000000001` 来定义读或写请求锁。
 
@@ -235,7 +235,7 @@ ZooKeeper 使用临时节点如 `/shared_lock/[Hostname]-R-xxxxx` 或 `/shared_l
 
 临时节点 `/shared_lock/[Hostname]-R-xxxxx` 或 `/shared_lock/[Hostname]-W-xxxxx` 被移除后，ZooKeeper 会通知注册了监听并在等待的客户端，这些客户端会再次执行获取锁逻辑。
 
-### 羊群效应
+### 1.7.3 羊群效应
 
 在大规模客户端情况下，一个客户端删除节点，会使得 ZooKeeper 短时间向大量注册监听的客户端发送通知，客户端也需要重新获取子节点列表。
 
@@ -246,9 +246,9 @@ ZooKeeper 使用临时节点如 `/shared_lock/[Hostname]-R-xxxxx` 或 `/shared_l
 * c. 如果是写请求: 向比自己小的最后一个节点注册 Watcher 监听。
 * d. 收到 Watcher 监听后，重复步骤。
 
-## 分布式队列
+## 1.8 分布式队列
 
-### 分布式屏障
+### 1.8.1 分布式屏障
 
 可参考 [code: zozospider/note-distributed-zookeeper-video/zookeeper-curator/src/main/java/com/zozospider/zookeepercurator/barrier](https://github.com/zozospider/note-distributed-zookeeper-video/tree/master/zookeeper-curator/src/main/java/com/zozospider/zookeepercurator/barrier)
 
@@ -272,7 +272,7 @@ ZooKeeper 使用临时节点如 `/shared_lock/[Hostname]-R-xxxxx` 或 `/shared_l
 
 # 二. ZooKeeper在大型分布式系统中的应用
 
-## Hadoop
+## 2.1 Hadoop
 
 Hadoop 是 Apache 开源的一个大型分布式计算框架。包括 HDFS, MapReduce, YARN。
 
@@ -282,7 +282,7 @@ Hadoop 是 Apache 开源的一个大型分布式计算框架。包括 HDFS, MapR
 
 * 2. 为 YARN 存储应用的运行状态。
 
-### YARN 介绍
+### 2.1.1 YARN 介绍
 
 YARN 是 Hadoop 为了提高计算节点 Master(JT) 的拓展性，同时为了支持多计算模型和提供资源的细粒度调度而引入的分布式调度框架。可支持如 MapReduce, Tez, Spark, Storm, Imlala, Open MPI 等。
 
@@ -292,7 +292,7 @@ YARN 主要由以下四部分组成:
 * ApplicationMaster(AM)
 * Container
 
-### ResourceManager(RM) 单点问题
+### 2.1.2 ResourceManager(RM) 单点问题
 
 为了解决 ResourceManager(RM) 单点问题，YARN 设计了一套 Active/Standby 模式的 ResourceManager HA 架构。
 
@@ -313,29 +313,28 @@ Hadoop Common 包中位于 org.apache.hadoop.ha 中的 ActiveStandbyElector 组�
 
 * 3. ResourceManager 状态存储
 
-## HBase
+## 2.2 HBase
 
 
-## Kafka
+## 2.3 Kafka
 
 
 # 三. ZooKeeper在阿里巴巴的实践与应用
 
-## 案例1 消息中间件：Metamorphosis
+## 3.1 案例1 消息中间件：Metamorphosis
 
 
-## 案例2 RPC服务款姐：Dubbo
+## 3.2 案例2 RPC服务款姐：Dubbo
 
 
-## 案例3 基于MySQL Binlog的增量订阅和消费组件：Canal
+## 3.3 案例3 基于MySQL Binlog的增量订阅和消费组件：Canal
 
 
-## 案例4 分布式数据库同步系统：Otter
+## 3.4 案例4 分布式数据库同步系统：Otter
 
 
-## 案例5 轻量级分布式通用搜索平台：终搜
+## 3.5 案例5 轻量级分布式通用搜索平台：终搜
 
 
-## 案例6 实时计算引擎
-
+## 3.6 案例6 实时计算引擎
 
