@@ -324,11 +324,21 @@ ZooKeeper 是 HBase 的核心组件。
 
 ### 2.2.1 系统冗错
 
+HBase 启动时，每个 RegionServer 会到 ZooKeeper 的 `/hbase/rs` 下创建节点，如 `/hbase/rs/[Hostname]`。HMaster 监听该节点。当 RegionServer 挂掉（Session 失效）时，ZooKeeper 删除该临时节点，HMaster 接收到通知，则开始冗错工作（HMaster 将该 RegionServer 处理的数据分片（Region）重新路由到其他节点，并记录到 Meta 信息供客户端查询）。
 
+HMaster 之所以本身不负责监控，是因为直接通过心跳机制，随着系统容量增加，HMaster 管理负担越来越重，HMaster 自身有挂掉的可能，因此数据需要持久化。
 
 ### 2.2.2 RootRegion 管理
 
+RootRegion 负责数据存储位置的元数据分片。客户端发起请求，会去查 RootRegion 获取数据位置。
+
+RootRegion 自身位置记录在 ZooKeeper 上（默认 `/hbase/root-region-server`）。当 RootRegion 变化，如手工移动或故障，能通过 ZooKeeper 感知，做出相应容灾措施。
+
 ### 2.2.3 Region 状态管理
+
+Region 是数据的物理切片，每个 Region 记录了全局数据的一小部分。不同 Region 之间数据不重复。
+
+由于系统故障、负载均衡、配置修改、Region 分裂合并等会引起 Region 经常变更。Region 移动会经历 Offline 和 online 过程。Offline 期间数据不能被访问，且 Region 的这个状态变更必须让全局知晓。高达 10 万级别的 Region 状态管理需要依靠 ZooKeeper。
 
 ### 2.2.4 分布式 SplitLog 任务管理
 
