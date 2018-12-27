@@ -212,7 +212,7 @@ ZooKeeper 使用一个临时节点如 `/exclusive_lock/lock` 来定义一个锁�
 
 共享锁称为读锁。不同事务可以同时对同一个数据对象进行读取，但是，只能在没有任何事务进行读写的情况下更新。
 
-**1. 定义锁**
+__1. 定义锁__
 
 ZooKeeper 使用临时节点如 `/shared_lock/[Hostname]-R-xxxxx` 或 `/shared_lock/[Hostname]-W-xxxxx` 来定义读或写请求锁。
 
