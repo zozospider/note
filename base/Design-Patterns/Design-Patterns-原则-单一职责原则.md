@@ -6,4 +6,3 @@
 > * [code: zozospider/note-base-design-patterns](https://github.com/zozospider/note-base-design-patterns)
 
 ---
-

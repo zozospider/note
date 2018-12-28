@@ -1,8 +1,6 @@
-# ZooKeeper video
 
----
+# Document & Code
 
-## Document & Code
 * [../分布式系统概念与ZooKeeper简介](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-video-分布式系统概念与ZooKeeper简介.md)
 * [../ZooKeeper安装](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-video-ZooKeeper安装.md)
 * [../ZooKeeper基本数据模型](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-video-ZooKeeper基本数据模型.md)
@@ -13,4 +11,3 @@
 * [code: zozospider/note-distributed-zookeeper-video](https://github.com/zozospider/note-distributed-zookeeper-video)
 
 ---
-
