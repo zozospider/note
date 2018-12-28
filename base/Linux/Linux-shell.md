@@ -27,3 +27,12 @@ fi
 * `[ -z STRING ]`: "STRING" 的长度为零则为真。
 * `[ STRING1 == STRING2 ]`: 如果 2 个字符串相同。
 * `[ STRING1 != STRING2 ]`: 如果字符串不相等则为真。
+
+# Sell sleep
+
+```
+sleep 1    睡眠1秒
+sleep 1s   睡眠1秒
+sleep 1m   睡眠1分
+sleep 1h   睡眠1小时
+```
