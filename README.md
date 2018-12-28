@@ -1,25 +1,29 @@
 # link
 
 - [base](https://github.com/zozospider/note/tree/master/base)
-  - [concept](https://github.com/zozospider/note/tree/master/base/concept)
-    - [concept](https://github.com/zozospider/note/blob/master/base/concept/concept.md)
-    - [concept-question](https://github.com/zozospider/note/blob/master/base/concept/concept-question.md)
   - [Design-Patterns](https://github.com/zozospider/note/tree/master/base/Design-Patterns)
     - [Design-Patterns](https://github.com/zozospider/note/blob/master/base/Design-Patterns/Design-Patterns.md)
   - [Linux](https://github.com/zozospider/note/tree/master/base/Linux)
     - [Linux-command](https://github.com/zozospider/note/blob/master/base/Linux/Linux-command.md)
     - [Linux-env](https://github.com/zozospider/note/blob/master/base/Linux/Linux-env.md)
     - [Linux-shell](https://github.com/zozospider/note/blob/master/base/Linux/Linux-shell.md)
+  - [concept](https://github.com/zozospider/note/tree/master/base/concept)
+    - [concept](https://github.com/zozospider/note/blob/master/base/concept/concept.md)
+    - [concept-question](https://github.com/zozospider/note/blob/master/base/concept/concept-question.md)
+
 - [Microservice](https://github.com/zozospider/note/tree/master/Microservice)
   - [Spring-Boot](https://github.com/zozospider/note/tree/master/Microservice/Spring-Boot)
     - [Spring-Boot-2.x](https://github.com/zozospider/note/blob/master/Microservice/Spring-Boot/Spring-Boot-2.x.md)
+
 - [distributed](https://github.com/zozospider/note/tree/master/distributed)
   - [ZooKeeper](https://github.com/zozospider/note/tree/master/distributed/ZooKeeper)
     - [ZooKeeper-book](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book.md)
     - [ZooKeeper-video](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-video.md)
+
 - [store](https://github.com/zozospider/note/tree/master/store)
   - [Elasticsearch](https://github.com/zozospider/note/tree/master/store/Elasticsearch)
     - [Elasticsearch-Best-Practices](https://github.com/zozospider/note/blob/master/store/Elasticsearch/Elasticsearch-Best-Practices.md)
+
 - [instrument](https://github.com/zozospider/note/tree/master/instrument)
   - [Git](https://github.com/zozospider/note/tree/master/instrument/Git)
     - [Git](https://github.com/zozospider/note/blob/master/instrument/Git/Git.md)
