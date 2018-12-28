@@ -113,6 +113,11 @@ unzip File.zip
 zip File.zip Dir
 ```
 
+`*.tar.xz`
+```
+
+```
+
 # 文件编码
 
 如需查看文件编码，执行以下命令：
