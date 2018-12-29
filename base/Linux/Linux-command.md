@@ -102,25 +102,27 @@ tar cf File.tar Dir
 
 `*.tar.gz` / `*.tgz`
 ```
-tar xzf File.tar.gz
-tar xzf File.tar.gz -C Dir
+tar -xzf File.tar.gz
+tar -xzf File.tar.gz -C Dir
 
-tar czf File.tar.gz Dir
-tar czf File.tar.gz --exclude=tomcat/logs --exclude=tomcat/libs --exclude=tomcat/xiaoshan.txt Dir
+tar -czf File.tar.gz Dir
+tar -czf File.tar.gz --exclude=tomcat/logs --exclude=tomcat/libs --exclude=tomcat/xiaoshan.txt Dir
 ```
 
 `*.zip`
 ```
 unzip File.zip
+unzip File.zip -d Dir
+
 zip File.zip Dir
 ```
 
 `*.tar.xz`
 ```
-xz dk File.tar.xz
-tar xf File.tar
+xz -dk File.tar.xz
+tar -xf File.tar
 
-xz zk Dir
+xz -zk Dir
 ```
 
 # 文件编码
