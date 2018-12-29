@@ -95,9 +95,9 @@ scp -r user@remote_ip:/remote_path/remote_dir /local_path/local_dir
 
 `*.tar`
 ```
-tar xf File.tar
+tar -xf File.tar
 
-tar cf File.tar Dir
+tar -cf File.tar Dir
 ```
 
 `*.tar.gz` / `*.tgz`
