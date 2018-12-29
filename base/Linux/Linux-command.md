@@ -96,6 +96,7 @@ scp -r user@remote_ip:/remote_path/remote_dir /local_path/local_dir
 `*.tar`
 ```
 tar xf File.tar
+
 tar cf File.tar Dir
 ```
 
@@ -103,6 +104,7 @@ tar cf File.tar Dir
 ```
 tar xzf File.tar.gz
 tar xzf File.tar.gz -C Dir
+
 tar czf File.tar.gz Dir
 tar czf File.tar.gz --exclude=tomcat/logs --exclude=tomcat/libs --exclude=tomcat/xiaoshan.txt Dir
 ```
@@ -115,7 +117,10 @@ zip File.zip Dir
 
 `*.tar.xz`
 ```
+xz dk File.tar.xz
+tar xf File.tar
 
+xz zk Dir
 ```
 
 # 文件编码
