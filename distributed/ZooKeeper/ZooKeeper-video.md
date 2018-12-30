@@ -9,5 +9,6 @@
 * [../使用ZooKeeper原生Java-API进行客户端开发](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-video-使用ZooKeeper原生Java-API进行客户端开发.md)
 
 * [code: zozospider/note-distributed-zookeeper-video](https://github.com/zozospider/note-distributed-zookeeper-video)
+* [code: zozospider/note-distributed-zookeeper-book](https://github.com/zozospider/note-distributed-zookeeper-book)
 
 ---

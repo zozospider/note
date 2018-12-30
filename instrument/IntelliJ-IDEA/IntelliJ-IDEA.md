@@ -2,8 +2,9 @@
 # Documentation
 
 * [mac激活](https://www.jianshu.com/p/3c87487e7121)
-* [提交代码到Github](https://github.com/FatliTalk/blog/issues/11)
-* [提交代码到Github-2](https://blog.csdn.net/rongxiang111/article/details/78120126)
+* [IntelliJ-IDEA 提交代码到 Github](https://github.com/FatliTalk/blog/issues/11)
+* [IntelliJ-IDEA 提交代码到 Github-2](https://blog.csdn.net/rongxiang111/article/details/78120126)
+* [git上传本地Intellij idea 项目到github](https://blog.csdn.net/u010237107/article/details/50910879)
 
 ---
 
@@ -67,3 +68,11 @@ bogon:note-distributed-zookeeper-video zoz$ git rm -r --cached .idea
 rm '.idea/uiDesigner.xml'
 bogon:note-distributed-zookeeper-video zoz$ 
 ```
+
+# IDEA 提交项目到 GitHub
+
+1. CVS - import into Version Control - Share Project on GitHub
+2. CVS - import into Version Control - Create Git Repository
+3. 右键 - Git - add
+4. 右键 - Git - Commit Directory
+5. 右键 - Git - Repository - Push
