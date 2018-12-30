@@ -89,6 +89,8 @@ ZooKeeper 提供了分布式数据的发布/订阅功能，能够让多个订阅
 | Expired(-112): 此时客户端会话失效，通常同时也会收到 SessionExpiredException 异常 | None(-1) | 会话超时 |
 | AuthFailed(4): 授权失败，通常也会收到 AuthFailedException 异常 | None(-1) | 使用错误的 scheme 进行权限检查 或 SASL 权限检查失败 |
 
+由于 Watcher 机制细节较为复杂，详情请参考 `《从 Paxos 到 ZooKeeper》 - 7.1.4 Watcher - 数据变更的通知`。
+
 ## 1.5 ACL - 保障数据的安全
 
 ---
