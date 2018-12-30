@@ -453,9 +453,33 @@ Dubbo 核心包括以下:
 - 自动发现: 提供基于注册中心的目录服务，使服务消费方能够动态查找服务提供方。
 - 其他: 其他还包括服务对象序列化 Serialize 组件，网络传输组件 Transport，协议层 Protocol，服务注册中心 Registry等。
 
+注册中心是 RPC 框架核心模块之一，用于服务的注册和订阅。在 ZooKeeper 节点设计上，以服务名和类型作为节点路径，符合 Dubbo 订阅和通知的需求，保证了以服务为粒度的变更通知，通知范围易于控制，及时在服务提供者和消费者变更频繁的情况下，也不会对 ZooKeeper 造成太大的性能影响。
+
+ZooKeeper 节点设计如下:
+- `/dubbo`: 根节点。
+- `/dubbo/com.foo.BarService`: 代表 Dubbo 的某一个服务。
+- `/dubbo/com.foo.BarService/providers`: 服务提供者根节点，每个子节点代表一个提供者。
+- `/dubbo/com.foo.BarService/consumers`: 服务消费者根节点，每个子节点代表一个消费者。
+
+以下为 com.foo.BarService 服务说明:
+
+> __服务提供者__
+
+服务提供者在初始化启动时，会在 ZooKeeper 的 `/dubbo/com.foo.BarService/providers` 节点下创建一个临时子节点，如 `/dubbo/com.foo.BarService/providers/10.20.153.10:20880`。临时节点意义在于，一旦发生故障，临时节点会被 ZooKeeper 删除，这样服务消费者和监控中心都能感知到变化。
+
+> __服务消费者__
+
+服务消费者在初始化启动时，会读取并订阅 ZooKeeper 的 `/dubbo/com.foo.BarService/providers` 节点下的所有子节点，解析出所有服务提供者的 URL 地址作为该服务地址列表，然后开始发起正常调用。
+
+同时服务消费者还会在 ZooKeeper 的 `/dubbo/com.foo.BarService/consumers` 节点下创建一个临时子节点，如 `/dubbo/com.foo.BarService/consumers/10.20.14.10`。
+
+> __监控中心__
+
+监控中心是 Dubbo 服务治理的重要组成。需要知道一个服务的所有提供者和订阅者及其变化情况，所以监控中心在启动时，会通过 ZooKeeper 的 `/dubbo/com.foo.BarService` 获取所有提供者和消费者的 URL 地址，并注册 Watcher 监听其子节点变化。
 
 
 ## 3.3 案例3 基于MySQL Binlog的增量订阅和消费组件: Canal
+
 
 
 ## 3.4 案例4 分布式数据库同步系统: Otter
