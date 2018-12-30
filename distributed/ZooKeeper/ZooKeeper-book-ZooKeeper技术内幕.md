@@ -135,7 +135,9 @@ ZooKeeper 允许开发人员对权限进行扩展，通过自定义和注册两�
 
 > __自定义权限控制器__
 
-ZooKeeper 定义了一个标准权限控制器 `AuthenticationProvider`，自带的 `DigestAuthenticationProvider` 和 `IPAuthenticationProvider` 也是基于该接口实现。
+自定义 `CustomAuthenticationProvider` 实现 ZooKeeper 的标准权限控制器 `AuthenticationProvider` 即可。
+
+ZooKeeper 自带的 `DigestAuthenticationProvider` 和 `IPAuthenticationProvider` 也是基于该接口实现。
 
 > __注册自定义权限控制器__
 
@@ -145,7 +147,15 @@ ZooKeeper 定义了一个标准权限控制器 `AuthenticationProvider`，自带
 
 ### ACL 管理
 
+> __设置 ACL__
 
+通过 zkCli 脚本登录 ZooKeeper 服务器，可进行 ACL 设置，以下为设置方式:
+- 创建节点时设置: `create [-s] [-e] path data acl`，如 `create -e /zk-book initData digest:foo:MiGs3Eiy1pP4rvH1Q1NwbP+oUF8=:cdrwa`。
+- 后期指定: `setAcl path acl`，如 `setAcl /zk-book digest:foo:MiGs3Eiy1pP4rvH1Q1NwbP+oUF8=:cdrwa`。
+
+> __Super 模式__
+
+一旦对一个数据节点设置了 ACL 权限，那么其他没有被授权的 ZooKeeper 客户端将无法访问该节点。此时开启 Super 模式，可以实现超级管理员权限，开启方法是在 ZooKeeper 启动时，添加系统属性 `-Dzookeeper.DigestAuthenticationProvider.superDigest.superDigest=superUser:kWN6aNSbjcKWPQjiV7cg0N24raU=`，其中 superUser 为超级管理员。
 
 ---
 
