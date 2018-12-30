@@ -441,11 +441,11 @@ ZooKeeper 记录 Offset 到节点路径为 `/consumers/[group_id]/offsets/[topic
 
 ## 3.1 案例1 消息中间件: Metamorphosis
 
-Matamorphosis 是阿里巴巴中间件团队开源的一个 Java 消息中间件，项目地址 [GitHub-killme2008-Metamorphosis](http:/github.com/killme2008/Metamorphosis)。详情请参考 `《从 Paxos 到 ZooKeeper》 - 6.3.1 案例1 消息中间件: Metamorphosis`。
+Matamorphosis 是阿里巴巴中间件团队开源的一个 Java 消息中间件。项目地址 [GitHub-killme2008-Metamorphosis](http:/github.com/killme2008/Metamorphosis)。详情请参考 `《从 Paxos 到 ZooKeeper》 - 6.3.1 案例1 消息中间件: Metamorphosis`。
 
 ## 3.2 案例2 RPC服务款姐: Dubbo
 
-Dubbo 是阿里巴巴开源的一个由 Java 编写的分布式服务框架，项目地址 [GitHub-alibaba-dubbo](https://github.com/alibaba/dubbo)。
+Dubbo 是阿里巴巴开源的一个由 Java 编写的分布式服务框架。项目地址 [GitHub-alibaba-dubbo](https://github.com/alibaba/dubbo)。
 
 Dubbo 核心包括以下:
 - 远程通信
@@ -480,9 +480,10 @@ ZooKeeper 节点设计如下:
 
 ## 3.3 案例3 基于MySQL Binlog的增量订阅和消费组件: Canal
 
-
+Canal 是阿里巴巴开源的一个由 Java 编写的基于 MySQL 数据库 Binlog 实现的增量订阅和消费组件。项目地址 [GitHub-alibaba-canal](http:/github.com/alibaba/canal)。详情请参考 `《从 Paxos 到 ZooKeeper》 - 6.3.1 案例3 基于MySQL Binlog的增量订阅和消费组件: Canal`。
 
 ## 3.4 案例4 分布式数据库同步系统: Otter
+
 
 
 ## 3.5 案例5 轻量级分布式通用搜索平台: 终搜
