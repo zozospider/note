@@ -442,7 +442,7 @@ ZooKeeper 记录 Offset 到节点路径为 `/consumers/[group_id]/offsets/[topic
 
 ## 3.1 案例1 消息中间件: Metamorphosis
 
-
+Matamorphosis 是阿里巴巴中间件团队开源的一个 Java 消息中间件，项目地址 [GitHub-killme2008-Metamorphosis](http:/github.com/killme2008/Metamorphosis)。
 
 ## 3.2 案例2 RPC服务款姐: Dubbo
 
