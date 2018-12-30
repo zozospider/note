@@ -56,9 +56,21 @@ version 的主要应用场景为分布式锁。在分布式系统运行过程中
 
 乐观锁称为乐观并发控制(Optimistic Concurrency Control, OCC), 具有宽松和友好性。乐观锁假定不同事务之间处理过程不会相互影响，因此在事务处理的绝大部分时间里不需要进行加锁处理，只在更新请求提交前，检查当前事务在读取数据后的这段时间内，是否由其他事务对该数据进行了修改，如果没有修改，则提交，如果有修改则回滚。乐观锁适合使用在数据并发竞争不大、事务冲突较少的应用场景中。
 
+乐观锁事务分为三个阶段: 数据读取, 写入校验, 数据写入。ZooKeeper 中的 version 就是用来实现乐观锁中的写入校验。以下为 PrepRequestProcessor 处理类中对数据更新请求的版本校验逻辑:
+```java
+version = setDataRequest.getVersion();
+int currentVersion = nodeRecord.stat.getVersion();
+if (version != -1 && version != currentVersion) {
+    throw new KeeperException.BadVersionException(path);
+}
+version = currentVersion + 1;
+```
 
+以上代码可以看出，在进行 setDataRequest 请求处理时，首先进行版本校验，ZooKeeper 从 setDataRequest 请求中获取当前请求的版本 version，同时从数据记录 nodeRecord 中获取当前服务器上该数据的最新版本 currentVersion，如果 version 为 "-1"，说明客户端不要求使用乐观锁，忽略版本比对，否则，就对比 version 和 currentVersion，如果不匹配，抛出 `BadVersionException` 异常。
 
 ## 1.4 Watcher - 数据变更的通知
+
+ZooKeeper 提供了分布式数据的发布/订阅功能，能够让多个订阅者同时监听某一个主题对象。ZooKeeper 引入 Watcher 机制实现通知功能，客户端通过向服务端注册一个 Watcher 监听，当服务端指定事件触发一个 Watcher，就会向客户端发送一个事件通知。
 
 
 
