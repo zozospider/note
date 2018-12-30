@@ -373,13 +373,13 @@ Kafka 使用 ZooKeeper 作为分布式协调框架，很好的将消息生产、
 
 ### 2.3.1 术语介绍
 
-* `Producer（生产者）`: 消息产生的源头，负责生成消息并发送到 Kafka。
-* `Consumer（消费者）`: 消息的使用方，负责消费 Kafka 的消息。
-* `Topic（主题）`: 由用户定义在 Kafka，用于建立生产者和消费者之间的订阅关系（生产者发送消息到指定 Topic，消费者从该 Topic 消费消息）。
-* `Partition（消息分区）`: 用于负载，一个 Topic 下有多个分区，如 `kafka-test` Topic 可以分 4 个分区，两台服务器分别提供 2 个分区，表示为: `0-1`, `0-2`, `1-1`, `1-2`。
-* `Broker`: Kafka 服务器。
-* `Group（消费者分组）`: 归组同类消费者，多个消费者可在同一个 Topic 下消费。
-* `Offset（偏移量）`: 消费者消费消息的过程，消息在文件中的偏移量。
+- `Producer（生产者）`: 消息产生的源头，负责生成消息并发送到 Kafka。
+- `Consumer（消费者）`: 消息的使用方，负责消费 Kafka 的消息。
+- `Topic（主题）`: 由用户定义在 Kafka，用于建立生产者和消费者之间的订阅关系（生产者发送消息到指定 Topic，消费者从该 Topic 消费消息）。
+- `Partition（消息分区）`: 用于负载，一个 Topic 下有多个分区，如 `kafka-test` Topic 可以分 4 个分区，两台服务器分别提供 2 个分区，表示为: `0-1`, `0-2`, `1-1`, `1-2`。
+- `Broker`: Kafka 服务器。
+- `Group（消费者分组）`: 归组同类消费者，多个消费者可在同一个 Topic 下消费。
+- `Offset（偏移量）`: 消费者消费消息的过程，消息在文件中的偏移量。
 
 ### 2.3.2 Broker 注册
 
@@ -399,10 +399,9 @@ Kafka 支持以下两种生产者负载均衡方式:
 
 > __四层负载均衡__
 
-根据生产者的 IP 和 port 来确定关联的 Broker。
-
-* 优势: 逻辑简单，只需维护和 Broker 单个 TCP 链接。
-* 劣势: 不是真正的负载均衡，每个生产者消息量和每个 Broker 消息存储不一样，接收总数不均匀。另外，生产者也无法感知 Broker 的新增删除。
+根据生产者的 IP 和 port 来确定关联的 Broker。有以下优缺点:
+- 优势: 逻辑简单，只需维护和 Broker 单个 TCP 链接。
+- 劣势: 不是真正的负载均衡，每个生产者消息量和每个 Broker 消息存储不一样，接收总数不均匀。另外，生产者也无法感知 Broker 的新增删除。
 
 > __使用 ZooKeeper 进行负载均衡__
 
@@ -431,10 +430,10 @@ ZooKeeper 记录 Offset 到节点路径为 `/consumers/[group_id]/offsets/[topic
 > __消费者注册__
 
 消费者服务器加入消费者分组过程如下:
-* a. 注册到消费者分组: 消费者服务器启动时，创建临时节点如 `/consumers/[group_id]/ids/[consumer_id]`。然后将自己订阅的 Topic 信息写入该节点。
-* b. 注册监听消费者分组中的消费者: 消费者需要对 `/consumers/[group_id]/ids` 注册子节点变化的 Watcher 监听，一旦同分组下有消费者变化，触发消费者负载均衡。
-* c. 注册监听 Broker 服务器: 消费者需要对 `/broker/ids/[0...n]` 注册节点变化的 Watcher 监听，如果 Broker 服务器列表变化，根据情况决定是否进行消费者负载均衡。
-* d. 进行消费者负载均衡: 让同一个 Topic 下不同分区的消息均衡的被多个消费者消费（通过一套特殊的消费者负载均衡算法）。
+- a. 注册到消费者分组: 消费者服务器启动时，创建临时节点如 `/consumers/[group_id]/ids/[consumer_id]`。然后将自己订阅的 Topic 信息写入该节点。
+- b. 注册监听消费者分组中的消费者: 消费者需要对 `/consumers/[group_id]/ids` 注册子节点变化的 Watcher 监听，一旦同分组下有消费者变化，触发消费者负载均衡。
+- c. 注册监听 Broker 服务器: 消费者需要对 `/broker/ids/[0...n]` 注册节点变化的 Watcher 监听，如果 Broker 服务器列表变化，根据情况决定是否进行消费者负载均衡。
+- d. 进行消费者负载均衡: 让同一个 Topic 下不同分区的消息均衡的被多个消费者消费（通过一套特殊的消费者负载均衡算法）。
 
 ---
 
@@ -445,6 +444,15 @@ ZooKeeper 记录 Offset 到节点路径为 `/consumers/[group_id]/offsets/[topic
 Matamorphosis 是阿里巴巴中间件团队开源的一个 Java 消息中间件，项目地址 [GitHub-killme2008-Metamorphosis](http:/github.com/killme2008/Metamorphosis)。详情请参考 `《从 Paxos 到 ZooKeeper》 - 6.3.1 案例1 消息中间件: Metamorphosis`。
 
 ## 3.2 案例2 RPC服务款姐: Dubbo
+
+Dubbo 是阿里巴巴开源的一个由 Java 编写的分布式服务框架，项目地址 [GitHub-alibaba-dubbo](https://github.com/alibaba/dubbo)。
+
+Dubbo 核心包括以下:
+- 远程通信
+- 集群容错
+- 自动发现: 提供基于注册中心的目录服务，使服务消费方能够动态查找服务提供方。
+- 其他: 其他还包括服务对象序列化 Serialize 组件，网络传输组件 Transport，协议层 Protocol，服务注册中心 Registry等。
+
 
 
 ## 3.3 案例3 基于MySQL Binlog的增量订阅和消费组件: Canal
