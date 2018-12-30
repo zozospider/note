@@ -163,7 +163,11 @@ ZooKeeper 自带的 `DigestAuthenticationProvider` 和 `IPAuthenticationProvider
 
 ## 2.1 Jute 介绍
 
+Jute 是 ZooKeeper 的序列号组件，最初是 Hadoop 默认序列化组件（0.21.0 版本后，换成了 Avro）。
+
 ## 2.2 使用 Jute 进行序列化
+
+
 
 ## 2.3 深入 Jute
 
