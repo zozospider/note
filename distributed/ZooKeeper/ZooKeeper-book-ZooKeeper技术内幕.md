@@ -77,6 +77,7 @@ ZooKeeper 提供了分布式数据的发布/订阅功能，能够让多个订阅
 接口类 Watcher 用于表示一个标准的事件处理器，其中包含 KeeperState（通知状态） 和 EventType（事件类型）.
 
 以下为常见的 KeeperState（通知状态） 和 EventType（事件类型）:
+
 | KeeperState | EventType | 触发条件 |
 | :--- | :--- | :--- |
 | SyncConnected(3): 此时客户端和服务器处于连接状态 | None(-1) | 客户端与服务器成功建立会话 |
