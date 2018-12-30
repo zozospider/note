@@ -93,6 +93,60 @@ ZooKeeper 提供了分布式数据的发布/订阅功能，能够让多个订阅
 
 ## 1.5 ACL - 保障数据的安全
 
+`UGO(User, Group, Others)`: 应用最广泛的权限控制方式，广泛应用于 Unix/Linux 系统中。
+
+`ACL(Access Control List)`: 访问控制列表，是一种更细粒度的权限管理方式，可以针对任意用户和组进行细粒度的权限控制。目前大部分 Unix 系统已经支持，Linux 也从 2.6 版本的内核开始支持。
+
+### ACL 介绍
+
+ZooKeeper 的 ACL 权限控制和 Unix/Linux 操作系统的 ACL 有一些区别。ACL 具有以下三个概念:
+
+> __权限模式(Scheme)__
+
+权限模式是权限校验使用的策略。分为以下四种模式:
+- `IP`: 通过 IP 地址细粒度控制。如 `ip:192.168.0.110` 表示权限控制针对该 IP。`ip:192.168.0.1/24` 表示权限控制针对 "192.168.0.*" IP 段。
+- `Digest`: 针对不同应用进行权限控制。用 `username:password` 表示, 其中 ZooKeeper 会对 username:password 进行 SHA-1 算法加密和 BASE64 编码，最后 username:password 被混淆为一个无法辨识的字符串。
+- `World`: 对所有用户开放。是一种特殊的 Digest 模式，使用 "world:anyone" 表示。
+- `Super`: 超级用户控制。是一种特殊的 Digest 模式。
+
+> __授权对象(ID)__
+
+授权对象为权限模式下对应的实体，以下为对应关系:
+
+| 权限模式 | 授权对象 |
+| :--- | :--- |
+| IP | IP 地址或 IP 段，如 `192.168.0.110` 或 `192.168.0.1/24` |
+| Digest | `username:BASE64(SHA-1(username:password))`，如 `foo:kWN6aNSbjcKWPqjiV7cg0N24raU=` |
+| Word | 只有一个 ID: `anyone` |
+| Super | 与 Digest 模式一致 |
+
+> __权限(Permission)__
+
+ZooKeeper 对数据的操作权限分为以下五类:
+- `CREATE(C)`: 数据节点的创建权限，允许授权对象在该数据节点下创建子节点。
+- `DELETE(D)`: 子节点的删除权限，允许授权对象删除该数据节点的子节点。
+- `READ(R)`: 数据节点的读取权限，允许授权对象访问该数据节点并读取其数据内容或子节点列表等。
+- `WRITE(W)`: 数据节点的更新权限，允许授权对象对该数据节点进行更新。
+- `ADMIN(A)`: 数据节点的管理权限，允许授权对象对该数据节点进行 ACL 设置。
+
+### 权限扩展体系
+
+ZooKeeper 允许开发人员对权限进行扩展，通过自定义和注册两个步骤完成。
+
+> __自定义权限控制器__
+
+ZooKeeper 定义了一个标准权限控制器 `AuthenticationProvider`，自带的 `DigestAuthenticationProvider` 和 `IPAuthenticationProvider` 也是基于该接口实现。
+
+> __注册自定义权限控制器__
+
+将自定义的权限控制器注册到 ZooKeeper 服务器中，支持以下两种方式注册:
+- 系统属性: 在 ZooKeeper 启动参数重配置 `-Dzookeeper.authProvider.1=com.zkbook.CustomAuthenticationProvider`。
+- 配置文件: 在 zoo.cfg 中配置 `authProvider.1=com.zkbook.CustomAuthenticationProvider`。
+
+### ACL 管理
+
+
+
 ---
 
 # 二 序列号与协议
