@@ -72,7 +72,21 @@ version = currentVersion + 1;
 
 ZooKeeper 提供了分布式数据的发布/订阅功能，能够让多个订阅者同时监听某一个主题对象。ZooKeeper 引入 Watcher 机制实现通知功能，客户端通过向服务端注册一个 Watcher 监听，当服务端指定事件触发一个 Watcher，就会向客户端发送一个事件通知。
 
+### Watcher 接口
 
+接口类 Watcher 用于表示一个标准的事件处理器，其中包含 KeeperState（通知状态） 和 EventType（事件类型）.
+
+以下为常见的 KeeperState（通知状态） 和 EventType（事件类型）:
+| KeeperState | EventType | 触发条件 |
+| :--- | :--- | :--- |
+| SyncConnected(3): 此时客户端和服务器处于连接状态 | None(-1) | 客户端与服务器成功建立会话 |
+|  | NodeCreated(1) | Watcher 监听的对应数据节点被创建 |
+|  | NodeDeleted(2) | Watcher 监听的对应数据节点被删除 |
+|  | NodeDataChanged(3) | Watcher 监听的对应数据节点的数据内容发生变化 |
+|  | NodeChildrenChanged(4) | Watcher 监听的对应数据节点的子节点列表发生变化 |
+| DisConnected(0): 此时客户端和服务器处于断开连接状态 | None(-1) | 客户端与 ZooKeeper 服务端断开连接 |
+| Expired(-112): 此时客户端会话失效，通常同时也会收到 SessionExpiredException 异常 | None(-1) | 会话超时 |
+| AuthFailed(4): 授权失败，通常也会收到 AuthFailedException 异常 | None(-1) | 使用错误的 scheme 进行权限检查 或 SASL 权限检查失败 |
 
 ## 1.5 ACL - 保障数据的安全
 
