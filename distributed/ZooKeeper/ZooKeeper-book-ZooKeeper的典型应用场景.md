@@ -480,14 +480,17 @@ ZooKeeper 节点设计如下:
 
 ## 3.3 案例3 基于MySQL Binlog的增量订阅和消费组件: Canal
 
-Canal 是阿里巴巴开源的一个由 Java 编写的基于 MySQL 数据库 Binlog 实现的增量订阅和消费组件。项目地址 [GitHub-alibaba-canal](http:/github.com/alibaba/canal)。详情请参考 `《从 Paxos 到 ZooKeeper》 - 6.3.1 案例3 基于MySQL Binlog的增量订阅和消费组件: Canal`。
+Canal 是阿里巴巴开源的一个由 Java 编写的基于 MySQL 数据库 Binlog 实现的增量订阅和消费组件。项目地址 [GitHub-alibaba-canal](http:/github.com/alibaba/canal)。详情请参考 `《从 Paxos 到 ZooKeeper》 - 6.3.3 案例3 基于MySQL Binlog的增量订阅和消费组件: Canal`。
 
 ## 3.4 案例4 分布式数据库同步系统: Otter
 
-
+Otter 是阿里巴巴开源的一个由 Java 编写的分布式数据库同步系统，主要用于异地双 A 机房的数据库数据同步。项目地址 [GitHub-alibaba-otter](http:/github.com/alibaba/otter)。详情请参考 `《从 Paxos 到 ZooKeeper》 - 6.3.4 案例4 分布式数据库同步系统: Otter`。
 
 ## 3.5 案例5 轻量级分布式通用搜索平台: 终搜
 
+终搜是阿里巴巴内部服务于各大业务线的通用搜索平台。详情请参考 `《从 Paxos 到 ZooKeeper》 - 6.3.5 案例5 轻量级分布式通用搜索平台: 终搜`。
 
-## 3.6 案例6 实时计算引擎
+## 3.6 案例6 实时计算引擎: JStorm
+
+JStorm 是阿里巴巴中间件团队开源的一个由 Java 编写的基于 Storm 改造和优化的分布式实时计算系统。详情请参考 `《从 Paxos 到 ZooKeeper》 - 6.3.6 案例6 实时计算引擎: JStorm`。
 
