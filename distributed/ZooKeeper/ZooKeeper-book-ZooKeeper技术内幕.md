@@ -269,7 +269,7 @@ ZooKeeper 通信协议设计包括:
 
 请求头包含:
 ```
-module org.apache.zookeeper.data {
+module org.apache.zookeeper.proto {
     ...
     class RequestHeader {
         int xid;
@@ -358,7 +358,7 @@ public class GetDataRequestMain implements Watcher {
 }
 ```
 
-ZooKeeper 客户端调用 getData() 接口，实际上就是向 ZooKeeper 服务端发送了一个 GetDataRequest 请求。通过 Wireshark 可以获取到发送的网络 TCP 包: `00,00,00,1d,00,00,00,01,00,00,00,04,00,00,00,10,2f,24,37,5f,32,5f,34,2f,67,65,74,5f,64,61,74,61,01`。以下是表示的含义:
+ZooKeeper 客户端调用 getData() 接口，实际上就是向 ZooKeeper 服务端发送了一个 GetDataRequest 请求。通过 Wireshark 可以获取到发送的网络 TCP 包: `00,00,00,1d,00,00,00,01,00,00,00,04,00,00,00,10,2f,24,37,5f,32,5f,34,2f,67,65,74,5f,64,61,74,61,01`。以下是其表示的含义:
 
 | 十六进制位 | 协议部分 | 数值或字符串 |
 | :--- | :--- | :--- |
@@ -370,6 +370,92 @@ ZooKeeper 客户端调用 getData() 接口，实际上就是向 ZooKeeper 服务
 | 01 | 32 位是 watch，代表是否注册 Watcher | 1（代表注册 Watcher） |
 
 ### 2.4.2 协议解析: 响应部分
+
+> __响应头: ReplyHeader__
+
+响应头包含:
+```
+module org.apache.zookeeper.proto {
+    ...
+    class ReplyHeader {
+        int xid;
+        long zxid;
+        int err;
+    }
+    ...
+}
+```
+
+- `xid`: 和请求头中的 xid 是一致的。
+- `zxid`: 代表 ZooKeeper 服务器上当前最新的事务 ID。
+- `err`: 错误码，有 22 种（详情查看 `org.apache.zookeeper.KeeperException.Code`），以下为部分示例:
+  - `Code.OK(0)`: 处理成功
+  - `Code.NONODE(101)`: 节点不存在
+  - `Code.NOAUTH(102)`: 没有权限
+
+> __响应体: Response__
+
+不同的 type 响应类型，响应体的结构是不同的，以下为部分示例:
+
+- ConnectResponse: 会话创建
+
+针对 ZooKeeper 客户端的会话创建请求，ZooKeeper 服务端会返回 ConnectResponse 响应，包含 protocolVersion（），timeOut（），sessionId（），passwd（），其数据结构在 `src/zookeeper.jute` 中定义如下:
+
+```
+module org.apache.zookeeper.proto {
+    ...
+    class ConnectResponse {
+        int protocolVersion;
+        int timeOut;
+        long sessionId;
+        buffer passwd;
+    }
+    ...
+}
+```
+
+- GetDataResponse: 获取节点数据
+
+针对 ZooKeeper 客户端的获取节点数据请求，ZooKeeper 服务端会返回 GetDataResponse 响应，包含 data（数据内容），stat（节点状态），其数据结构在 `src/zookeeper.jute` 中如下:
+```
+module org.apache.zookeeper.proto {
+    ...
+    class GetDataResponse {
+        buffer data;
+        org.apache.zookeeper.data.Stat stat;
+    }
+    ...
+}
+```
+
+- SetDataResponse: 更新节点数据
+
+针对 ZooKeeper 客户端的更新节点数据请求，ZooKeeper 服务端会返回 SetDataResponse 响应，包含 stat（节点状态），其数据结构在 `src/zookeeper.jute` 中如下:
+```
+module org.apache.zookeeper.proto {
+    ...
+    class SetDataResponse {
+        org.apache.zookeeper.data.Stat stat;
+    }
+    ...
+}
+```
+
+> __响应实例__
+
+根据上文请求示例中 `获取节点数据` 的例子，针对 ZooKeeper 客户端调用 getData() 接口请求，ZooKeeper 服务端会响应结果。通过 Wireshark 可以获取到响应的网络 TCP 包: `00,00`。以下是其表示的含义:
+
+| 十六进制位 | 协议部分 | 数值或字符串 |
+| :--- | :--- | :--- |
+| 00,00,00,63 | 0~3 位是 len，代表整个响应的数据包长度 | 99 |
+| 00,00,00,05 | 4~7 位是 xid，代表客户端请求的发起序号 | 5（代表本次请求是客户端会话创建后的第 5 次请求发送） |
+| 00,00,00,00,00,00,00,04 | 8~15 位是 zxid，代表当前服务端处理过第最新的 ZXID 值 | 4 |
+| 00,00,00,00 | 16~19 位是 err，代表错误码 | 0（代表 Code.OK） |
+| 00,00,00,0b | 20~23 位是 len，代表节点数据内容的长度 | 11（代表接下去的 11 位是数据内容的字节数组） |
+| 69,27,6b,5f,63,6f,6e,74,65,6e,74 | 24~34 位是 data，代表节点的数据内容 | i'm_content |
+| 00,00,00,00,00,00,00,04 | 35~42 位是 czxid，代表创建该数据节点时的 ZXID | 4 |
+| 00,00,00,00,00,00,00,04 | 43~50 位是 mzxid，代表最后一次修改该数据节点时的 ZXID | 4 |
+| 00,00,01,43,67,bd,0e,08 | 51~58 位是 ctime，代表数据节点的创建时间 | 1389014879752（即: 2014-01-06 21:27:59） |
 
 
 ---
