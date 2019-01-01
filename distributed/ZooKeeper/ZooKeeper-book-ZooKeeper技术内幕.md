@@ -97,7 +97,7 @@ ZooKeeper 提供了分布式数据的发布/订阅功能，能够让多个订阅
 
 `ACL(Access Control List)`: 访问控制列表，是一种更细粒度的权限管理方式，可以针对任意用户和组进行细粒度的权限控制。目前大部分 Unix 系统已经支持，Linux 也从 2.6 版本的内核开始支持。
 
-### ACL 介绍
+### 1.5.1 ACL 介绍
 
 ZooKeeper 的 ACL 权限控制和 Unix/Linux 操作系统的 ACL 有一些区别。ACL 具有以下三个概念:
 
@@ -129,7 +129,7 @@ ZooKeeper 对数据的操作权限分为以下五类:
 - `WRITE(W)`: 数据节点的更新权限，允许授权对象对该数据节点进行更新。
 - `ADMIN(A)`: 数据节点的管理权限，允许授权对象对该数据节点进行 ACL 设置。
 
-### 权限扩展体系
+### 1.5.2 权限扩展体系
 
 ZooKeeper 允许开发人员对权限进行扩展，通过自定义和注册两个步骤完成。
 
@@ -145,7 +145,7 @@ ZooKeeper 自带的 `DigestAuthenticationProvider` 和 `IPAuthenticationProvider
 - 系统属性: 在 ZooKeeper 启动参数重配置 `-Dzookeeper.authProvider.1=com.zkbook.CustomAuthenticationProvider`。
 - 配置文件: 在 zoo.cfg 中配置 `authProvider.1=com.zkbook.CustomAuthenticationProvider`。
 
-### ACL 管理
+### 1.5.3 ACL 管理
 
 > __设置 ACL__
 
@@ -259,6 +259,89 @@ Jute 组件会使用不同的代码生成器来生成实际编程语言（Java /
 
 ## 2.4 通信协议
 
+ZooKeeper 通信协议设计包括:
+- 请求: len + 请求头 + 请求体
+- 响应: len + 响应头 + 响应体
+
+### 2.4.1 协议解析: 请求部分
+
+> __请求头: RequestHeader__
+
+请求头包含:
+```
+module org.apache.zookeeper.data {
+    ...
+    class RequestHeader {
+        int xid;
+        int type;
+    }
+    ...
+}
+```
+
+- `xid`: 用于记录客户端请求发起先后顺序，确保单个客户端请求的响应顺序。
+- `type`: 代表请求类型，有 20 种（详情查看 `org.apache.zookeeper.ZooDefs.OpCode`），以下为部分示例:
+  - `OpCode.create(1)`: 创建节点
+  - `OpCode.delete(2)`: 删除节点
+  - `OpCode.exists(3)`: 节点是否存在
+  - `OpCode.getData(4)`: 获取节点数据
+  - `OpCode.setData(5)`: 设置节点数据
+
+> __请求体: Request__
+
+不同的 type 请求类型，请求体的结构是不同的，以下为部分示例:
+
+- ConnectRequest: 会话创建
+
+ZooKeeper 客户端和服务端创建会话时，会发送 ConnectRequest 请求，包含 protocolVersion（版本号），lastZxidSeen(最近一次接收到的服务器 ZXID lastZxidSeen），timeOut（会话超时时间），sessionId（会话标示），passwd（会话密码），其数据结构在 `src/zookeeper.jute` 中定义如下:
+```
+module org.apache.zookeeper.proto {
+    ...
+    class ConnectRequest {
+        int protocolVersion;
+        long lastZxidSeen;
+        int timeOut;
+        long sessionId;
+        buffer passwd;
+    }
+    ...
+}
+```
+
+- GetDataRequest: 获取节点数据
+
+ZooKeeper 客户端在向服务器发送获取节点数据请求时，会发送 GetDataRequest 请求，包含 path（节点路径），watch（是否注册 Watcher），其数据结构在 `src/zookeeper.jute` 中如下:
+```
+module org.apache.zookeeper.proto {
+    ...
+    class GetDataRequest {
+        ustring path;
+        boolean watch;
+    }
+    ...
+}
+```
+
+- SetDataRequest: 更新节点数据
+
+ZooKeeper 客户端在向服务器发送更新节点数据请求时，会发送 SetDataRequest 请求，包含 path（节点路径），data（数据内容）,version（期望版本号），其数据结构在 `src/zookeeper.jute` 中如下:
+```
+module org.apache.zookeeper.proto {
+    ...
+    class SetDataRequest {
+        ustring path;
+        buffer data;
+        int version;
+    }
+    ...
+}
+```
+
+> __请求实例__
+
+
+
+### 2.4.2 协议解析: 响应部分
 
 
 ---
