@@ -339,7 +339,35 @@ module org.apache.zookeeper.proto {
 
 > __请求实例__
 
+以下为 `获取节点数据` 的例子:
 
+```java
+public class GetDataRequestMain implements Watcher {
+
+    public static void main(String[] args) throws IOException, KeeperException, InterruptedException {
+
+        ZooKeeper zooKeeper = new ZooKeeper("domain1.book.zookeeper", 5000, new GetDataRequestMain());
+        zooKeeper.getData("/$7_2_4/get_data", true, null);
+    }
+
+    @Override
+    public void process(WatchedEvent event) {
+        // TODO
+    }
+
+}
+```
+
+ZooKeeper 客户端调用 getData() 接口，实际上就是向 ZooKeeper 服务端发送了一个 GetDataRequest 请求。通过 Wireshark 可以获取到发送的网络 TCP 包: `00,00,00,1d,00,00,00,01,00,00,00,04,00,00,00,10,2f,24,37,5f,32,5f,34,2f,67,65,74,5f,64,61,74,61,01`。以下是表示的含义:
+
+| 十六进制位 | 协议部分 | 数值或字符串 |
+| :--- | :--- | :--- |
+| 00,00,00,1d | 0~3 位是 len，代表整个请求的数据包长度 | 29 |
+| 00,00,00,01 | 4~7 位是 xid，代表客户端请求的发起序号 | 1 |
+| 00,00,00,04 | 8~11 位是 type，代表客户端请求类型 | 4（代表 OpCode.getData） |
+| 00,00,00,10 | 12~15 位是 len，代表节点路径的长度 | 16（代表节点路径长度转换成十六进制是 16位） |
+| 2f,24,37,5f,32,5f,34,2f,67,65,74,5f,64,61,74,61 | 16~31 位是 path，代表节点路径 | /$7_2_4/get_data（通过比对 ASCII 码表转换成十进制即可） |
+| 01 | 32 位是 watch，代表是否注册 Watcher | 1（代表注册 Watcher） |
 
 ### 2.4.2 协议解析: 响应部分
 
