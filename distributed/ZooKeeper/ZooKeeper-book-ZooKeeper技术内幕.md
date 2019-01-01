@@ -167,7 +167,67 @@ Jute 是 ZooKeeper 的序列号组件，最初是 Hadoop 默认序列化组件�
 
 ## 2.2 使用 Jute 进行序列化
 
+以下为使用 Jute 对某个对象进行序列化和反序列化的例子:
 
+- 1. 定义对象，实现 Record 接口:
+```java
+public class MockReqHeader implements Record {
+
+    private long sessionId;
+    private String type;
+
+    public MockReqHeader() {
+    }
+
+    public MockReqHeader(long sessionId, String type) {
+        this.sessionId = sessionId;
+        this.type = type;
+    }
+
+    // set get ...
+
+    @Override
+    public void serialize(OutputArchive archive, String tag) throws IOException {
+        archive.startRecord(this, tag);
+        archive.writeLong(sessionId, "sessionId");
+        archive.writeString(type, "type");
+        archive.endRecord(this, tag);
+    }
+
+    @Override
+    public void deserialize(InputArchive archive, String tag) throws IOException {
+        archive.startRecord(tag);
+        sessionId = archive.readLong("sessionId");
+        type = archive.readString("type");
+        archive.endRecord(tag);
+    }
+
+}
+```
+
+- 2. 序列化和反序列化:
+```java
+// 开始序列化
+ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+BinaryOutputArchive outputArchive = BinaryOutputArchive.getArchive(outputStream);
+
+MockReqHeader mock = new MockReqHeader(0x244221eccb92a34el, "ping");
+mock.serialize(outputArchive, "header");
+
+// 这里通常是 TCP 网络传输对象
+ByteBuffer buffer = ByteBuffer.wrap(outputStream.toByteArray());
+
+// 开始反序列化
+ByteBufferInputStream inputStream = new ByteBufferInputStream(buffer);
+BinaryInputArchive inputArchive = BinaryInputArchive.getArchive(inputStream);
+
+MockReqHeader receivedMock = new MockReqHeader();
+receivedMock.deserialize(inputArchive, "header");
+
+// 关闭流
+inputStream.close();
+outputStream.close();
+```
 
 ## 2.3 深入 Jute
 
