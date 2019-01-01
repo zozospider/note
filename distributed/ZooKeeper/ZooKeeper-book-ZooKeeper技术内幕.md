@@ -231,7 +231,35 @@ outputStream.close();
 
 ## 2.3 深入 Jute
 
+Record 为 Jute 定义的序列化格式，ZooKeeper 中所有需要进行网络传输或本地磁盘存储的类型，都实现了该接口。实体类通过实现 Record 定义的 serialize() 和 deserialize()，来定义自己如何被序列化和反序列化。
+
+其中，参数 OutputArchive 和 InputArchive 是底层真正的序列化和反序列化器，每个 archive 可以序列化和反序列化多个对象，不同对象使用 tag 参数标识。
+
+Archive 的官方实现包括:
+- `BinaryOutputArchive`/`BinaryInputArchive`: 对数据对象的序列化和反序列化，主要用于网络传输和本地磁盘存储。
+- `CsvOutputArchive`/`CsvInputArchive`: 对数据的序列化，方便数据对象的可视化展示。
+- `XmlOutputArchive`/`XmlInputArchive`: 将数据对象以 XML 格式保存和还原。
+
+ZooKeeper 的 `src/zookeeper.jute` 定义文件中会定义一些需要生成的类，以下为定义 ID 和 ACL 示例:
+```
+module org.apache.zookeeper.data {
+    class Id {
+        ustring scheme;
+        ustring id;
+    }
+    class ACL {
+        int perms;
+        Id id;
+    }
+    ...
+}
+```
+
+Jute 组件会使用不同的代码生成器来生成实际编程语言（Java / C / C++）的文件，如 Java 使用 JavaGenerator 来生成类文件（都会实现 Record 接口），存放在 `src/java/generated` 目录。
+
 ## 2.4 通信协议
+
+
 
 ---
 
