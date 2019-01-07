@@ -101,7 +101,7 @@ ZooKeeper 提供了分布式数据的发布/订阅功能，能够让多个订阅
 
 ZooKeeper 的 ACL 权限控制和 Unix/Linux 操作系统的 ACL 有一些区别。ACL 具有以下三个概念:
 
-> __1.5.1.1 权限模式(Scheme)__
+> __权限模式(Scheme)__
 
 权限模式是权限校验使用的策略。分为以下四种模式:
 - `IP`: 通过 IP 地址细粒度控制。如 `ip:192.168.0.110` 表示权限控制针对该 IP。`ip:192.168.0.1/24` 表示权限控制针对 "192.168.0.*" IP 段。
@@ -109,7 +109,7 @@ ZooKeeper 的 ACL 权限控制和 Unix/Linux 操作系统的 ACL 有一些区别
 - `World`: 对所有用户开放。是一种特殊的 Digest 模式，使用 "world:anyone" 表示。
 - `Super`: 超级用户控制。是一种特殊的 Digest 模式。
 
-> __1.5.1.2 授权对象(ID)__
+> __授权对象(ID)__
 
 授权对象为权限模式下对应的实体，以下为对应关系:
 
@@ -120,7 +120,7 @@ ZooKeeper 的 ACL 权限控制和 Unix/Linux 操作系统的 ACL 有一些区别
 | Word | 只有一个 ID: `anyone` |
 | Super | 与 Digest 模式一致 |
 
-> __1.5.1.3 权限(Permission)__
+> __权限(Permission)__
 
 ZooKeeper 对数据的操作权限分为以下五类:
 - `CREATE(C)`: 数据节点的创建权限，允许授权对象在该数据节点下创建子节点。
@@ -133,13 +133,13 @@ ZooKeeper 对数据的操作权限分为以下五类:
 
 ZooKeeper 允许开发人员对权限进行扩展，通过自定义和注册两个步骤完成。
 
-> __自定义权限控制器__
+- - 自定义权限控制器
 
 自定义 `CustomAuthenticationProvider` 实现 ZooKeeper 的标准权限控制器 `AuthenticationProvider` 即可。
 
 ZooKeeper 自带的 `DigestAuthenticationProvider` 和 `IPAuthenticationProvider` 也是基于该接口实现。
 
-> __注册自定义权限控制器__
+- 注册自定义权限控制器
 
 将自定义的权限控制器注册到 ZooKeeper 服务器中，支持以下两种方式注册:
 - 系统属性: 在 ZooKeeper 启动参数重配置 `-Dzookeeper.authProvider.1=com.zkbook.CustomAuthenticationProvider`。
