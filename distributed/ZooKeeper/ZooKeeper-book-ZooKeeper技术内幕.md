@@ -133,13 +133,13 @@ ZooKeeper 对数据的操作权限分为以下五类:
 
 ZooKeeper 允许开发人员对权限进行扩展，通过自定义和注册两个步骤完成。
 
-- - 自定义权限控制器
+- - - - 自定义权限控制器
 
 自定义 `CustomAuthenticationProvider` 实现 ZooKeeper 的标准权限控制器 `AuthenticationProvider` 即可。
 
 ZooKeeper 自带的 `DigestAuthenticationProvider` 和 `IPAuthenticationProvider` 也是基于该接口实现。
 
-- 注册自定义权限控制器
+- - - 注册自定义权限控制器
 
 将自定义的权限控制器注册到 ZooKeeper 服务器中，支持以下两种方式注册:
 - 系统属性: 在 ZooKeeper 启动参数重配置 `-Dzookeeper.authProvider.1=com.zkbook.CustomAuthenticationProvider`。
