@@ -564,7 +564,7 @@ EventThread 线程不断地从 waitingEvents 队列中取出待处理的 Watcher
 
 ## 3.2 服务器地址列表
 
-ZooKeeper 客户端接收到 connectString 参数如 `192.168.0.1:2181,192.168.0.2:2181,192.168.0.3:2181` 后, 会将其放入 ConnectStringParser 对象中, 该类基本结构如下:
+ZooKeeper 客户端接收到 connectString 参数如 `192.168.0.1:2181,192.168.0.2:2181,192.168.0.3:2181` 后, 会将其放入 ConnectStringParser 对象中, 该类简单结构如下:
 ```java
 public final class ConnectStringParser {
     private final String chrootPath;
@@ -600,7 +600,7 @@ public interface HostProvider {
 
 > __StaticHostProvider__
 
-StaticHostProvider 基本结构如下:
+StaticHostProvider 简单结构如下:
 ```java
 public final class StaticHostProvider implements HostProvider {
     private final List<InetSocketAddress> serverAddresses = new ArrayList<InetSocketAddress>(5);
@@ -615,6 +615,110 @@ public final class StaticHostProvider implements HostProvider {
 StaticHostProvider 首先会使用 Collections 工具类的 shuffle 方法将服务器列表随机打散, 拼装成一个环形循环队列. 以后每次尝试获取一个服务器地址时, currentIndex 游标会向前移动一位, 如果发现游标移动超过了整个列表的长度, 就重置为 0. 如果发现当前游标位置和上次使用的地址位置一样, 即 currentIndex 和 lastIndex 相等时, 就进行 spinDelay 毫秒时间等待.
 
 ## 3.3 ClientCnxn: 网络 I/O
+
+ClientCnxn 负责客户端和服务端之间的网络连接和通信. 以下为简单结构:
+```java
+public class ClientCnxn {
+
+    private final LinkedList<Packet> outgoingQueue = new LinkedList<Packet>();
+    private final LinkedList<Packet> pendingQueue = new LinkedList<Packet>();
+    public static final int packetLen = Integer.getInteger("jute.maxbuffer", 4096 * 1024);
+    final SendThread sendThread;
+    final EventThread eventThread;
+
+    private void conLossPacket(Packet p) {
+    }
+    private void finishPacket(Packet p) {
+    }
+    Packet queuePacket(RequestHeader h, ReplyHeader r, Record request, Record response, AsyncCallback cb, String clientPath, String serverPath, Object ctx, WatchRegistration watchRegistration) {
+    }
+    public void sendPacket(Record request, Record response, AsyncCallback cb, int opCode) throws IOException {
+    }
+
+    static class Packet {
+        Packet(RequestHeader requestHeader, ReplyHeader replyHeader, Record request, Record response, WatchRegistration watchRegistration) {
+        }
+        Packet(RequestHeader requestHeader, ReplyHeader replyHeader, Record request, Record response, WatchRegistration watchRegistration, boolean readOnly) {
+        }
+    }
+    class SendThread extends ZooKeeperThread {
+        private final ClientCnxnSocket clientCnxnSocket;
+        SendThread(ClientCnxnSocket clientCnxnSocket) {
+        }
+        ClientCnxnSocket getClientCnxnSocket() {
+            return clientCnxnSocket;
+        }
+        public void sendPacket(Packet p) throws IOException {
+        }
+    }
+    class EventThread extends ZooKeeperThread {
+        private final LinkedBlockingQueue<Object> waitingEvents = new LinkedBlockingQueue<Object>();
+        EventThread() {
+        }
+        public void queuePacket(Packet packet) {
+        }
+    }
+}
+```
+
+### 3.3.1 Packet
+
+Packet 是 ClientCnxn 内部的一个对协议层的封装对象，简单结构如下:
+```java
+public class ClientCnxn {
+    static class Packet {
+        RequestHeader requestHeader;
+        ReplyHeader replyHeader;
+        Record request;
+        Record response;
+        ByteBuffer bb;
+        String clientPath;
+        String serverPath;
+        boolean finished;
+        AsyncCallback cb;
+        Object ctx;
+        WatchRegistration watchRegistration;
+        public boolean readOnly;
+        Packet(RequestHeader requestHeader, ReplyHeader replyHeader, Record request, Record response, WatchRegistration watchRegistration) {
+        }
+        Packet(RequestHeader requestHeader, ReplyHeader replyHeader, Record request, Record response, WatchRegistration watchRegistration, boolean readOnly) {
+        }
+        public void createBB() {
+        }
+    }
+}
+```
+
+- `requestHeader`: 最基本的请求头
+- `replyHeader`: 响应头
+- `request`: 请求体
+- `response`: 响应体
+- `clientPath/serverPath`: 节点路径
+- `watchRegistration`: 注册的 Watcher
+- `createBB()`: 该方法负责对 Packet 对象进行序列化, 只会将 requestHeader, request, readOnly 三个属性进行序列化, 转换成可用于客户端和服务端网络传输的 ByteBuffer 对象, 其余属性都保存在客户端的上下文中, 不会进行网络传输.
+
+### 3.3.2 outgoingQueue 和 pendingQueue
+
+- `outgoingQueue`: 存储需要发送到服务端的 Packet 集合.
+- `pendingQueue`: 存储已经从客户端发送到服务端且需要等待服务端响应的 Packet 集合.
+
+### 3.3.3 SendThread
+
+SendThread 是 ClientCnxn 内部的一个核心 I/O 调度线程, 用于管理客户端和服务端之间的所有网络 I/O 操作. 主要有以下作用:
+
+- a. SendThread 维护了客户端与服务端之间的会话生命周期, 通过一定频率向服务端发送 PING 包实现心跳检测. 同时, 在会话周期内, 如果客户端与服务端 TCP 连接断开, 会自动透明地完成重连.
+
+- b. SendThread 管理了客户端所有请求发送和响应接收操作, 将其上层客户端 API 操作转换成响应请求发送到服务端, 并完成对同步调用的返回和异步调用的回调.
+
+- c. SendThread 负责将来自服务端的事件传递给 EventThread 处理.
+
+### 3.3.4 EventThread
+
+EventThread 是 ClientCnxn 内部的一个核心调度线程, 负责客户端的事件处理, 并出发客户端注册的 Watcher 监听.
+
+EventThread 内部有一个 waitingEvents 队列, 临时存放需要被触发的 Object(包括客户端注册的 Watcher 和 异步接口中注册的回调器 AsyncCallback). EventThread 会不断地从 waitingEvents 队列中取出 Object, 识别出具体类型(Watcher 或 AsyncCallback), 并分别调用 process 和 processResult 接口方法实现对事件的触发和回调.
+
+### 3.3.5 ClientCnxnSocket
 
 ---
 
