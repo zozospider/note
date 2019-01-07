@@ -8,32 +8,32 @@
 
 ## 1.1 数据模型
 
-ZooKeeper 使用 `数据节点`，称为 `ZNode`，是 ZooKeeper 中数据的最小单元，每个 ZNode 可以保存数据，也可以挂载子节点。
+ZooKeeper 使用 `数据节点`, 称为 `ZNode`, 是 ZooKeeper 中数据的最小单元, 每个 ZNode 可以保存数据, 也可以挂载子节点.
 
 ## 1.2 节点特性
 
-ZooKeeper 的每个数据节点都是有生命周期的，节点类型可分为: 持久节点(`PERSISTENT`), 临时节点(`EPHEMERAL`), 顺序节点(`SEQUENTIAL`)。可生成以下四种组合类型:
-- 持久节点(`PERSISTENT`): 是指数据节点被创建后，会一直存在 ZooKeeper 服务器上，直到有主动删除操作。
-- 持久顺序节点(`PERSISTENT_SEQUENTIAL`): 在持久节点基础上增加顺序性。创建子节点的时候，可以设置一个顺序标记，在创建时，ZooKeeper 会自动为给定节点加上一个数字后缀（上限是整型的最大值），作为一个新的、完整的节点名。
-- 临时节点(`EPHEMERAL`): 生命周期和客户端会话绑定，如果客户端会话失效，节点会自动清理。ZooKeeper 规定了临时节点只能作为叶子节点（不能基于临时节点来创建子节点）。
-- 临时顺序节点(`EPHEMERAL_SEQUENTIAL`): 在临时节点基础上增加顺序性。
+ZooKeeper 的每个数据节点都是有生命周期的, 节点类型可分为: 持久节点(`PERSISTENT`), 临时节点(`EPHEMERAL`), 顺序节点(`SEQUENTIAL`). 可生成以下四种组合类型:
+- 持久节点(`PERSISTENT`): 是指数据节点被创建后, 会一直存在 ZooKeeper 服务器上, 直到有主动删除操作.
+- 持久顺序节点(`PERSISTENT_SEQUENTIAL`): 在持久节点基础上增加顺序性. 创建子节点的时候, 可以设置一个顺序标记, 在创建时, ZooKeeper 会自动为给定节点加上一个数字后缀(上限是整型的最大值), 作为一个新的、完整的节点名.
+- 临时节点(`EPHEMERAL`): 生命周期和客户端会话绑定, 如果客户端会话失效, 节点会自动清理.ZooKeeper 规定了临时节点只能作为叶子节点(不能基于临时节点来创建子节点).
+- 临时顺序节点(`EPHEMERAL_SEQUENTIAL`): 在临时节点基础上增加顺序性.
 
 ### 1.2.1 状态信息
 
-每个数据节点除了存储数据内容外，还存储节点本身的状态信息（可通过 `get` 命令获取）。以下为 get 命令获取的结果:
-- 第一行: 节点的数据内容。
+每个数据节点除了存储数据内容外, 还存储节点本身的状态信息(可通过 `get` 命令获取). 以下为 get 命令获取的结果:
+- 第一行: 节点的数据内容.
 - 后续内容: 节点 Stat 状态对象的格式化输出:
-  - `czxid`: Created ZXID, 表示该数据节点被创建时的事务 ID。
-  - `mzxid`: Modified ZXID, 表示该节点最后一次被更新时的事务 ID。
-  - `ctime`: Created Time, 表示节点被创建的时间。
-  - `mtime`: Modified Time, 表示该节点最后一次被更新的时间。
-  - `version`: 数据节点的版本号。
-  - `cversion`: 子节点的版本号。
-  - `aversion`: 节点的 ACL 版本号。
-  - `ephemeralOwner`: 创建该临时节点的会话 sessionID。如果是持久节点则为 0。
-  - `dataLength`: 数据内容的长度。
-  - `numChildren`: 当前节点的子节点个数。
-  - `pzxid`: 该节点的子节点列表最后一次被修改时的事务 ID（只有子节点列表变更才会更新 pzxid，子节点内容变更不会影响 pzxid）。
+  - `czxid`: Created ZXID, 表示该数据节点被创建时的事务 ID.
+  - `mzxid`: Modified ZXID, 表示该节点最后一次被更新时的事务 ID.
+  - `ctime`: Created Time, 表示节点被创建的时间.
+  - `mtime`: Modified Time, 表示该节点最后一次被更新的时间.
+  - `version`: 数据节点的版本号.
+  - `cversion`: 子节点的版本号.
+  - `aversion`: 节点的 ACL 版本号.
+  - `ephemeralOwner`: 创建该临时节点的会话 sessionID.如果是持久节点则为 0.
+  - `dataLength`: 数据内容的长度.
+  - `numChildren`: 当前节点的子节点个数.
+  - `pzxid`: 该节点的子节点列表最后一次被修改时的事务 ID(只有子节点列表变更才会更新 pzxid, 子节点内容变更不会影响 pzxid).
 
 ## 1.3 版本 - 保证分布式数据原子性操作
 
@@ -42,21 +42,21 @@ ZooKeeper 的每个数据节点都是有生命周期的，节点类型可分为:
 - `cversion`: 当前数据节点子节点的版本号
 - `aversion`: 当前数据节点 ACL 变更版本号
 
-比如一个数据节点 `/zk-book` 创建完毕后，节点的 version 值是 0，表示 "当前节点创建以后，被更新过 0 次"，如果进行更新操作，那么 version 将变成 1。注意，version 表示的变更次数，即使更新为相同的值，version 依然会增加。
+比如一个数据节点 `/zk-book` 创建完毕后, 节点的 version 值是 0, 表示 "当前节点创建以后, 被更新过 0 次", 如果进行更新操作, 那么 version 将变成 1. 注意, version 表示的变更次数, 即使更新为相同的值, version 依然会增加.
 
-version 的主要应用场景为分布式锁。在分布式系统运行过程中，需要依靠锁来保证在高并发情况下数据更新的准确性。锁可以分为悲观锁和乐观锁，以下为说明:
+version 的主要应用场景为分布式锁. 在分布式系统运行过程中, 需要依靠锁来保证在高并发情况下数据更新的准确性. 锁可以分为悲观锁和乐观锁, 以下为说明:
 
 > __悲观锁__
 
-悲观锁称为悲观并发控制(Pessimistic Concurrency Control, PCC), 具有强烈的独占和排他性，能够有效避免不同事务对同一个资源并发更新而造成的数据一致性问题。悲观锁假定不同事务之间的处理一定会出现相互干扰，从而需要在一个事务从头到尾的过程中都对数据进行加锁。悲观锁适合解决那些对于数据更新竞争十分激烈的场景。
+悲观锁称为悲观并发控制(Pessimistic Concurrency Control, PCC), 具有强烈的独占和排他性, 能够有效避免不同事务对同一个资源并发更新而造成的数据一致性问题. 悲观锁假定不同事务之间的处理一定会出现相互干扰, 从而需要在一个事务从头到尾的过程中都对数据进行加锁. 悲观锁适合解决那些对于数据更新竞争十分激烈的场景.
 
-如果一个事务正在对数据进行处理，那么在整个处理过程中，都会将数据出于锁定状态，在这期间，其他事务将无法对这个数据进行更新操作，直到事务完成对该数据的处理并释放锁后，才能重新竞争锁。
+如果一个事务正在对数据进行处理, 那么在整个处理过程中, 都会将数据出于锁定状态, 在这期间, 其他事务将无法对这个数据进行更新操作, 直到事务完成对该数据的处理并释放锁后, 才能重新竞争锁.
 
 > __乐观锁__
 
-乐观锁称为乐观并发控制(Optimistic Concurrency Control, OCC), 具有宽松和友好性。乐观锁假定不同事务之间处理过程不会相互影响，因此在事务处理的绝大部分时间里不需要进行加锁处理，只在更新请求提交前，检查当前事务在读取数据后的这段时间内，是否由其他事务对该数据进行了修改，如果没有修改，则提交，如果有修改则回滚。乐观锁适合使用在数据并发竞争不大、事务冲突较少的应用场景中。
+乐观锁称为乐观并发控制(Optimistic Concurrency Control, OCC), 具有宽松和友好性. 乐观锁假定不同事务之间处理过程不会相互影响, 因此在事务处理的绝大部分时间里不需要进行加锁处理, 只在更新请求提交前, 检查当前事务在读取数据后的这段时间内, 是否由其他事务对该数据进行了修改, 如果没有修改, 则提交, 如果有修改则回滚. 乐观锁适合使用在数据并发竞争不大、事务冲突较少的应用场景中.
 
-乐观锁事务分为三个阶段: 数据读取, 写入校验, 数据写入。ZooKeeper 中的 version 就是用来实现乐观锁中的写入校验。以下为 PrepRequestProcessor 处理类中对数据更新请求的版本校验逻辑:
+乐观锁事务分为三个阶段: 数据读取, 写入校验, 数据写入. ZooKeeper 中的 version 就是用来实现乐观锁中的写入校验. 以下为 PrepRequestProcessor 处理类中对数据更新请求的版本校验逻辑:
 ```java
 version = setDataRequest.getVersion();
 int currentVersion = nodeRecord.stat.getVersion();
@@ -66,17 +66,17 @@ if (version != -1 && version != currentVersion) {
 version = currentVersion + 1;
 ```
 
-以上代码可以看出，在进行 setDataRequest 请求处理时，首先进行版本校验，ZooKeeper 从 setDataRequest 请求中获取当前请求的版本 version，同时从数据记录 nodeRecord 中获取当前服务器上该数据的最新版本 currentVersion，如果 version 为 "-1"，说明客户端不要求使用乐观锁，忽略版本比对，否则，就对比 version 和 currentVersion，如果不匹配，抛出 `BadVersionException` 异常。
+以上代码可以看出, 在进行 setDataRequest 请求处理时, 首先进行版本校验, ZooKeeper 从 setDataRequest 请求中获取当前请求的版本 version, 同时从数据记录 nodeRecord 中获取当前服务器上该数据的最新版本 currentVersion, 如果 version 为 "-1", 说明客户端不要求使用乐观锁, 忽略版本比对, 否则, 就对比 version 和 currentVersion, 如果不匹配, 抛出 `BadVersionException` 异常.
 
 ## 1.4 Watcher - 数据变更的通知
 
-ZooKeeper 提供了分布式数据的发布/订阅功能，能够让多个订阅者同时监听某一个主题对象。ZooKeeper 引入 Watcher 机制实现通知功能，客户端通过向服务端注册一个 Watcher 监听，当服务端指定事件触发一个 Watcher，就会向客户端发送一个事件通知。
+ZooKeeper 提供了分布式数据的发布/订阅功能, 能够让多个订阅者同时监听某一个主题对象.ZooKeeper 引入 Watcher 机制实现通知功能, 客户端通过向服务端注册一个 Watcher 监听, 当服务端指定事件触发一个 Watcher, 就会向客户端发送一个事件通知.
 
 ### Watcher 接口
 
-接口类 Watcher 用于表示一个标准的事件处理器，其中包含 KeeperState（通知状态） 和 EventType（事件类型）.
+接口类 Watcher 用于表示一个标准的事件处理器, 其中包含 KeeperState(通知状态) 和 EventType(事件类型).
 
-以下为常见的 KeeperState（通知状态） 和 EventType（事件类型）:
+以下为常见的 KeeperState(通知状态) 和 EventType(事件类型):
 
 | KeeperState | EventType | 触发条件 |
 | :--- | :--- | :--- |
@@ -86,76 +86,76 @@ ZooKeeper 提供了分布式数据的发布/订阅功能，能够让多个订阅
 |  | NodeDataChanged(3) | Watcher 监听的对应数据节点的数据内容发生变化 |
 |  | NodeChildrenChanged(4) | Watcher 监听的对应数据节点的子节点列表发生变化 |
 | DisConnected(0): 此时客户端和服务器处于断开连接状态 | None(-1) | 客户端与 ZooKeeper 服务端断开连接 |
-| Expired(-112): 此时客户端会话失效，通常同时也会收到 SessionExpiredException 异常 | None(-1) | 会话超时 |
-| AuthFailed(4): 授权失败，通常也会收到 AuthFailedException 异常 | None(-1) | 使用错误的 scheme 进行权限检查 或 SASL 权限检查失败 |
+| Expired(-112): 此时客户端会话失效, 通常同时也会收到 SessionExpiredException 异常 | None(-1) | 会话超时 |
+| AuthFailed(4): 授权失败, 通常也会收到 AuthFailedException 异常 | None(-1) | 使用错误的 scheme 进行权限检查 或 SASL 权限检查失败 |
 
-由于 Watcher 机制细节较为复杂，详情请参考 `《从 Paxos 到 ZooKeeper》 - 7.1.4 Watcher - 数据变更的通知`。
+由于 Watcher 机制细节较为复杂, 详情请参考 `《从 Paxos 到 ZooKeeper》 - 7.1.4 Watcher - 数据变更的通知`.
 
 ## 1.5 ACL - 保障数据的安全
 
-`UGO(User, Group, Others)`: 应用最广泛的权限控制方式，广泛应用于 Unix/Linux 系统中。
+`UGO(User, Group, Others)`: 应用最广泛的权限控制方式, 广泛应用于 Unix/Linux 系统中.
 
-`ACL(Access Control List)`: 访问控制列表，是一种更细粒度的权限管理方式，可以针对任意用户和组进行细粒度的权限控制。目前大部分 Unix 系统已经支持，Linux 也从 2.6 版本的内核开始支持。
+`ACL(Access Control List)`: 访问控制列表, 是一种更细粒度的权限管理方式, 可以针对任意用户和组进行细粒度的权限控制. 目前大部分 Unix 系统已经支持, Linux 也从 2.6 版本的内核开始支持.
 
 ### 1.5.1 ACL 介绍
 
-ZooKeeper 的 ACL 权限控制和 Unix/Linux 操作系统的 ACL 有一些区别。ACL 具有以下三个概念:
+ZooKeeper 的 ACL 权限控制和 Unix/Linux 操作系统的 ACL 有一些区别. ACL 具有以下三个概念:
 
 > __权限模式(Scheme)__
 
-权限模式是权限校验使用的策略。分为以下四种模式:
-- `IP`: 通过 IP 地址细粒度控制。如 `ip:192.168.0.110` 表示权限控制针对该 IP。`ip:192.168.0.1/24` 表示权限控制针对 "192.168.0.*" IP 段。
-- `Digest`: 针对不同应用进行权限控制。用 `username:password` 表示, 其中 ZooKeeper 会对 username:password 进行 SHA-1 算法加密和 BASE64 编码，最后 username:password 被混淆为一个无法辨识的字符串。
-- `World`: 对所有用户开放。是一种特殊的 Digest 模式，使用 "world:anyone" 表示。
-- `Super`: 超级用户控制。是一种特殊的 Digest 模式。
+权限模式是权限校验使用的策略. 分为以下四种模式:
+- `IP`: 通过 IP 地址细粒度控制. 如 `ip:192.168.0.110` 表示权限控制针对该 IP.`ip:192.168.0.1/24` 表示权限控制针对 "192.168.0.*" IP 段.
+- `Digest`: 针对不同应用进行权限控制. 用 `username:password` 表示, 其中 ZooKeeper 会对 username:password 进行 SHA-1 算法加密和 BASE64 编码, 最后 username:password 被混淆为一个无法辨识的字符串.
+- `World`: 对所有用户开放. 是一种特殊的 Digest 模式, 使用 "world:anyone" 表示.
+- `Super`: 超级用户控制. 是一种特殊的 Digest 模式.
 
 > __授权对象(ID)__
 
-授权对象为权限模式下对应的实体，以下为对应关系:
+授权对象为权限模式下对应的实体, 以下为对应关系:
 
 | 权限模式 | 授权对象 |
 | :--- | :--- |
-| IP | IP 地址或 IP 段，如 `192.168.0.110` 或 `192.168.0.1/24` |
-| Digest | `username:BASE64(SHA-1(username:password))`，如 `foo:kWN6aNSbjcKWPqjiV7cg0N24raU=` |
+| IP | IP 地址或 IP 段, 如 `192.168.0.110` 或 `192.168.0.1/24` |
+| Digest | `username:BASE64(SHA-1(username:password))`, 如 `foo:kWN6aNSbjcKWPqjiV7cg0N24raU=` |
 | Word | 只有一个 ID: `anyone` |
 | Super | 与 Digest 模式一致 |
 
 > __权限(Permission)__
 
 ZooKeeper 对数据的操作权限分为以下五类:
-- `CREATE(C)`: 数据节点的创建权限，允许授权对象在该数据节点下创建子节点。
-- `DELETE(D)`: 子节点的删除权限，允许授权对象删除该数据节点的子节点。
-- `READ(R)`: 数据节点的读取权限，允许授权对象访问该数据节点并读取其数据内容或子节点列表等。
-- `WRITE(W)`: 数据节点的更新权限，允许授权对象对该数据节点进行更新。
-- `ADMIN(A)`: 数据节点的管理权限，允许授权对象对该数据节点进行 ACL 设置。
+- `CREATE(C)`: 数据节点的创建权限, 允许授权对象在该数据节点下创建子节点.
+- `DELETE(D)`: 子节点的删除权限, 允许授权对象删除该数据节点的子节点.
+- `READ(R)`: 数据节点的读取权限, 允许授权对象访问该数据节点并读取其数据内容或子节点列表等.
+- `WRITE(W)`: 数据节点的更新权限, 允许授权对象对该数据节点进行更新.
+- `ADMIN(A)`: 数据节点的管理权限, 允许授权对象对该数据节点进行 ACL 设置.
 
 ### 1.5.2 权限扩展体系
 
-ZooKeeper 允许开发人员对权限进行扩展，通过自定义和注册两个步骤完成。
+ZooKeeper 允许开发人员对权限进行扩展, 通过自定义和注册两个步骤完成.
 
 > __自定义权限控制器__
 
-自定义 `CustomAuthenticationProvider` 实现 ZooKeeper 的标准权限控制器 `AuthenticationProvider` 即可。
+自定义 `CustomAuthenticationProvider` 实现 ZooKeeper 的标准权限控制器 `AuthenticationProvider` 即可.
 
-ZooKeeper 自带的 `DigestAuthenticationProvider` 和 `IPAuthenticationProvider` 也是基于该接口实现。
+ZooKeeper 自带的 `DigestAuthenticationProvider` 和 `IPAuthenticationProvider` 也是基于该接口实现.
 
 > __注册自定义权限控制器__
 
-将自定义的权限控制器注册到 ZooKeeper 服务器中，支持以下两种方式注册:
-- 系统属性: 在 ZooKeeper 启动参数重配置 `-Dzookeeper.authProvider.1=com.zkbook.CustomAuthenticationProvider`。
-- 配置文件: 在 zoo.cfg 中配置 `authProvider.1=com.zkbook.CustomAuthenticationProvider`。
+将自定义的权限控制器注册到 ZooKeeper 服务器中, 支持以下两种方式注册:
+- 系统属性: 在 ZooKeeper 启动参数重配置 `-Dzookeeper.authProvider.1=com.zkbook.CustomAuthenticationProvider`.
+- 配置文件: 在 zoo.cfg 中配置 `authProvider.1=com.zkbook.CustomAuthenticationProvider`.
 
 ### 1.5.3 ACL 管理
 
 > __设置 ACL__
 
-通过 zkCli 脚本登录 ZooKeeper 服务器，可进行 ACL 设置，以下为设置方式:
-- 创建节点时设置: `create [-s] [-e] path data acl`，如 `create -e /zk-book initData digest:foo:MiGs3Eiy1pP4rvH1Q1NwbP+oUF8=:cdrwa`。
-- 后期指定: `setAcl path acl`，如 `setAcl /zk-book digest:foo:MiGs3Eiy1pP4rvH1Q1NwbP+oUF8=:cdrwa`。
+通过 zkCli 脚本登录 ZooKeeper 服务器, 可进行 ACL 设置, 以下为设置方式:
+- 创建节点时设置: `create [-s] [-e] path data acl`, 如 `create -e /zk-book initData digest:foo:MiGs3Eiy1pP4rvH1Q1NwbP+oUF8=:cdrwa`.
+- 后期指定: `setAcl path acl`, 如 `setAcl /zk-book digest:foo:MiGs3Eiy1pP4rvH1Q1NwbP+oUF8=:cdrwa`.
 
 > __Super 模式__
 
-一旦对一个数据节点设置了 ACL 权限，那么其他没有被授权的 ZooKeeper 客户端将无法访问该节点。此时开启 Super 模式，可以实现超级管理员权限，开启方法是在 ZooKeeper 启动时，添加系统属性 `-Dzookeeper.DigestAuthenticationProvider.superDigest.superDigest=superUser:kWN6aNSbjcKWPQjiV7cg0N24raU=`，其中 superUser 为超级管理员。
+一旦对一个数据节点设置了 ACL 权限, 那么其他没有被授权的 ZooKeeper 客户端将无法访问该节点. 此时开启 Super 模式, 可以实现超级管理员权限, 开启方法是在 ZooKeeper 启动时, 添加系统属性 `-Dzookeeper.DigestAuthenticationProvider.superDigest.superDigest=superUser:kWN6aNSbjcKWPQjiV7cg0N24raU=`, 其中 superUser 为超级管理员.
 
 ---
 
@@ -163,13 +163,13 @@ ZooKeeper 自带的 `DigestAuthenticationProvider` 和 `IPAuthenticationProvider
 
 ## 2.1 Jute 介绍
 
-Jute 是 ZooKeeper 的序列号组件，最初是 Hadoop 默认序列化组件（0.21.0 版本后，换成了 Avro）。
+Jute 是 ZooKeeper 的序列号组件, 最初是 Hadoop 默认序列化组件(0.21.0 版本后, 换成了 Avro).
 
 ## 2.2 使用 Jute 进行序列化
 
 以下为使用 Jute 对某个对象进行序列化和反序列化的例子:
 
-- 1. 定义对象，实现 Record 接口:
+- 1. 定义对象, 实现 Record 接口:
 ```java
 public class MockReqHeader implements Record {
 
@@ -231,16 +231,16 @@ outputStream.close();
 
 ## 2.3 深入 Jute
 
-Record 为 Jute 定义的序列化格式，ZooKeeper 中所有需要进行网络传输或本地磁盘存储的类型，都实现了该接口。实体类通过实现 Record 定义的 serialize() 和 deserialize()，来定义自己如何被序列化和反序列化。
+Record 为 Jute 定义的序列化格式, ZooKeeper 中所有需要进行网络传输或本地磁盘存储的类型, 都实现了该接口. 实体类通过实现 Record 定义的 serialize() 和 deserialize(), 来定义自己如何被序列化和反序列化.
 
-其中，参数 OutputArchive 和 InputArchive 是底层真正的序列化和反序列化器，每个 archive 可以序列化和反序列化多个对象，不同对象使用 tag 参数标识。
+其中, 参数 OutputArchive 和 InputArchive 是底层真正的序列化和反序列化器, 每个 archive 可以序列化和反序列化多个对象, 不同对象使用 tag 参数标识.
 
 Archive 的官方实现包括:
-- `BinaryOutputArchive`/`BinaryInputArchive`: 对数据对象的序列化和反序列化，主要用于网络传输和本地磁盘存储。
-- `CsvOutputArchive`/`CsvInputArchive`: 对数据的序列化，方便数据对象的可视化展示。
-- `XmlOutputArchive`/`XmlInputArchive`: 将数据对象以 XML 格式保存和还原。
+- `BinaryOutputArchive`/`BinaryInputArchive`: 对数据对象的序列化和反序列化, 主要用于网络传输和本地磁盘存储.
+- `CsvOutputArchive`/`CsvInputArchive`: 对数据的序列化, 方便数据对象的可视化展示.
+- `XmlOutputArchive`/`XmlInputArchive`: 将数据对象以 XML 格式保存和还原.
 
-ZooKeeper 的 `src/zookeeper.jute` 定义文件中会定义一些需要生成的类，以下为定义 ID 和 ACL 示例:
+ZooKeeper 的 `src/zookeeper.jute` 定义文件中会定义一些需要生成的类, 以下为定义 ID 和 ACL 示例:
 ```
 module org.apache.zookeeper.data {
     class Id {
@@ -255,7 +255,7 @@ module org.apache.zookeeper.data {
 }
 ```
 
-Jute 组件会使用不同的代码生成器来生成实际编程语言（Java / C / C++）的文件，如 Java 使用 JavaGenerator 来生成类文件（都会实现 Record 接口），存放在 `src/java/generated` 目录。
+Jute 组件会使用不同的代码生成器来生成实际编程语言(Java / C / C++)的文件, 如 Java 使用 JavaGenerator 来生成类文件(都会实现 Record 接口), 存放在 `src/java/generated` 目录.
 
 ## 2.4 通信协议
 
@@ -279,8 +279,8 @@ module org.apache.zookeeper.proto {
 }
 ```
 
-- `xid`: 用于记录客户端请求发起先后顺序，确保单个客户端请求的响应顺序。
-- `type`: 代表请求类型，有 20 种（详情查看 `org.apache.zookeeper.ZooDefs.OpCode`），以下为部分示例:
+- `xid`: 用于记录客户端请求发起先后顺序, 确保单个客户端请求的响应顺序.
+- `type`: 代表请求类型, 有 20 种(详情查看 `org.apache.zookeeper.ZooDefs.OpCode`), 以下为部分示例:
   - `OpCode.create(1)`: 创建节点
   - `OpCode.delete(2)`: 删除节点
   - `OpCode.exists(3)`: 节点是否存在
@@ -289,11 +289,11 @@ module org.apache.zookeeper.proto {
 
 > __请求体: Request__
 
-不同的 type 请求类型，请求体的结构是不同的，以下为部分示例:
+不同的 type 请求类型, 请求体的结构是不同的, 以下为部分示例:
 
 - ConnectRequest: 会话创建
 
-ZooKeeper 客户端和服务端创建会话时，会发送 ConnectRequest 请求，包含 protocolVersion（版本号），lastZxidSeen(最近一次接收到的服务器 ZXID lastZxidSeen），timeOut（会话超时时间），sessionId（会话标示），passwd（会话密码），其数据结构在 `src/zookeeper.jute` 中定义如下:
+ZooKeeper 客户端和服务端创建会话时, 会发送 ConnectRequest 请求, 包含 protocolVersion(版本号), lastZxidSeen(最近一次接收到的服务器 ZXID lastZxidSeen), timeOut(会话超时时间), sessionId(会话标示), passwd(会话密码), 其数据结构在 `src/zookeeper.jute` 中定义如下:
 ```
 module org.apache.zookeeper.proto {
     ...
@@ -310,7 +310,7 @@ module org.apache.zookeeper.proto {
 
 - GetDataRequest: 获取节点数据
 
-ZooKeeper 客户端在向服务器发送获取节点数据请求时，会发送 GetDataRequest 请求，包含 path（节点路径），watch（是否注册 Watcher），其数据结构在 `src/zookeeper.jute` 中如下:
+ZooKeeper 客户端在向服务器发送获取节点数据请求时, 会发送 GetDataRequest 请求, 包含 path(节点路径), watch(是否注册 Watcher), 其数据结构在 `src/zookeeper.jute` 中如下:
 ```
 module org.apache.zookeeper.proto {
     ...
@@ -324,7 +324,7 @@ module org.apache.zookeeper.proto {
 
 - SetDataRequest: 更新节点数据
 
-ZooKeeper 客户端在向服务器发送更新节点数据请求时，会发送 SetDataRequest 请求，包含 path（节点路径），data（数据内容）,version（期望版本号），其数据结构在 `src/zookeeper.jute` 中如下:
+ZooKeeper 客户端在向服务器发送更新节点数据请求时, 会发送 SetDataRequest 请求, 包含 path(节点路径), data(数据内容),version(期望版本号), 其数据结构在 `src/zookeeper.jute` 中如下:
 ```
 module org.apache.zookeeper.proto {
     ...
@@ -358,16 +358,16 @@ public class GetDataRequestMain implements Watcher {
 }
 ```
 
-ZooKeeper 客户端调用 getData() 接口，实际上就是向 ZooKeeper 服务端发送了一个 GetDataRequest 请求。通过 Wireshark 可以获取到发送的网络 TCP 包: `00,00,00,1d,00,00,00,01,00,00,00,04,00,00,00,10,2f,24,37,5f,32,5f,34,2f,67,65,74,5f,64,61,74,61,01`。以下是其表示的含义:
+ZooKeeper 客户端调用 getData() 接口, 实际上就是向 ZooKeeper 服务端发送了一个 GetDataRequest 请求. 通过 Wireshark 可以获取到发送的网络 TCP 包: `00,00,00,1d,00,00,00,01,00,00,00,04,00,00,00,10,2f,24,37,5f,32,5f,34,2f,67,65,74,5f,64,61,74,61,01`. 以下是其表示的含义:
 
 | 十六进制位 | 协议部分 | 数值或字符串 |
 | :--- | :--- | :--- |
-| 00,00,00,1d | 0~3 位是 len，代表整个请求的数据包长度 | 29 |
-| 00,00,00,01 | 4~7 位是 xid，代表客户端请求的发起序号 | 1 |
-| 00,00,00,04 | 8~11 位是 type，代表客户端请求类型 | 4（代表 OpCode.getData） |
-| 00,00,00,10 | 12~15 位是 len，代表节点路径的长度 | 16（代表节点路径长度转换成十六进制是 16位） |
-| 2f,24,37,5f,32,5f,34,2f,67,65,74,5f,64,61,74,61 | 16~31 位是 path，代表节点路径 | /$7_2_4/get_data（通过比对 ASCII 码表转换成十进制即可） |
-| 01 | 32 位是 watch，代表是否注册 Watcher | 1（代表注册 Watcher） |
+| 00,00,00,1d | 0~3 位是 len, 代表整个请求的数据包长度 | 29 |
+| 00,00,00,01 | 4~7 位是 xid, 代表客户端请求的发起序号 | 1 |
+| 00,00,00,04 | 8~11 位是 type, 代表客户端请求类型 | 4(代表 OpCode.getData) |
+| 00,00,00,10 | 12~15 位是 len, 代表节点路径的长度 | 16(代表节点路径长度转换成十六进制是 16位) |
+| 2f,24,37,5f,32,5f,34,2f,67,65,74,5f,64,61,74,61 | 16~31 位是 path, 代表节点路径 | /$7_2_4/get_data(通过比对 ASCII 码表转换成十进制即可) |
+| 01 | 32 位是 watch, 代表是否注册 Watcher | 1(代表注册 Watcher) |
 
 ### 2.4.2 协议解析: 响应部分
 
@@ -386,20 +386,20 @@ module org.apache.zookeeper.proto {
 }
 ```
 
-- `xid`: 和请求头中的 xid 是一致的。
-- `zxid`: 代表 ZooKeeper 服务器上当前最新的事务 ID。
-- `err`: 错误码，有 22 种（详情查看 `org.apache.zookeeper.KeeperException.Code`），以下为部分示例:
+- `xid`: 和请求头中的 xid 是一致的.
+- `zxid`: 代表 ZooKeeper 服务器上当前最新的事务 ID.
+- `err`: 错误码, 有 22 种(详情查看 `org.apache.zookeeper.KeeperException.Code`), 以下为部分示例:
   - `Code.OK(0)`: 处理成功
   - `Code.NONODE(101)`: 节点不存在
   - `Code.NOAUTH(102)`: 没有权限
 
 > __响应体: Response__
 
-不同的 type 响应类型，响应体的结构是不同的，以下为部分示例:
+不同的 type 响应类型, 响应体的结构是不同的, 以下为部分示例:
 
 - ConnectResponse: 会话创建
 
-针对 ZooKeeper 客户端的会话创建请求，ZooKeeper 服务端会返回 ConnectResponse 响应，包含 protocolVersion（），timeOut（），sessionId（），passwd（），其数据结构在 `src/zookeeper.jute` 中定义如下:
+针对 ZooKeeper 客户端的会话创建请求, ZooKeeper 服务端会返回 ConnectResponse 响应, 包含 protocolVersion(), timeOut(), sessionId(), passwd(), 其数据结构在 `src/zookeeper.jute` 中定义如下:
 
 ```
 module org.apache.zookeeper.proto {
@@ -416,7 +416,7 @@ module org.apache.zookeeper.proto {
 
 - GetDataResponse: 获取节点数据
 
-针对 ZooKeeper 客户端的获取节点数据请求，ZooKeeper 服务端会返回 GetDataResponse 响应，包含 data（数据内容），stat（节点状态），其数据结构在 `src/zookeeper.jute` 中如下:
+针对 ZooKeeper 客户端的获取节点数据请求, ZooKeeper 服务端会返回 GetDataResponse 响应, 包含 data(数据内容), stat(节点状态), 其数据结构在 `src/zookeeper.jute` 中如下:
 ```
 module org.apache.zookeeper.proto {
     ...
@@ -430,7 +430,7 @@ module org.apache.zookeeper.proto {
 
 - SetDataResponse: 更新节点数据
 
-针对 ZooKeeper 客户端的更新节点数据请求，ZooKeeper 服务端会返回 SetDataResponse 响应，包含 stat（节点状态），其数据结构在 `src/zookeeper.jute` 中如下:
+针对 ZooKeeper 客户端的更新节点数据请求, ZooKeeper 服务端会返回 SetDataResponse 响应, 包含 stat(节点状态), 其数据结构在 `src/zookeeper.jute` 中如下:
 ```
 module org.apache.zookeeper.proto {
     ...
@@ -443,37 +443,37 @@ module org.apache.zookeeper.proto {
 
 > __响应实例__
 
-根据上文请求示例中 `获取节点数据` 的例子，针对 ZooKeeper 客户端调用 getData() 接口请求，ZooKeeper 服务端会响应结果。通过 Wireshark 可以获取到响应的网络 TCP 包: `00,00,00,63,00,00,00,05,00,00,00,00,00,00,00,04,00,00,00,00,00,00,00,0b,69,27,6b,5f,63,6f,6e,74,65,6e,74,00,00,00,00,00,00,00,04,00,00,00,00,00,00,00,04,00,00,01,43,67,bd,0e,08,00,00,01,43,67,bd,0e,08,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,0b,00,00,00,00,00,00,00,00,00,00,00,04`。以下是其表示的含义:
+根据上文请求示例中 `获取节点数据` 的例子, 针对 ZooKeeper 客户端调用 getData() 接口请求, ZooKeeper 服务端会响应结果. 通过 Wireshark 可以获取到响应的网络 TCP 包: `00,00,00,63,00,00,00,05,00,00,00,00,00,00,00,04,00,00,00,00,00,00,00,0b,69,27,6b,5f,63,6f,6e,74,65,6e,74,00,00,00,00,00,00,00,04,00,00,00,00,00,00,00,04,00,00,01,43,67,bd,0e,08,00,00,01,43,67,bd,0e,08,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,0b,00,00,00,00,00,00,00,00,00,00,00,04`. 以下是其表示的含义:
 
 | 十六进制位 | 协议部分 | 数值或字符串 |
 | :--- | :--- | :--- |
-| 00,00,00,63 | 0~3 位是 len，代表整个响应的数据包长度 | 99 |
-| 00,00,00,05 | 4~7 位是 xid，代表客户端请求的发起序号 | 5（代表本次请求是客户端会话创建后的第 5 次请求发送） |
-| 00,00,00,00,00,00,00,04 | 8~15 位是 zxid，代表当前服务端处理过第最新的 ZXID 值 | 4 |
-| 00,00,00,00 | 16~19 位是 err，代表错误码 | 0（代表 Code.OK） |
-| 00,00,00,0b | 20~23 位是 len，代表节点数据内容的长度 | 11（代表接下去的 11 位是数据内容的字节数组） |
-| 69,27,6b,5f,63,6f,6e,74,65,6e,74 | 24~34 位是 data，代表节点的数据内容 | i'm_content |
-| 00,00,00,00,00,00,00,04 | 35~42 位是 czxid，代表创建该数据节点时的 ZXID | 4 |
-| 00,00,00,00,00,00,00,04 | 43~50 位是 mzxid，代表最后一次修改该数据节点时的 ZXID | 4 |
-| 00,00,01,43,67,bd,0e,08 | 51~58 位是 ctime，代表数据节点的创建时间 | 1389014879752（即: 2014-01-06 21:27:59） |
-| 00,00,01,43,67,bd,0e,08 | 59~66 位是 mtime，代表数据节点最后一次变更的时间 | 1389014879752（即: 2014-01-06 21:27:59） |
-| 00,00,00,00 | 67~70 位是 version，代表数据节点的内容的版本号 | 0 |
-| 00,00,00,00 | 71~74 位是 cversion，代表数据节点的子节点的版本号 | 0 |
-| 00,00,00,00 | 75~78 位是 aversion，代表数据节点的 ACL 变更版本号 | 0 |
-| 00,00,00,00,00,00,00,00 | 79~86 位是 ephemeralOwner，如果该数据节点是临时节点，那么就记录创建该临时节点的会话 ID，如果是持久节点，则为 0 | 0（代表该节点是持久节点） |
-| 00,00,00,0b | 87~90 位是 dataLength，代表数据节点的数据内容长度 | 11 |
-| 00,00,00,00 | 91~94 位是 numChildren，代表数据节点的子节点个数 | 0 |
-| 00,00,00,00,00,00,00,04 | 95~102 位是 pzxid，代表最后一次对子节点列表变更的 PZXID | 4 |
+| 00,00,00,63 | 0~3 位是 len, 代表整个响应的数据包长度 | 99 |
+| 00,00,00,05 | 4~7 位是 xid, 代表客户端请求的发起序号 | 5(代表本次请求是客户端会话创建后的第 5 次请求发送) |
+| 00,00,00,00,00,00,00,04 | 8~15 位是 zxid, 代表当前服务端处理过第最新的 ZXID 值 | 4 |
+| 00,00,00,00 | 16~19 位是 err, 代表错误码 | 0(代表 Code.OK) |
+| 00,00,00,0b | 20~23 位是 len, 代表节点数据内容的长度 | 11(代表接下去的 11 位是数据内容的字节数组) |
+| 69,27,6b,5f,63,6f,6e,74,65,6e,74 | 24~34 位是 data, 代表节点的数据内容 | i'm_content |
+| 00,00,00,00,00,00,00,04 | 35~42 位是 czxid, 代表创建该数据节点时的 ZXID | 4 |
+| 00,00,00,00,00,00,00,04 | 43~50 位是 mzxid, 代表最后一次修改该数据节点时的 ZXID | 4 |
+| 00,00,01,43,67,bd,0e,08 | 51~58 位是 ctime, 代表数据节点的创建时间 | 1389014879752(即: 2014-01-06 21:27:59) |
+| 00,00,01,43,67,bd,0e,08 | 59~66 位是 mtime, 代表数据节点最后一次变更的时间 | 1389014879752(即: 2014-01-06 21:27:59) |
+| 00,00,00,00 | 67~70 位是 version, 代表数据节点的内容的版本号 | 0 |
+| 00,00,00,00 | 71~74 位是 cversion, 代表数据节点的子节点的版本号 | 0 |
+| 00,00,00,00 | 75~78 位是 aversion, 代表数据节点的 ACL 变更版本号 | 0 |
+| 00,00,00,00,00,00,00,00 | 79~86 位是 ephemeralOwner, 如果该数据节点是临时节点, 那么就记录创建该临时节点的会话 ID, 如果是持久节点, 则为 0 | 0(代表该节点是持久节点) |
+| 00,00,00,0b | 87~90 位是 dataLength, 代表数据节点的数据内容长度 | 11 |
+| 00,00,00,00 | 91~94 位是 numChildren, 代表数据节点的子节点个数 | 0 |
+| 00,00,00,00,00,00,00,04 | 95~102 位是 pzxid, 代表最后一次对子节点列表变更的 PZXID | 4 |
 
 ---
 
 # 三 客户端
 
 ZooKeeper 客户端主要由以下几个核心组件组成:
-- `ZooKeeper 实例`: 客户端的入口。
-- `ClientWatchManager`: 客户端 Watcher 管理器。
-- `HostProvider`: 客户端地址列表管理器。
-- `ClientCnxn`: 客户端核心线程，包括 `SendThread`(I/O 线程，负责客户端和服务端之间的网络 I/O 通信) 和 `EventThread`(事件线程，负责处理服务端事件) 两个线程。
+- `ZooKeeper 实例`: 客户端的入口.
+- `ClientWatchManager`: 客户端 Watcher 管理器.
+- `HostProvider`: 客户端地址列表管理器.
+- `ClientCnxn`: 客户端核心线程, 包括 `SendThread`(I/O 线程, 负责客户端和服务端之间的网络 I/O 通信) 和 `EventThread`(事件线程, 负责处理服务端事件) 两个线程.
 
 以下为 ZooKeeper 客户端构造方法:
 ```java
@@ -484,37 +484,37 @@ ZooKeeper(String connectString, int sessionTimeout, Watcher watcher, long sessio
 ```
 
 客户端初始化过程大概如下:
-- a. 设置默认 Watcher。
-- b. 设置 ZooKeeper 服务器地址列表。
-- c. 创建 ClientCnxn。
+- a. 设置默认 Watcher.
+- b. 设置 ZooKeeper 服务器地址列表.
+- c. 创建 ClientCnxn.
 
-传入 ZooKeeper 构造方法的 Watcher 对象会被保存在 ZKWatchManager 的 defaultWatcher 中，作为整个客户端会话期间的默认 Watcher。
+传入 ZooKeeper 构造方法的 Watcher 对象会被保存在 ZKWatchManager 的 defaultWatcher 中, 作为整个客户端会话期间的默认 Watcher.
 
 ## 3.1 一次会话的创建过程
 
-一次客户端会话的创建过程可以分为初始化阶段、会话创建阶段、响应处理阶段。
+一次客户端会话的创建过程可以分为初始化阶段、会话创建阶段、响应处理阶段.
 
 ### 3.1.1 初始化阶段
 
 > 1. __初始化 ZooKeeper 对象__
 
-调用构造方法实例化 ZooKeeper 对象，并创建一个客户端的 Watcher 管理器: ClientWatchManager。
+调用构造方法实例化 ZooKeeper 对象, 并创建一个客户端的 Watcher 管理器: ClientWatchManager.
 
 > 2. __设置默认 Watcher__
 
-构造方法中传入的 Watcher 对象作为 ClientWatchManager 的默认 Watcher。
+构造方法中传入的 Watcher 对象作为 ClientWatchManager 的默认 Watcher.
 
 > 3. __构造 HostProvider__
 
-构造方法中传入的服务器地址被存放在服务器地址列表管理器 HostProvider 中。
+构造方法中传入的服务器地址被存放在服务器地址列表管理器 HostProvider 中.
 
 > 4. __初始化 ClientCnxn__
 
-ZooKeeper 客户端会创建一个网络连接器 ClientCnxn，用来管理客户端和服务端的网络交互。客户端还会初始化两个核心队列 outgoingQueue(客户端的请求发送队列) 和 pendingQueue(服务端的响应等待队列)。另外，客户端还会创建 ClientCnxnSocket(ClientCnxn 的底层网络 I/O 处理器)。
+ZooKeeper 客户端会创建一个网络连接器 ClientCnxn, 用来管理客户端和服务端的网络交互. 客户端还会初始化两个核心队列 outgoingQueue(客户端的请求发送队列) 和 pendingQueue(服务端的响应等待队列). 另外, 客户端还会创建 ClientCnxnSocket(ClientCnxn 的底层网络 I/O 处理器).
 
 > 5. __初始化 SendThread 和 EventThread__
 
-客户端会创建两个核心网络线程 SendThread 和 EventThread。其中，SendThread 用于管理客户端和服务端之间的所有网络 I/O，客户端会将 ClientCnxnSocket 分配给 SendThread 作为底层网络 I/O 处理器。EventThread 用于进行客户端的事件处理，客户端会初始化 EventTread 的待处理事件队列 waitingEvents。
+客户端会创建两个核心网络线程 SendThread 和 EventThread. 其中, SendThread 用于管理客户端和服务端之间的所有网络 I/O, 客户端会将 ClientCnxnSocket 分配给 SendThread 作为底层网络 I/O 处理器. EventThread 用于进行客户端的事件处理, 客户端会初始化 EventTread 的待处理事件队列 waitingEvents.
 
 ### 3.1.2 会话创建阶段
 
@@ -522,49 +522,49 @@ ZooKeeper 客户端会创建一个网络连接器 ClientCnxn，用来管理客�
 
 > 7. __获取一个服务器地址__
 
-SendThread 从 HostProvider 中随机取出一个地址，然后委托给 ClientCnxnSocket 去创建与 ZooKeeper 服务器之间的 TCP 连接。
+SendThread 从 HostProvider 中随机取出一个地址, 然后委托给 ClientCnxnSocket 去创建与 ZooKeeper 服务器之间的 TCP 连接.
 
 > 8. __创建 TCP 连接__
 
-获取到服务器地址后，ClientCnxnSocket 负责和服务器创建一个 TCP 长连接。
+获取到服务器地址后, ClientCnxnSocket 负责和服务器创建一个 TCP 长连接.
 
 > 9. __构造 ConnectRequest 请求__
 
-创建完客户端和服务器之间的 Socket 连接后，SendThread 根据当前情况构造出一个 ConnectRequest 请求并将该请求包装成 Packet 对象，放入请求发送队列 outgoingQueue 中，试图与服务端创建一个会话。
+创建完客户端和服务器之间的 Socket 连接后, SendThread 根据当前情况构造出一个 ConnectRequest 请求并将该请求包装成 Packet 对象, 放入请求发送队列 outgoingQueue 中, 试图与服务端创建一个会话.
 
 > 10. __发送请求__
 
-当客户端请求准备完毕后。ClientCnxnSocket 从 outgoingQueue 中取出一个待发送的 Packet 对象，将其序列化成 ByteBuffer 后，发送到服务端。
+当客户端请求准备完毕后. ClientCnxnSocket 从 outgoingQueue 中取出一个待发送的 Packet 对象, 将其序列化成 ByteBuffer 后, 发送到服务端.
 
 ### 3.1.3 响应处理阶段
 
 > 11. __接收服务端响应__
 
-ClientCnxnSocket 接收到服务端的响应后，判断当前客户端是否已经初始化完毕，如果未完成初始化，就认为该响应一定是会话创建请求的响应，直接交由 readConnectResult 方法来处理。
+ClientCnxnSocket 接收到服务端的响应后, 判断当前客户端是否已经初始化完毕, 如果未完成初始化, 就认为该响应一定是会话创建请求的响应, 直接交由 readConnectResult 方法来处理.
 
 > 12. __处理 Response__
 
-ClientCnxnSocket 将接收到的服务端响应反序列化，得到 ConnectResponse 对象，并从中获取到 ZooKeeper 服务端分配的会话 sessionId。
+ClientCnxnSocket 将接收到的服务端响应反序列化, 得到 ConnectResponse 对象, 并从中获取到 ZooKeeper 服务端分配的会话 sessionId.
 
 > 13. __连接成功__
 
-连接成功后，一方面通知 SendThread 线程，进一步对客户端进行会话参数(readTimeout 和 connectTimeout 等)设置并更新客户端状态。另一方面，将当前成功连接的服务器地址通知给 HostProvider 地址管理器。
+连接成功后, 一方面通知 SendThread 线程, 进一步对客户端进行会话参数(readTimeout 和 connectTimeout 等)设置并更新客户端状态.另一方面, 将当前成功连接的服务器地址通知给 HostProvider 地址管理器.
 
 > 14. __生成事件 SyncConnected-None__
 
-为了让上层应用感知到会话已创建成功，SendThread 会生成一个 SyncConnected-None 事件，将该事件传递给 EventThread 线程。
+为了让上层应用感知到会话已创建成功, SendThread 会生成一个 SyncConnected-None 事件, 将该事件传递给 EventThread 线程.
 
 > 15. __查询 Watcher__
 
-EventThread 线程接收到该事件后，从 ClientWatchManager 管理器中查询出对应的 Watcher(针对 SyncConnected-None 事件，对应默认 Watcher)，然后将其放到 EventThread 的 waitingEvents 队列中。
+EventThread 线程接收到该事件后, 从 ClientWatchManager 管理器中查询出对应的 Watcher(针对 SyncConnected-None 事件, 对应默认 Watcher), 然后将其放到 EventThread 的 waitingEvents 队列中.
 
 > 16. __处理事件__
 
-EventThread 线程不断地从 waitingEvents 队列中取出待处理的 Watcher 对象，然后调用该对象的 process 接口方法，以达到触发 Watcher 的目的。
+EventThread 线程不断地从 waitingEvents 队列中取出待处理的 Watcher 对象, 然后调用该对象的 process 接口方法, 以达到触发 Watcher 的目的.
 
 ## 3.2 服务器地址列表
 
-ZooKeeper 客户端接收到 connectString 参数如 `192.168.0.1:2181,192.168.0.2:2181,192.168.0.3:2181` 后，会将其放入 ConnectStringParser 对象中，该类基本结构如下:
+ZooKeeper 客户端接收到 connectString 参数如 `192.168.0.1:2181,192.168.0.2:2181,192.168.0.3:2181` 后, 会将其放入 ConnectStringParser 对象中, 该类基本结构如下:
 ```java
 public final class ConnectStringParser {
     private final String chrootPath;
@@ -574,16 +574,16 @@ public final class ConnectStringParser {
 
 ### 3.2.1 Chroot: 客户端隔离命名空间
 
-如果一个 ZooKeeper 客户端设置了 Chroot，那么该客户端对服务端的所有操作，都会被限制在自己的命名空间下。通过设置 Chroot，能够将一个客户端与服务端的一棵子树对应，可以实现不同应用之间的相互隔离。
+如果一个 ZooKeeper 客户端设置了 Chroot, 那么该客户端对服务端的所有操作, 都会被限制在自己的命名空间下. 通过设置 Chroot, 能够将一个客户端与服务端的一棵子树对应, 可以实现不同应用之间的相互隔离.
 
-通过在 connectString 中添加后缀实现，如下:
+通过在 connectString 中添加后缀实现, 如下:
 ```
 192.168.0.1:2181,192.168.0.2:2181,192.168.0.3:2181/apps/X
 ```
 
 ### 3.2.2 HostProvider: 地址列表管理器
 
-ConnectStringParser 对象中的 serverAddresses 属性封装了客户端的服务器地址列表，该地址列表会被进一步封装到 HostProvider 接口的实现类 StaticHostProvider 中。
+ConnectStringParser 对象中的 serverAddresses 属性封装了客户端的服务器地址列表, 该地址列表会被进一步封装到 HostProvider 接口的实现类 StaticHostProvider 中.
 
 以下为 HostProvider 接口:
 ```java
