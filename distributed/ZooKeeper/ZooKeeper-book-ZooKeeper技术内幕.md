@@ -504,7 +504,7 @@ ZooKeeper(String connectString, int sessionTimeout, Watcher watcher, long sessio
 
 构造方法中传入的 Watcher 对象作为 ClientWatchManager 的默认 Watcher。
 
-> 3. __构造 HostProvider>__
+> 3. __构造 HostProvider__
 
 构造方法中传入的服务器地址被存放在服务器地址列表管理器 HostProvider 中。
 
@@ -520,12 +520,87 @@ ZooKeeper 客户端会创建一个网络连接器 ClientCnxn，用来管理客�
 
 > 6. __启动 SendThread 和 EventThread__
 
+> 7. __获取一个服务器地址__
 
+SendThread 从 HostProvider 中随机取出一个地址，然后委托给 ClientCnxnSocket 去创建与 ZooKeeper 服务器之间的 TCP 连接。
+
+> 8. __创建 TCP 连接__
+
+获取到服务器地址后，ClientCnxnSocket 负责和服务器创建一个 TCP 长连接。
+
+> 9. __构造 ConnectRequest 请求__
+
+创建完客户端和服务器之间的 Socket 连接后，SendThread 根据当前情况构造出一个 ConnectRequest 请求并将该请求包装成 Packet 对象，放入请求发送队列 outgoingQueue 中，试图与服务端创建一个会话。
+
+> 10. __发送请求__
+
+当客户端请求准备完毕后。ClientCnxnSocket 从 outgoingQueue 中取出一个待发送的 Packet 对象，将其序列化成 ByteBuffer 后，发送到服务端。
 
 ### 3.1.3 响应处理阶段
 
+> 11. __接收服务端响应__
+
+ClientCnxnSocket 接收到服务端的响应后，判断当前客户端是否已经初始化完毕，如果未完成初始化，就认为该响应一定是会话创建请求的响应，直接交由 readConnectResult 方法来处理。
+
+> 12. __处理 Response__
+
+ClientCnxnSocket 将接收到的服务端响应反序列化，得到 ConnectResponse 对象，并从中获取到 ZooKeeper 服务端分配的会话 sessionId。
+
+> 13. __连接成功__
+
+连接成功后，一方面通知 SendThread 线程，进一步对客户端进行会话参数(readTimeout 和 connectTimeout 等)设置并更新客户端状态。另一方面，将当前成功连接的服务器地址通知给 HostProvider 地址管理器。
+
+> 14. __生成事件 SyncConnected-None__
+
+为了让上层应用感知到会话已创建成功，SendThread 会生成一个 SyncConnected-None 事件，将该事件传递给 EventThread 线程。
+
+> 15. __查询 Watcher__
+
+EventThread 线程接收到该事件后，从 ClientWatchManager 管理器中查询出对应的 Watcher(针对 SyncConnected-None 事件，对应默认 Watcher)，然后将其放到 EventThread 的 waitingEvents 队列中。
+
+> 16. __处理事件__
+
+EventThread 线程不断地从 waitingEvents 队列中取出待处理的 Watcher 对象，然后调用该对象的 process 接口方法，以达到触发 Watcher 的目的。
 
 ## 3.2 服务器地址列表
+
+ZooKeeper 客户端接收到 connectString 参数如 `192.168.0.1:2181,192.168.0.2:2181,192.168.0.3:2181` 后，会将其放入 ConnectStringParser 对象中，该类基本结构如下:
+```java
+public final class ConnectStringParser {
+    private final String chrootPath;
+    private final ArrayList<InetSocketAddress> serverAddresses = new ArrayList<InetSocketAddress>();
+}
+```
+
+### 3.2.1 Chroot: 客户端隔离命名空间
+
+如果一个 ZooKeeper 客户端设置了 Chroot，那么该客户端对服务端的所有操作，都会被限制在自己的命名空间下。通过设置 Chroot，能够将一个客户端与服务端的一棵子树对应，可以实现不同应用之间的相互隔离。
+
+通过在 connectString 中添加后缀实现，如下:
+```
+192.168.0.1:2181,192.168.0.2:2181,192.168.0.3:2181/apps/X
+```
+
+### 3.2.2 HostProvider: 地址列表管理器
+
+ConnectStringParser 对象中的 serverAddresses 属性封装了客户端的服务器地址列表，该地址列表会被进一步封装到 HostProvider 接口的实现类 StaticHostProvider 中。
+
+以下为 HostProvider 接口:
+```java
+public interface HostProvider {
+    public int size();
+    public InetSocketAddress next(long spinDelay);
+    public void onConnected();
+}
+```
+
+- size(): 该方法用于返回当前服务器地址列表的个数.
+- next(long spinDelay): 该方法用于返回一个服务器地址 InetSocketAddress, 以便客户端便于连接服务器.
+- onConnected(): 回调方法, 如果客户端与服务端成功连接, 通过该方法通知 HostProvider.
+
+### 3.2.3 StaticHostProvider
+
+
 
 ## 3.3 ClientCnxn: 网络 I/O
 
