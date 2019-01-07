@@ -1,4 +1,10 @@
 
+# Document & Code
+
+- [Linux工具快速教程](https://linuxtools-rst.readthedocs.io/zh_CN/latest/index.html)
+
+---
+
 # 端口
 
 ## 查看端口是否被占用
@@ -132,3 +138,72 @@ xz -zk Dir
 enca file
 ```
 
+# crontab
+
+- [crontab 定时任务](https://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/crontab.html)
+
+## 注意事项
+
+因为 crontab 调用脚本和用户手动执行脚本的环境不一样，可能导致 crontab 执行脚本失败。所以脚本中需要保证环境变量被正确引入。
+
+## 案例
+
+每 1 分钟执行一次 myCommand:
+```
+* * * * * myCommand
+```
+
+每小时的第 3 和第 15 分钟执行:
+```
+3,15 * * * * myCommand
+```
+
+在上午 8 点到 11 点的第 3 和第 15 分钟执行:
+```
+3,15 8-11 * * * myCommand
+```
+
+每隔两天的上午8点到11点的第3和第15分钟执行:
+```
+3,15 8-11 */2  *  * myCommand
+```
+
+每周一上午8点到11点的第3和第15分钟执行:
+```
+3,15 8-11 * * 1 myCommand
+```
+
+每晚的 21:30 重启 smb:
+```
+30 21 * * * /etc/init.d/smb restart
+```
+
+每月 1、10、22 日的 4:45 重启 smb:
+```
+45 4 1,10,22 * * /etc/init.d/smb restart
+```
+
+每周六、周日的 1:10 重启 smb
+```
+10 1 * * 6,0 /etc/init.d/smb restart
+```
+
+每天 18:00 至 23:00 之间每隔 30 分钟重启 smb:
+```
+0,30 18-23 * * * /etc/init.d/smb restart
+```
+
+每星期六的晚上 11:00 pm 重启 smb:
+```
+0 23 * * 6 /etc/init.d/smb restart
+```
+
+每一小时重启 smb
+```
+* */1 * * * /etc/init.d/smb restart
+```
+
+晚上 11 点到早上 7 点之间，每隔一小时重启 smb:
+```
+0 23-7 * * * /etc/init.d/smb restart
+```
