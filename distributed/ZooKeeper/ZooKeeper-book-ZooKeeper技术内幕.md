@@ -470,10 +470,10 @@ module org.apache.zookeeper.proto {
 # 三 客户端
 
 ZooKeeper 客户端主要由以下几个核心组件组成:
-- ZooKeeper 实例: 客户端的入口。
-- ClientWatchManager: 客户端 Watcher 管理器。
-- HostProvider: 客户端地址列表管理器。
-- ClientCnxn: 客户端核心线程，包括 `SendThread`(I/O 线程，负责客户端和服务端之间的网络 I/O 通信) 和 `EventThread`(事件线程，负责处理服务端事件) 两个线程。
+- `ZooKeeper 实例`: 客户端的入口。
+- `ClientWatchManager`: 客户端 Watcher 管理器。
+- `HostProvider`: 客户端地址列表管理器。
+- `ClientCnxn`: 客户端核心线程，包括 `SendThread`(I/O 线程，负责客户端和服务端之间的网络 I/O 通信) 和 `EventThread`(事件线程，负责处理服务端事件) 两个线程。
 
 以下为 ZooKeeper 客户端构造方法:
 ```java
@@ -492,6 +492,20 @@ ZooKeeper(String connectString, int sessionTimeout, Watcher watcher, long sessio
 
 ## 3.1 一次会话的创建过程
 
+一次客户端会话的创建过程可以分为初始化阶段、会话创建阶段、响应处理阶段。
+
+### 3.1.1 初始化阶段
+
+- a. 初始化 ZooKeeper 对象: 调用构造方法实例化 ZooKeeper 对象，并创建一个客户端的 Watcher 管理器: ClientWatchManager。
+- b. 设置默认 Watcher: 构造方法中传入的 Watcher 对象作为 ClientWatchManager 的默认 Watcher。
+- c. 构造 HostProvider: 构造方法中传入的服务器地址被存放在服务器地址列表管理器 HostProvider 中。
+- d. 初始化 ClientCnxn: ZooKeeper 客户端会创建一个网络连接器 ClientCnxn，用来管理客户端和服务端的网络交互。客户端还会初始化两个核心队列 outgoingQueue(客户端的请求发送队列) 和 pendingQueue(服务端的响应等待队列)。另外，客户端还会创建 ClientCnxnSocket(ClientCnxn 的底层网络 I/O 处理器)。
+- e. 初始化 SendThread 和 EventThread: 客户端会创建两个核心网络线程 SendThread 和 EventThread。其中，SendThread 用于管理客户端和服务端之间的所有网络 I/O，客户端会将 ClientCnxnSocket 分配给 SendThread 作为底层网络 I/O 处理器。EventThread 用于进行客户端的事件处理，客户端会初始化 EventTread 的待处理事件队列 waitingEvents。
+
+### 3.1.2 会话创建阶段
+
+
+### 3.1.3 响应处理阶段
 
 
 ## 3.2 服务器地址列表
