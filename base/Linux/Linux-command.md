@@ -144,7 +144,20 @@ enca file
 
 ## 注意事项
 
-因为 crontab 调用脚本和用户手动执行脚本的环境不一样，可能导致 crontab 执行脚本失败。所以脚本中需要保证环境变量被正确引入。
+因为 crontab 调用脚本和用户手动执行脚本的环境不一样，可能导致 crontab 执行脚本失败。所以脚本中需要保证环境变量被正确引入，如:
+```shell
+#!/bin/sh
+
+# source /etc/profile
+
+export CURATOR_HOME=/home/user/.local
+export PATH=$CURATOR_HOME/bin:$PATH
+
+today=`date +"%Y-%m-%d"`
+export logfile_today=/home/user/app/curator/alias-$today.log
+
+curator --config /home/user/app/curator/curator.yml /home/user/app/curator/action.yml
+```
 
 ## 案例
 
