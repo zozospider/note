@@ -146,7 +146,7 @@ enca file
 
 因为 crontab 调用脚本和用户手动执行脚本的环境不一样，可能导致 crontab 执行脚本失败。所以脚本中需要保证环境变量被正确引入。
 
-如下，curator 执行的环境变量需要在脚本中指定 `export CURATOR_HOME=xxx`，另外 `curator.yml` 中调用了 `logfile_today` 环境变量，也需要在脚本中指定 `export logfile_today=xxx`:
+如下，curator 执行的环境变量需要在脚本中通过 `export CURATOR_HOME=xxx` 指定，另外 `curator.yml` 中调用了 `logfile_today` 环境变量，也需要在脚本中通过 `export logfile_today=xxx` 指定:
 ```shell
 #!/bin/sh
 
