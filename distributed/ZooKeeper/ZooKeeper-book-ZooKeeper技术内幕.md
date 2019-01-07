@@ -133,13 +133,13 @@ ZooKeeper 对数据的操作权限分为以下五类:
 
 ZooKeeper 允许开发人员对权限进行扩展，通过自定义和注册两个步骤完成。
 
-- - __自定义权限控制器__
+> __自定义权限控制器__
 
 自定义 `CustomAuthenticationProvider` 实现 ZooKeeper 的标准权限控制器 `AuthenticationProvider` 即可。
 
 ZooKeeper 自带的 `DigestAuthenticationProvider` 和 `IPAuthenticationProvider` 也是基于该接口实现。
 
-- - - __注册自定义权限控制器__
+> __注册自定义权限控制器__
 
 将自定义的权限控制器注册到 ZooKeeper 服务器中，支持以下两种方式注册:
 - 系统属性: 在 ZooKeeper 启动参数重配置 `-Dzookeeper.authProvider.1=com.zkbook.CustomAuthenticationProvider`。
@@ -496,29 +496,29 @@ ZooKeeper(String connectString, int sessionTimeout, Watcher watcher, long sessio
 
 ### 3.1.1 初始化阶段
 
-- a. 初始化 ZooKeeper 对象
+> 1. __初始化 ZooKeeper 对象__
 
 调用构造方法实例化 ZooKeeper 对象，并创建一个客户端的 Watcher 管理器: ClientWatchManager。
 
-- b. 设置默认 Watcher
+> 2. __设置默认 Watcher__
 
 构造方法中传入的 Watcher 对象作为 ClientWatchManager 的默认 Watcher。
 
-- c. 构造 HostProvider
+> 3. __构造 HostProvider>__
 
 构造方法中传入的服务器地址被存放在服务器地址列表管理器 HostProvider 中。
 
-- d. 初始化 ClientCnxn
+> 4. __初始化 ClientCnxn__
 
 ZooKeeper 客户端会创建一个网络连接器 ClientCnxn，用来管理客户端和服务端的网络交互。客户端还会初始化两个核心队列 outgoingQueue(客户端的请求发送队列) 和 pendingQueue(服务端的响应等待队列)。另外，客户端还会创建 ClientCnxnSocket(ClientCnxn 的底层网络 I/O 处理器)。
 
-- e. 初始化 SendThread 和 EventThread
+> 5. __初始化 SendThread 和 EventThread__
 
 客户端会创建两个核心网络线程 SendThread 和 EventThread。其中，SendThread 用于管理客户端和服务端之间的所有网络 I/O，客户端会将 ClientCnxnSocket 分配给 SendThread 作为底层网络 I/O 处理器。EventThread 用于进行客户端的事件处理，客户端会初始化 EventTread 的待处理事件队列 waitingEvents。
 
 ### 3.1.2 会话创建阶段
 
-- f. 启动 SendThread 和 EventThread
+> 6. __启动 SendThread 和 EventThread__
 
 
 
