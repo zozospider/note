@@ -469,7 +469,30 @@ module org.apache.zookeeper.proto {
 
 # 三 客户端
 
+ZooKeeper 客户端主要由以下几个核心组件组成:
+- ZooKeeper 实例: 客户端的入口。
+- ClientWatchManager: 客户端 Watcher 管理器。
+- HostProvider: 客户端地址列表管理器。
+- ClientCnxn: 客户端核心线程，包括 `SendThread`(I/O 线程，负责客户端和服务端之间的网络 I/O 通信) 和 `EventThread`(事件线程，负责处理服务端事件) 两个线程。
+
+以下为 ZooKeeper 客户端构造方法:
+```java
+ZooKeeper(String connectString, int sessionTimeout, Watcher watcher);
+ZooKeeper(String connectString, int sessionTimeout, Watcher watcher, boolean canBeReadOnly);
+ZooKeeper(String connectString, int sessionTimeout, Watcher watcher, long sessionId, byte[] sessionPasswd);
+ZooKeeper(String connectString, int sessionTimeout, Watcher watcher, long sessionId, byte[] sessionPasswd, boolean canBeReadOnly);
+```
+
+客户端初始化过程大概如下:
+- a. 设置默认 Watcher。
+- b. 设置 ZooKeeper 服务器地址列表。
+- c. 创建 ClientCnxn。
+
+传入 ZooKeeper 构造方法的 Watcher 对象会被保存在 ZKWatchManager 的 defaultWatcher 中，作为整个客户端会话期间的默认 Watcher。
+
 ## 3.1 一次会话的创建过程
+
+
 
 ## 3.2 服务器地址列表
 
