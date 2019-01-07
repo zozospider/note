@@ -99,8 +99,8 @@
 * Redis
 * Elasticsearch
 * MongoDB
-* HBase
 * Hadoop HDFS
+* HBase
 
 ## stream
 * Kafka
