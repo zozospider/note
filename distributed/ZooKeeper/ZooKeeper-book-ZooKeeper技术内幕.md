@@ -720,6 +720,23 @@ EventThread 内部有一个 waitingEvents 队列, 临时存放需要被触发的
 
 ### 3.3.5 ClientCnxnSocket
 
+ClientCnxnSocket 定义了底层 Socket 通信的接口.
+
+可通过在 zookeeper.clientCnxnSocket 系统变量中配置 ClientCnxnSocket 实现类的全类名, 如 `-Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNIO`. 默认实现是使用 Java 原生 NIO 接口的 `ClientCnxnSocketNIO`.
+
+> __请求发送__
+
+从 outgoingQueue 队列中提取出一个可发送的 Packet 对象, 同时生成一个客户端请求序号 XID 并将其设置到 Packet 对象中, 然后将其序列化后进行发送. 请求发送完毕后, 立即将该 Packet 保存到 pendingQueue 队列中, 等待服务端响应后进行处理.
+
+> __响应接收__
+
+客户端收到来自服务端的响应后, 根据不同客户端请求类型, 进行不同处理, 如下:
+- 如果当前客户端尚未进行初始化, 说明当前客户端和服务端之间正在进行会话创建, 那么就将收到的 ByteBuffer 序列化成 ConnectResponse 对象.
+- 如果当前客户端处于正常会话周期, 且收到的服务端响应是一个事件, 那么客户端会将收到的 ByteBuffer 序列化成 WatcherEvent 对象, 并将该事件放入待处理队列中.
+- 如果是一个常规的请求响应(Create, GetData, Exist 等), 那么会从 pendingQueue 队列中取出一个 Packet 来进行处理. 客户端首先会检测服务端响应中包含的 XID 值来确保请求处理的顺序性, 然后将收到的 ByteBuffer 序列化成相应的 Response 对象.
+
+最后, 在 finishPacket 方法中处理 Watcher 注册等逻辑.
+
 ---
 
 # 四 会话
