@@ -833,19 +833,19 @@ ExpirationTime = (1370907015000 / 2000 + 1) * 2000 = 1370907017000
 
 服务端会不断接收来自客户端的心跳, 并且需要重新激活对应的客户端会话, 激活过程称为 TouchSession, TouchSession 主要流程如下:
 
-- 1. 检测该会话是否已关闭.
+- a. 检测该会话是否已关闭.
 
 Leader 会检测该会话是否已经关闭, 如果关闭, 那么不再继续激活该会话.
 
-- 2. 计算该会话新的超时时间 ExpirationTime_New.
+- b. 计算该会话新的超时时间 ExpirationTime_New.
 
 如果会话未关闭, 那么需要使用上述公式计算出该会话下一次超时时间点 ExpirationTime_New, 并根据该时间定位到其所在的区块.
 
-- 3. 定位该会话当前的区块.
+- c. 定位该会话当前的区块.
 
 获取该会话老的超时时间点 ExpirationTime_Old, 并根据该时间定位到其所在的区块.
 
-- 4. 迁移会话.
+- d. 迁移会话.
 
 将会话从老的区块中取出, 放入新的区块中.
 
@@ -869,33 +869,33 @@ SessionTracker 中有一个单独的线程负责会话超时检查, 称为 "超�
 
 当 SessionTracker 整理出已经过期的会话后, 需要对会话进行清理, 步骤如下:
 
-- 1. 会话状态标记为 "已关闭"
+- a. 会话状态标记为 "已关闭"
 
 SessionTracker 首先将会话的 isClosing 标记为 true, 保证在会话清理期间不会再处理接收到的该客户端的新请求.
 
-- 2. 发起 "会话关闭" 请求
+- b. 发起 "会话关闭" 请求
 
 提交 "会话关闭" 请求, 交付给 PrepRequestProcessor 处理器进行处理.
 
-- 3. 收集需要清理的临时节点
+- c. 收集需要清理的临时节点
 
 一旦某个会话失效, 那么和该会话相关的临时节点(EPHEMERAL)都需要被一并清除.
 
 因为每个会话都单独保存了一份由该会话维护的所有临时节点集合在 ZooKeeper 内存数据库中, 因此清理时, 只需要根据 sessionID 就可以拿到这份临时节点列表.
 
-- 4. 添加 "节点删除" 事务变更
+- d. 添加 "节点删除" 事务变更
 
 收集到所有临时节点后, ZooKeeper 会将这些临时节点逐个转换成 "节点删除" 请求, 并放入事务变更队列 outstandingChanges 中.
 
-- 5. 删除临时节点
+- e. 删除临时节点
 
 FinalRequestProcessor 处理器会触发内存数据库, 删除该会话对应的所有临时节点.
 
-- 6. 移除会话
+- f. 移除会话
 
 节点删除后, 需要将会话从 SessionTracker 内部(即 sessionsById, sessionsWithTimeout, sessionsSets) 移除.
 
-- 7. 关闭 NIOServerCnxn
+- g. 关闭 NIOServerCnxn
 
 最后, 从 NIOServerCnxnFactory 中找到该会话对应的 NIOServerCnxn, 将其关闭.
 
