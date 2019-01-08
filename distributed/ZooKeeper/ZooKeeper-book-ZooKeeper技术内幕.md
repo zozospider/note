@@ -741,7 +741,11 @@ ClientCnxnSocket 定义了底层 Socket 通信的接口.
 
 # 四 会话
 
+ZooKeeper 的连接与会话就是客户端通过实例化 ZooKeeper 对象来实现客户端与服务器创建并保持 TCP 连接的过程.
+
 ## 4.1 会话状态
+
+
 
 ## 4.2 会话创建
 
