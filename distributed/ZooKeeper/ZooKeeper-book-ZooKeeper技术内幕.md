@@ -901,6 +901,34 @@ FinalRequestProcessor 处理器会触发内存数据库, 删除该会话对应�
 
 ## 4.5 重连
 
+ZooKeeper 客户端和服务端维持的是一个长连接, 在 sessionTimeout 时间内, 服务端会不断检测客户端是否处于正常连接(客户端的每一次操作触发会话激活).
+
+然而, 当客户端与服务端由于网络故障断开连接后, 客户端可能会出现以下异常:
+- `CONNECTION_LOSS`: 连接断开
+- `SESSION_EXPIRED`: 会话失效
+
+### 4.5.1 连接断开: CONNECTION_LOSS
+
+因为网络闪断或服务器故障导致连接断开, 此时, ZooKeeper 客户端会自动从地址列表中重新逐个选取新的地址尝试重新连接.
+
+假设某应用使用 ZooKeeper 客户端进行 setData() 操作时出现 CONNECTION_LOSS 现象, 那么客户端会接收到 None-Disconnected 通知, 同时会抛出 `org.apache.zookeeper.KeeperException.ConnectionLossException` 异常. 因此, 应用应该捕获 ConnectionLossException 异常, 等待客户端自动重连.
+
+客户端重连成功后, 会接收到 None-SyncConnected 通知.
+
+### 4.5.2 会话失效: SESSION_EXPIRED
+
+会话失效一般发生在 CONNECTION_LOSS 情况, 由于重连时间过长, 超过了 sessionTimeout(会话超时时间), 服务器认为该会话已经结束并进行了会话清理.
+
+客户端此时重新连接服务器, 会被服务器告知 SESSION_EXPIRED(会话失效), 在这种情况下, 应用需要重新实例化一个 ZooKeeper 对象.
+
+### 4.5.3 会话转移: SESSION_MOVED
+
+会话转移是指客户端会话从一台服务器转移到另一台服务器.
+
+假设客户端和服务器 S1 出现连接断开后, 成功重连了新的服务器 S2 并延续了有效会话, 那么就说明会话从 S1 转移到了 S2.
+
+服务端在处理客户端请求时, 会首先检查会话的 Owner(所有者), 如果 Owner 不是当前服务器, 会抛出 SessionMovedException 异常. 这样做是为了避免会话转移过程中的事务问题(在极端情况下, 如果客户端C1 与服务器 S1 建立连接, 某一时刻, C1 向 S1 发送了请求 R1: setData('/session', 1), 但是在请求到达前, 连接断开, 在很短时间内, C1 重新连接上服务器 S2, C1 向 S2 发送请求 R2: setData('/session', 1), 此时 S2 正常处理. 但是 R1 最终到达 S1 并被 S1 处理, 就出现了 R2 请求被 R1 请求覆盖的情况).
+
 ---
 
 # 五 服务器启动
