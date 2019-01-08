@@ -745,7 +745,13 @@ ZooKeeper 的连接与会话就是客户端通过实例化 ZooKeeper 对象来�
 
 ## 4.1 会话状态
 
+ZooKeeper 会话状态可分为: CONNECTING, CONNECTED, CLOSE. 以下为不同场景下的会话状态:
 
+- 客户端创建 ZooKeeper 对象, 客户端状态此时变成 CONNECTING.
+- 客户端成功连接上服务器,  客户端状态此时变成 CONNECTED.
+- 客户端与服务端出现连接断开, 客户端会自动重连, 客户端状态此时变成 CONNECTING.
+- 客户端再次成功连接上服务器,  客户端状态此时变成 CONNECTED.
+- 如果出现会话超时, 权限检查失败, 客户端主动退出等情况, 客户端状态此时变成 CLOSE.
 
 ## 4.2 会话创建
 
