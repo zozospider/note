@@ -755,7 +755,83 @@ ZooKeeper 会话状态可分为: CONNECTING, CONNECTED, CLOSE. 以下为不同�
 
 ## 4.2 会话创建
 
+### 4.2.1 Session
+
+Session 是 ZooKeeper 中的会话实体, 代表了一个客户端会话. 包括以下基本属性:
+- `sessionID`: 会话 ID, 用来唯一标识一个会话, ZooKeeper 会为每个会话创建一个全局唯一的 sessionID.
+- `TimeOut`: 会话超时时间, 可配置. 客户端向服务器发送这个超时时间后, 服务器会根据自己的超时时间限制最终确定会话的超时时间.
+- `TickTime`: 下次会话超时时间点, 用于 "分桶策略" 管理中, ZooKeeper 会为每个会话标记一个下次会话超时时间点. TickTime 是 13 位的 long 型整数, 其值接近但不完全等于 TimeOut.
+- `isClosing`: 标记一个会话是否关闭. 当服务端检测到某个会话已经超时失效时, 会将该会话 isClosing 标记为关闭, 确保不再处理该会话的新请求.
+
+### 4.2.2 sessionID
+
+`SessionTracker`(ZooKeeper 服务端会话管理器) 初始化时, 会调用 initializeNextSession() 方法来生成一个初始化 sessionID, 后续会在该 sessionID 基础上为每个会话进行分配.
+
+以下为 `SessionTrackerImpl` 初始化 sessionID 代码逻辑:
+```java
+public static long initializeNextSession(long id) {
+    long nextSid = 0;
+    nextSid = (Time.currentElapsedTime() << 24) >>> 8;
+    nextSid =  nextSid | (id <<56);
+    return nextSid;
+}
+```
+
+该代码逻辑的简单解释如下:
+- a. 获取当前时间的毫秒表示.
+- b. 左移 24 位.
+- c. 无符号右移 8 位.
+- d. 添加机器标识: SID.
+- e. 将步骤 c 和 d 得到的两个 64 位标识的数值进行 `|` 操作.
+
+经过上述算法计算后, 可得到一个单机唯一的序列号. 该算法可概括为: 高 8 位确定了所在机器, 后 56 位使用当前时间的毫秒表示进行随机.
+
+### 4.2.3 SessionTracker
+
+SessionTracker 是 ZooKeeper 服务端的会话管理器, 负责会话的创建, 管理, 清理等工作.
+
+每个会话在 SessionTracker 内部都保留了如下内容:
+- `sessionsById`: 是一个 HashMap<Long, SessionImpl> 类型的数据结构, 根据 sessionID 来管理 Session 实体.
+- `sessionsWithTimeout`: 是一个 ConcurrentHashMap<Long, Integer> 类型的数据结构, 根据 sessionID 来管理会话超时时间.
+- `sessionSets`: 是一个 HashMap<Long, SessionSet> 类型的数据结构, 根据下次会话超时时间点来归档会话, 便于进行会话管理和超时检查.
+
+### 4.2.4 创建连接
+
+客户端发起 "会话创建" 请求后, 服务端的处理可分为四大步骤:
+- 处理 `ConnectRequest` 请求
+- 会话创建
+- 处理器链路处理
+- 会话响应
+
 ## 4.3 会话管理
+
+### 4.3.1 分桶策略
+
+SessionTracker 采用了 "分桶策略" 进行 ZooKeeper 的会话管理. 分桶策略是指将类似的会话放在同一区块中管理, 便于进行不同区块的隔离处理和同一区块的统一处理. ZooKeeper 通过每个会话的 ExpirationTime, 将所有会话分配在不同的区块中.
+
+ExpirationTime 表示该会话最佳一次可能超时的时间点, 计算方式如下:
+```
+ExpirationTime_ = CurrentTime + SessionTimeout
+ExpirationTime = (ExpirationTime_ / ExpirationInterval + 1) * ExpirationInterval
+```
+
+- `CurrentTime`: 当前时间(毫秒).
+- `SessionTimeout`: 会话设置的超时时间(毫秒).
+- `ExpirationInterval`: Leader 服务器在运行期间定时进行会话超时检查的时间间隔(毫秒), 默认值是 tickTime 值(2000).
+
+假设当前时间毫秒表示为 1370907000000, 客户端会话超时时间为 15000 毫秒, 服务器设置的 tickTime 为 2000 毫秒(即 ExpirationInterval 也为 2000 毫秒), 那么计算出的 ExpirationTime 值如下:
+```
+ExpirationTime_ = 1370907000000 + 15000 = 1370907015000
+ExpirationTime = (1370907015000 / 2000 + 1) * 2000 = 1370907017000
+```
+
+即 ExpirationTime 的值总是 ExpirationInterval 的整数倍.
+
+### 4.3.2 会话激活
+
+
+
+### 4.3.3 会话超时检查
 
 ## 4.4 会话清理
 
