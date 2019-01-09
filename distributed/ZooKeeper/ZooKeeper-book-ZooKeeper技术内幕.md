@@ -89,15 +89,15 @@ ZooKeeper 使用 `数据节点`, 称为 `ZNode`, 是 ZooKeeper 中数据的最�
 
 ## 1.2 节点特性
 
-ZooKeeper 的每个数据节点都是有生命周期的, 节点类型可分为: 持久节点(`PERSISTENT`), 临时节点(`EPHEMERAL`), 顺序节点(`SEQUENTIAL`). 可生成以下四种组合类型:
-- 持久节点(`PERSISTENT`): 是指数据节点被创建后, 会一直存在 ZooKeeper 服务器上, 直到有主动删除操作.
-- 持久顺序节点(`PERSISTENT_SEQUENTIAL`): 在持久节点基础上增加顺序性. 创建子节点的时候, 可以设置一个顺序标记, 在创建时, ZooKeeper 会自动为给定节点加上一个数字后缀(上限是整型的最大值), 作为一个新的, 完整的节点名.
-- 临时节点(`EPHEMERAL`): 生命周期和客户端会话绑定, 如果客户端会话失效, 节点会自动清理.ZooKeeper 规定了临时节点只能作为叶子节点(不能基于临时节点来创建子节点).
-- 临时顺序节点(`EPHEMERAL_SEQUENTIAL`): 在临时节点基础上增加顺序性.
+ZooKeeper 的每个数据节点都是有生命周期的, 节点类型可分为: 持久节点 (`PERSISTENT`), 临时节点 (`EPHEMERAL`), 顺序节点 (`SEQUENTIAL`). 可生成以下四种组合类型:
+- 持久节点 (`PERSISTENT`): 是指数据节点被创建后, 会一直存在 ZooKeeper 服务器上, 直到有主动删除操作.
+- 持久顺序节点 (`PERSISTENT_SEQUENTIAL`): 在持久节点基础上增加顺序性. 创建子节点的时候, 可以设置一个顺序标记, 在创建时, ZooKeeper 会自动为给定节点加上一个数字后缀 (上限是整型的最大值), 作为一个新的, 完整的节点名.
+- 临时节点 (`EPHEMERAL`): 生命周期和客户端会话绑定, 如果客户端会话失效, 节点会自动清理.ZooKeeper 规定了临时节点只能作为叶子节点 (不能基于临时节点来创建子节点).
+- 临时顺序节点 (`EPHEMERAL_SEQUENTIAL`): 在临时节点基础上增加顺序性.
 
 ### 1.2.1 状态信息
 
-每个数据节点除了存储数据内容外, 还存储节点本身的状态信息(可通过 `get` 命令获取). 以下为 get 命令获取的结果:
+每个数据节点除了存储数据内容外, 还存储节点本身的状态信息 (可通过 `get` 命令获取). 以下为 get 命令获取的结果:
 - 第一行: 节点的数据内容.
 - 后续内容: 节点 Stat 状态对象的格式化输出:
   - `czxid`: Created ZXID, 表示该数据节点被创建时的事务 ID.
@@ -110,7 +110,7 @@ ZooKeeper 的每个数据节点都是有生命周期的, 节点类型可分为: 
   - `ephemeralOwner`: 创建该临时节点的会话 sessionID.如果是持久节点则为 0.
   - `dataLength`: 数据内容的长度.
   - `numChildren`: 当前节点的子节点个数.
-  - `pzxid`: 该节点的子节点列表最后一次被修改时的事务 ID(只有子节点列表变更才会更新 pzxid, 子节点内容变更不会影响 pzxid).
+  - `pzxid`: 该节点的子节点列表最后一次被修改时的事务 ID (只有子节点列表变更才会更新 pzxid, 子节点内容变更不会影响 pzxid).
 
 ## 1.3 版本 - 保证分布式数据原子性操作
 
@@ -131,7 +131,7 @@ version 的主要应用场景为分布式锁. 在分布式系统运行过程中,
 
 > __乐观锁__
 
-乐观锁称为乐观并发控制(Optimistic Concurrency Control, OCC), 具有宽松和友好性. 乐观锁假定不同事务之间处理过程不会相互影响, 因此在事务处理的绝大部分时间里不需要进行加锁处理, 只在更新请求提交前, 检查当前事务在读取数据后的这段时间内, 是否由其他事务对该数据进行了修改, 如果没有修改, 则提交, 如果有修改则回滚. 乐观锁适合使用在数据并发竞争不大, 事务冲突较少的应用场景中.
+乐观锁称为乐观并发控制 (Optimistic Concurrency Control, OCC), 具有宽松和友好性. 乐观锁假定不同事务之间处理过程不会相互影响, 因此在事务处理的绝大部分时间里不需要进行加锁处理, 只在更新请求提交前, 检查当前事务在读取数据后的这段时间内, 是否由其他事务对该数据进行了修改, 如果没有修改, 则提交, 如果有修改则回滚. 乐观锁适合使用在数据并发竞争不大, 事务冲突较少的应用场景中.
 
 乐观锁事务分为三个阶段: 数据读取, 写入校验, 数据写入. ZooKeeper 中的 version 就是用来实现乐观锁中的写入校验. 以下为 PrepRequestProcessor 处理类中对数据更新请求的版本校验逻辑:
 ```java
@@ -157,28 +157,28 @@ ZooKeeper 提供了分布式数据的发布/订阅功能, 能够让多个订阅�
 
 | KeeperState | EventType | 触发条件 |
 | :--- | :--- | :--- |
-| SyncConnected(3): 此时客户端和服务器处于连接状态 | None(-1) | 客户端与服务器成功建立会话 |
-|  | NodeCreated(1) | Watcher 监听的对应数据节点被创建 |
-|  | NodeDeleted(2) | Watcher 监听的对应数据节点被删除 |
-|  | NodeDataChanged(3) | Watcher 监听的对应数据节点的数据内容发生变化 |
-|  | NodeChildrenChanged(4) | Watcher 监听的对应数据节点的子节点列表发生变化 |
-| DisConnected(0): 此时客户端和服务器处于断开连接状态 | None(-1) | 客户端与 ZooKeeper 服务端断开连接 |
-| Expired(-112): 此时客户端会话失效, 通常同时也会收到 SessionExpiredException 异常 | None(-1) | 会话超时 |
-| AuthFailed(4): 授权失败, 通常也会收到 AuthFailedException 异常 | None(-1) | 使用错误的 scheme 进行权限检查 或 SASL 权限检查失败 |
+| SyncConnected (3): 此时客户端和服务器处于连接状态 | None (-1) | 客户端与服务器成功建立会话 |
+|  | NodeCreated (1) | Watcher 监听的对应数据节点被创建 |
+|  | NodeDeleted (2) | Watcher 监听的对应数据节点被删除 |
+|  | NodeDataChanged (3) | Watcher 监听的对应数据节点的数据内容发生变化 |
+|  | NodeChildrenChanged (4) | Watcher 监听的对应数据节点的子节点列表发生变化 |
+| DisConnected (0): 此时客户端和服务器处于断开连接状态 | None (-1) | 客户端与 ZooKeeper 服务端断开连接 |
+| Expired (-112): 此时客户端会话失效, 通常同时也会收到 SessionExpiredException 异常 | None (-1) | 会话超时 |
+| AuthFailed (4): 授权失败, 通常也会收到 AuthFailedException 异常 | None (-1) | 使用错误的 scheme 进行权限检查 或 SASL 权限检查失败 |
 
 由于 Watcher 机制细节较为复杂, 详情请参考 `[从 Paxos 到 ZooKeeper] - 7.1.4 Watcher - 数据变更的通知`.
 
 ## 1.5 ACL - 保障数据的安全
 
-`UGO(User, Group, Others)`: 应用最广泛的权限控制方式, 广泛应用于 Unix/Linux 系统中.
+`UGO (User, Group, Others)`: 应用最广泛的权限控制方式, 广泛应用于 Unix/Linux 系统中.
 
-`ACL(Access Control List)`: 访问控制列表, 是一种更细粒度的权限管理方式, 可以针对任意用户和组进行细粒度的权限控制. 目前大部分 Unix 系统已经支持, Linux 也从 2.6 版本的内核开始支持.
+`ACL (Access Control List)`: 访问控制列表, 是一种更细粒度的权限管理方式, 可以针对任意用户和组进行细粒度的权限控制. 目前大部分 Unix 系统已经支持, Linux 也从 2.6 版本的内核开始支持.
 
 ### 1.5.1 ACL 介绍
 
 ZooKeeper 的 ACL 权限控制和 Unix/Linux 操作系统的 ACL 有一些区别. ACL 具有以下三个概念:
 
-> __权限模式(Scheme)__
+> __权限模式 (Scheme)__
 
 权限模式是权限校验使用的策略. 分为以下四种模式:
 - `IP`: 通过 IP 地址细粒度控制. 如 `ip:192.168.0.110` 表示权限控制针对该 IP.`ip:192.168.0.1/24` 表示权限控制针对 "192.168.0.*" IP 段.
@@ -186,7 +186,7 @@ ZooKeeper 的 ACL 权限控制和 Unix/Linux 操作系统的 ACL 有一些区别
 - `World`: 对所有用户开放. 是一种特殊的 Digest 模式, 使用 "world:anyone" 表示.
 - `Super`: 超级用户控制. 是一种特殊的 Digest 模式.
 
-> __授权对象(ID)__
+> __授权对象 (ID)__
 
 授权对象为权限模式下对应的实体, 以下为对应关系:
 
@@ -197,14 +197,14 @@ ZooKeeper 的 ACL 权限控制和 Unix/Linux 操作系统的 ACL 有一些区别
 | Word | 只有一个 ID: `anyone` |
 | Super | 与 Digest 模式一致 |
 
-> __权限(Permission)__
+> __权限 (Permission)__
 
 ZooKeeper 对数据的操作权限分为以下五类:
-- `CREATE(C)`: 数据节点的创建权限, 允许授权对象在该数据节点下创建子节点.
-- `DELETE(D)`: 子节点的删除权限, 允许授权对象删除该数据节点的子节点.
-- `READ(R)`: 数据节点的读取权限, 允许授权对象访问该数据节点并读取其数据内容或子节点列表等.
-- `WRITE(W)`: 数据节点的更新权限, 允许授权对象对该数据节点进行更新.
-- `ADMIN(A)`: 数据节点的管理权限, 允许授权对象对该数据节点进行 ACL 设置.
+- `CREATE (C)`: 数据节点的创建权限, 允许授权对象在该数据节点下创建子节点.
+- `DELETE( D)`: 子节点的删除权限, 允许授权对象删除该数据节点的子节点.
+- `READ (R)`: 数据节点的读取权限, 允许授权对象访问该数据节点并读取其数据内容或子节点列表等.
+- `WRITE (W)`: 数据节点的更新权限, 允许授权对象对该数据节点进行更新.
+- `ADMIN (A)`: 数据节点的管理权限, 允许授权对象对该数据节点进行 ACL 设置.
 
 ### 1.5.2 权限扩展体系
 
@@ -332,7 +332,7 @@ module org.apache.zookeeper.data {
 }
 ```
 
-Jute 组件会使用不同的代码生成器来生成实际编程语言(Java / C / C++)的文件, 如 Java 使用 JavaGenerator 来生成类文件(都会实现 Record 接口), 存放在 `src/java/generated` 目录.
+Jute 组件会使用不同的代码生成器来生成实际编程语言 (Java / C / C++) 的文件, 如 Java 使用 JavaGenerator 来生成类文件 (都会实现 Record 接口), 存放在 `src/java/generated` 目录.
 
 ## 2.4 通信协议
 
@@ -357,12 +357,12 @@ module org.apache.zookeeper.proto {
 ```
 
 - `xid`: 用于记录客户端请求发起先后顺序, 确保单个客户端请求的响应顺序.
-- `type`: 代表请求类型, 有 20 种(详情查看 `org.apache.zookeeper.ZooDefs.OpCode`), 以下为部分示例:
-  - `OpCode.create(1)`: 创建节点
-  - `OpCode.delete(2)`: 删除节点
-  - `OpCode.exists(3)`: 节点是否存在
-  - `OpCode.getData(4)`: 获取节点数据
-  - `OpCode.setData(5)`: 设置节点数据
+- `type`: 代表请求类型, 有 20 种 (详情查看 `org.apache.zookeeper.ZooDefs.OpCode`), 以下为部分示例:
+  - `OpCode.create (1)`: 创建节点
+  - `OpCode.delete (2)`: 删除节点
+  - `OpCode.exists (3)`: 节点是否存在
+  - `OpCode.getData (4)`: 获取节点数据
+  - `OpCode.setData (5)`: 设置节点数据
 
 > __请求体: Request__
 
@@ -370,7 +370,7 @@ module org.apache.zookeeper.proto {
 
 - ConnectRequest: 会话创建
 
-ZooKeeper 客户端和服务端创建会话时, 会发送 ConnectRequest 请求, 包含 protocolVersion(版本号), lastZxidSeen(最近一次接收到的服务器 ZXID lastZxidSeen), timeOut(会话超时时间), sessionId(会话标示), passwd(会话密码), 其数据结构在 `src/zookeeper.jute` 中定义如下:
+ZooKeeper 客户端和服务端创建会话时, 会发送 ConnectRequest 请求, 包含 protocolVersion (版本号), lastZxidSeen (最近一次接收到的服务器 ZXID lastZxidSeen), timeOut (会话超时时间), sessionId (会话标示), passwd (会话密码), 其数据结构在 `src/zookeeper.jute` 中定义如下:
 ```
 module org.apache.zookeeper.proto {
     ...
@@ -401,7 +401,7 @@ module org.apache.zookeeper.proto {
 
 - SetDataRequest: 更新节点数据
 
-ZooKeeper 客户端在向服务器发送更新节点数据请求时, 会发送 SetDataRequest 请求, 包含 path(节点路径), data(数据内容),version(期望版本号), 其数据结构在 `src/zookeeper.jute` 中如下:
+ZooKeeper 客户端在向服务器发送更新节点数据请求时, 会发送 SetDataRequest 请求, 包含 path (节点路径), data (数据内容),version (期望版本号), 其数据结构在 `src/zookeeper.jute` 中如下:
 ```
 module org.apache.zookeeper.proto {
     ...
@@ -441,10 +441,10 @@ ZooKeeper 客户端调用 getData() 接口, 实际上就是向 ZooKeeper 服务�
 | :--- | :--- | :--- |
 | 00,00,00,1d | 0~3 位是 len, 代表整个请求的数据包长度 | 29 |
 | 00,00,00,01 | 4~7 位是 xid, 代表客户端请求的发起序号 | 1 |
-| 00,00,00,04 | 8~11 位是 type, 代表客户端请求类型 | 4(代表 OpCode.getData) |
-| 00,00,00,10 | 12~15 位是 len, 代表节点路径的长度 | 16(代表节点路径长度转换成十六进制是 16位) |
-| 2f,24,37,5f,32,5f,34,2f,67,65,74,5f,64,61,74,61 | 16~31 位是 path, 代表节点路径 | /$7_2_4/get_data(通过比对 ASCII 码表转换成十进制即可) |
-| 01 | 32 位是 watch, 代表是否注册 Watcher | 1(代表注册 Watcher) |
+| 00,00,00,04 | 8~11 位是 type, 代表客户端请求类型 | 4 (代表 OpCode.getData) |
+| 00,00,00,10 | 12~15 位是 len, 代表节点路径的长度 | 16 (代表节点路径长度转换成十六进制是 16位) |
+| 2f,24,37,5f,32,5f,34,2f,67,65,74,5f,64,61,74,61 | 16~31 位是 path, 代表节点路径 | /$7_2_4/get_data (通过比对 ASCII 码表转换成十进制即可) |
+| 01 | 32 位是 watch, 代表是否注册 Watcher | 1 (代表注册 Watcher) |
 
 ### 2.4.2 协议解析: 响应部分
 
@@ -465,10 +465,10 @@ module org.apache.zookeeper.proto {
 
 - `xid`: 和请求头中的 xid 是一致的.
 - `zxid`: 代表 ZooKeeper 服务器上当前最新的事务 ID.
-- `err`: 错误码, 有 22 种(详情查看 `org.apache.zookeeper.KeeperException.Code`), 以下为部分示例:
-  - `Code.OK(0)`: 处理成功
-  - `Code.NONODE(101)`: 节点不存在
-  - `Code.NOAUTH(102)`: 没有权限
+- `err`: 错误码, 有 22 种 (详情查看 `org.apache.zookeeper.KeeperException.Code`), 以下为部分示例:
+  - `Code.OK (0)`: 处理成功
+  - `Code.NONODE (101)`: 节点不存在
+  - `Code.NOAUTH (102)`: 没有权限
 
 > __响应体: Response__
 
@@ -493,7 +493,7 @@ module org.apache.zookeeper.proto {
 
 - GetDataResponse: 获取节点数据
 
-针对 ZooKeeper 客户端的获取节点数据请求, ZooKeeper 服务端会返回 GetDataResponse 响应, 包含 data(数据内容), stat(节点状态), 其数据结构在 `src/zookeeper.jute` 中如下:
+针对 ZooKeeper 客户端的获取节点数据请求, ZooKeeper 服务端会返回 GetDataResponse 响应, 包含 data (数据内容), stat (节点状态), 其数据结构在 `src/zookeeper.jute` 中如下:
 ```
 module org.apache.zookeeper.proto {
     ...
@@ -507,7 +507,7 @@ module org.apache.zookeeper.proto {
 
 - SetDataResponse: 更新节点数据
 
-针对 ZooKeeper 客户端的更新节点数据请求, ZooKeeper 服务端会返回 SetDataResponse 响应, 包含 stat(节点状态), 其数据结构在 `src/zookeeper.jute` 中如下:
+针对 ZooKeeper 客户端的更新节点数据请求, ZooKeeper 服务端会返回 SetDataResponse 响应, 包含 stat (节点状态), 其数据结构在 `src/zookeeper.jute` 中如下:
 ```
 module org.apache.zookeeper.proto {
     ...
@@ -525,19 +525,19 @@ module org.apache.zookeeper.proto {
 | 十六进制位 | 协议部分 | 数值或字符串 |
 | :--- | :--- | :--- |
 | 00,00,00,63 | 0~3 位是 len, 代表整个响应的数据包长度 | 99 |
-| 00,00,00,05 | 4~7 位是 xid, 代表客户端请求的发起序号 | 5(代表本次请求是客户端会话创建后的第 5 次请求发送) |
+| 00,00,00,05 | 4~7 位是 xid, 代表客户端请求的发起序号 | 5 (代表本次请求是客户端会话创建后的第 5 次请求发送) |
 | 00,00,00,00,00,00,00,04 | 8~15 位是 zxid, 代表当前服务端处理过第最新的 ZXID 值 | 4 |
-| 00,00,00,00 | 16~19 位是 err, 代表错误码 | 0(代表 Code.OK) |
-| 00,00,00,0b | 20~23 位是 len, 代表节点数据内容的长度 | 11(代表接下去的 11 位是数据内容的字节数组) |
+| 00,00,00,00 | 16~19 位是 err, 代表错误码 | 0 (代表 Code.OK) |
+| 00,00,00,0b | 20~23 位是 len, 代表节点数据内容的长度 | 11 (代表接下去的 11 位是数据内容的字节数组) |
 | 69,27,6b,5f,63,6f,6e,74,65,6e,74 | 24~34 位是 data, 代表节点的数据内容 | i'm_content |
 | 00,00,00,00,00,00,00,04 | 35~42 位是 czxid, 代表创建该数据节点时的 ZXID | 4 |
 | 00,00,00,00,00,00,00,04 | 43~50 位是 mzxid, 代表最后一次修改该数据节点时的 ZXID | 4 |
-| 00,00,01,43,67,bd,0e,08 | 51~58 位是 ctime, 代表数据节点的创建时间 | 1389014879752(即: 2014-01-06 21:27:59) |
-| 00,00,01,43,67,bd,0e,08 | 59~66 位是 mtime, 代表数据节点最后一次变更的时间 | 1389014879752(即: 2014-01-06 21:27:59) |
+| 00,00,01,43,67,bd,0e,08 | 51~58 位是 ctime, 代表数据节点的创建时间 | 1389014879752 (即: 2014-01-06 21:27:59) |
+| 00,00,01,43,67,bd,0e,08 | 59~66 位是 mtime, 代表数据节点最后一次变更的时间 | 1389014879752 (即: 2014-01-06 21:27:59) |
 | 00,00,00,00 | 67~70 位是 version, 代表数据节点的内容的版本号 | 0 |
 | 00,00,00,00 | 71~74 位是 cversion, 代表数据节点的子节点的版本号 | 0 |
 | 00,00,00,00 | 75~78 位是 aversion, 代表数据节点的 ACL 变更版本号 | 0 |
-| 00,00,00,00,00,00,00,00 | 79~86 位是 ephemeralOwner, 如果该数据节点是临时节点, 那么就记录创建该临时节点的会话 ID, 如果是持久节点, 则为 0 | 0(代表该节点是持久节点) |
+| 00,00,00,00,00,00,00,00 | 79~86 位是 ephemeralOwner, 如果该数据节点是临时节点, 那么就记录创建该临时节点的会话 ID, 如果是持久节点, 则为 0 | 0 (代表该节点是持久节点) |
 | 00,00,00,0b | 87~90 位是 dataLength, 代表数据节点的数据内容长度 | 11 |
 | 00,00,00,00 | 91~94 位是 numChildren, 代表数据节点的子节点个数 | 0 |
 | 00,00,00,00,00,00,00,04 | 95~102 位是 pzxid, 代表最后一次对子节点列表变更的 PZXID | 4 |
@@ -550,7 +550,7 @@ ZooKeeper 客户端主要由以下几个核心组件组成:
 - `ZooKeeper 实例`: 客户端的入口.
 - `ClientWatchManager`: 客户端 Watcher 管理器.
 - `HostProvider`: 客户端地址列表管理器.
-- `ClientCnxn`: 客户端核心线程, 包括 `SendThread`(I/O 线程, 负责客户端和服务端之间的网络 I/O 通信) 和 `EventThread`(事件线程, 负责处理服务端事件) 两个线程.
+- `ClientCnxn`: 客户端核心线程, 包括 `SendThread` (I/O 线程, 负责客户端和服务端之间的网络 I/O 通信) 和 `EventThread` (事件线程, 负责处理服务端事件) 两个线程.
 
 以下为 ZooKeeper 客户端构造方法:
 ```java
@@ -587,7 +587,7 @@ ZooKeeper(String connectString, int sessionTimeout, Watcher watcher, long sessio
 
 > 4. __初始化 ClientCnxn__
 
-ZooKeeper 客户端会创建一个网络连接器 ClientCnxn, 用来管理客户端和服务端的网络交互. 客户端还会初始化两个核心队列 outgoingQueue(客户端的请求发送队列) 和 pendingQueue(服务端的响应等待队列). 另外, 客户端还会创建 ClientCnxnSocket(ClientCnxn 的底层网络 I/O 处理器).
+ZooKeeper 客户端会创建一个网络连接器 ClientCnxn, 用来管理客户端和服务端的网络交互. 客户端还会初始化两个核心队列 outgoingQueue (客户端的请求发送队列) 和 pendingQueue (服务端的响应等待队列). 另外, 客户端还会创建 ClientCnxnSocket (ClientCnxn 的底层网络 I/O 处理器).
 
 > 5. __初始化 SendThread 和 EventThread__
 
@@ -625,7 +625,7 @@ ClientCnxnSocket 将接收到的服务端响应反序列化, 得到 ConnectRespo
 
 > 13. __连接成功__
 
-连接成功后, 一方面通知 SendThread 线程, 进一步对客户端进行会话参数(readTimeout 和 connectTimeout 等)设置并更新客户端状态.另一方面, 将当前成功连接的服务器地址通知给 HostProvider 地址管理器.
+连接成功后, 一方面通知 SendThread 线程, 进一步对客户端进行会话参数 (readTimeout 和 connectTimeout 等) 设置并更新客户端状态.另一方面, 将当前成功连接的服务器地址通知给 HostProvider 地址管理器.
 
 > 14. __生成事件 SyncConnected-None__
 
@@ -633,7 +633,7 @@ ClientCnxnSocket 将接收到的服务端响应反序列化, 得到 ConnectRespo
 
 > 15. __查询 Watcher__
 
-EventThread 线程接收到该事件后, 从 ClientWatchManager 管理器中查询出对应的 Watcher(针对 SyncConnected-None 事件, 对应默认 Watcher), 然后将其放到 EventThread 的 waitingEvents 队列中.
+EventThread 线程接收到该事件后, 从 ClientWatchManager 管理器中查询出对应的 Watcher (针对 SyncConnected-None 事件, 对应默认 Watcher), 然后将其放到 EventThread 的 waitingEvents 队列中.
 
 > 16. __处理事件__
 
@@ -793,7 +793,7 @@ SendThread 是 ClientCnxn 内部的一个核心 I/O 调度线程, 用于管理�
 
 EventThread 是 ClientCnxn 内部的一个核心调度线程, 负责客户端的事件处理, 并出发客户端注册的 Watcher 监听.
 
-EventThread 内部有一个 waitingEvents 队列, 临时存放需要被触发的 Object(包括客户端注册的 Watcher 和 异步接口中注册的回调器 AsyncCallback). EventThread 会不断地从 waitingEvents 队列中取出 Object, 识别出具体类型(Watcher 或 AsyncCallback), 并分别调用 process 和 processResult 接口方法实现对事件的触发和回调.
+EventThread 内部有一个 waitingEvents 队列, 临时存放需要被触发的 Object (包括客户端注册的 Watcher 和 异步接口中注册的回调器 AsyncCallback). EventThread 会不断地从 waitingEvents 队列中取出 Object, 识别出具体类型 (Watcher 或 AsyncCallback), 并分别调用 process 和 processResult 接口方法实现对事件的触发和回调.
 
 ### 3.3.5 ClientCnxnSocket
 
@@ -810,7 +810,7 @@ ClientCnxnSocket 定义了底层 Socket 通信的接口.
 客户端收到来自服务端的响应后, 根据不同客户端请求类型, 进行不同处理, 如下:
 - 如果当前客户端尚未进行初始化, 说明当前客户端和服务端之间正在进行会话创建, 那么就将收到的 ByteBuffer 序列化成 ConnectResponse 对象.
 - 如果当前客户端处于正常会话周期, 且收到的服务端响应是一个事件, 那么客户端会将收到的 ByteBuffer 序列化成 WatcherEvent 对象, 并将该事件放入待处理队列中.
-- 如果是一个常规的请求响应(Create, GetData, Exist 等), 那么会从 pendingQueue 队列中取出一个 Packet 来进行处理. 客户端首先会检测服务端响应中包含的 XID 值来确保请求处理的顺序性, 然后将收到的 ByteBuffer 序列化成相应的 Response 对象.
+- 如果是一个常规的请求响应 (Create, GetData, Exist 等), 那么会从 pendingQueue 队列中取出一个 Packet 来进行处理. 客户端首先会检测服务端响应中包含的 XID 值来确保请求处理的顺序性, 然后将收到的 ByteBuffer 序列化成相应的 Response 对象.
 
 最后, 在 finishPacket 方法中处理 Watcher 注册等逻辑.
 
@@ -842,7 +842,7 @@ Session 是 ZooKeeper 中的会话实体, 代表了一个客户端会话. 包括
 
 ### 4.2.2 sessionID
 
-`SessionTracker`(ZooKeeper 服务端会话管理器) 初始化时, 会调用 initializeNextSession() 方法来生成一个初始化 sessionID, 后续会在该 sessionID 基础上为每个会话进行分配.
+`SessionTracker` (ZooKeeper 服务端会话管理器) 初始化时, 会调用 initializeNextSession() 方法来生成一个初始化 sessionID, 后续会在该 sessionID 基础上为每个会话进行分配.
 
 以下为 `SessionTrackerImpl` 初始化 sessionID 代码逻辑:
 ```java
@@ -892,11 +892,11 @@ ExpirationTime_ = CurrentTime + SessionTimeout
 ExpirationTime = (ExpirationTime_ / ExpirationInterval + 1) * ExpirationInterval
 ```
 
-- `CurrentTime`: 当前时间(毫秒).
-- `SessionTimeout`: 会话设置的超时时间(毫秒).
-- `ExpirationInterval`: Leader 服务器在运行期间定时进行会话超时检查的时间间隔(毫秒), 默认值是 tickTime 值(2000).
+- `CurrentTime`: 当前时间 (毫秒).
+- `SessionTimeout`: 会话设置的超时时间 (毫秒).
+- `ExpirationInterval`: Leader 服务器在运行期间定时进行会话超时检查的时间间隔 (毫秒), 默认值是 tickTime 值 (2000).
 
-假设当前时间毫秒表示为 1370907000000, 客户端会话超时时间为 15000 毫秒, 服务器设置的 tickTime 为 2000 毫秒(即 ExpirationInterval 也为 2000 毫秒), 那么计算出的 ExpirationTime 值如下:
+假设当前时间毫秒表示为 1370907000000, 客户端会话超时时间为 15000 毫秒, 服务器设置的 tickTime 为 2000 毫秒 (即 ExpirationInterval 也为 2000 毫秒), 那么计算出的 ExpirationTime 值如下:
 ```
 ExpirationTime_ = 1370907000000 + 15000 = 1370907015000
 ExpirationTime = (1370907015000 / 2000 + 1) * 2000 = 1370907017000
@@ -956,7 +956,7 @@ SessionTracker 首先将会话的 isClosing 标记为 true, 保证在会话清�
 
 - c. 收集需要清理的临时节点
 
-一旦某个会话失效, 那么和该会话相关的临时节点(EPHEMERAL)都需要被一并清除.
+一旦某个会话失效, 那么和该会话相关的临时节点 (EPHEMERAL) 都需要被一并清除.
 
 因为每个会话都单独保存了一份由该会话维护的所有临时节点集合在 ZooKeeper 内存数据库中, 因此清理时, 只需要根据 sessionID 就可以拿到这份临时节点列表.
 
@@ -970,7 +970,7 @@ FinalRequestProcessor 处理器会触发内存数据库, 删除该会话对应�
 
 - f. 移除会话
 
-节点删除后, 需要将会话从 SessionTracker 内部(即 sessionsById, sessionsWithTimeout, sessionsSets) 移除.
+节点删除后, 需要将会话从 SessionTracker 内部 (即 sessionsById, sessionsWithTimeout, sessionsSets) 移除.
 
 - g. 关闭 NIOServerCnxn
 
@@ -994,9 +994,9 @@ ZooKeeper 客户端和服务端维持的是一个长连接, 在 sessionTimeout �
 
 ### 4.5.2 会话失效: SESSION_EXPIRED
 
-会话失效一般发生在 CONNECTION_LOSS 情况, 由于重连时间过长, 超过了 sessionTimeout(会话超时时间), 服务器认为该会话已经结束并进行了会话清理.
+会话失效一般发生在 CONNECTION_LOSS 情况, 由于重连时间过长, 超过了 sessionTimeout (会话超时时间), 服务器认为该会话已经结束并进行了会话清理.
 
-客户端此时重新连接服务器, 会被服务器告知 SESSION_EXPIRED(会话失效), 在这种情况下, 应用需要重新实例化一个 ZooKeeper 对象.
+客户端此时重新连接服务器, 会被服务器告知 SESSION_EXPIRED (会话失效), 在这种情况下, 应用需要重新实例化一个 ZooKeeper 对象.
 
 ### 4.5.3 会话转移: SESSION_MOVED
 
@@ -1004,7 +1004,7 @@ ZooKeeper 客户端和服务端维持的是一个长连接, 在 sessionTimeout �
 
 假设客户端和服务器 S1 出现连接断开后, 成功重连了新的服务器 S2 并延续了有效会话, 那么就说明会话从 S1 转移到了 S2.
 
-服务端在处理客户端请求时, 会首先检查会话的 Owner(所有者), 如果 Owner 不是当前服务器, 会抛出 SessionMovedException 异常. 这样做是为了避免会话转移过程中的事务问题(在极端情况下, 如果客户端C1 与服务器 S1 建立连接, 某一时刻, C1 向 S1 发送了请求 R1: setData('/session', 1), 但是在请求到达前, 连接断开, 在很短时间内, C1 重新连接上服务器 S2, C1 向 S2 发送请求 R2: setData('/session', 1), 此时 S2 正常处理. 但是 R1 最终到达 S1 并被 S1 处理, 就出现了 R2 请求被 R1 请求覆盖的情况).
+服务端在处理客户端请求时, 会首先检查会话的 Owner (所有者), 如果 Owner 不是当前服务器, 会抛出 SessionMovedException 异常. 这样做是为了避免会话转移过程中的事务问题 (在极端情况下, 如果客户端C1 与服务器 S1 建立连接, 某一时刻, C1 向 S1 发送了请求 R1: setData('/session', 1), 但是在请求到达前, 连接断开, 在很短时间内, C1 重新连接上服务器 S2, C1 向 S2 发送请求 R2: setData('/session', 1), 此时 S2 正常处理. 但是 R1 最终到达 S1 并被 S1 处理, 就出现了 R2 请求被 R1 请求覆盖的情况).
 
 ---
 
