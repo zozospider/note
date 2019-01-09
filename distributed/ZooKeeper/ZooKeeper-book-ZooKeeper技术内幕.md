@@ -1016,19 +1016,59 @@ ZooKeeper 客户端和服务端维持的是一个长连接, 在 sessionTimeout �
 
 > a. __统一由 QuorumPeerMain 作为启动类__
 
+单机或集群模式下, `zkServer.sh` 脚本的启动类都是 `org.apache.zookeeper.server.quorum.QuorumPeerMain`.
+
 > b. __解析配置文件 zoo.cfg__
+
+`zoo.cfg` 配置了 tickTime, dataDir, clientPort 等参数.
 
 > c. __创建并启动历史文件清理器 DatadirCleanupManager__
 
+历史文件清理包括对事务日志和快照数据文件的定时清理.
+
 > d. __判断当前集群模式__
+
+根据 `zoo.cfg` 解析出的地址列表判断当前为单机模式还是集群模式. 如果是单机模式, 就委托给 `org.apache.zookeeper.server.ZooKeeperServerMain` 处理.
 
 > e. __再次解析配置文件 zoo.cfg__
 
 > f. __创建服务器实例 ZooKeeperServer__
 
+`org.apache.zookeeper.server.ZooKeeperServer` 是单机版 ZooKeeper 服务端的核心类.
+
 ### 5.1.2 初始化
 
 > g. __创建服务器统计器 ServerStats__
+
+`org.apache.zookeeper.server.ServerStats` 是 ZooKeeper 服务器运行时的统计器, 简单结构如下:
+```java
+public class ServerStats {
+    private long packetsSent;
+    private long packetsReceived;
+    private long maxLatency;
+    private long minLatency = Long.MAX_VALUE;
+    private long totalLatency = 0;
+    private long count = 0;
+    private AtomicLong fsyncThresholdExceedCount = new AtomicLong(0);
+    public void incrementFsyncThresholdExceedCount() {
+    }
+    public void resetFsyncThresholdExceedCount() {
+    }
+    synchronized void updateLatency(long requestCreateTime) {
+    }
+    synchronized public void incrementPacketsReceived() {
+    }
+    synchronized public void incrementPacketsSent() {
+    }
+}
+```
+
+- `packetsSent`: 从 ZooKeeper 启动开始, 或最近一次重置统计信息后, 服务端向客户端发送的响应包次数.
+- `packetsReceived`: 从 ZooKeeper 启动开始, 或最近一次重置统计信息后, 服务端接收到的来自客户端的请求包次数.
+- `maxLatency`: 从 ZooKeeper 启动开始, 或最近一次重置统计信息后, 服务端请求处理的最大延时.
+- `minLatency`: 从 ZooKeeper 启动开始, 或最近一次重置统计信息后, 服务端请求处理的最小延时.
+- `totalLatency`: 从 ZooKeeper 启动开始, 或最近一次重置统计信息后, 服务端请求处理的总延时.
+- `count`: 从 ZooKeeper 启动开始, 或最近一次重置统计信息后, 服务端处理的客户端请求总次数.
 
 > h. __创建 ZooKeeper 数据管理器 FileTxnSnapLog__
 
