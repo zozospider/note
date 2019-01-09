@@ -357,7 +357,7 @@ module org.apache.zookeeper.proto {
 ```
 
 - `xid`: 用于记录客户端请求发起先后顺序, 确保单个客户端请求的响应顺序.
-- `type`: 代表请求类型, 有 20 种 (详情查看 `org.apache.zookeeper.ZooDefs.OpCode`), 以下为部分示例:
+- `type`: 代表请求类型, 有 20 种 (详情查看 OpCode (`org.apache.zookeeper.ZooDefs.OpCode`)), 以下为部分示例:
   - `OpCode.create (1)`: 创建节点
   - `OpCode.delete (2)`: 删除节点
   - `OpCode.exists (3)`: 节点是否存在
@@ -988,7 +988,7 @@ ZooKeeper 客户端和服务端维持的是一个长连接, 在 sessionTimeout �
 
 因为网络闪断或服务器故障导致连接断开, 此时, ZooKeeper 客户端会自动从地址列表中重新逐个选取新的地址尝试重新连接.
 
-假设某应用使用 ZooKeeper 客户端进行 setData() 操作时出现 CONNECTION_LOSS 现象, 那么客户端会接收到 None-Disconnected 通知, 同时会抛出 `org.apache.zookeeper.KeeperException.ConnectionLossException` 异常. 因此, 应用应该捕获 ConnectionLossException 异常, 等待客户端自动重连.
+假设某应用使用 ZooKeeper 客户端进行 setData() 操作时出现 CONNECTION_LOSS 现象, 那么客户端会接收到 None-Disconnected 通知, 同时会抛出 ConnectionLossException (`org.apache.zookeeper.KeeperException.ConnectionLossException`) 异常. 因此, 应用应该捕获 ConnectionLossException 异常, 等待客户端自动重连.
 
 客户端重连成功后, 会接收到 None-SyncConnected 通知.
 
@@ -1016,7 +1016,7 @@ ZooKeeper 客户端和服务端维持的是一个长连接, 在 sessionTimeout �
 
 > a. __统一由 QuorumPeerMain 作为启动类__
 
-单机或集群模式下, `zkServer.sh` 脚本的启动类都是 `org.apache.zookeeper.server.quorum.QuorumPeerMain`.
+单机或集群模式下, `zkServer.sh` 脚本的启动类都是 QuorumPeerMain (`org.apache.zookeeper.server.quorum.QuorumPeerMain`).
 
 > b. __解析配置文件 zoo.cfg__
 
@@ -1024,17 +1024,17 @@ ZooKeeper 客户端和服务端维持的是一个长连接, 在 sessionTimeout �
 
 > c. __创建并启动历史文件清理器 DatadirCleanupManager__
 
-历史文件清理包括对事务日志和快照数据文件的定时清理.
+历史文件清理包括对快照数据文件和事务日志文件的定时清理.
 
 > d. __判断当前集群模式__
 
-根据 `zoo.cfg` 解析出的地址列表判断当前为单机模式还是集群模式. 如果是单机模式, 就委托给 `org.apache.zookeeper.server.ZooKeeperServerMain` 处理.
+根据 `zoo.cfg` 解析出的地址列表判断当前为单机模式还是集群模式. 如果是单机模式, 就委托给 ZooKeeperServerMain (`org.apache.zookeeper.server.ZooKeeperServerMain`) 处理.
 
 > e. __再次解析配置文件 zoo.cfg__
 
 > f. __创建服务器实例 ZooKeeperServer__
 
-`org.apache.zookeeper.server.ZooKeeperServer` 是单机版 ZooKeeper 服务端的核心类.
+ZooKeeperServer (`org.apache.zookeeper.server.ZooKeeperServer`) 是单机版 ZooKeeper 服务端的核心类.
 
 ### 5.1.2 初始化
 
@@ -1072,9 +1072,17 @@ public class ServerStats {
 
 > h. __创建 ZooKeeper 数据管理器 FileTxnSnapLog__
 
+FileTxnSnapLog (`org.apache.zookeeper.server.persistence.FileTxnSnapLog`) 位于 ZooKeeper 上层和底层数据存储之间的, 提供操作数据文件的接口.
+
+操作的数据文件包括:
+- `快照数据文件`: 存储在 zoo.cfg 的 `dataDir` 中.
+- `事务日志文件`: 存储在 zoo.cfg 的 `dataLogDir` 中.
+
 > i. __设置服务器 tickTime 和会话超时时间__
 
 > j. __创建 ServerCnxnFactory__
+
+可通过系统属性 `zookeeper.serverCnxnFactory` 指定.
 
 > k. __初始化 ServerCnxnFactory__
 
@@ -1082,11 +1090,23 @@ public class ServerStats {
 
 > m. __恢复本地数据__
 
+每次启动 ZooKeeper 时, 都会从快照数据文件和事务日志文件中进行数据恢复.
+
 > n. __创建并启动会话管理器__
+
+创建一个会话管理器 SessionTracker. SessionTracker 会初始化 expirationInterval, nextExpirationTime, sessionsWithTimeout, 并计算出一个初始 sessionID.
+
+SessionTracker 初始化完毕后, 会开始进行会话超时检查.
 
 > o. __初始化 ZooKeeper 的请求处理链__
 
+ZooKeeper 对请求的处理方式时责任链模式. 即一个请求会由多个处理器来处理, 这些处理器串联起来形成一个请求处理链.
+
+单机版 ZooKeeper 的请求处理链依次为: `PrepRequestProcessor`, `SyncRequestProcessor`, `FinalRequestProcessor`.
+
 > p. __注册 JMX 服务__
+
+ZooKeeper 会将服务器运行时的信息以 JMX 的方式暴露出来.
 
 > q. __注册 ZooKeeper 服务器实例__
 
@@ -1112,9 +1132,17 @@ public class ServerStats {
 
 > h. __创建 QuorumPeer 实例__
 
+Quorum 是 ZooKeeperServer (ZooKeeper 服务器实例) 的托管者, QuorumPeer 代表了 ZooKeeper 集群中的一台机器.
+
 > i. __创建内存数据库 ZKDatabase__
 
+ZKDatabase 是 ZooKeeper 的内存数据库, 负责管理 ZooKeeper 的会话记录, DataTree, 事务日志的存储.
+
 > j. __初始化 QuorumPeer__
+
+对 QuorumPeer 配置服务器地址列表, Leader 选举算法, 会话超时时间等.
+
+另外, 因为 QuorumPeer 是 ZooKeeperServer 的托管者, 所以需要将一些核心组件 (FileTxnSnapLog, ServerCnxnFactory, ZKDatabase) 注册到 QuorumPeer 中.
 
 > k. __恢复本地数据__
 
@@ -1124,39 +1152,79 @@ public class ServerStats {
 
 > m. __初始化 Leader 选举__
 
+首先, ZooKeeper 会根据自身的 SID (服务器 ID), lastLoggedZxid (最新的 ZXID), currentEpoch (当前服务器 epoch) 来生成一个初始化的投票. 然后, ZooKeeper 会根据 zoo.cfg 中的配置, 来创建相应的 Leader 选举算法实现 (目前只支持 `FastLeaderElection` 算法).
+
 > n. __注册 JMX 服务__
 
 > o. __检测当前服务器状态__
 
+QuorumPeer 作为 ZooKeeperServer 的托管者, 其核心工作就是不断检测当前服务器状态并做出相应处理.、
+
+ZooKeeper 服务器分为以下几个状态:
+- `LOOKING`
+- `LEADING`
+- `FOLLOWING/OBSERVING`
+
+在启动阶段, QuorumPeer 的初始化状态为 LOOKING.
+
 > p. __Leader 选举__
+
+集群中所有机器进行一系列投票后, 最终产生 Leader, 其余称为 Follower / Observer. 通常, 集群中那个机器处理的数据越新 (通过每个服务器处理过的最大的 ZXID 来比较), 其越有可能称为 Leader.
 
 ### 5.2.4 Leader 和 Follower 启动期交互过程
 
 > q. __创建 Leader 服务器和 Follower 服务器__
 
+每个服务器根据选举后自身的角色, 开始进入各角色创建流程.
+
 > r. __Leader 服务器启动 Follower 接收器 LearnerCnxAcceptor__
+
+Leader (`org.apache.zookeeper.server.quorum.Leader`) 服务器需要和非 Leader (`org.apache.zookeeper.server.quorum.Learner`) 服务器保持连接. LearnerCnxAcceptor 负责接收所有 Learner 服务器的连接请求.
 
 > s. __Learner 服务器开始和 Leader 建立连接__
 
+Learner 启动完毕后, 与 Leader 建立连接.
+
 > t. __Leader 服务器创建 LearnerHandler__
+
+Leader 接收到连接请求后, 会创建一个 LearnerHandler (`org.apache.zookeeper.server.quorum.LearnerHandler`) 实例, 每个 LearnerHandler 实例对应一个 Leader 与 Learner 之间的连接, 其负责两者的所有消息通信和数据同步.
 
 > u. __向 Leader 注册__
 
+Learner 和 Leader 建立连接后, Learner 就开始向 Leader 进行注册 (Learner 将自己的基本信息发送给 Leader).
+
 > v. __Leader 解析 Learner 信息, 计算新的 epoch__
+
+Learner 接收到 Learner 的 SID 和 ZXID 后, 根据 ZXID 解析出 epoch_of_learner, 并判断如果 epoch_of_learner 比 Leader 自身的 epoch_of_leader 更大, 则更新 Leader 的 epoch_of_leader 值为如下:
+```
+epoch_of_leader = epoch_of_learner + 1
+```
+
+Leader 的 LearnerHandler 会进行等待, 直到过半的 Learner 向 Leader 注册并更新了 epoch_of_leader 后, Leader 就可以确定当前集群的 epoch.
 
 > w. __发送 Leader 状态__
 
+Leader 确定 epoch 后, 会将该信息以一个 LEADERINFO 的消息发送给 Learner, 并等待响应.
+
 > x. __Learner 发送 ACK 消息__
+
+Learner 收到 LEADERINFO 消息后, 解析出 epoch 和 ZXID, 然后反馈一个 ACKEPOCH 响应.
 
 > y. __数据同步__
 
+Leader 接收到 ACK 后, 就可以开始与其进行数据同步了.
+
 > z. __启动 Leader 和 Learner 服务器__
+
+当有过半的 Learner 完成了数据同步后, Leader 和 Learner 服务器实例就可以开始启动了.
 
 ### 5.2.5 Leader 和 Follower 启动
 
 > Aa. __创建并启动会话管理器__
 
 > Ab. __初始化 ZooKeeper 的请求处理链__
+
+和单机版一样, 集群中的每个服务器都会启动串联的请求处理链 (不同角色的服务器会有不同的请求处理链).
 
 > Ac. __注册 JMX 服务__
 
