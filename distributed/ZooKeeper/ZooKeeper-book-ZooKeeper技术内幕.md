@@ -1012,7 +1012,113 @@ ZooKeeper 客户端和服务端维持的是一个长连接, 在 sessionTimeout �
 
 ## 5.1 单机版服务器启动
 
+### 5.1.1 预启动
+
+> a. __统一由 QuorumPeerMain 作为启动类__
+
+> b. __解析配置文件 zoo.cfg__
+
+> c. __创建并启动历史文件清理器 DatadirCleanupManager__
+
+> d. __判断当前集群模式__
+
+> e. __再次解析配置文件 zoo.cfg__
+
+> f. __创建服务器实例 ZooKeeperServer__
+
+### 5.1.2 初始化
+
+> g. __创建服务器统计器 ServerStats__
+
+> h. __创建 ZooKeeper 数据管理器 FileTxnSnapLog__
+
+> i. __设置服务器 tickTime 和会话超时时间__
+
+> j. __创建 ServerCnxnFactory__
+
+> k. __初始化 ServerCnxnFactory__
+
+> l. __启动 ServerCnxnFactory 主线程__
+
+> m. __恢复本地数据__
+
+> n. __创建并启动会话管理器__
+
+> o. __初始化 ZooKeeper 的请求处理链__
+
+> p. __注册 JMX 服务__
+
+> q. __注册 ZooKeeper 服务器实例__
+
 ## 5.2 集群版服务器启动
+
+### 5.2.1 预启动
+
+> a. __统一由 QuorumPeerMain 作为启动类__
+
+> b. __解析配置文件 zoo.cfg__
+
+> c. __创建并启动历史文件清理器 DatadirCleanupManager__
+
+> d. __判断当前集群模式__
+
+### 5.2.2 初始化
+
+> e. __创建 ServerCnxnFactory__
+
+> f. __初始化 ServerCnxnFactory__
+
+> g. __创建 ZooKeeper 数据管理器 FileTxnSnapLog__
+
+> h. __创建 QuorumPeer 实例__
+
+> i. __创建内存数据库 ZKDatabase__
+
+> j. __初始化 QuorumPeer__
+
+> k. __恢复本地数据__
+
+> l. __启动 ServerCnxnFactory 线程__
+
+### 5.2.3 Leader 选举
+
+> m. __初始化 Leader 选举__
+
+> n. __注册 JMX 服务__
+
+> o. __检测当前服务器状态__
+
+> p. __Leader 选举__
+
+### 5.2.4 Leader 和 Follower 启动期交互过程
+
+> q. __创建 Leader 服务器和 Follower 服务器__
+
+> r. __Leader 服务器启动 Follower 接收器 LearnerCnxAcceptor__
+
+> s. __Learner 服务器开始和 Leader 建立连接__
+
+> t. __Leader 服务器创建 LearnerHandler__
+
+> u. __向 Leader 注册__
+
+> v. __Leader 解析 Learner 信息, 计算新的 epoch__
+
+> w. __发送 Leader 状态__
+
+> x. __Learner 发送 ACK 消息__
+
+> y. __数据同步__
+
+> z. __启动 Leader 和 Learner 服务器__
+
+### 5.2.5 Leader 和 Follower 启动
+
+> Aa. __创建并启动会话管理器__
+
+> Ab. __初始化 ZooKeeper 的请求处理链__
+
+> Ac. __注册 JMX 服务__
 
 ---
 
