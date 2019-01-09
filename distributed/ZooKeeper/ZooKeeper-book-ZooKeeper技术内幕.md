@@ -1179,7 +1179,7 @@ ZooKeeper 服务器分为以下几个状态:
 
 > r. __Leader 服务器启动 Follower 接收器 LearnerCnxAcceptor__
 
-Leader (`org.apache.zookeeper.server.quorum.Leader`) 服务器需要和非 Leader (`org.apache.zookeeper.server.quorum.Learner`) 服务器保持连接. LearnerCnxAcceptor 负责接收所有 Learner 服务器的连接请求.
+Leader (`org.apache.zookeeper.server.quorum.Leader`) 服务器需要和非 Leader (`org.apache.zookeeper.server.quorum.Learner`) 服务器保持连接. LearnerCnxAcceptor (`org.apache.zookeeper.server.quorum.Leader.LearnerCnxAcceptor`) 负责接收所有 Learner 服务器的连接请求.
 
 > s. __Learner 服务器开始和 Leader 建立连接__
 
