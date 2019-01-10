@@ -64,6 +64,11 @@
         - [6.1.1 服务器启动时期的 Leader 选举](#611-服务器启动时期的-leader-选举)
         - [6.1.2 服务器运行期间的 Leader 选举](#612-服务器运行期间的-leader-选举)
     - [6.2 Leader 选举的算法分析](#62-leader-选举的算法分析)
+        - [6.2.1 进入 Leader 选举](#621-进入-leader-选举)
+        - [6.2.2 开始投票](#622-开始投票)
+        - [6.2.3 变更投票](#623-变更投票)
+        - [6.2.4 确定 Leader](#624-确定-leader)
+        - [6.2.5 小结](#625-小结)
     - [6.3 Leader 选举的实现细节](#63-leader-选举的实现细节)
 - [七 各服务器角色介绍](#七-各服务器角色介绍)
     - [7.1 Leader](#71-leader)
@@ -1306,6 +1311,61 @@ Server1 和 Server2 由于都是初始情况, 所以都投给自己. 假设投�
 > f. __改变服务器状态__
 
 ## 6.2 Leader 选举的算法分析
+
+ZooKeeper 目前只支持 TCP 版本的 FastLeaderElection (`org.apache.zookeeper.server.quorum.FastLeaderElection`) 选举算法.
+
+以下为相关术语介绍:
+- `SID` (服务器 ID): 用来标识 ZooKeeper 集群中的一台机器, 和 myid 值一致.
+- `ZXID` (事务 ID): 用来标识一次服务器状态的变更, 集群中每台机器的 ZXID 可能不一致.
+- `Vote` (投票): 通过投票实现 Leader 选举.
+- `Quorum` (过半机器数): 集群中过半的机器, 计算公式如下:
+```
+quorum = (n/2 + 1)
+```
+- `vote_sid`: 接收到的投票中所推举的 Leader 服务器的 SID.
+- `vote_zxid`: 接收到的投票中所推举的 Leader 服务器的 ZXID.
+- `self_sid`: 自己的 SID.
+- `self_zxid`: 自己的 ZXID.
+
+### 6.2.1 进入 Leader 选举
+
+如果集群中已经存在一个 Leader, 那么后续启动的机器只需和 Leader 建立连接. 如果集群中不存在 Leader, 会进行 Leader 选举.
+
+当整个集群刚初始化或者运行期间 Leader 挂了时, 集群中的所有机器都会处于 "LOOKING" 状态, 所有机器会向集群中的其他机器发送消息, 该消息称为 "投票", 以 `(SID, ZXID)` 来表示.
+
+假设集群有 5 台机器, SID 为 1, 2, 3, 4, 5, ZXID 为 9, 9, 9, 8, 8. SID 为 2 的机器是 Leader, 某一时刻, SID 为 1 和 2 的机器出现故障, 因此集群开始选举.
+
+### 6.2.2 开始投票
+
+第一次投票, 每台机器都投给自己, 所以 3, 4, 5 机器的投票情况为:
+- Server3: (3, 9)
+- Server4: (4, 8)
+- Server5: (5, 8)
+
+### 6.2.3 变更投票
+
+每台机器会收到其他机器的投票, 以下为对 (vote_sid, vote_zxid) 和 (self_sid, self_zxid) 的对比规则:
+- 如果 vote_zxid > self_zxid, 就认可接收到的投票并更新, 然后将更新后的投票发送出去.
+- 如果 vote_zxid < self_zxid, 就坚持自己的投票不做任何变更.
+- 如果 vote_zxid == self_zxid 且 vote_sid > self_zxid, 就认可接收到的投票并更新, 然后将更新后的投票发送出去.
+- 如果 vote_zxid == self_zxid 且 vote_sid < self_zxid, 就坚持自己的投票不做任何变更.
+
+以下为该案例中每台机器的对比情况:
+- Server3: 接收到 (4, 8) 和 (5, 8) 两个投票, 由于自己 (3, 9) 的 ZXID 大于接收到的两个投票, 因此坚持自己的投票不做任何变更.
+- Server4: 接收到 (3, 9) 和 (5, 8) 两个投票, 由于 (3, 9) 的 ZXID 大于自己, 因此变更投票为 (3, 9), 然后将更新后的投票发送出去.
+- Server5: 接收到 (3, 9) 和 (4, 8) 两个投票, 由于 (3, 9) 的 ZXID 大于自己, 因此变更投票为 (3, 9), 然后将更新后的投票发送出去.
+
+### 6.2.4 确定 Leader
+
+经过第二轮投票后, Server3 收到了 Server4, Server5 的投票, Server4 收到了 Server5 的投票, Server5 收到了 Server4 的投票, 此时开始统计投票.
+
+统计投票规则为如果某一台机器收到了超过半数相同的投票, 那么投票对应的机器就为 Leader. 该案例中只要收到 3 个或 3 个以上相同的投票即可, 因为 Server3, Server4, Server5 都收到了 (3, 9), 所以 Leader 为 Server3.
+
+### 6.2.5 小结
+
+通常情况下, 那台服务器上的数据越新, 它的 ZXID 就越大, 也就代表越能够保证数据的恢复, 它就越有可能成为 Leader.
+
+在 ZXID 相同的情况下, SID 较大的就成为 Leader.
 
 ## 6.3 Leader 选举的实现细节
 
