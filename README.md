@@ -90,11 +90,9 @@
 
 ## distributed
 * ZooKeeper
-* Hadoop
 * Ambari
 
 ## store
-* Spring Data
 * MySQL
 * Redis
 * Elasticsearch
@@ -110,6 +108,12 @@
 * Spark Streaming
 * Flink
 * Pulsar
+
+## analysis
+* Hadoop
+* Hive
+* Spark
+* Kylin
 
 ## monitoring security test view
 * Ambari
