@@ -1375,7 +1375,7 @@ ServerState (`org.apache.zookeeper.server.quorum.QuorumPeer.ServerState`) 中标
 - `LEADING`: 领导者状态, 表明当前服务器是 Leader.
 - `OBSERVING`: 观察者状态, 表明当前服务器是 Observer.
 
-Leader 选举投票中的 Vote (`org.apache.zookeeper.server.quorum.Vote`) 数据结构简单定义如下:
+代表 Leader 选举投票的 Vote (`org.apache.zookeeper.server.quorum.Vote`) 数据结构简单定义如下:
 ```java
 public class Vote {
     final private int version;
