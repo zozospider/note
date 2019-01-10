@@ -1369,6 +1369,32 @@ quorum = (n/2 + 1)
 
 ## 6.3 Leader 选举的实现细节
 
+ServerState (`org.apache.zookeeper.server.quorum.QuorumPeer.ServerState`) 中标识了服务器的四种状态:
+- `LOOKING`: 寻找 Leader 状态, 此时需要进行 Leader 选举.
+- `FOLLOWING`: 跟随者状态, 表明当前服务器是 Follower.
+- `LEADING`: 领导者状态, 表明当前服务器是 Leader.
+- `OBSERVING`: 观察者状态, 表明当前服务器是 Observer.
+
+Leader 选举投票中的 Vote (`org.apache.zookeeper.server.quorum.Vote`) 数据结构简单定义如下:
+```java
+public class Vote {
+    final private int version;
+    final private long id;
+    final private long zxid;
+    final private long electionEpoch;
+    final private long peerEpoch;
+    final private ServerState state;
+    public Vote(int version, long id, long zxid, long electionEpoch, long peerEpoch, ServerState state) {
+    }
+}
+```
+
+- `id`: 被推举的 Leader 的 SID.
+- `zxid`: 被推举的 Leader 的事务 ID.
+- `electionEpoch`: 
+- `peerEpoch`: 
+- `state`: 
+
 ---
 
 # 七 各服务器角色介绍
