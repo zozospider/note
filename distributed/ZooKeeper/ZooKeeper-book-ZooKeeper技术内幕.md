@@ -1391,9 +1391,23 @@ public class Vote {
 
 - `id`: 被推举的 Leader 的 SID.
 - `zxid`: 被推举的 Leader 的事务 ID.
-- `electionEpoch`: 
-- `peerEpoch`: 
-- `state`: 
+- `electionEpoch`: 逻辑时钟, 用来判断多个投票是否属于同一轮选举周期(该值在服务端是一个自增序列, 每次进入新一轮投票, 都会加 1).
+- `peerEpoch`: 被推举的 Leader 的 epoch.
+- `state`: 当前服务器状态.
+
+每台服务器都会启动一个 QuorumCnxManager (`org.apache.zookeeper.server.quorum.QuorumCnxManager`), 用于服务器之间 Leader 选举的网络通信.
+
+### 6.3.1 消息队列
+
+### 6.3.2 建立连接
+
+### 6.3.3 消息接收与发送
+
+### 6.3.4 选票管理
+
+### 6.3.4 算法核心
+
+
 
 ---
 
