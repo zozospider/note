@@ -1395,22 +1395,92 @@ public class Vote {
 - `peerEpoch`: 被推举的 Leader 的 epoch.
 - `state`: 当前服务器状态.
 
-每台服务器都会启动一个 QuorumCnxManager (`org.apache.zookeeper.server.quorum.QuorumCnxManager`), 用于服务器之间 Leader 选举的网络通信.
+### 6.3.1 QuorumCnxManager & FastLeaderElection
 
-以下为 QuorumCnxManager 的相关介绍:
+- 每台服务器都会启动一个 QuorumCnxManager (`org.apache.zookeeper.server.quorum.QuorumCnxManager`), 用于服务器之间 Leader 选举的网络通信.
 
-### 6.3.1 消息队列
+以下为 QuorumCnxManager 的简单结构:
+```java
+public class QuorumCnxManager {
+    final ConcurrentHashMap<Long, SendWorker> senderWorkerMap;
+    final ConcurrentHashMap<Long, ArrayBlockingQueue<ByteBuffer>> queueSendMap;
+    final ConcurrentHashMap<Long, ByteBuffer> lastMessageSent;
+    public final ArrayBlockingQueue<Message> recvQueue;
+    public void receiveConnection(final Socket sock) {
+    }
+    public void receiveConnectionAsync(final Socket sock) {
+    }
+    public class Listener extends ZooKeeperThread {
+        volatile ServerSocket ss = null;
+        @Override
+        public void run() {
+        }
+    }
+    class SendWorker extends ZooKeeperThread {
+        Long sid;
+        Socket sock;
+        RecvWorker recvWorker;
+        volatile boolean running = true;
+        DataOutputStream dout;
+        @Override
+        public void run() {
+        }
+    }
+    class RecvWorker extends ZooKeeperThread {
+        Long sid;
+        Socket sock;
+        volatile boolean running = true;
+        final DataInputStream din;
+        final SendWorker sw;
+        @Override
+        public void run() {
+        }
+    }
+}
+```
 
+- FastLeaderElection (`org.apache.zookeeper.server.quorum.FastLeaderElection`) 是 ZooKeeper 的选举算法实现.
 
+以下为 FastLeaderElection 的简单结构:
+```java
+public class FastLeaderElection implements Election {
+    LinkedBlockingQueue<ToSend> sendqueue;
+    LinkedBlockingQueue<Notification> recvqueue;
+    protected class Messenger {
+        WorkerSender ws;
+        WorkerReceiver wr;
+        class WorkerReceiver extends ZooKeeperThread {
+        }
+        class WorkerSender extends ZooKeeperThread {
+        }
+    }
+}
+```
 
-### 6.3.2 建立连接
+### 6.3.2 消息队列
 
-### 6.3.3 消息接收与发送
+QuorumCnxManager 内部会按照每台服务器 (自己和其他) 的 SID 分组, 每一组包含该服务器的队列集合 (接受队列, 发送队列), 不同组之间互不干扰.
 
-### 6.3.4 选票管理
+- `senderWorkerMap`: 发送器集合, 每个 SendWorker, 都对应一台远程的 ZooKeeper 服务器, 负责消息的发送. 按照 SID 进行分组.
+- `queueSendMap`: 消息发送队列, 用于保存待发送的消息. 按照 SID 进行分组, 分别为集群中的每台机器分配了一个单独队列.
+- `lastMessageSent`: 最近发送过的消息. 为每个 SID 保留最近发送过的一个消息.
+- `recvQueue`: 消息接收队列, 用于从其他服务器接受到的消息.
 
-### 6.3.4 算法核心
+### 6.3.3 建立连接
 
+某台服务器的 QuorumCnxManager 启动的时候, 会创建一个 ServerSocket 来监听 Leader 选举的通信端口 (默认 3888).
+
+开启监听后, 就能够不断地接受来自其他服务器的 "创建连接" 请求. 建立 TCP 连接规则为: 只允许 SID 大的服务器主动和其他服务器建立连接, 否则断开连接.
+
+接收到其他服务器的 TCP 连接请求时, 会交给 receiveConnection() 方法处理. receiveConnection() 方法会对比自己和远程服务器的 SID 值, 如果自己的 SID 值更大, 就会断开当前连接, 然后自己主动去和远程服务器建立连接.
+
+一旦建立起连接, 就会根据远程服务器的 SID 来创建相应的 SendWorker (消息发送器) 和 RecvWorker (消息接收器).
+
+### 6.3.4 消息接收与发送
+
+### 6.3.2 选票管理
+
+### 6.3.3 算法核心
 
 
 ---
