@@ -1,4 +1,35 @@
 
+# 安装
+
+## 本地仓库
+
+```xml
+<localRepository>D:\zz\app\maven\apache-maven-3.6.0-repo</localRepository>
+```
+
+## 代理
+
+```xml
+  <mirrors>
+     ...
+     <mirror>  
+      <id>alimaven</id>  
+      <name>aliyun maven</name>  
+      <url>http://maven.aliyun.com/nexus/content/groups/public/</url>  
+      <mirrorOf>central</mirrorOf>          
+    </mirror>
+  </mirrors>
+```
+
+## 环境变量
+```
+MAVEN_HOME
+D:\zz\app\maven\apache-maven-3.6.0
+
+PATH
+%MAVEN_HOME%\bin
+```
+
 # 打包
 
 ## 生成 jar 包排除文件

@@ -1397,7 +1397,11 @@ public class Vote {
 
 每台服务器都会启动一个 QuorumCnxManager (`org.apache.zookeeper.server.quorum.QuorumCnxManager`), 用于服务器之间 Leader 选举的网络通信.
 
+以下为 QuorumCnxManager 的相关介绍:
+
 ### 6.3.1 消息队列
+
+
 
 ### 6.3.2 建立连接
 
