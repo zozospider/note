@@ -14,6 +14,10 @@
 
 2. 去掉勾选: Startup/Shutdown > Reopen last project on startup
 
+3. 界面主题字体修改: File > Settings > Appearance & Behavior > Appearance > 勾选 Use custom font > 修改 Size
+
+4. 编辑区字体修改: File > Settings > Editor > Font > 修改 Size
+
 # Keymap Refrence
 
 Help > Keymap Refrence
