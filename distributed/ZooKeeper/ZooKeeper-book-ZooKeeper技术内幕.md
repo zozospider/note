@@ -1611,7 +1611,7 @@ Leader 服务主要工作有以下两个:
 
 使用责任链模式来处理客户端的每一个请求.
 
-![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-book-ZooKeeper技术内幕/71-Leader-Processing-chain.png.png)
+![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-book-ZooKeeper%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95/71-Leader-Processing-chain.png)
 
 ## 7.2 Follower
 
