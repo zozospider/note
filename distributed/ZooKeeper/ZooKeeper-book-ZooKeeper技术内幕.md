@@ -1439,7 +1439,7 @@ public class QuorumCnxManager {
 }
 ```
 
-- FastLeaderElection (`org.apache.zookeeper.server.quorum.FastLeaderElection`) 是 ZooKeeper 的选举算法实现.
+- ZooKeeper 的选举算法是通过 FastLeaderElection (`org.apache.zookeeper.server.quorum.FastLeaderElection`) 实现的.
 
 以下为 FastLeaderElection 的简单结构:
 ```java
@@ -1457,7 +1457,7 @@ public class FastLeaderElection implements Election {
 }
 ```
 
-### 6.3.2 消息队列
+### 6.3.2 QuorumCnxManager - 消息队列
 
 QuorumCnxManager 内部会按照每台服务器 (自己和其他) 的 SID 分组, 每一组包含该服务器的队列集合 (接受队列, 发送队列), 不同组之间互不干扰.
 
@@ -1466,7 +1466,7 @@ QuorumCnxManager 内部会按照每台服务器 (自己和其他) 的 SID 分组
 - `lastMessageSent`: 最近发送过的消息. 为每个 SID 保留最近发送过的一个消息.
 - `recvQueue`: 消息接收队列, 用于从其他服务器接受到的消息.
 
-### 6.3.3 建立连接
+### 6.3.3 QuorumCnxManager - 建立连接
 
 某台服务器的 QuorumCnxManager 启动的时候, 会创建一个 ServerSocket 来监听 Leader 选举的通信端口 (默认 3888).
 
@@ -1476,11 +1476,45 @@ QuorumCnxManager 内部会按照每台服务器 (自己和其他) 的 SID 分组
 
 一旦建立起连接, 就会根据远程服务器的 SID 来创建相应的 SendWorker (消息发送器) 和 RecvWorker (消息接收器).
 
-### 6.3.4 消息接收与发送
+### 6.3.4 QuorumCnxManager - 消息接收与发送
 
-### 6.3.2 选票管理
+- QuorumCnxManager 中, 消息的接收是由 RecvWorker 负责, ZooKeeper 会为每个远程服务器分配一个单独的 RecvWorker.
 
-### 6.3.3 算法核心
+每个 RecvWorker 会不断地从这个 TCP 连接中读取 Message (消息), 并将读取到的 Message 保存到 recvQueue 中.
+
+- QuorumCnxManager 中, 消息的发送是由 SendWorker 负责, ZooKeeper 会为每个远程服务器分配一个单独的 SendWorker.
+
+每个 SendWorker 会不断地从消息发送队列中读取一条消息来进行发送, 同时将这条消息放入 lastMessageSent (最近发送过的消息) 中.
+
+一旦 ZooKeeper 发现针对的某台远程服务器的消息发送队列为空, 就需要从 lastMessageSent 中取出一个最近发送过的消息再次发送, 目的是为了解决接收方在消息接收前或者收到消息后服务器挂了, 导致消息未被正确处理, 当然, 消息接收方在处理消息的时候, 也会避免对消息的重复处理.
+
+### 6.3.5 FastLeaderElection - 选票管理
+
+以下为常用概念:
+- 外部投票: 其他服务器发来的投票.
+- 内部投票: 服务器自身的投票.
+- 选举轮次: Leader 选举的次数, 即 logicalclock.
+- PK: 内部投票和外部投票进行对比, 确定是否需要变更内部投票.
+
+以下为 FastLeaderElection 中选票管理的组件:
+- `sendqueue`: 选票发送队列.
+
+- `recvqueue`: 选票接收队列.
+
+- `WorkerReceiver`: 选票接收器.
+
+该接收器会不断地从 QuorumCnxManager 中取出其他服务器发来的选举消息, 并将其转换成一个投票, 然后保存到 recvqueue 中.
+
+会有以下几种情况:
+  - a. 如果发现外部投票的选举轮次小鱼当前服务器, 就直接忽略这个外部投票, 同时发出自己的内部投票.
+  - b. 如果当前服务器并不是 LOOKING 状态, 即已经选举出了 Leader, 那么也会忽略这个外部投票, 同时将 Leader 信息以投票的形式发送出去.
+  - c. 如果接收到来自 Observer 服务器, 就忽略该消息, 同时发出自己的内部投票.
+
+- `WorkerSender`: 选票发送器.
+
+该发送器会不断地从 sendqueue 中获取待发送的选票, 并将其传递到底层的 QuorumCnxManager 中去.
+
+### 6.3.6 FastLeaderElection - 算法核心
 
 
 ---
