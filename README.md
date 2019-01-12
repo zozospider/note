@@ -25,6 +25,7 @@
   - [ZooKeeper](https://github.com/zozospider/note/tree/master/distributed/ZooKeeper)
     - [ZooKeeper-book](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book.md)
     - [ZooKeeper-video](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-video.md)
+    - [ZooKeeper-share](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-share.md)
 
 - [store](https://github.com/zozospider/note/tree/master/store)
   - [Elasticsearch](https://github.com/zozospider/note/tree/master/store/Elasticsearch)
