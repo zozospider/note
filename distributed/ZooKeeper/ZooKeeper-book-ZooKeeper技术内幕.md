@@ -1375,26 +1375,6 @@ ServerState (`org.apache.zookeeper.server.quorum.QuorumPeer.ServerState`) 中标
 - `LEADING`: 领导者状态, 表明当前服务器是 Leader.
 - `OBSERVING`: 观察者状态, 表明当前服务器是 Observer.
 
-代表 Leader 选举投票的 Vote (`org.apache.zookeeper.server.quorum.Vote`) 数据结构简单定义如下:
-```java
-public class Vote {
-    final private int version;
-    final private long id;
-    final private long zxid;
-    final private long electionEpoch;
-    final private long peerEpoch;
-    final private ServerState state;
-    public Vote(int version, long id, long zxid, long electionEpoch, long peerEpoch, ServerState state) {
-    }
-}
-```
-
-- `id`: 被推举的 Leader 的 SID.
-- `zxid`: 被推举的 Leader 的事务 ID.
-- `electionEpoch`: 逻辑时钟, 用来判断多个投票是否属于同一轮选举周期(该值在服务端是一个自增序列, 每次进入新一轮投票, 都会加 1).
-- `peerEpoch`: 被推举的 Leader 的 epoch.
-- `state`: 当前服务器状态.
-
 ### 6.3.1 QuorumCnxManager & FastLeaderElection
 
 - 每台服务器都会启动一个 QuorumCnxManager (`org.apache.zookeeper.server.quorum.QuorumCnxManager`), 用于服务器之间 Leader 选举的网络通信.
@@ -1446,6 +1426,7 @@ public class QuorumCnxManager {
 public class FastLeaderElection implements Election {
     LinkedBlockingQueue<ToSend> sendqueue;
     LinkedBlockingQueue<Notification> recvqueue;
+    AtomicLong logicalclock = new AtomicLong();
     protected class Messenger {
         WorkerSender ws;
         WorkerReceiver wr;
@@ -1453,6 +1434,9 @@ public class FastLeaderElection implements Election {
         }
         class WorkerSender extends ZooKeeperThread {
         }
+    }
+    public Vote lookForLeader() throws InterruptedException {
+        HashMap<Long, Vote> recvset = new HashMap<Long, Vote>();
     }
 }
 ```
@@ -1484,7 +1468,7 @@ QuorumCnxManager 内部会按照每台服务器 (自己和其他) 的 SID 分组
 
 - QuorumCnxManager 中, 消息的发送是由 SendWorker 负责, ZooKeeper 会为每个远程服务器分配一个单独的 SendWorker.
 
-每个 SendWorker 会不断地从消息发送队列中读取一条消息来进行发送, 同时将这条消息放入 lastMessageSent (最近发送过的消息) 中.
+每个 SendWorker 会不断地从消息发送队列 sendqueue 中读取一条消息来进行发送, 同时将这条消息放入 lastMessageSent (最近发送过的消息) 中.
 
 一旦 ZooKeeper 发现针对的某台远程服务器的消息发送队列为空, 就需要从 lastMessageSent 中取出一个最近发送过的消息再次发送, 目的是为了解决接收方在消息接收前或者收到消息后服务器挂了, 导致消息未被正确处理, 当然, 消息接收方在处理消息的时候, 也会避免对消息的重复处理.
 
@@ -1517,6 +1501,101 @@ c. 如果接收到来自 Observer 服务器, 就忽略该消息, 同时发出自
 
 ### 6.3.6 FastLeaderElection - 算法核心
 
+Leader 选举算法的基本流程, 在 lookForLeader() 方法中实现, 以下为核心步骤:
+
+> a. __自增选举轮次__
+
+FastLeaderElection 中有一个 logicalclock 属性, 用于标识当前 Leader 选举轮次, 所有有效投票都必须在同一轮次中. 因此在开始新的轮次时, logicalclock 会自增.
+
+> b. __初始化选票__
+
+在开始新的轮次时, 每个服务器都会初始化自己的选票, 初始化选票即 Vote 属性的初始化.
+
+代表 Leader 选举投票的 Vote (`org.apache.zookeeper.server.quorum.Vote`) 数据结构简单定义如下:
+```java
+public class Vote {
+    final private int version;
+    final private long id;
+    final private long zxid;
+    final private long electionEpoch;
+    final private long peerEpoch;
+    final private ServerState state;
+    public Vote(int version, long id, long zxid, long electionEpoch, long peerEpoch, ServerState state) {
+    }
+}
+```
+
+- `id`: 被推举的 Leader 的 SID.
+- `zxid`: 被推举的 Leader 的事务 ID.
+- `electionEpoch`: 逻辑时钟, 用来判断多个投票是否属于同一轮选举周期(该值在服务端是一个自增序列, 每次进入新一轮投票, 都会加 1).
+- `peerEpoch`: 被推举的 Leader 的 epoch.
+- `state`: 当前服务器状态.
+
+以下为 Vote 初始化后的值:
+- `id`: 当前服务器自身的 SID.
+- `zxid`: 当前服务器最新的 ZXID.
+- `electionEpoch`: 当前服务器的选举轮次.
+- `peerEpoch`: 被推举的服务器的选举轮次.
+- `state`: LOOKING.
+
+> c. __发送初始化选票__
+
+完成初始化后, 服务器会发起第一次投票, ZooKeeper 会将初始化好的选票放入 sendqueue 中, 由发送器 SendWorker 发送出去.
+
+> d. __接收外部投票__
+
+每台服务器会不断地从 recvQueue 中获取外部投票.
+
+如果服务器发送无法获取到任何外部投票, 就会确认自己是否和集群中其他服务器保持有效连接. 如果没有连接, 就马上建立连接, 如果已经连接, 就再次发送自己的内部投票.
+
+> e. __判断选举轮次__
+
+当发送完初始选票后, 就开始处理外部投票, 会根据选举轮次来进行不同的处理.
+
+- 外部投票的选举轮次大于内部投票
+
+如果外部的选举轮次大于内部, 就会立即更新自己的 logicalclock (选举轮次), 并清空所有收到的投票, 然后初始化投票并和外部投票 PK 以确认是否变更内部投票, 最终再将内部投票发送出去.
+
+- 外部投票的选举轮次小于内部投票
+
+如果外部的选举轮次小于内部, 就忽略该外部投票, 不做任何处理, 并返回步骤 d.
+
+- 外部投票的选举轮次等于内部投票
+
+这是大多数场景, 如果相等, 就开始进行 PK.
+
+> f. __选票 PK__
+
+收到其他服务器有效的外部投票后, 就开始 PK, 其核心逻辑在 totalOrderPredicate() 方法中实现, 因为 PK 的目的是确定当前服务器是否需要变更投票, 因此该方法会返回 boolean 值.
+
+以下三个条件, 只要符合任意一个就需要进行投票变更:
+- a. 如果外部投票中被推举的 Leader 服务器的选举轮次大于内部投票, 那么就需要进行投票变更.
+- b. 如果选举轮次一致, 就对比两者的 ZXID, 如果外部投票的 ZXID 大于内部投票, 那么就需要进行投票变更.
+- c. 如果两者的 ZXID 一致, 就对比两者的 SID, 如果外部投票的 SID 大于内部投票, 那么就需要进行投票变更.
+
+> g. __投票变更__
+
+选票 PK 如果确认需要进行投票变更, 就使用外部投票覆盖内部投票, 然后将该内部投票发送出去.
+
+> h. __选票归档__
+
+无论是否进行了投票变更, 都会将刚收到的外部投票按照 SID 区分, 放入 totalOrderPredicate() 方法的变量 `HashMap<Long, Vote> recvset` (选票集合) 中, 用于记录当前服务器在本轮次中收到的所有外部投票, 如 {(1, vote1), (2, vote2), ...}.
+
+> i. __统计投票__
+
+投票归档后, 就开始统计投票, 其过程就是统计集群中是否有过半的机器认可了当前的内部投票, 如果有则认可该内部投票并终止投票.
+
+> j. __更新服务器状态__
+
+统计投票后, 如果确定可以终止投票, 就开始更新服务器状态.
+
+服务器首先判断当前被过半服务器认可的投票是否是自己, 如果是自己, 就将自己的状态更新为 LEADING, 如果不是自己, 就根据情况确定自己是 FOLLOWING 或 OBSERVING.
+
+> __小结__
+
+以上步骤中的 `d ~ i` 会循环, 直到 Leader 选举产生.
+
+在完成 步骤 i 后, 如果发现已经有过半的服务器认可了当前投票, 并不会立即进入下一步, 而是会等待一段时间 (默认 200ms) 来确认是否有新的更优的投票.
 
 ---
 
