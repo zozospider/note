@@ -1679,7 +1679,10 @@ Leader 服务器会与每个 Follower/Observer 服务器建立一个 TCP 长连�
 
 ## 7.2 Follower
 
-
+Follower 服务主要工作有以下三个:
+- 处理客户端非事务请求, 转发事务请求给 Leader.
+- 参与事务请求 Proposal 投票.
+- 参与 Leader 选举投票.
 
 ### 7.2.1 请求处理链
 
@@ -1688,6 +1691,10 @@ Leader 服务器会与每个 Follower/Observer 服务器建立一个 TCP 长连�
 ### 7.3.1 请求处理链
 
 ## 7.4 集群间消息通信
+
+ZooKeeper 集群的工作都是由 Leader 服务器来负责进行协调, 各服务器间的网络通讯, 是通过不同类型的消息传递来实现的.
+
+以下为 ZooKeeper 的四种消息类型:
 
 ### 7.4.1 数据同步型
 
