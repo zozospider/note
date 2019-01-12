@@ -79,6 +79,7 @@
 - [七 各服务器角色介绍](#七-各服务器角色介绍)
     - [7.1 Leader](#71-leader)
         - [7.1.1 请求处理链](#711-请求处理链)
+        - [7.1.2 LearnerHandler](#712-LearnerHandler)
     - [7.2 Follower](#72-follower)
         - [7.2.1 请求处理链](#721-请求处理链)
     - [7.3 Observer](#73-observer)
@@ -1628,17 +1629,57 @@ Leader 服务主要工作有以下两个:
 
 > __PrepRequestProcessor__
 
+PrepRequestProcessor (`org.apache.zookeeper.server.PrepRequestProcessor`) 是 Leader 服务器的顶级预处理器.
+
+PrepRequestProcessor 能够识别出当前客户端请求是否是事务请求 (事务请求是指会改变服务器状态的请求, 比如创建会话, 创建节点, 更新数据, 删除节点等). 对于事务请求, PrepRequestProcessor 会对其进行一系列预处理, 如创建请求事务头, 事务体, 会话检查, ACL 检查, 版本检查等.
+
 > __ProposalRequestProcessor__
+
+ProposalRequestProcessor (`org.apache.zookeeper.server.quorum.ProposalRequestProcessor`) 是 Leader 服务器的事务投票处理器, 也是 Leader 服务器的事务处理流程的发起者.
+
+对于非事务请求, ProposalRequestProcessor 会将请求流转到 CommitProcessor 处理器, 不再做其他处理.
+
+对于事务请求, ProposalRequestProcessor 不仅会将请求交给 CommitProcessor 处理器, 还会将事务请求交给 SyncRequestProcessor 进行事务日志记录.
+
+另外, 对于事务请求, ProposalRequestProcessor 还会根据请求类型创建对应的 Proposal 提议, 并发送给所有的 Follower 服务器来发起一次集群内的事务投票.
 
 > __SyncRequestProcessor__
 
+SyncRequestProcessor (`org.apache.zookeeper.server.SyncRequestProcessor`) 是事务日志记录器, 主要用来将事务请求记录到事务日志文件中, 同时还会触发 ZooKeeper 进行数据快照.
+
+> __AckRequestProcessor__
+
+AckRequestProcessor (`org.apache.zookeeper.server.quorum.AckRequestProcessor`) 是 Leader 特有的处理器, 负责在 SyncRequestProcessor 完成事务日志记录后, 向 Proposal 的投票收集器发送 ACK 反馈, 以通知投票收集器当前服务器已经完成了对该 Proposal 的事务日志记录.
+
 > __CommitProcessor__
+
+CommitProcessor (`org.apache.zookeeper.server.quorum.CommitProcessor`) 是事务提交处理器, 可以很好的控制对事务请求的顺序处理.
+
+对于非事务请求, CommitProcessor 会将请求交给下一级处理器.
+
+对于事务请求, CommitProcessor 会等待集群内针对 Proposal 的投票, 直到该 Proposal 可被提交.
 
 > __ToBeAppliedRequestProcessor__
 
+ToBeAppliedRequestProcessor (`org.apache.zookeeper.server.quorum.Leader.ToBeAppliedRequestProcessor`) 有一个 `ConcurrentLinkedQueue<Proposal> toBeApplied` 队列, 用来存储已经被 CommitProcessor 处理过的可被提交的 Proposal.
+
+ToBeAppliedRequestProcessor 将这些请求逐个交给 FinalRequestProcessor 处理器, 等到 FinalRequestProcessor 处理器处理完之后, 再将其从 toBeApplied 队列中移除.
+
 > __FinalRequestProcessor__
 
+FinalRequestProcessor (`org.apache.zookeeper.server.FinalRequestProcessor`) 是最后一个处理器, 主要用来进行客户端请求返回之前的收尾工作.
+
+针对事务请求, FinalRequestProcessor 还会将事务应用到内存数据库中.
+
+### 7.1.2 LearnerHandler
+
+LearnerHandler (`org.apache.zookeeper.server.quorum.LearnerHandler`) 是 Learner 服务器的管理器, 主要负责 Leader 服务器和 Follower/Observer 服务器之间的网络通信, 如数据同步, 请求转发, Proposal 提议投票等.
+
+Leader 服务器会与每个 Follower/Observer 服务器建立一个 TCP 长连接, 会为每一个 Follower/Observer 服务器创建一个 LearnerHandler 实体.
+
 ## 7.2 Follower
+
+
 
 ### 7.2.1 请求处理链
 
