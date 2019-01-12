@@ -1603,9 +1603,23 @@ public class Vote {
 
 ## 7.1 Leader
 
+Leader 服务主要工作有以下两个:
+- 事务请求的唯一调度和处理者, 保证集群事务处理的顺序性.
+- 集群内部各服务器的调度者.
+
+### 7.1.1 请求处理链
+
+使用责任链模式来处理客户端的每一个请求.
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-book-ZooKeeper技术内幕/71-Leader-Processing-chain.png.png)
+
 ## 7.2 Follower
 
+### 7.2.1 请求处理链
+
 ## 7.3 Observer
+
+### 7.3.1 请求处理链
 
 ## 7.4 集群间消息通信
 
