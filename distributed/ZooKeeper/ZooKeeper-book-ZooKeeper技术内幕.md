@@ -1738,8 +1738,8 @@ ZooKeeper 集群的工作都是由 Leader 服务器来负责进行协调, 各服
 
 | 消息类型 | 发送方 -> 接收方 | 说明 |
 | :--- | :--- | :--- |
-| PING, 1 | Leader -> Learner |  |
-| REVALIDATE, 2 | Learner -> Leader |  |
+| PING, 1 | Leader -> Learner | // TODO |
+| REVALIDATE, 2 | Learner -> Leader | 通常发生在客户端重连的时候, 新的服务器需要向 Leader 发送 REVALIDATE 消息以确定该会话是否已经超时 |
 
 ---
 
