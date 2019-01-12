@@ -70,11 +70,24 @@
         - [6.2.4 确定 Leader](#624-确定-leader)
         - [6.2.5 小结](#625-小结)
     - [6.3 Leader 选举的实现细节](#63-leader-选举的实现细节)
+        - [6.3.1 QuorumCnxManager & FastLeaderElection](#631-quorumcnxmanager--fastleaderelection)
+        - [6.3.2 QuorumCnxManager - 消息队列](#632-quorumcnxmanager---消息队列)
+        - [6.3.3 QuorumCnxManager - 建立连接](#633-quorumcnxmanager---建立连接)
+        - [6.3.4 QuorumCnxManager - 消息接收与发送](#634-quorumcnxmanager---消息接收与发送)
+        - [6.3.5 FastLeaderElection - 选票管理](#635-fastleaderelection---选票管理)
+        - [6.3.6 FastLeaderElection - 算法核心](#636-fastleaderelection---算法核心)
 - [七 各服务器角色介绍](#七-各服务器角色介绍)
     - [7.1 Leader](#71-leader)
+        - [7.1.1 请求处理链](#711-请求处理链)
     - [7.2 Follower](#72-follower)
+        - [7.2.1 请求处理链](#721-请求处理链)
     - [7.3 Observer](#73-observer)
+        - [7.3.1 请求处理链](#731-请求处理链)
     - [7.4 集群间消息通信](#74-集群间消息通信)
+        - [7.4.1 数据同步型](#741-数据同步型)
+        - [7.4.2 服务器初始化型](#742-服务器初始化型)
+        - [7.4.3 请求处理型](#743-请求处理型)
+        - [7.4.4 会话管理型](#744-会话管理型)
 - [八 请求处理](#八-请求处理)
     - [8.1 会话创建请求](#81-会话创建请求)
     - [8.2 SetData 请求](#82-setdata-请求)
@@ -1613,6 +1626,18 @@ Leader 服务主要工作有以下两个:
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-book-ZooKeeper%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95/71-Leader-Processing-chain.png)
 
+> __PrepRequestProcessor__
+
+> __ProposalRequestProcessor__
+
+> __SyncRequestProcessor__
+
+> __CommitProcessor__
+
+> __ToBeAppliedRequestProcessor__
+
+> __FinalRequestProcessor__
+
 ## 7.2 Follower
 
 ### 7.2.1 请求处理链
@@ -1622,6 +1647,14 @@ Leader 服务主要工作有以下两个:
 ### 7.3.1 请求处理链
 
 ## 7.4 集群间消息通信
+
+### 7.4.1 数据同步型
+
+### 7.4.2 服务器初始化型
+
+### 7.4.3 请求处理型
+
+### 7.4.4 会话管理型
 
 ---
 
