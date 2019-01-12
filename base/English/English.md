@@ -1,5 +1,5 @@
 
-# 常用
+# Chinese to English
 
 - 我很无聊
 
@@ -114,3 +114,24 @@ I am at the park.
 - 运动很好玩
 
 Exercising is fun.
+
+---
+
+# English to Chinese
+
+- I'm not buying it.
+
+我不相信
+
+- Sorry, I didn't catch that.
+
+抱歉, 我没有听到/听懂
+
+- It's not the end of the world.
+
+这不是世界末日
+
+- Make yourself at home.
+
+把这里当作自己的家
+
