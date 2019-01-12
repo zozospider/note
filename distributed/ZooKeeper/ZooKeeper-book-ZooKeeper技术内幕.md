@@ -1698,11 +1698,52 @@ ZooKeeper 集群的工作都是由 Leader 服务器来负责进行协调, 各服
 
 ### 7.4.1 数据同步型
 
+数据同步型是指在进行数据同步的时候, Learner 和 Leader 相互通信所用的消息.
+
+以下为消息类型:
+| 消息类型 | 发送方 -> 接收方 | 说明 |
+| :--- | :--- | :--- |
+| DIFF, 13 | Leader -> Learner | 用于通知 Learner, Leader 即将与其进行 "DIFF" 方式的数据同步 |
+| TRUNC, 14 | Leader -> Learner | 用于触发 Learner 进行内存数据库的回滚操作 |
+| SNAP, 15 | Leader -> Learner | 用于通知 Learner, Leader 即将与其进行 "全量" 方式的数据同步 |
+| UPTODATE, 12 | Leader -> Learner | 用来告诉 Learner, 已经完成了数据同步, 可以安康i是对外提供服务了 |
+
 ### 7.4.2 服务器初始化型
+
+服务器初始化型是指在整个集群或是某些新机器初始化的时候, Learner 和 Leader 相互通信所用的消息.
+
+以下为消息类型:
+| 消息类型 | 发送方 -> 接收方 | 说明 |
+| :--- | :--- | :--- |
+| OBSERVERINFO, 16 | Observer -> Leader | Observer 在启动的时候发送给 Leader, 用于向 Leader 注册自己身份. 消息中包含 SID 和最新的 ZXID |
+| FOLLOWERINFO, 11 | Follower -> Leader | Follower 在启动的时候发送给 Leader, 用于向 Leader 注册自己身份. 消息中包含 SID 和最新的 ZXID |
+| LEADERINFO, 17 | Leader -> Learner | Learner 连接上 Leader 后, 会发送 LearnerInfo (OBSERVERINFO/FOLLOWERINFO), Leader 接收到消息后, 会将 LEADERINFO 发送给 Learner, 消息中包含当前 Leader 最新的 EPOCH 值 |
+| ACKEPOCH, 18 | Learner -> Leader | Learner 收到 Leader 发送的 LEADERINFO 后, 会将 ACKEPOCH (自己最新的 ZXID 和 EPOCH) 发送给 Leader |
+| NEWLEADER, 10 | Leader -> Learner | 该消息用于 Leader 向 Learner 发送一个阶段性标识 (带上 Leader 最新的 ZXID), 如完成数据同步, 足够多的 Follower 连接上 Leader 等 |
 
 ### 7.4.3 请求处理型
 
+请求处理型是指在进行请求处理的时候, Learner 和 Leader 相互通信所用的消息.
+
+以下为消息类型:
+| 消息类型 | 发送方 -> 接收方 | 说明 |
+| :--- | :--- | :--- |
+| REQUEST, 1 | Learner -> Leader | 当 Learner 接收到客户端的事务请求后, 就会将请求以 REQUEST 消息的形式转发给 Leader 来处理 |
+| PROPOSAL, 2 | Leader -> Follower | ZAB 协议中的提议. 在处理事务请求的时候, Leader 会见将事务请求以 PROPOSAL 消息的形式创建投票发送给所有 Follower 来进行事务日志的记录 |
+| ACK, 3 | Follower -> Leader | FOllower 接收到 Leader 的 PROPOSAL 消息, 并完成事务日志的记录后, 会以 ACK 消息反馈给 Leader |
+| COMMIT, 4 | Leader -> Follower | Leader 在接收到过半的 Follower 发来的 ACK 消息后, 就进入事务请求的最终提交流程, 生成 COMMIT 消息, 告知所有 Follower 进行事务请求的提交 |
+| INFORM, 8 | Learner -> Observer |  |
+| SYNC, 7 | Leader -> Learner |  |
+
 ### 7.4.4 会话管理型
+
+会话管理型是指在进行会话管理的过程中, Learner 和 Leader 相互通信所用的消息.
+
+以下为消息类型:
+| 消息类型 | 发送方 -> 接收方 | 说明 |
+| :--- | :--- | :--- |
+| PING, 1 | Leader -> Learner |  |
+| REVALIDATE, 2 | Learner -> Leader |  |
 
 ---
 
