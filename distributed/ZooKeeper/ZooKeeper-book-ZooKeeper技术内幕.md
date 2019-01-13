@@ -1874,19 +1874,95 @@ SyncRequestProcessor 首先会判断该请求是否是事务请求, 对于每一
 
 在发起投票前, 首先会检查当前服务器的 ZXID 是否可用, 如果不可用, 将会抛出 XidRolloverException 异常.
 
-> t. __生成提议 Proposal__
+> t. __生成 Proposal 提议__
 
 如果当前服务器的 ZXID 可用, 就可以开始事务投票了.
 
 ZooKeeper 会将创建的事务请求头, 事务请求体, ZXID, 请求本身序列号到 Proposal 对象中 (Proposal 对象就是一个提议, 是针对 ZooKeeper 服务器状态变更的申请).
 
-> u. __广播提议__
+> u. __广播 Proposal 提议__
+
+生成提议后, Leader 服务器会以 ZXID 为标识, 将该 Proposal 提议放入投票箱 outstandingProposals 中, 同时会将该 Proposal 提议广播给所有 Follower 服务器.
+
+> v. __收集投票__
+
+Follower 服务器在接收到 Leader 服务器发来的 Proposal 提议后, 会进入 Sync 流程来进行事务日志的记录, 一旦记录完成, 就会发送 ACK 消息给 Leader 服务器.
+
+Leader 服务器根据这些 ACK 消息来统计每个 Proposal 提议的投票情况, 当一个 Proposal 提议获得了集群中过半机器的投票, 就认为该 Proposal 提议通过, 可以进入 Commit 提交阶段.
+
+> w. __将请求放入 toBeApplied 队列__
+
+在该 Proposal 提议被 commit 提交前, 首先会将其放入 toBeApplied 队列中.
+
+> x. __广播 COMMIT 消息__
+
+一旦 ZooKeeper 确认一个 Proposal 提议已经可以被提交, Leader 服务器就会向 Follower 服务器和 Observer 服务器发送 COMMIT 消息, 以便所有服务器都能够提交该 Proposal 提议.
+
+由于 Observer 服务器并未参与之前的提议, 因此 Observer 服务器尚未保存任何关于该 Proposal 提议的信息, 所以在广播的时候, 需要区别对待. Leader 服务器会向其发送一个 INFORM 消息 (该消息中包含了当前 Proposal 提议的内容), 而 Follower 服务器由于已经保存了 Proposal 提议信息, 因此 Leader 服务器只需要向其发送 ZXID 即可.
 
 ### 8.1.6 事务处理 - Commit 流程
 
+> y. __将请求交付给 CommitProcessor 处理器__
+
+CommitProcessor (`org.apache.zookeeper.server.quorum.CommitProcessor`) 处理器收到 COMMIT 请求后, 并不会立即处理, 而是会将其放入 queuedRequests 队列中.
+
+> z. __处理 queuedRequests 队列请求__
+
+CommitProcessor 处理器会有一个单独的线程来处理从上一级处理器流转下来的请求. 当检测到 queuedRequests 队列中由新的请求时, 就会逐个从队列中取出请求进行处理.
+
+> Aa. __标记 nextPending__
+
+如果从 queuedRequests 队列中取出的是一个事务请求, 就需要将 `Request nextPending` 标记为当前请求 (便于 CommitProcessor 处理器检测当前集群是否正在进行事务请求的投票, 同时确保事务请求的顺序性).
+
+另外, 需要进行集群中各服务器之间的投票处理.
+
+> Ab. __等待 Proposal 投票__
+
+在 Commit 流程处理的同时, Leader 已经根据当前事务请求生成一个 Proposal 提议, 并广播给了所有的 Follower 服务器, 因此, 这时候 Commit 流程需要等待, 直到投票结束.
+
+> Ac. __投票通过__
+
+如果一个 Proposal 提议已经获得过半机器的投票认可, 那么就会进入请求提交阶段, ZooKeeper 会将该请求放入 `LinkedList<Request> queuedRequests` 队列中, 同时唤醒 Commit 流程.
+
+> Ad. __提交请求__
+
+一旦发现 queuedRequests 队列中已经有可以提交的请求了, Commit 流程就会开始提交请求.
+
+为了保证事务请求的顺序性, Commit 流程还会对比之前标记的 nextPending 和 queuedRequests 队列中的第一个请求是否一致. 如果检查通过, Commit 流程就会将该请求放入 `ArrayList<Request> toProcess` 队列中, 然后交给下一个 FinalRequestProcessor 处理器.
+
 ### 8.1.7 事务应用
 
-### 8.1.8 会话相应
+> Ae. __交付给 FinalRequestProcessor 处理器__
+
+FinalRequestProcessor (`org.apache.zookeeper.server.FinalRequestProcessor`) 处理器会先检查 `final List<ChangeRecord> outstandingChanges` 队列中请求的有效性, 如果发现这些请求已经落后于当前正在处理的请求, 就直接从 outstandingChanges 队列中移除.
+
+> Af. __事务应用__
+
+在之前的请求处理逻辑中, 仅仅是将事务请求记录到了事务日志中, 内存数据库中的状态尚未变更. 因此该步骤就是将事务变更应用到内存数据库中.
+
+但是对于 "会话创建" 这类事务请求, ZooKeeper 做了特殊处理: 因为在 ZooKeeper 内存中, 会话管理都是由 SessionTracker 负责, 不涉及内存数据库的变更. 而在步骤 i 注册会话中, 已经将会话信息注册到了 SessionTracker 中, 因此此时只需要再次向 SessionTracker 注册会话即可.
+
+> Ag. __将事务请求放入队列 commitProposal__
+
+一旦完成事务请求的内存数据库应用, 就可以将该请求放入 commitProposal 队列中.
+
+commitProposal 队列用来保存最近被提交的事务请求, 以便集群间机器进行数据的快速同步.
+
+### 8.1.8 会话响应
+
+客户端请求在经过 ZooKeeper 服务端处理链路的所有请求处理器处理后, 就会进入最后的会话响应阶段:
+
+> Ah. __统计处理__
+
+ZooKeeper 会计算请求在服务端处理所花费的时间, 还会统计客户端连接的基本信息, 如 lastZxid (最新的 ZXID), lastOp (最后一次和服务端的操作), lastLatency (最后一次请求处理所花费的时间) 等.
+
+> Ai. __创建响应 ConnectResponse__
+
+ConnectResponse (`org.apache.zookeeper.proto.ConnectResponse`) 包含了 protocolVersion (当前客户端与服务端之间的通信协议版本号), timeOut (会话超时时间), sessionId, passwd (会话密码).
+
+> Aj. __序列化 ConnectResponse__
+
+> Ak. __I/O 层发送响应给客户端__
 
 ## 8.2 SetData 请求
 
