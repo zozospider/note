@@ -1856,6 +1856,8 @@ ProposalRequestProcessor 是一个与提案相关的处理器, 是 ZooKeeper 中
 
 ### 8.1.4 事务处理 - Sync 处理
 
+> r. __Sync 处理__
+
 Sync 流程, 就是使用 SyncRequestProcessor (`org.apache.zookeeper.server.SyncRequestProcessor`) 处理器记录事务日志的过程. Leader 和 Follower 的请求处理链都有这个处理器, 两者在事务日志的记录功能上完全一致.
 
 SyncRequestProcessor 首先会判断该请求是否是事务请求, 对于每一个事务请求, 都会通过事务日志的形式将其记录下来.
@@ -1863,6 +1865,22 @@ SyncRequestProcessor 首先会判断该请求是否是事务请求, 对于每一
 完成事务日志记录后, 每个 Follower 服务器都会向 Leader 服务器发送 ACK 消息, 表明自身完成了事务日志的记录, 以便 Leader 服务器统计每个事务请求的投票情况.
 
 ### 8.1.5 事务处理 - Proposal 流程
+
+在 ZooKeeper 中, 每一个事务请求都需要集群中过半机器投票认可才能被真正应用到 ZooKeeper 的内存数据库中, 这个投票与统计的过程称为 `Proposal 流程`.
+
+> s. __发起投票__
+
+如果当前请求是事务请求, Leader 服务器就会发起一轮事务投票.
+
+在发起投票前, 首先会检查当前服务器的 ZXID 是否可用, 如果不可用, 将会抛出 XidRolloverException 异常.
+
+> t. __生成提议 Proposal__
+
+如果当前服务器的 ZXID 可用, 就可以开始事务投票了.
+
+ZooKeeper 会将创建的事务请求头, 事务请求体, ZXID, 请求本身序列号到 Proposal 对象中 (Proposal 对象就是一个提议, 是针对 ZooKeeper 服务器状态变更的申请).
+
+> u. __广播提议__
 
 ### 8.1.6 事务处理 - Commit 流程
 
