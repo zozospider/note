@@ -1774,37 +1774,93 @@ ZooKeeper 集群的工作都是由 Leader 服务器来负责进行协调, 各服
 
 > c. __反序列化 ConnectRequest 请求__
 
+对该请求进行反序列化, 生成一个 ConnectRequest 请求实体.
+
 > d. __判断是否是 ReadOnly 客户端__
+
+如果当前 ZooKeeper 服务端是以 ReadOnly 模式启动, 那么所有非 ReadOnly 请求都不会处理. 因此, 会检查 ConnectRequest 是否是 ReadOnly 客户端.
 
 > e. __检查客户端 ZXID__
 
+同一个 ZooKeeper 集群中, 服务端的 ZXID 一定大于客户端的 ZXID. 因此, 如果发现客户端的 ZXID 大于服务端的 ZXID, 将不接受该请求.
+
 > f. __协商 sessionTimeout__
 
+客户端在构造 ZooKeeper 实例的时候, 会有一个 sessionTimeout 参数用于指定会话超时时间.
+
+服务端会根据自己的超时时间最终确定该会话的超时时间, 该过程称为 "sessionTimeout 协商".
+
+默认情况下, 服务端会对超时时间限制在 2 个 tickTime ~ 20 个 tickTime 之间. 假设 tickTime 为 2000ms, 那么服务端就会限制客户端超时时间在 4s ~ 40s.
+
 > g. __判断是否需要重新创建会话__
+
+如果客户端请求中包含 sessionID, 就认为客户端正在进行会话重连, 此时服务端只需重新打开这个会话, 否则需要重新创建.
 
 ### 8.1.2 会话创建
 
 > h. __为客户端生成 sessionID__
 
+每个服务端启动时, 都会初始化一个 SessionTracker (会话管理器), 同时初始化 `基准 sessionID`, 针对每个客户端, 只需在这个基准 sessionID 的基础上逐个递增即可.
+
 > i. __注册会话__
+
+SessionTracker 中有 `ConcurrentHashMap<Long, Integer> sessionsWithTimeout` (根据 sessionID 保存了所有会话的超时时间) 和 `HashMap<Long, SessionImpl> sessionsById = new HashMap<Long, SessionImpl>()` (根据 sessionID 保存了所有会话实体) 两个属性.
+
+在会话创建初期, 会将该客户端会话的相关信息保存到这两个属性中.
 
 > j. __激活会话__
 
+激活会话的核心是为会话安排一个区块, 以便会话清理程序能够高效清理会话 (参考 `分桶策略`).
+
 > k. __生成会话密码__
+
+服务端在创建会话时, 会生成一个会话密码, 以下为会话密码的生成方式:
+```java
+static final private long superSecret = 0XB3415C00L;
+Random r = new Random(sessionId ^ superSecret);
+r.nextBytes(passwd);
+```
+
+服务端会将 sessionID 和 会话密码一起发送给客户端, 作为会话在集群中不同机器间转移的凭证.
 
 ### 8.1.3 预处理
 
 > l. __将请求交给 ZooKeeper 的 PrepRequestProcessor 处理器进行处理__
 
+ZooKeeper 针对客户端的请求采用责任链模式处理. 在第一个请求处理器 PrepRequestProcessor 处理前, ZooKeeper 会根据请求所属的会话进行一次会话激活, 完成会话激活后, 就将该请求提交给 PrepRequestProcessor 处理器.
+
 > m. __创建请求事务头__
+
+对于事务请求, ZooKeeper 会为其创建请求事务头, 服务端后续的请求处理器都是基于该请求头来识别当前请求是否时事务请求.
+
+请求事务头包含如下信息:
+- `clientId`: 客户端 ID, 用于唯一标识该请求所属客户端.
+- `cxid`: 客户端的操作序列号.
+- `zxid`: 该事务请求对应的事务 ZXID.
+- `time`: 服务器开始处理该事务请求的时间.
+- `type`: 事务请求类型, 如 create, delete, setData, createSession (定义在 `org.apache.zookeeper.ZooDefs.OpCode` 中) 等.
 
 > n. __创建请求事务体__
 
+对于事务请求, ZooKeeper 会为其创建请求事务体, "会话创建" 对应 CreateSessionTxn (`org.apache.zookeeper.txn.CreateSessionTxn`).
+
 > o. __注册与激活会话__
+
+与步骤 i 相同, 当非 Leader 服务器转发会话创建请求过来时, 此时尚未在 Leader 的 SessionTracker 中进行会话注册, 因此需要在此进行一次注册与激活.
 
 > p. __将请求交给 ProposalRequestProcessor 处理器__
 
+ProposalRequestProcessor 会将请求交给下一级 ProposalRequestProcessor.
+
+ProposalRequestProcessor 是一个与提案相关的处理器, 是 ZooKeeper 中针对事务请求所展开的一个投票流程中对事务操作的包装. 从该处理器开始, 会进入三个子处理流程: Sync 流程, Proposal 流程, Commit 流程.
+
 ### 8.1.4 事务处理 - Sync 处理
+
+Sync 流程, 就是使用 SyncRequestProcessor (`org.apache.zookeeper.server.SyncRequestProcessor`) 处理器记录事务日志的过程. Leader 和 Follower 的请求处理链都有这个处理器, 两者在事务日志的记录功能上完全一致.
+
+SyncRequestProcessor 首先会判断该请求是否是事务请求, 对于每一个事务请求, 都会通过事务日志的形式将其记录下来.
+
+完成事务日志记录后, 每个 Follower 服务器都会向 Leader 服务器发送 ACK 消息, 表明自身完成了事务日志的记录, 以便 Leader 服务器统计每个事务请求的投票情况.
 
 ### 8.1.5 事务处理 - Proposal 流程
 
