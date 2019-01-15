@@ -2080,6 +2080,81 @@ ZooKeeper 会将请求事务头和事务体交给内存数据库 ZKDatabase 进�
 
 ## 9.1 内存数据
 
+ZooKeeper 数据存储分为内存数据存储和磁盘数据存储.
+
+ZooKeeper 的数据模型是一棵树, 在 ZooKeeper 的内存数据库中, 存储了整棵树的内容 (包括所有节点路径, 节点数据及其 ACL 信息等).
+
+ZooKeeper 会定时将这棵树存储到磁盘上.
+
+### 9.1.3 ZKDatabase
+
+ZKDatabase (`org.apache.zookeeper.server.ZKDatabase`) 是 ZooKeeper 的内存数据库, 负责管理 ZooKeeper 的所有会话, DataTree 存储和事务日志.
+
+ZKDatabase 会定时向磁盘 dump 快照数据, 同时在 ZooKeeper 服务器启动的时候, 通过磁盘上的事务日志和快照数据文件恢复成一个完整的内存数据库.
+
+ZKDatabase 的简单结构如下:
+```java
+public class ZKDatabase {
+    protected DataTree dataTree;
+    protected ConcurrentHashMap<Long, Integer> sessionsWithTimeouts;
+    protected FileTxnSnapLog snapLog;
+    protected LinkedList<Proposal> committedLog = new LinkedList<Proposal>();
+    protected ReentrantReadWriteLock logLock = new ReentrantReadWriteLock();
+    volatile private boolean initialized = false;
+    public ZKDatabase(FileTxnSnapLog snapLog) {
+    }
+}
+```
+
+### 9.1.1 DataTree
+
+DataTree 代表了内存中的一份完整的数据, DataTree 是独立的组件, 他不包含任何与网络, 客户端连接, 请求处理等相关逻辑.
+
+DataTree 的简单结构如下:
+```java
+public class DataTree {
+    // nodes
+    private final ConcurrentHashMap<String, DataNode> nodes = new ConcurrentHashMap<String, DataNode>();
+    public void addDataNode(String path, DataNode node) {
+    }
+    public DataNode getNode(String path) {
+    }
+    // ephemerals
+    private final Map<Long, HashSet<String>> ephemerals = new ConcurrentHashMap<Long, HashSet<String>>();
+    public HashSet<String> getEphemerals(long sessionId) {
+    }
+    // specialPath
+    private DataNode root = new DataNode(null, new byte[0], -1L, new StatPersisted());
+    private DataNode procDataNode = new DataNode(root, new byte[0], -1L, new StatPersisted());
+    private DataNode quotaDataNode = new DataNode(procDataNode, new byte[0], -1L, new StatPersisted());
+    boolean isSpecialPath(String path) {
+    }
+}
+```
+
+> __nodes__
+
+DataTree 的 `nodes` 存放了所有的数据节点, 对于 ZooKeeper 数据的所有操作, 底层都是对这个 Map 结构的操作, 该 Map 的 key 为数据节点路径, value 为数据节点的内容: DataNode.
+
+DataTree 的 `ephemerals` 保存了所有的临时节点, 该 Map 的 key 为 sessionId, value 为临时节点的路径集合.
+
+### 9.1.2 DataNode
+
+DataNode 的简单结构如下:
+```java
+public class DataNode implements Record {
+    DataNode parent;
+    byte data[];
+    Long acl;
+    public StatPersisted stat;
+    private Set<String> children = null;
+    synchronized public void deserialize(InputArchive archive, String tag) throws IOException {
+    }
+    synchronized public void serialize(OutputArchive archive, String tag) throws IOException {
+    }
+}
+```
+
 ## 9.2 事物日志
 
 ## 9.3 snapshot - 数据快照
