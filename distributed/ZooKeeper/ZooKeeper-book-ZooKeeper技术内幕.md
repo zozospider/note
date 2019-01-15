@@ -2140,6 +2140,8 @@ DataTree 的 `ephemerals` 保存了所有的临时节点, 该 Map 的 key 为 se
 
 ### 9.1.2 DataNode
 
+DataNode 是数据存储的最小单元.
+
 DataNode 的简单结构如下:
 ```java
 public class DataNode implements Record {
@@ -2148,6 +2150,10 @@ public class DataNode implements Record {
     Long acl;
     public StatPersisted stat;
     private Set<String> children = null;
+    public synchronized boolean addChild(String child) {
+    }
+    public synchronized boolean removeChild(String child) {
+    }
     synchronized public void deserialize(InputArchive archive, String tag) throws IOException {
     }
     synchronized public void serialize(OutputArchive archive, String tag) throws IOException {
@@ -2155,7 +2161,39 @@ public class DataNode implements Record {
 }
 ```
 
+- `data[]`: 节点的数据内容
+- `acl`: ACL 列表
+- `stat`: 节点状态
+- `parent`: 父节点
+- `children`: 子节点列表
+
 ## 9.2 事物日志
+
+### 9.2.1 文件存储
+
+ZooKeeper 用于存储日志文件的目录是在 `zoo.cfg` 中配置的 `dataLogDir`, 如果 dataLogDir 没有配置, 则使用 `dataDir`.
+
+假设 `dataLogDir=/home/user/zkData/zk_log`, 那么 ZooKeeper 在运行时会在该目录下创建一个 `version-2` 子目录, 该目录为当前 ZooKeeper 使用的事务日志格式版本号, 如果下次某个 ZooKeeper 版本对事务日志格式进行了变更, 该目录就会变更. 以下为 `/home/user/zkData/zk_log/version-2` 目录下的文件:
+```
+-rw-rw-r-- 1 user user 67108880 02-23 16:10 log.2c01631713
+-rw-rw-r-- 1 user user 67108880 02-23 17:07 log.2c0164334d
+-rw-rw-r-- 1 user user 67108880 02-23 16:10 log.2d01654af8
+-rw-rw-r-- 1 user user 67108880 02-23 16:10 log.2d0166a224
+```
+
+这些日志为 ZooKeeper 的事务日志, 具有以下特点:
+- 文件大小一致, 都是 67108880KB (64M).
+- 文件名后缀有规律, 都是一个十六进制数字, 随着修改时间的推移, 该后缀变大.
+
+该文件名后缀是一个 ZXID (事务 ID), 是写入该事务日志文件的第一条事务记录的 ZXID. 由于 ZXID 是由两部分组成, 高 32 位代表当前 Leader 的 epoch (周期), 低 32 位代表真正的操作序列号, 因此, 使用 ZXID 作为事务日志的后缀, 可以清楚的得出当前运行时 ZooKeeper 的 Leader 周期.
+
+以上的 4 个事务日志, 前 2 个的 epoch 是十进制 44 (十六进制 2c), 后 2 个的 epoch 是十进制 45 (十六进制 2d). 
+
+### 9.2.2 日志格式
+
+### 9.2.3 日志写入
+
+### 9.2.4 日志截断
 
 ## 9.3 snapshot - 数据快照
 
