@@ -94,7 +94,7 @@
     - [8.2 会话创建请求](#82-会话创建请求)
         - [8.2.1 请求接受](#821-请求接受)
         - [8.2.2 会话创建](#822-会话创建)
-        - [8.1.3 预处理](#813-预处理)
+        - [8.2.3 预处理](#823-预处理)
         - [8.2.4 事务处理 - Sync 处理](#824-事务处理---sync-处理)
         - [8.2.5 事务处理 - Proposal 流程](#825-事务处理---proposal-流程)
         - [8.2.6 事务处理 - Commit 流程](#826-事务处理---commit-流程)
@@ -111,9 +111,21 @@
         - [8.4.3 请求响应](#843-请求响应)
 - [九 数据与存储](#九-数据与存储)
     - [9.1 内存数据](#91-内存数据)
+        - [9.1.3 ZKDatabase](#913-zkdatabase)
+        - [9.1.1 DataTree](#911-datatree)
+        - [9.1.2 DataNode](#912-datanode)
     - [9.2 事物日志](#92-事物日志)
+        - [9.2.1 文件存储](#921-文件存储)
+        - [9.2.2 存储格式](#922-存储格式)
+        - [9.2.3 日志写入](#923-日志写入)
+        - [9.2.4 日志截断](#924-日志截断)
     - [9.3 snapshot - 数据快照](#93-snapshot---数据快照)
+        - [9.3.1 文件存储](#931-文件存储)
+        - [9.3.2 存储格式](#932-存储格式)
+        - [9.3.3 数据快照](#933-数据快照)
     - [9.4 初始化](#94-初始化)
+        - [9.4.1 初始化流程](#941-初始化流程)
+        - [9.4.2 PlayBackListener](#942-playbacklistener)
     - [9.5 数据同步](#95-数据同步)
 
 ---
@@ -2177,8 +2189,8 @@ ZooKeeper 用于存储日志文件的目录是在 `zoo.cfg` 中配置的 `dataLo
 ```
 -rw-rw-r-- 1 user user 67108880 02-23 16:10 log.2c01631713
 -rw-rw-r-- 1 user user 67108880 02-23 17:07 log.2c0164334d
--rw-rw-r-- 1 user user 67108880 02-23 16:10 log.2d01654af8
--rw-rw-r-- 1 user user 67108880 02-23 16:10 log.2d0166a224
+-rw-rw-r-- 1 user user 67108880 02-23 18:19 log.2d01654af8
+-rw-rw-r-- 1 user user 67108880 02-23 19:28 log.2d0166a224
 ```
 
 这些日志为 ZooKeeper 的事务日志, 具有以下特点:
@@ -2189,7 +2201,7 @@ ZooKeeper 用于存储日志文件的目录是在 `zoo.cfg` 中配置的 `dataLo
 
 以上的 4 个事务日志, 前 2 个的 epoch 是十进制 44 (十六进制 2c), 后 2 个的 epoch 是十进制 45 (十六进制 2d). 
 
-### 9.2.2 日志格式
+### 9.2.2 存储格式
 
 用二进制编辑器打开某个事务日志文件后发现内容无法用肉眼识别, 里面的内容是序列化之后的事务日志. 文件前部分为有效内容, 后部分被 `0`/`\0` 填充.
 
@@ -2399,7 +2411,147 @@ force 接口对应的就是底层的 fsync 接口, 是一个比较耗费磁盘 I
 
 ## 9.3 snapshot - 数据快照
 
+数据快照是用来记录 ZooKeeper 服务器上某一个时刻的全量内存数据内容, 并将其写入到磁盘文件中.
+
+### 9.3.1 文件存储
+
+ZooKeeper 用于存储快照数据的目录是在 `zoo.cfg` 中配置的 `dataDir`.
+
+假设 `dataDir=/home/user/zkData/zk_data`, 那么 ZooKeeper 在运行时会在该目录下创建一个 `version-2` 子目录, 该目录为当前 ZooKeeper 使用的快照数据格式版本号, 如果下次某个 ZooKeeper 版本对快照数据格式进行了变更, 该目录就会变更. 以下为 `/home/user/zkData/zk_data/version-2` 目录下的文件:
+```
+-rw-rw-r-- 1 user user 1258072 03-01 17:49 snapshot.2c021384ce
+-rw-rw-r-- 1 user user 1258096 03-01 18:56 snapshot.2c0214dd50
+-rw-rw-r-- 1 user user 1258096 03-01 19:54 snapshot.2d0216054c
+-rw-rw-r-- 1 user user 1258459 03-01 21:06 snapshot.2d021773fc
+-rw-rw-r-- 1 user user 1258123 03-01 22:06 snapshot.2d0218a3ce
+```
+
+这些日志为 ZooKeeper 的事务日志, 具有以下特点:
+- 文件名后缀有规律, 都是一个十六进制数字, 该后缀表示本次数据快照开始时刻的服务器最新 ZXID, 在恢复阶段, ZooKeeper 会根据该 ZXID 来确定数据恢复的起始点.
+
+另外, 与事务日志文件不同的是, ZooKeeper 的快照数据没有采用 `预分配` 机制, 每个快照数据文件中的所有内容都是有效的, 文件中不会存在大量的 `0`/`\0`, 因此该文件的大小在一定程度上能够反映当前 ZooKeeper 内存中的全量数据 (元信息) 大小.
+
+### 9.3.2 存储格式
+
+用二进制编辑器打开某个快照数据文件后发现内容无法用肉眼识别, 里面的内容是序列化之后的快照数据.
+
+ZooKeeper 提供了快照数据格式化工具 SnapshotFormatter (`org.apache.zookeeper.server.SnapshotFormatter`), 可将快照数据文件转换成可视化的数据内容, 使用方法如下:
+```
+java SnapshotFormatter snapshot.300000007
+```
+
+以下为执行后的输出结果示例:
+```
+ZNode Details (count=7);
+---
+/
+  cZxid = 0x00000000000000
+  ctime = Thu Jan 01 08:00:00 CST 1970
+  mZxid = 0x00000000000000
+  mtime = Thu Jan 01 08:00:00 CST 1970
+  pZxid = 0x00000300000003
+  cversion = 2
+  dataVersion = 0
+  aclVersion = 0
+  ephemeralOwner = 0x00000000000000
+  dataLength = 0
+---
+/test_log
+  cZxid = 0x00000300000003
+  ctime = Thu Feb 25 23:08:40 CST 2014
+  mZxid = 0x00000300000004
+  mtime = Thu Feb 25 23:08:54 CST 2014
+  pZxid = 0x00000300000006
+  cversion = 1
+  dataVersion = 1
+  aclVersion = 0
+  ephemeralOwner = 0x00000000000000
+  dataLength = 2
+---
+/test
+  cZxid = 0x00000100000002
+
+...
+
+```
+
+可以看到, ZooKeeper 上的数据节点的元信息被逐个输出.
+
+### 9.3.3 数据快照
+
+FileSnap 负责维护快照数据对外的接口, 如快照数据的写入, 读取等. 以下为 FileSnap (`org.apache.zookeeper.server.persistence.FileSnap`) 的简单结构:
+```java
+public class FileSnap implements SnapShot {
+    File snapDir;
+    private volatile boolean close = false;
+    private static final int VERSION=2;
+    private static final long dbId=-1;
+    public final static int SNAP_MAGIC = ByteBuffer.wrap("ZKSN".getBytes()).getInt();
+    public static final String SNAPSHOT_FILE_PREFIX = "snapshot";
+    protected void serialize(DataTree dt,Map<Long, Integer> sessions, OutputArchive oa, FileHeader header) throws IOException {
+    }
+    public synchronized void serialize(DataTree dt, Map<Long, Integer> sessions, File snapShot) throws IOException {
+    }
+    public void deserialize(DataTree dt, Map<Long, Integer> sessions, InputArchive ia) throws IOException {
+    }
+    public long deserialize(DataTree dt, Map<Long, Integer> sessions) throws IOException {
+    }
+    public File findMostRecentSnapshot() throws IOException {
+    }
+    private List<File> findNValidSnapshots(int n) throws IOException {
+    }
+    public List<File> findNRecentSnapshots(int n) throws IOException {
+    }
+}
+```
+
+数据的写入流程就是将内存数据库序列化并写入快照数据文件中的过程.
+
+以下为 ZooKeeper 对数据的一些操作:
+- 针对客户端的每一次事务操作, ZooKeeper 都会将他们记录到事务日志中, 同时, 也会将数据变更应用到内存数据库中.
+- 在进行若干次事务日志记录后, ZooKeeper 会将内存数据库的全量数据 Dump 到本地文件中 (数据快照).
+
+以下为数据快照步骤:
+
+> a. __确定是否需要进行数据快照__
+
+没进行一次事务日志记录后, ZooKeeper 都会检测当前是否需要进行数据快照.
+
+理论上进行 snapCount 次事务操作后就会进行数据快照, 但是考虑到数据快照对整体性能的影响, 需要尽量避免 ZooKeeper 集群中所有机器同时进行数据快照. 因此, 在具体实现中, 是采用 `过半随机` 策略, 即符合如下条件就进行数据快照:
+```
+logCount > (snapCount / 2 + randRoll);
+```
+
+- `logCount`: 当前以及记录的事务日志数量
+- `randRoll`: 1 至 (snapCount / 2) 之间的随机数
+
+如果配置 snapCount 为 100000, 那么 ZooKeeper 会在 50000 ~ 100000 次事务记录后进行一次数据快照.
+
+> b. __切换事务日志文件__
+
+满足上述条件后, 会首先进行事务日志文件的切换, 即当前的事务日志已经 `写满` (已经写入了 snapCount 个事务日志), 需要重新创建一个新的事务日志.
+
+> c. __创建数据快照异步线程__
+
+为了保证数据快照不影响主流程, 需要创建一个单独的异步线程.
+
+> d. __获取全量数据和会话信息__
+
+数据快照本质上就是将 ZKDatabase (内存) 中的 DataTree (所有数据节点信息) 和会话信息保存到本地磁盘中.
+
+> e. __生成快照数据文件名__
+
+ZooKeeper 会根据当前已提交的最大 ZXID 来生成数据快照文件名.
+
+> f. __数据序列化__
+
+首先序列化文件头信息, 然后序列化会话信息和 DataTree, 同时生成一个 Checksum, 一并写入快照数据文件中去.
+
 ## 9.4 初始化
+
+### 9.4.1 初始化流程
+
+### 9.4.2 PlayBackListener
 
 ## 9.5 数据同步
 
