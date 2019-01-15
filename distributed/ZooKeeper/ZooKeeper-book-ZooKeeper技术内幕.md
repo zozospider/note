@@ -2549,9 +2549,93 @@ ZooKeeper 会根据当前已提交的最大 ZXID 来生成数据快照文件名.
 
 ## 9.4 初始化
 
-### 9.4.1 初始化流程
+在 ZooKeeper 服务器启动期间, 会进行数据初始化工作, 用于将存储在磁盘上的数据文件加载到内存中. 主要包括以下两个过程:
+- 从快照文件中加载快照数据.
+- 根据事务日志进行数据订正.
 
-### 9.4.2 PlayBackListener
+> a. __初始化 FileTxnSnapLog__
+
+FileTxnSnapLog (`org.apache.zookeeper.server.persistence.FileTxnSnapLog`) 是 ZooKeeper 事务日志和快照数据的访问层, 用于衔接上层业务和底层数据存储 (底层数据存储包括事务日志和快照数据两部分).
+
+以下为 FileTxnSnapLog 的简单结构:
+```java
+public class FileTxnSnapLog {
+    private final File dataDir;
+    private final File snapDir;
+    private TxnLog txnLog;
+    private SnapShot snapLog;
+    public final static int VERSION = 2;
+    public final static String version = "version-";
+    public interface PlayBackListener {
+    }
+    public FileTxnSnapLog(File dataDir, File snapDir) throws IOException {
+        this.dataDir = new File(dataDir, version + VERSION);
+        this.snapDir = new File(snapDir, version + VERSION);
+        ...
+        txnLog = new FileTxnLog(this.dataDir);
+        snapLog = new FileSnap(this.snapDir);
+    }
+    private void checkLogDir() throws LogDirContentCheckException {
+    }
+    private void checkSnapDir() throws SnapDirContentCheckException {
+    }
+    public File getDataDir() {
+    }
+    public File getSnapDir() {
+    }
+    public long restore(DataTree dt, Map<Long, Integer> sessions, PlayBackListener listener) throws IOException {
+    }
+    public long fastForwardFromEdits(DataTree dt, Map<Long, Integer> sessions, PlayBackListener listener) throws IOException {
+    }
+    public void processTransaction(TxnHeader hdr,DataTree dt, Map<Long, Integer> sessions, Record txn) throws KeeperException.NoNodeException {
+    }
+    public long getLastLoggedZxid() {
+    }
+    public void save(DataTree dataTree, ConcurrentHashMap<Long, Integer> sessionsWithTimeouts) throws IOException {
+    }
+    public boolean truncateLog(long zxid) throws IOException {
+    }
+    public File findMostRecentSnapshot() throws IOException {
+    }
+    public List<File> findNRecentSnapshots(int n) throws IOException {
+    }
+    public File[] getSnapshotLogs(long zxid) {
+    }
+    public boolean append(Request si) throws IOException {
+    }
+    public void commit() throws IOException {
+    }
+    public void rollLog() throws IOException {
+    }
+    public void close() throws IOException {
+    }
+}
+```
+
+- `TxnLog` (`FileTxnLog`): 事务日志管理器
+- `SnapShot` (`FileSnap`): 快照数据管理器.
+
+> b. __初始化 ZKDatabase__
+
+> c. __创建 PlayBackListener 监听器__
+
+> d. __处理快照文件__
+
+> e. __获取最新的 100 个快照文件__
+
+> f. __解析快照文件__
+
+> g. __获取最新的 ZXID__
+
+> h. __处理事务日志__
+
+> i. __获取所有 zxid_for_snap 之后提交的事务__
+
+> j. __事务应用__
+
+> k. __获取最新的 ZXID__
+
+> l. __校验 epoch__
 
 ## 9.5 数据同步
 
