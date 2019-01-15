@@ -2191,6 +2191,48 @@ ZooKeeper 用于存储日志文件的目录是在 `zoo.cfg` 中配置的 `dataLo
 
 ### 9.2.2 日志格式
 
+用二进制编辑器打开某个事务日志文件后发现内容无法用肉眼识别, 里面的内容是序列化之后的事务日志. 文件前部分为有效内容, 后部分被 `0`/`\0` 填充.
+
+ZooKeeper 提供了事务日志格式化工具 LogFormatter (`org.apache.zookeeper.server.LogFormatter`), 可将事务日志文件转换成可视化的事务操作日志, 使用方法如下:
+```
+java LogFormatter log.300000001
+```
+
+以下为执行后的输出结果示例:
+```
+ZooKeeper Transactional Log File with dbid 0 txnlog format version 2
+
+...
+
+..11:07:41 session 0x144699552020000 cxi 0x0 zxid 0x300000002 createSession 30000
+
+..11:08:40 session 0x144699552020000 cxid 0x2 zxid 0x300000003 create '/test_log,#7631,v(s(31,s('world,'anyone))),F,2
+
+..11:08:54 session ... cxid 0x3 zxid 0x300000004 setData 'test_log,#7632,1
+
+..11:09:11 session ... cxid 0x4 zxid 0x300000005 create 'test_log/c,#7631,v(s(31,s('world,'anyone))),F,1
+
+..11:09:26 session ... cxid 0x5 zxid 0x300000006 delete '/test_log/c
+
+...
+
+EOF reached after 7 txns.
+```
+
+由于这是一个事务操作日志, 因此没有任何读操作记录, 每一行对应一次事务操作, 节点内容也可以参考 LogFormatter 源码自行分析:
+
+- 第一行: `ZooKeeper Transactional Log File with dbid 0 txnlog format version 2`
+
+这是事务日志的文件头信息, 主要输出事务日志的 DBID, 日志格式版本号.
+
+- 第二行: `..11:07:41 session 0x144699552020000 cxi 0x0 zxid 0x300000002`
+
+这是一次客户端会话创建的事务, 从左到右分别为: 事务操作时间, 客户端会话 ID, CXID (客户端的操作序列号), ZXID, 操作类型, 会话超时时间.
+
+- 第三行: `..11:08:40 session 0x144699552020000 cxid 0x2 zxid 0x300000003 create '/test_log,#7631,v(s(31,s('world,'anyone))),F,2`
+
+这是一次节点创建的事务, 从左到右分别为: 事务操作时间, 客户端会话ID, CXID, ZXID, 操作类型, 节点路径, 节点数据内容 (#7631 初始化为 v1, 使用 #+内容的 ASCII 码值), 节点的 ACL 信息, 是否是临时节点 (F 代表持久节点, T 代表临时节点), 父节点的子节点版本号.
+
 ### 9.2.3 日志写入
 
 ### 9.2.4 日志截断
