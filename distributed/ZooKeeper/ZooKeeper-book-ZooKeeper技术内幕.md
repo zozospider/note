@@ -2726,7 +2726,7 @@ ZooKeeper 中数据的快照机制决定了快照文件中并非包含了所有�
 
 数据同步过程就是 Leader 将那些没有在 Learner 上提交过的事务请求同步给 Learner.
 
-![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-book-ZooKeeper%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95/95-Data-Synchronization.png.png)
+![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-book-ZooKeeper%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95/95-Data-Synchronization.png)
 
 ### 9.5.1 获取 Learner 状态
 
