@@ -2120,7 +2120,7 @@ public class ZKDatabase {
 
 ### 9.1.1 DataTree
 
-DataTree 代表了内存中的一份完整的数据, DataTree 是独立的组件, 他不包含任何与网络, 客户端连接, 请求处理等相关逻辑.
+DataTree 代表了内存中的一份完整的数据. DataTree 是独立的组件, 他不包含任何与网络, 客户端连接, 请求处理等相关逻辑.
 
 DataTree 的简单结构如下:
 ```java
@@ -2617,25 +2617,103 @@ public class FileTxnSnapLog {
 
 > b. __初始化 ZKDatabase__
 
+完成 FileTxnSnapLog 初始化后, 就完成了 ZooKeeper 服务器和底层数据存储的对接. 接下来开始构建内存数据库 ZKDatabase.
+
+在 ZKDatabase 初始化的时候, DataTree 也会进行初始化 (创建 `/`, `/zookeeper`, `/zookeeper/quota` 默认节点).
+
+然后将上一步的 FileTxnSnapLog 对象交给 ZKDatabase, 以便内存数据库能够对事务日志和快照数据进行访问.
+
+ZKDatabase 还会创建 sessionsWithTimeouts, 用于保存所有客户端会话超时时间, 称为 `会话超时时间记录器`.
+
 > c. __创建 PlayBackListener 监听器__
+
+PlayBackListener (`org.apache.zookeeper.server.persistence.FileTxnSnapLog.PlayBackListener`) 监听器主要用来接收事务应用过程中的回调. 以下为 PlayBackListener 的简单结构:
+```java
+public class FileTxnSnapLog {
+    public interface PlayBackListener {
+        void onTxnLoaded(TxnHeader hdr, Record rec);
+    }
+    public long restore(DataTree dt, Map<Long, Integer> sessions, PlayBackListener listener) throws IOException {
+    }
+    public long fastForwardFromEdits(DataTree dt, Map<Long, Integer> sessions, PlayBackListener listener) throws IOException {
+    }
+}
+```
+
+在完成 ZKDatabase 的初始化后, ZooKeeper 会创建一个 PlayBackListener 监听器, 并将其置于 FileTxnSnapLog 中, 以下为实现代码:
+```java
+public class ZKDatabase {
+    protected LinkedList<Proposal> committedLog = new LinkedList<Proposal>();
+    private final PlayBackListener commitProposalPlaybackListener = new PlayBackListener() {
+        public void onTxnLoaded(TxnHeader hdr, Record txn){
+            addCommittedProposal(hdr, txn);
+        }
+    };
+    public long loadDataBase() throws IOException {
+        long zxid = snapLog.restore(dataTree, sessionsWithTimeouts, commitProposalPlaybackListener);
+        initialized = true;
+        return zxid;
+    }
+    public long fastForwardDataBase() throws IOException {
+        long zxid = snapLog.fastForwardFromEdits(dataTree, sessionsWithTimeouts, commitProposalPlaybackListener);
+        initialized = true;
+        return zxid;
+    }
+}
+```
+
+PlayBackListener 会将这些被应用到内存数据库中的事务转存到 `ZKDatabase.committedLog` 中, 以便 Follower 服务器进行快速的数据同步.
 
 > d. __处理快照文件__
 
+完成内存数据库的初始化后, ZooKeeper 就可以从磁盘中恢复数据了.
+
+每一个快照数据文件中都保存了 ZooKeeper 服务器近似全量的数据, 因此首先从快照文件开始加载.
+
 > e. __获取最新的 100 个快照文件__
+
+通常更新时间最晚的那个文件包含了最新的全量数据. 但在 ZooKeeper 的实现中, 会获取最新的 100 个快照文件 (不足则获取全部).
 
 > f. __解析快照文件__
 
+因为快照文件都是内存数据序列化到磁盘的二进制文件, 因此需要进行反序列化, 生成 DataTree 对象和 sessionsWithTimeouts 集合, 同时还会校验文件的 checkSum.
+
+解析过程如下:
+- 如果最新的那个快照文件正确性校验通过的化, 通常只会解析这个最新的这个快照文件.
+- 如果最新的快照文件不可用时, 需要逐个将这 100 个文件全部解析完.
+- 如果将所有快照文件都解析完后还是无法成功恢复一个完整的 DataTree 对象和 sessionsWithTimeouts 集合, 就会启动失败.
+
 > g. __获取最新的 ZXID__
+
+基于快照文件构建完一个完整的 DataTree 对象和 sessionsWithTimeouts 集合后, 根据这个快照文件的文件名解析出最新的 ZXID: `zxid_for_snap`.
+
+zxid_for_snap 代表了 ZooKeeper 开始进行数据快照的时刻.
 
 > h. __处理事务日志__
 
+此时 ZooKeeper 服务器内存中已经有了一份近似全量的数据了, 现在开始通过事务日志来更新增量数据.
+
 > i. __获取所有 zxid_for_snap 之后提交的事务__
+
+ZooKeeper 中数据的快照机制决定了快照文件中并非包含了所有的事务操作, 未被包含在快照文件中的那部分事务操作需要通过数据订正来实现.
+
+因此需要从事务日志中获取所有 ZXID 比快照文件中的 zxid_for_snap 大的事务操作.
 
 > j. __事务应用__
 
+获取到所有 ZXID 比快照文件中的 zxid_for_snap 大的事务后, 将他们逐个应用到之前基于快照文件恢复出来的 DataTree 对象和 sessionsWithTimeouts 集合中去.
+
+每当有一个事务被应用到内存数据库中后, ZooKeeper 会回调 PlayBackListener 监听器, 将这一事务操作记录转换成 Proposal, 并将该 Proposal 保存到 ZKDatabase.committedLog 中, 以便 Follower 服务器进行快速的数据同步.
+
 > k. __获取最新的 ZXID__
 
+当所有事务都被完整的应用到内存数据库中后, 基本完成了数据的初始化, 此时再次获取一个 ZXID, 用来标识上次服务器正常运行时提交的最大事务 ID.
+
 > l. __校验 epoch__
+
+`epoch` 标识了当前 Leader 周期, 每次选举产生一个新的 Leader 服务器后, 就会生成一个新的 epoch. 集群中的机器通信都会带上这个 epoch 以确保彼此在同一个周期内.
+
+在完成数据加载后, ZooKeeper 会从上一步确定的 ZXID 中解析出事务处理的 Leader 周期 `epochOfZxid`, 同时也会从磁盘的 currentEpoch 和 acceptedEpoch 文件中读取上次记录的最新的 epoch 值, 进行校验.
 
 ## 9.5 数据同步
 
