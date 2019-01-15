@@ -1831,7 +1831,7 @@ r.nextBytes(passwd);
 
 服务端会将 sessionID 和 会话密码一起发送给客户端, 作为会话在集群中不同机器间转移的凭证.
 
-### 8.1.3 预处理
+### 8.2.3 预处理
 
 > l. __将请求交给 ZooKeeper 的 PrepRequestProcessor 处理器进行处理__
 
