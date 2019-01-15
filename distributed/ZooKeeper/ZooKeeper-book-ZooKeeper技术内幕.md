@@ -2235,7 +2235,167 @@ EOF reached after 7 txns.
 
 ### 9.2.3 日志写入
 
+FileTxnLog 负责维护事务日志对外的接口, 如事务日志的写入, 读取等. 以下为 FileTxnLog 的简单结构:
+```java
+public class FileTxnLog implements TxnLog {
+    public final static int VERSION = 2;
+    public static final String LOG_FILE_PREFIX = "log";
+    long lastZxidSeen;
+    volatile BufferedOutputStream logStream = null;
+    volatile OutputArchive oa;
+    volatile FileOutputStream fos = null;
+    File logDir;
+    private final boolean forceSync = !System.getProperty("zookeeper.forceSync", "yes").equals("no");;
+    long dbId;
+    File logFileWrite = null;
+    private FilePadding filePadding = new FilePadding();
+    private ServerStats serverStats;
+    private LinkedList<FileOutputStream> streamsToFlush = new LinkedList<FileOutputStream>();
+    public synchronized boolean append(TxnHeader hdr, Record txn) throws IOException {
+    }
+    public boolean isForceSync() {
+    }
+    public static File[] getLogFiles(File[] logDirList,long snapshotZxid) {
+    }
+    public long getLastLoggedZxid() {
+    }
+    public synchronized void commit() throws IOException {
+    }
+    public boolean truncate(long zxid) throws IOException {
+    }
+    private static FileHeader readHeader(File file) throws IOException {
+    }
+    static class PositionInputStream extends FilterInputStream {
+    }
+    public static class FileTxnIterator implements TxnLog.TxnIterator {
+    }
+}
+```
+
+- `streamsToFlush`: ZooKeeper 用来记录当前需要将数据强制刷入磁盘的文件流.
+
+将事务操作写入事务日志的工作主要由 `append()` 方法来负责. 在写入时, 会将事务头和事务体传给该方法.
+
+以下为写入步骤:
+
+> a. __确定是否有事务日志可写__
+
+ZooKeeper 服务器启动完成或上一个事务日志写满时, 都会与事务日志文件断开. 因此, 在进行事务日志写入前, ZooKeeper 首先会判断 FileTxnLog 组件是否已经关联了上一个可写的事务日志文件.
+
+如果没有关联, 就使用与该事物操作关联的 ZXID 作为后缀创建一个事务日志文件, 同时构建事务日志文件头信息 FileHeader, 以下为 FileHeader 的简单结构:
+```java
+public class FileHeader implements Record {
+  private int magic;
+  private int version;
+  private long dbid;
+}
+```
+
+- `magic`: 魔数
+- `version`: 事务日志格式版本 version
+
+构建完 FileHeader 后, 会立即写入这个日志文件中. 同时, 将该文件的文件流放入 `streamsToFlush`.
+
+> b. __确定事务日志文件是否需要扩容 (预分配)__
+
+ZooKeeper 的事务文件采取 `磁盘空间预分配` 策略, 当检测到当前事务日志文件剩余空间不足 4096 字节 (4KB) 时, 就会在现有文件的基础上, 将文件大小增加 65536KB (64MB), 然后使用 `0`/`\0` 填充被扩容的文件空间.
+
+采用磁盘空间预分配策略的理由如下:
+
+事务写入可以近似看做是一个磁盘 I/O 过程, 文件的不断追加写入操作会触发底层磁盘 Seek (磁盘 I/O 为文件开辟新的磁盘块). 而客户端的每次事务操作, 都需要被写入日志文件中, 因此事务日志的写入性能直接决定了 ZooKeeper 服务器对事务请求的响应.
+
+为了避免磁盘 Seek 的频率过高, ZooKeeper 在创建事务日志的时候就会进行文件空间 `预分配`, 在文件创建之初就向操作系统预分配一个很大的磁盘块 (可通过系统属性 `zookeeper.preAllocSize` 设置, 默认 64MB), 一旦文件空间不足 4KB, 就会再次预分配.
+
+> c. __事务序列化__
+
+事务序列化包括事务头和事务体的序列化, 序列化最终会生成一个字节数组.
+
+- 事务头为 TxnHeader (`org.apache.zookeeper.txn.TxnHeader`), 以下为 TxnHeader 的简单结构:
+```java
+public class TxnHeader implements Record {
+  private long clientId;
+  private int cxid;
+  private long zxid;
+  private long time;
+  private int type;
+  public void serialize(OutputArchive a_, String tag) throws java.io.IOException {
+  }
+  public void deserialize(InputArchive a_, String tag) throws java.io.IOException {
+  }
+}
+```
+
+- 事务体包括 CreateSessionTxn (会话创建事务), CreateTxn (节点创建事务), DeleteTxn (节点删除事务), SetDataTxn (节点数据更新事务).
+
+以下为 CreateSessionTxn (`org.apache.zookeeper.txn.CreateSessionTxn`) 的简单结构:
+```java
+public class CreateSessionTxn implements Record {
+  private int timeOut;
+  public void serialize(OutputArchive a_, String tag) throws java.io.IOException {
+  }
+  public void deserialize(InputArchive a_, String tag) throws java.io.IOException {
+  }
+}
+```
+
+以下为 CreateTxn (`org.apache.zookeeper.txn.CreateTxn`) 的简单结构:
+```java
+public class CreateTxn implements Record {
+  private String path;
+  private byte[] data;
+  private java.util.List<org.apache.zookeeper.data.ACL> acl;
+  private boolean ephemeral;
+  private int parentCVersion;
+  public void serialize(OutputArchive a_, String tag) throws java.io.IOException {
+  }
+  public void deserialize(InputArchive a_, String tag) throws java.io.IOException {
+  }
+}
+```
+
+以下为 DeleteTxn (`org.apache.zookeeper.txn.DeleteTxn`) 的简单结构:
+```java
+public class DeleteTxn implements Record {
+  private String path;
+  public void serialize(OutputArchive a_, String tag) throws java.io.IOException {
+  }
+  public void deserialize(InputArchive a_, String tag) throws java.io.IOException {
+  }
+}
+```
+
+以下为 SetDataTxn (`org.apache.zookeeper.txn.SetDataTxn`) 的简单结构:
+```java
+public class SetDataTxn implements Record {
+  private String path;
+  private byte[] data;
+  private int version;
+  public void serialize(OutputArchive a_, String tag) throws java.io.IOException {
+  }
+  public void deserialize(InputArchive a_, String tag) throws java.io.IOException {
+  }
+}
+```
+
+> d. __生成 Checksum__
+
+为保证事务日志文件的完整性和准确性, ZooKeeper 在将事务日志写入前, 会根据上一步骤产生的字节数组来计算 Checksum (默认使用 Adler32 算法).
+
+> e. __写入事务日志文件流__
+
+将序列化后的事务头, 事务体, Checksum 写入文件流 BufferedOutputStream 中.
+
+> f. __事务日志刷入磁盘__
+
+由于 BufferedOutputStream 文件流无法实时写入磁盘文件, 因此需要将缓存强制刷入磁盘, 由于 `append()` 方法已经将每个事务日志文件对应的文件流放入了 `streamsToFlush` 中, 因此需要从 streamsToFlush 中取出文件流, 并调用 `FileChannel.force(boolean metaData)` 接口方法来将数据刷入磁盘.
+
+force 接口对应的就是底层的 fsync 接口, 是一个比较耗费磁盘 I/O 资源的接口, 因此允许用户主动调用该接口 (可通过系统属性 `zookeeper.forceSync` 设置).
+
 ### 9.2.4 日志截断
+
+由于 ZooKeeper 规定集群中的所有机器都必须与 Leader 服务器的数据保持同步, 因此, 如果出现 peerLastZxid (非 Leader 机器上记录的事务 ID) 比 Leader 上的大, 就是一个非法运行时状态.
+
+如果遇到此情况, Leader 会发送 TRUNC 命令给这个机器, 要求其进行日志截断, Learner 在接到命令后, 会删除所有包含或大于 peerLastZxid 的事务日志文件.
 
 ## 9.3 snapshot - 数据快照
 
