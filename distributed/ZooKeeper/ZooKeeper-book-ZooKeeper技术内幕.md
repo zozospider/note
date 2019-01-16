@@ -2752,34 +2752,47 @@ Leader 服务器在同步前会进行初始化, 包括以下:
 
 ### 9.5.3 直接差异化同步 (DIFF 同步)
 
-- 场景: `minCommittedLog < peerLastZxid < maxCommittedLog`
+- 场景: `minCommittedLog < peerLastZxid < maxCommittedLog`.
 
 这种情况会使用 `直接差异化同步` (DIFF 同步) 方式.
 
-Leader 会首先向 Learner 发送一个 DIFF 指令用于通知 Learner 进入差异化数据同步阶段. 在实际 Proposal 同步时, 针对每个 Proposal, Leader 都会通过发送 PROPOSAL 和 COMMIT 这两个数据包来完成 (和事务请求的提交过程一致).
+在实际 Proposal 同步时, 针对每个 Proposal, Leader 都会通过发送 PROPOSAL 和 COMMIT 这两个数据包来完成 (和事务请求的提交过程一致).
 
 假设某个时刻 Leader 的 committedLog 对应的 ZXID 为: `0x500000001`, `0x500000002`, `0x500000003`, `0x500000004`, `0x500000005`, 而 Learner 最后处理的 ZXID 为: `0x500000003`. 那么 Leader 就会依次将 `0x500000004` 和 `0x500000005` 这两个提议同步给 Learner. 同步内容如下:
 
 | 发送顺序 | 数据包类型 | 对应的 ZXID |
 | :--- | :--- | :--- |
-| 1 | PROPOSAL | `0x500000004` |
-| 2 | COMMIT | `0x500000004` |
-| 3 | PROPOSAL | `0x500000005` |
-| 4 | COMMIT | `0x500000005` |
+| 1 | `PROPOSAL` | `0x500000004` |
+| 2 | `COMMIT` | `0x500000004` |
+| 3 | `PROPOSAL` | `0x500000005` |
+| 4 | `COMMIT` | `0x500000005` |
 
-
+- Leader 会首先向 Learner 发送一个 `DIFF` 指令用于通知 Learner 进入差异化数据同步阶段.
+- 然后 Learner 会依次将 Leader 发送的 4 个数据包应用到内存数据库中.
+- 然后 Learder 会将该 Learner 加入到 forwardingFollowers / observingLearners 队列中.
+- 随后 Leader 还会发送一个 `NEWLEADER` 指令, 用于通知 Learner, 已经将 committedLog 队列中的 Proposal 都同步给自己了, Leader 会反馈一个 ACK 消息, 表明自己确实完成了对 committedLog 队列中的 Proposal 的同步. Leader 接收到 Learner 的 ACK 消息后, 就认为已经完成了数据同步.
+- 完成数据同步后会进入 `过半策略` (Leader 会和其他 Learner 进行上述同样的数据同步流程, 直到集群中过半的 Learner 响应了 Leader 的 NEWLEADER 指令). 如果满足过半策略, Leader 就会想所有已完成同步的 Learner 发送一个 `UPTODATE` 指令, 用于通知 Learner 已经完成了数据同步且集群中已经有过半机器完成了数据同步, 集群已具备对外服务能力了.
+- Learner 收到 Leader 的 UPTODATE 指令后, 会终止数据同步流程, 然后再次向 Leader 反馈一个 ACK 消息.
 
 ### 9.5.4 先回滚再差异化同步 (TRUNC + DIFF 同步)
 
+- 场景: 
+
 ### 9.5.5 仅回滚同步 (TRUNC 同步)
 
-- 场景: `peerLastZxid > maxCommittedLog`
+- 场景: `peerLastZxid > maxCommittedLog`.
 
 
 ### 9.5.6 全量同步 (SNAP 同步)
 
-- 场景: `peerLastZxid < maxCommittedLog`
+- 场景 1: `peerLastZxid < maxCommittedLog`.
+- 场景 2: Leader 上没有 committedLog, `peerLastZxid > lastProcessedZxid` (Leader 数据恢复后得到的最大 ZXID).
 
+这两种场景下, Leader 都无法直接使用 committedLog 和 Learner 进行数据同步, 因此只能进行全量同步, 全量同步就是 Leader 将本机上的全量内存数据都同步给 Learner.
+
+- Leader 首先向 Learner 发送一个 `SNAP` 指令用于通知 Learner 即将进行全量数据同步.
+- 然后 Leader 从内存数据库中获取到全量的数据节点和会话超时时间记录器, 将他们序列化后传输给 Learner.
+- Learner 接收到全量数据后, 会将其反序列化, 然后载入内存数据库.
 
 ---
 
