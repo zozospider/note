@@ -8,6 +8,7 @@
 * [../使用ZooKeeper](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book-使用ZooKeeper.md)
 * [../ZooKeeper的典型应用场景](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book-ZooKeeper的典型应用场景.md)
 * [../ZooKeeper技术内幕](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book-ZooKeeper技术内幕.md)
+* [../ZooKeeper运维](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book-ZooKeeper运维.md)
 
 * [code: zozospider/note-distributed-zookeeper-book](https://github.com/zozospider/note-distributed-zookeeper-book)
 * [code: zozospider/note-distributed-zookeeper-video](https://github.com/zozospider/note-distributed-zookeeper-video)
