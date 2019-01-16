@@ -1,4 +1,26 @@
 
+- [Document & Code](#document--code)
+- [一 配置详解](#一-配置详解)
+    - [1.1 基本配置](#11-基本配置)
+    - [1.2 高级配置](#12-高级配置)
+- [二 四字命令](#二-四字命令)
+- [三 JMX](#三-jmx)
+    - [3.1 开启远程 JMX](#31-开启远程-jmx)
+    - [3.2 通过 JConsole 连接 ZooKeeper](#32-通过-jconsole-连接-zookeeper)
+- [四 监控](#四-监控)
+    - [4.1 实时监控](#41-实时监控)
+    - [4.2 数据统计](#42-数据统计)
+- [五 构建一个高可用的集群](#五-构建一个高可用的集群)
+    - [5.1 集群组成](#51-集群组成)
+    - [5.2 容灾](#52-容灾)
+    - [5.3 扩容与缩容](#53-扩容与缩容)
+- [六 日常运维](#六-日常运维)
+    - [6.1 数据与日志管理](#61-数据与日志管理)
+    - [6.2 Too many connections](#62-too-many-connections)
+    - [6.3 磁盘管理](#63-磁盘管理)
+
+---
+
 # Document & Code
 
 * [../Zookeeper-book](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book.md)
@@ -81,6 +103,12 @@
 ---
 
 # 二 四字命令
+
+四字命令通常用来发送请求到 ZooKeeper 服务器用于获取信息.
+
+有以下两种操作方式:
+- `Telnet [ip] [port]` 后, 直接输入四字命令即可.
+- `echo [command] | nc [ip] [port]`.
 
 ---
 
