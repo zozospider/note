@@ -114,6 +114,10 @@
 
 # 三 JMX
 
+JMX (Java Management Extensions, Java 管理拓展), 是一个为应用程序, 设备, 系统等植入管理功能的框架, 能够非常方便地让 Java 系统对外提供运行时数据信息获取和系统管控的接口.
+
+ZooKeeper 使用了标准的 JMX 方式来对外提供运行时数据信息和便捷的管控接口.
+
 ## 3.1 开启远程 JMX
 
 ## 3.2 通过 JConsole 连接 ZooKeeper
