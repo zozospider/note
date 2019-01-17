@@ -106,9 +106,7 @@
 
 四字命令通常用来发送请求到 ZooKeeper 服务器用于获取信息.
 
-有以下两种操作方式:
-- `Telnet [ip] [port]` 后, 直接输入四字命令即可.
-- `echo [command] | nc [ip] [port]`.
+请参考 [ZooKeeper 四字命令 Four Letter Words](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-video-ZK%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E4%B8%8E%E5%9F%BA%E4%BA%8ELinux%E7%9A%84ZK%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%AD%A6%E4%B9%A0.md#zookeeper-%E5%9B%9B%E5%AD%97%E5%91%BD%E4%BB%A4-four-letter-words)
 
 ---
 

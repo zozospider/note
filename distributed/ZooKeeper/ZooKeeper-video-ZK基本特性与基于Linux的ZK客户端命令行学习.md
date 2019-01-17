@@ -35,6 +35,7 @@
 - [ACL 之 super 超级管理员](#acl-之-super-超级管理员)
 - [ACL 的常用使用场景](#acl-的常用使用场景)
 - [ZooKeeper 四字命令 Four Letter Words](#zookeeper-四字命令-four-letter-words)
+    - [nc 方式](#nc-方式)
 
 # Document & Code
 
@@ -123,6 +124,8 @@ dataLength = 0
 numChildren = 1
 ```
 
+---
+
 # session 的基本原理与 create 命令的使用
 
 ## sesion 基本原理
@@ -210,6 +213,8 @@ Created /zozo/sec0000000002
 [zk: localhost:2181(CONNECTED) 4] create -s /zozo/sec seq
 Created /zozo/sec0000000003
 ```
+
+---
 
 # set与delete命令的使用
 
@@ -310,11 +315,15 @@ version No is not valid : /zozo/sec0000000002
 [zk: localhost:2181(CONNECTED) 22] delete /zozo/sec0000000002 1
 ```
 
+---
+
 # 理解 watcher 机制
 
 * 每个节点都有一个 watcher，当监控的某个对象（ZNode）发生变化，则触发事件。
 * ZooKeeper 的 watcher 是一次性的，触发后立即销毁。
 * 父节点，子节点增删改都能触发 watcher，可分为（子）节点创建事件、（子）节点删除事件、（子）节点数据变化事件。
+
+---
 
 # 父节点 watcher 事件
 
@@ -452,9 +461,13 @@ dataLength = 2
 numChildren = 0
 ```
 
+---
+
 # watcher 常用使用场景
 
 统一资源配置：ZooKeeper 集群维护一份配置文件，并在集群内保持同步。客户端在连接集群中任意节点时，对该配置文件进行 watch，如果该配置发生变化，会在集群内相互同步，同时客户端会监控到文件变化，就可以进行相应处理。
+
+---
 
 # ACL 权限详解
 
@@ -492,6 +505,8 @@ ACL 权限格式为：`scheme:id:permissions`：
 * WRITE: 设置节点数据
 * ADMIN: 设置权限
 
+---
+
 # ACL 命令行 world 讲解
 
 `world:anyone:cdrwa`：该权限为创建节点后的默认权限。表示所有人都可以对节点进行任何操作。
@@ -528,6 +543,8 @@ Created /acc/abc
 Authentication is not valid : /acc/abc
 ```
 
+---
+
 # ACL 命令行 auth 讲解
 
 使用 `setAcl /acc auth:zz:password:cdrwa` 使得 zz 用户具有权限。
@@ -558,13 +575,17 @@ numChildren = 1
 : cdrwa
 ```
 
+---
+
 # ACL 命令行 digest
 
 出现演示与实际操作结果不符的情况。待定。
 
+---
+
 # ACL 命令行 ip
 
-
+---
 
 # ACL 之 super 超级管理员
 
@@ -581,14 +602,24 @@ numChildren = 1
 ./zkServer.sh restart
 ```
 
+---
+
 # ACL 的常用使用场景
 
 1. 开发/测试环境分离，不同用户账号权限分离。
 2. 控制 ip 访问服务。
 
+---
+
 # ZooKeeper 四字命令 Four Letter Words
 
 通过四字命令简单命令来和服务器交互。
+
+有以下两种操作方式:
+- `Telnet [ip] [port]` 后, 直接输入四字命令即可.
+- `echo [command] | nc [ip] [port]`.
+
+## nc 方式
 
 需要先安装 yum install nc.
 
@@ -603,8 +634,9 @@ numChildren = 1
 * envi: 环境变量。
 * mntr: 监控 ZooKeeper 健康信息。
 * wchs: 展示 watch 信息。
-* wchc 与 wchp: session 与 watch 及 path 与 watch 信息。
+* wchc / wchp: session 与 watch 及 path 与 watch 信息。
+* srst: 重置所有服务器的统计信息。
 
 其中，部分命令需要权限（如 wchc 与 wchp），可在 zoo.cfg 中添加 `4lw.commands.whitelist=*` 配置来允许所有命令执行。也可通过 `4lw.commands.whitelist=stat, ruok, conf, isro` 配置来允许指定命令运行。
 
-
+---
