@@ -369,10 +369,10 @@ ZooKeeper 提供了一种自动清理历史快照数据和事务日志文件的�
 
 | ISSUE | 说明 |
 | :--- | :--- |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
+| [ZOOKEEPER-368](https://issues.apache.org/jira/browse/ZOOKEEPER-368) | 添加新的服务器角色 Observer, 其不参与 Leader 选举和事务请求投票, 但支持处理非事物请求. |
+| [ZOOKEEPER-601](https://issues.apache.org/jira/browse/ZOOKEEPER-601) | 服务端支持 minSessionTimeout 和 maxSessionTimeout (会话超时时间限制) 的配置 |
+| [ZOOKEEPER-496](https://issues.apache.org/jira/browse/ZOOKEEPER-496) | 添加工具 zktreeutil (ZooKeeper Tree Data Utility), 用于对 ZooKeeper 内存数据进行导入, 导出, 增量更新等. |
+| [ZOOKEEPER-678](https://issues.apache.org/jira/browse/ZOOKEEPER-678) | 添加工具 ZooInspector, 用于查看和更新 ZooKeeper 内存数据库中的数据. |
 
 ### 7.1.2 3.3.1 版本
 
