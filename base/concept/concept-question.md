@@ -3,6 +3,10 @@
 
 # 说明 Java 中 equals() 和 hashcode() 方法的区别。
 
+# Java 中 HashMap 如何确定索引位置?
+
+# Java 中 HashMap 扩容为什么一定要是原有的 2 倍或 2^n?
+
 # 什么是假死和脑裂，如何避免？
 
 如果 Server1 为 Master 状态，但是由于负载过高（GC 占用时间长或 CPU 负载高）或网络闪断，无法对外提供服务，此时注册中心（如 ZooKeeper）认为其会话失效，释放节点，将 Server2 切换为 Master 状态，但是 Server1 依然认为自己是 Master，这种情况下称 Server1 为 `假死`，所产生的两个 Master 的情况称为 `脑裂`。
