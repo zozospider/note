@@ -17,6 +17,10 @@
   - [Regular-Expression](https://github.com/zozospider/note/tree/master/data/Regular-Expression)
     - [Regular-Expression](https://github.com/zozospider/note/blob/master/data/Regular-Expression/Regular-Expression.md)
 
+- [Java](https://github.com/zozospider/note/tree/master/Java)
+  - [JVM](https://github.com/zozospider/note/tree/master/Java/JVM)
+    - [JVM-memory-model](https://github.com/zozospider/note/blob/master/Java/JVM/JVM-memory-model.md)
+
 - [Microservice](https://github.com/zozospider/note/tree/master/Microservice)
   - [Spring-Boot](https://github.com/zozospider/note/tree/master/Microservice/Spring-Boot)
     - [Spring-Boot-2.x](https://github.com/zozospider/note/blob/master/Microservice/Spring-Boot/Spring-Boot-2.x.md)
