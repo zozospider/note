@@ -378,25 +378,25 @@ ZooKeeper 提供了一种自动清理历史快照数据和事务日志文件的�
 
 | ISSUE | 说明 |
 | :--- | :--- |
-|  |  |
+| [ZOOKEEPER-764](https://issues.apache.org/jira/browse/ZOOKEEPER-764) | 修复 Observer 参与 Leader 选举的 Bug. |
 
 ### 7.1.3 3.3.2 版本
 
 | ISSUE | 说明 |
 | :--- | :--- |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
+| [ZOOKEEPER-794](https://issues.apache.org/jira/browse/ZOOKEEPER-794) | 统一客户端针对同步和异步接口下连接断开后的处理. |
+| [ZOOKEEPER-795](https://issues.apache.org/jira/browse/ZOOKEEPER-795) | 修复客户端会话超时退出后, EventThread 线程未退出的 Bug. |
+| [ZOOKEEPER-844](https://issues.apache.org/jira/browse/ZOOKEEPER-844) | 客户端添加对 AuthFailed 事件的处理与通知. |
+| [ZOOKEEPER-881](https://issues.apache.org/jira/browse/ZOOKEEPER-881) | 修复服务器启动时期从磁盘中重复加载数据的 Bug. |
+| [ZOOKEEPER-904](https://issues.apache.org/jira/browse/ZOOKEEPER-904) | 修复 Super 模式下不恰当的 ACL 变更导致 Super 模式自身不生效的 Bug. |
 
 ### 7.1.4 3.3.4 版本
 
 | ISSUE | 说明 |
 | :--- | :--- |
-|  |  |
-|  |  |
-|  |  |
+| [ZOOKEEPER-1239](https://issues.apache.org/jira/browse/ZOOKEEPER-1239) | 允许用户配置 ZooKeeper 在进行事务日志 fsync 操作时小号时间的报警阈值. |
+| [ZOOKEEPER-1087](https://issues.apache.org/jira/browse/ZOOKEEPER-1087) | 修复 ForceSync 参数设置不生效的 Bug. |
+| [ZOOKEEPER-1049](https://issues.apache.org/jira/browse/ZOOKEEPER-1049) | 修复客户端大规模连接断开后会话失效, |
 
 ## 7.2 3.4 系列
 
@@ -406,40 +406,40 @@ ZooKeeper 提供了一种自动清理历史快照数据和事务日志文件的�
 
 | ISSUE | 说明 |
 | :--- | :--- |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
+| [ZOOKEEPER-733](https://issues.apache.org/jira/browse/ZOOKEEPER-733) | 引入 Netty 作为服务端的 NIO 实现. |
+| [ZOOKEEPER-909](https://issues.apache.org/jira/browse/ZOOKEEPER-909) | 以接口形式剥离出 ClientCnxn 相关逻辑, 为后续添加 Netty 实现做准备. |
+| [ZOOKEEPER-965](https://issues.apache.org/jira/browse/ZOOKEEPER-965) | 支持批处理操作接口 multi, 允许客户端一次性提交多个事务操作, 这些操作具有原子性, 即要么全部被成功执行, 要么全部不执行. |
+| [ZOOKEEPER-1030](https://issues.apache.org/jira/browse/ZOOKEEPER-1030) | 将单个客户端与单台服务器之间的 maxClientCnxns (最大并发连接数) 的默认值从 10 提高到 60. |
+| [ZOOKEEPER-1153](https://issues.apache.org/jira/browse/ZOOKEEPER-1153) | 废弃 LeaderElection 和 AuthFastLeaderElection 两种 Leader 选举算法. |
+| [ZOOKEEPER-729](https://issues.apache.org/jira/browse/ZOOKEEPER-729) | 开放递归删除 ZNode 的 API 接口. |
+| [ZOOKEEPER-938](https://issues.apache.org/jira/browse/ZOOKEEPER-938) | 添加对 SASL 权限认证的支持. |
+| [ZOOKEEPER-850](https://issues.apache.org/jira/browse/ZOOKEEPER-850) | 采用 slf4j 来替换之前的 log4j 日志系统. |
+| [ZOOKEEPER-874](https://issues.apache.org/jira/browse/ZOOKEEPER-874) | 对事物日志进行恢复过程中, 通过回调 PlayBackListener 监听器来实现缓存事务提交记录, 以便集群其他机器快速同步. |
+| [ZOOKEEPER-1107](https://issues.apache.org/jira/browse/ZOOKEEPER-1107) | 添加自动清理历史快照数据和事务日志文件的机制. |
+| [ZOOKEEPER-773](https://issues.apache.org/jira/browse/ZOOKEEPER-773) | 添加日志可视化工具. |
+| [ZOOKEEPER-737](https://issues.apache.org/jira/browse/ZOOKEEPER-737) | 改造四字命令处理模型, 采用命令线程方式. |
+| [ZOOKEEPER-744](https://issues.apache.org/jira/browse/ZOOKEEPER-744) | 添加四字命令 mntr, 用于对 ZooKeeper 服务器监控. |
+| [ZOOKEEPER-808](https://issues.apache.org/jira/browse/ZOOKEEPER-808) | 添加浏览器端 ZooKeeper 管理与控制工具: huebrowser. |
+| [ZOOKEEPER-769](https://issues.apache.org/jira/browse/ZOOKEEPER-769) | 修复 Observer 参与事务请求投票的 Bug. |
+| [ZOOKEEPER-795](https://issues.apache.org/jira/browse/ZOOKEEPER-795) | 修复会话失效后, 客户端 EventThread 线程为退出的 Bug. |
+| [ZOOKEEPER-1055](https://issues.apache.org/jira/browse/ZOOKEEPER-1055) | 去除对 ZNode 重复的 ACL 设置. |
 
 ### 7.2.2 3.4.4 版本
 
 | ISSUE | 说明 |
 | :--- | :--- |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
+| [ZOOKEEPER-1344](https://issues.apache.org/jira/browse/ZOOKEEPER-1344) | 批处理操作接口 multi 添加对 Chroot 的支持. |
+| [ZOOKEEPER-1321](https://issues.apache.org/jira/browse/ZOOKEEPER-1321) | 通过 JMX 和四字命令方式对外开放服务器连接数信息. |
+| [ZOOKEEPER-1377](https://issues.apache.org/jira/browse/ZOOKEEPER-1377) | 添加快照数据可视化工具: SnapshotFormatter. |
+| [ZOOKEEPER-1307](https://issues.apache.org/jira/browse/ZOOKEEPER-1307) | zkCli 添加对 InvalidACLException, NoAuthException, BadArgumentsException, BadVersionException 异常的捕获, 以便出现以上异常时, 用户依然能够正常使用 zkCli. |
+| [ZOOKEEPER-1465](https://issues.apache.org/jira/browse/ZOOKEEPER-1465) | 修复集群内部增量和全量数据同步缺陷, 减少在大数据量场景下的集群恢复时间. |
 
 ### 7.2.3 3.4.6 版本
 
 | ISSUE | 说明 |
 | :--- | :--- |
-|  |  |
-|  |  |
+| [ZOOKEEPER-1459](https://issues.apache.org/jira/browse/ZOOKEEPER-1459) | 修复在单机模式下启动的 ZooKeeper, 退出时未关闭事务日志文件流导致无法删除相关文件的 Bug. |
+| [ZOOKEEPER-1808](https://issues.apache.org/jira/browse/ZOOKEEPER-1808) | 在 FastLeaderElection 选举过程的消息中添加 version 字段, 以便将来能够区别出不同版本的选举消息. |
 
 ---
 
