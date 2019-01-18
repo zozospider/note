@@ -31,6 +31,10 @@
   - [Elasticsearch](https://github.com/zozospider/note/tree/master/store/Elasticsearch)
     - [Elasticsearch-Best-Practices](https://github.com/zozospider/note/blob/master/store/Elasticsearch/Elasticsearch-Best-Practices.md)
 
+- [stream](https://github.com/zozospider/note/tree/master/stream)
+  - [Kafka](https://github.com/zozospider/note/tree/master/stream/Kafka)
+    - [Kafka-video](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video.md)
+
 - [instrument](https://github.com/zozospider/note/tree/master/instrument)
   - [Git](https://github.com/zozospider/note/tree/master/instrument/Git)
     - [Git](https://github.com/zozospider/note/blob/master/instrument/Git/Git.md)
