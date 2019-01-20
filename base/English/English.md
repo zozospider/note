@@ -1,4 +1,12 @@
 
+# Book
+
+- `The Road Less Traveled`: 少有人走的路. 三观, 爱情观, 自律.
+- `How To Become A Straight-A Student`: 如何规划, 时间管理.
+- `How to Make Friends and Influence People`: 人性的弱点. 如何提升情商.
+- `Procrastiniation`: 拖延症.
+- `Intimate Relationships`: 亲密关系 (心理学). 爱情, 婚姻, 人需要社交.
+
 # Chinese to English
 
 - 我很无聊
