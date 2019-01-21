@@ -84,3 +84,6 @@ mvn dependency:copy-dependencies -DoutputDirectory=lib
 mvn dependency:copy-dependencies -DoutputDirectory=lib -DincludeScope=compile
 ```
 
+
+[maven 配置 pom.xml 打包生成：单jar包／jar包+lib目录](https://www.jianshu.com/p/9146cec6cc60)
+
