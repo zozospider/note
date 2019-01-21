@@ -84,6 +84,33 @@ mvn dependency:copy-dependencies -DoutputDirectory=lib
 mvn dependency:copy-dependencies -DoutputDirectory=lib -DincludeScope=compile
 ```
 
+## 打出的包包含所有依赖的 jar
 
-[maven 配置 pom.xml 打包生成：单jar包／jar包+lib目录](https://www.jianshu.com/p/9146cec6cc60)
+- 1. 在pom.xml中添加maven-assembly-plugin插件
+```xml
+        <plugins>
+          <plugin>  
+              <artifactId>maven-assembly-plugin</artifactId>  
+              <configuration>  
+                  <!--这部分可有可无,加上的话则直接生成可运行jar包-->
+                  <!--<archive>-->
+                      <!--<manifest>-->
+                          <!--<mainClass>${exec.mainClass}</mainClass>-->
+                      <!--</manifest>-->
+                  <!--</archive>-->
+                  <descriptorRefs>  
+                      <descriptorRef>jar-with-dependencies</descriptorRef>  
+                  </descriptorRefs>  
+             </configuration>
+        </plugin>
+```
+
+- 2. 在pom.xml同级目录下打开命令行执行如下命令:
+```
+mvn assembly:assembly
+```
+
+## 上传本地 jar 包到私服
+
+[mvn命令上传本地jar包到远程maven私服Mac](http://leoray.leanote.com/post/mac_upload_local_jar_to_private_maven)
 
