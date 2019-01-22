@@ -116,3 +116,77 @@ mvn assembly:assembly
 [上传jar包到nexus私服](https://my.oschina.net/lujianing/blog/297128)  (可参考)
 [mvn命令上传本地jar包到远程maven私服Mac](http://leoray.leanote.com/post/mac_upload_local_jar_to_private_maven)
 
+以下为具体步骤:
+
+### 1. 搭建nexus服务器
+
+假设搭建成功后, 路径为 `http://localhost:8081/nexus/`.
+
+### 2. Maven：利用mvn deploy命令将jar包上传到nexus服务器
+
+- 2.1 修改 `$MAVEN_HOME/setting.xml`，在 `<profiles></profiles>` 标签内增加以下内容:
+```xml
+<profile>
+    <id>DEV</id>
+    <repositories>
+        <repository>
+            <id>nexus</id>
+            <name>local_repositories</name>
+            <url>http://localhost:8081/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+</profile>
+```
+
+- 2.2 修改 `$MAVEN_HOME/setting.xml`，在 `<servers></servers>`标签内增加以下内容:
+```xml
+<server>
+   <id>releases</id> <!-- nexus仓库的ID，比如这里选的是releases仓库 -->
+   <username>deployment</username> <!-- 这里使用的是nexus的帐号：deployment，可以在nexus服务器管理 -->
+   <password>deployment123</password> <!-- deployment帐号默认密码： deployment123 -->
+</server>
+```
+
+- 2.3 修改项目下的 `pom.xml`，在 `<project></project>` 标签内增加以下内容:
+```xml
+<distributionManagement>
+    <snapshotRepository>
+        <id>snapshots</id>
+        <name>Nexus Snapshot Repository</name>
+        <url>http://localhost:8081/nexus/content/repositories/snapshots</url>
+    </snapshotRepository>
+
+    <repository>
+        <id>releases</id>
+        <name>Nexus Release Repository</name>
+        <url>http://localhost:8081/nexus/content/repositories/releases</url>
+    </repository>
+</distributionManagement>
+```
+
+- 2.4 访问 `http://localhost:8081/nexus/`，将 releases 仓库的 Deployment Policy 的只修改为 Allow Redeploy, 如下图:
+
+![image](https://static.oschina.net/uploads/space/2015/0125/133420_hzyo_566545.jpg)
+
+- 2.5 在项目下执行 mvn deploy 命令:
+```
+mvn deploy:deploy-file -DgroupId=app.xxx -DartifactId=xxx -Dversion=1.0 -Dpackaging=jar -Dfile=D:\java\picture_server\target\xxx-1.0-SNAPSHOT.jar -Durl=http://localhost:8081/nexus/content/repositories/releases/ -DrepositoryId=releases
+```
+
+- 2.6 执行成功后, 访问 `http://localhost:8081/nexus/content/repositories/releases/` 找到刚才上传成功的jar包.
+
+- 2.7 修改其他项目 `pom.xml`, 在 `<dependencies></dependencies>` 标签内增加以下内容可以导入该依赖 jar 包:
+```xml
+<dependency>
+    <groupId>app.xxx</groupId>
+    <artifactId>xxx</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
