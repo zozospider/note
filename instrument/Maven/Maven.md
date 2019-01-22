@@ -112,5 +112,7 @@ mvn assembly:assembly
 
 ## 上传本地 jar 包到私服
 
+[Maven：利用mvn deploy命令将jar包上传到nexus服务器](https://my.oschina.net/u/566545/blog/371514)  (已测试有效)
+[上传jar包到nexus私服](https://my.oschina.net/lujianing/blog/297128)  (可参考)
 [mvn命令上传本地jar包到远程maven私服Mac](http://leoray.leanote.com/post/mac_upload_local_jar_to_private_maven)
 
