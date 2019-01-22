@@ -174,6 +174,8 @@ mvn assembly:assembly
 
 ![image](https://static.oschina.net/uploads/space/2015/0125/133420_hzyo_566545.jpg)
 
+Nexus-Allow-Redeploy.jpg
+
 - 2.5 在项目下执行 mvn deploy 命令:
 ```
 mvn deploy:deploy-file -DgroupId=app.xxx -DartifactId=xxx -Dversion=1.0 -Dpackaging=jar -Dfile=D:\java\picture_server\target\xxx-1.0-SNAPSHOT.jar -Durl=http://localhost:8081/nexus/content/repositories/releases/ -DrepositoryId=releases
