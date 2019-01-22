@@ -172,9 +172,7 @@ mvn assembly:assembly
 
 - 2.4 访问 `http://localhost:8081/nexus/`，将 releases 仓库的 Deployment Policy 的只修改为 Allow Redeploy, 如下图:
 
-![image](https://static.oschina.net/uploads/space/2015/0125/133420_hzyo_566545.jpg)
-
-Nexus-Allow-Redeploy.jpg
+![image](https://raw.githubusercontent.com/zozospider/note/master/instrument/Maven/Maven/Nexus-Allow-Redeploy.jpg)
 
 - 2.5 在项目下执行 mvn deploy 命令:
 ```
