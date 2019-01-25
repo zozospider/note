@@ -21,6 +21,10 @@
   - [JVM](https://github.com/zozospider/note/tree/master/Java/JVM)
     - [JVM-memory-model](https://github.com/zozospider/note/blob/master/Java/JVM/JVM-memory-model.md)
 
+- [network](https://github.com/zozospider/note/tree/master/network)
+  - [DNS](https://github.com/zozospider/note/tree/master/network/DNS)
+    - [DNS](https://github.com/zozospider/note/blob/master/network/DNS/DNS.md)
+
 - [Microservice](https://github.com/zozospider/note/tree/master/Microservice)
   - [Spring-Boot](https://github.com/zozospider/note/tree/master/Microservice/Spring-Boot)
     - [Spring-Boot-2.x](https://github.com/zozospider/note/blob/master/Microservice/Spring-Boot/Spring-Boot-2.x.md)
@@ -86,6 +90,7 @@
 
 ## network
 * TCP & UDP & HTTP & HTTPS & HTTP/2 & WebSocket
+* DNS
 * Java network programming
 * Netty
 
