@@ -60,7 +60,7 @@
 ## base
 * English
 * data structures
-* Algorithm
+* algorithm
 * Design Patterns
 * Linux
 * concept
