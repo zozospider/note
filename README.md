@@ -89,7 +89,9 @@
 * JConsole
 
 ## network
-* TCP & UDP & HTTP & HTTPS & HTTP/2 & WebSocket
+* TCP & UDP
+* HTTP & HTTPS & HTTP/2
+* WebSocket
 * DNS
 * Java network programming
 * Netty
