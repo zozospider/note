@@ -7,6 +7,16 @@ Coordination services are notoriously hard to get right. They are especially pro
 
 # Design Goals
 
+## ZooKeeper is simple
+
+Unlike a typical file system, which is designed for storage, `ZooKeeper data is kept in-memory, which means ZooKeeper can acheive high throughput and low latency numbers.`
+
+## ZooKeeper is replicated
+
+## ZooKeeper is ordered
+
+## ZooKeeper is fast
+
 # Data model and the hierarchical namespace
 
 # Nodes and ephemeral nodes
