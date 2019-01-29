@@ -59,6 +59,7 @@
 
 ## base
 * English
+* mathematics
 * data structures
 * algorithm
 * Design Patterns
