@@ -219,3 +219,13 @@ curator --config /home/user/app/curator/curator.yml /home/user/app/curator/actio
 ```
 0 23-7 * * * /etc/init.d/smb restart
 ```
+
+# 删除
+
+## 清空正在写的文件内容
+
+执行以下命令：
+```
+> file
+```
+
