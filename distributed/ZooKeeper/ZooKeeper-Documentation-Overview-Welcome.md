@@ -15,9 +15,11 @@ The ZooKeeper implementation puts a premium on high performance, highly avaliabl
 
 ## ZooKeeper is replicated
 
+![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-book-ZooKeeper%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95/71-Leader-Processing-chain.png)
+
 The servers that make up the ZooKeeper service must all know about each other. They maintain an in-memory image of state, along with a transaction logs and snaopshots in a persistent store. As long as the majority of the servers are avaliable, the ZooKeeper service will be avaliable.
 
-Client connect to a single ZooKeper server. the Client maintains a TCP connection through which it sends requests, gets responses, gets watch events, and sends hart beats. If the TCP connection to server breaks, the client will connect to a diffrent server.
+Client connect to a single ZooKeper server. `The client maintains a TCP connection through which it sends requests, gets responses, gets watch events, and sends hart beats.` If the TCP connection to server breaks, the client will connect to a diffrent server.
 
 ## ZooKeeper is ordered
 
