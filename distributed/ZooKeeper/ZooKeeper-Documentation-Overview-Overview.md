@@ -1,9 +1,35 @@
 
+- [Document & Code](#document--code)
+- [ZooKeeper](#zookeeper)
+- [Design Goals](#design-goals)
+    - [ZooKeeper is simple](#zookeeper-is-simple)
+    - [ZooKeeper is replicated](#zookeeper-is-replicated)
+    - [ZooKeeper is ordered](#zookeeper-is-ordered)
+    - [ZooKeeper is fast](#zookeeper-is-fast)
+- [Data model and the hierarchical namespace](#data-model-and-the-hierarchical-namespace)
+- [Nodes and ephemeral nodes](#nodes-and-ephemeral-nodes)
+- [Conditional updates and watches](#conditional-updates-and-watches)
+- [Guarantees](#guarantees)
+- [Simple API](#simple-api)
+- [Implementation](#implementation)
+- [Uses](#uses)
+- [Performance](#performance)
+- [Reliability](#reliability)
+- [The ZooKeeper Project](#the-zookeeper-project)
+
+# Document & Code
+
+* [../Zookeeper-book](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-Documentation.md)
+
+---
+
 # ZooKeeper
 
 `ZooKeeper is a distributed, open-source coordination service for distributed applications.`
 
 Coordination services are notoriously hard to get right. They are especially prone to errors such as race conditions and deadlock. `The motivation behind ZooKeeper is to relieve distributed applications the responsibility of implementing coordination services from scratch.`
+
+---
 
 # Design Goals
 
@@ -29,22 +55,42 @@ Client connect to a single ZooKeper server. `The client maintains a TCP connecti
 
 `It is especially fast in read-dominant wokloads.` ZooKeeper applications run on thousands of machines, and it performs best where reads are more common than writes, at radios of around 10:1.
 
+---
+
 # Data model and the hierarchical namespace
+
+---
 
 # Nodes and ephemeral nodes
 
+---
+
 # Conditional updates and watches
+
+---
 
 # Guarantees
 
 # Simple API
 
+---
+
 # Implementation
+
+---
 
 # Uses
 
+---
+
 # Performance
+
+---
 
 # Reliability
 
+---
+
 # The ZooKeeper Project
+
+---
