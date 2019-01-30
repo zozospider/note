@@ -15,7 +15,7 @@ The ZooKeeper implementation puts a premium on high performance, highly avaliabl
 
 ## ZooKeeper is replicated
 
-![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-book-ZooKeeper%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95/71-Leader-Processing-chain.png)
+![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-Documentation-Overview-Welcome/ZooKeeper-is-replicated.jpg)
 
 The servers that make up the ZooKeeper service must all know about each other. They maintain an in-memory image of state, along with a transaction logs and snaopshots in a persistent store. As long as the majority of the servers are avaliable, the ZooKeeper service will be avaliable.
 
