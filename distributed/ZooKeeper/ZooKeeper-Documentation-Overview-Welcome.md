@@ -11,7 +11,13 @@ Coordination services are notoriously hard to get right. They are especially pro
 
 Unlike a typical file system, which is designed for storage, `ZooKeeper data is kept in-memory, which means ZooKeeper can acheive high throughput and low latency numbers.`
 
+The ZooKeeper implementation puts a premium on high performance, highly avaliable, strictly ordered access. The performance aspects of ZooKeeper means it can be used in large, distributed systems. The reliability aspects keep it from being a single point of failure. The strict ordering means that sophisticated synchronization primitives can ben implemented at the client.
+
 ## ZooKeeper is replicated
+
+The servers that make up the ZooKeeper service must all know about each other. They maintain an in-memory image of state, along with a transaction logs and snaopshots in a persistent store. As long as the majority of the servers are avaliable, the ZooKeeper service will be avaliable.
+
+Client connect to a single ZooKeper server. the Client maintains a TCP connection through which it sends requests, gets responses, gets watch events, and sends hart beats. If the TCP connection to server breaks, the client will connect to a diffrent server.
 
 ## ZooKeeper is ordered
 
