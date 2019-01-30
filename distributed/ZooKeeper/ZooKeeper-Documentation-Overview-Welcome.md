@@ -21,7 +21,11 @@ Client connect to a single ZooKeper server. the Client maintains a TCP connectio
 
 ## ZooKeeper is ordered
 
+`ZooKeeper stamps each update with a number that reflects the order of all ZooKeeper transactions.`
+
 ## ZooKeeper is fast
+
+`It is especially fast in read-dominant wokloads.` ZooKeeper applications run on thousands of machines, and it performs best where reads are more common than writes, at radios of around 10:1.
 
 # Data model and the hierarchical namespace
 
