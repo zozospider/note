@@ -61,95 +61,95 @@
 # skill
 
 ## base
-* English
-* Advanced mathematics
-* Linear algebra
-* data structures
-* algorithm
-* Design Patterns
-* Linux
-* concept
+- English
+- Advanced mathematics
+- Linear algebra
+- data structures
+- algorithm
+- Design Patterns
+- Linux
+- concept
 
 ## data
-* XML & JSON & Protobuf & Avro & Thrift
-* Regular Expression
+- XML & JSON & Protobuf & Avro & Thrift
+- Regular Expression
 
 ## language
-* C
-* Go
-* Python
-* Scala
-* Kotlin
-* ECMA Script 6
-* Node.js
-* TypeScript
+- C
+- Go
+- Python
+- Scala
+- Kotlin
+- ECMA Script 6
+- Node.js
+- TypeScript
 
 ## Java
-* Java
-* Java Annotations
-* Java Reflection
-* JDK
-* JVM
-* JMX
-* JConsole
+- Java
+- Java Annotations
+- Java Reflection
+- JDK
+- JVM
+- JMX
+- JConsole
 
 ## network
-* TCP & UDP
-* HTTP & HTTPS & HTTP/2
-* WebSocket
-* DNS
-* Java network programming
-* Netty
+- TCP & UDP
+- HTTP & HTTPS & HTTP/2
+- WebSocket
+- DNS
+- Java network programming
+- Netty
 
 ## Concurrent
-* Java concurrency programming
-* Disruptor
+- Java concurrency programming
+- Disruptor
 
 ## Microservice
-* Spring
-* Spring Boot
-* Spring Cloud
-* Spring Cloud Data Flow
+- Spring
+- Spring Boot
+- Spring Cloud
+- Spring Cloud Data Flow
 
 ## distributed
-* ZooKeeper
-* Ambari
+- ZooKeeper
+- Ambari
 
 ## store
-* MySQL
-* Redis
-* Elasticsearch
-* MongoDB
-* Hadoop HDFS
-* HBase
+- MySQL
+- Redis
+- Elasticsearch
+- MongoDB
+- Hadoop HDFS
+- HBase
 
 ## stream
-* Kafka
-* Flume
-* Logstash
-* Storm
-* Spark Streaming
-* Flink
-* Pulsar
+- Kafka
+- Flume
+- Logstash
+- Storm
+- Spark Streaming
+- Flink
+- Pulsar
 
 ## analysis
-* Hadoop
-* Hive
-* Spark
-* Kylin
+- Hadoop
+- Hive
+- Spark
+- Kylin
 
 ## monitoring security test view
-* Ambari
-* Zabbix
-* Spring Security
-* Shiro
-* Kibana
-* Echarts
+- Ambari
+- Zabbix
+- Spring Security
+- Shiro
+- Kibana
+- Echarts
 
 ## instrument
-* Maven
-* Git
-* IntelliJ IDEA
-* Mac
+- Maven
+- Git
+- IntelliJ IDEA
+- Mac
 
 ## NLP
