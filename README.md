@@ -3,6 +3,8 @@
 - [base](https://github.com/zozospider/note/tree/master/base)
   - [English](https://github.com/zozospider/note/tree/master/base/English)
     - [English](https://github.com/zozospider/note/blob/master/base/English/English.md)
+  - [Advanced-mathematics](https://github.com/zozospider/note/tree/master/base/Advanced-mathematics)
+    - [Advanced-mathematics-video](https://github.com/zozospider/note/blob/master/base/Advanced-mathematics/Advanced-mathematics-video.md)
   - [Design-Patterns](https://github.com/zozospider/note/tree/master/base/Design-Patterns)
     - [Design-Patterns](https://github.com/zozospider/note/blob/master/base/Design-Patterns/Design-Patterns.md)
   - [Linux](https://github.com/zozospider/note/tree/master/base/Linux)
@@ -60,7 +62,8 @@
 
 ## base
 * English
-* mathematics
+* Advanced mathematics
+* Linear algebra
 * data structures
 * algorithm
 * Design Patterns
