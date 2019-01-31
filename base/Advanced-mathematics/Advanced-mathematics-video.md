@@ -12,3 +12,10 @@ y=x^{a}, b=\int_{m}^{n}
 y=x^{3}
 
 ![](http://latex.codecogs.com/gif.latex?y=x^{3})
+
+
+y=x^{3}, y=x^{3}
+
+![](http://latex.codecogs.com/gif.latex?y=x^{3}, y=x^{3})
+
+![](http://latex.codecogs.com/gif.latex?y=x^{3} , y=x^{3})
