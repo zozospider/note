@@ -41,7 +41,7 @@ The ZooKeeper implementation puts a premium on high performance, highly avaliabl
 
 ## ZooKeeper is replicated
 
-![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-Documentation-Overview-Welcome/ZooKeeper-is-replicated.jpg)
+![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-Documentation-Overview-Welcome/ZooKeeper-Service.jpg)
 
 The servers that make up the ZooKeeper service must all know about each other. They maintain an in-memory image of state, along with a transaction logs and snaopshots in a persistent store. As long as the majority of the servers are avaliable, the ZooKeeper service will be avaliable.
 
@@ -59,9 +59,21 @@ Client connect to a single ZooKeper server. `The client maintains a TCP connecti
 
 # Data model and the hierarchical namespace
 
+The namespace provided by ZooKeeper is much like that of a standard file system. `Evey node in ZooKeeper's namespace is identified by a path.`
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-Documentation-Overview-Welcome/ZooKeepers-Hierarchical-Namespace.jpg)
+
 ---
 
 # Nodes and ephemeral nodes
+
+Unlike is standard file systems, `each node in a ZooKeeper namespace can have data associated with it as well as children.` It is like a file-system that allows a file to also be a directory. (`ZooKeeper was designed to store coordination data: status information, configuration, local infomation, etc., so the data stored at each node is usually small, in the byte to kilobyte range.`)
+
+`Znodes maintain a stat structure that includes version numbers for data changes, ACL changes, and timestamps, to allow cache validations and coordinated updates. Each time a znode's data changes, the version number increases.`
+
+`The data stored at each znode in a namespace is read and written atomically.` Reads get all the data bytes associated with a znode and a write replaces all the data. `Each znode has an Access Control List (ACL) that restricts who can do what.`
+
+`ZooKeeper also has the notion of ephemeral nodes. These znodes exists as long as the session that created the znode is active. When sessin ends the znode is deleted.`
 
 ---
 
