@@ -22,6 +22,16 @@ $${a}\in{M}$$
 
 \\(l(x_i) = - \log_2 P(x_i)\\)
 
+- 正常
+
+${a}\in{M}$: 表示 a 属于 M.
+
+${a}\notin{M}$}: 表示 a 不属于 M.
+
+$M = \\{m_1, m_2, m_3, \cdots, m_n\\}$
+
+$M = \lbrace m_1, m_2, m_3, \cdots, m_n \rbrace$
+
 # codecogs test
 
 -[Equation Editor](http://latex.codecogs.com/)
