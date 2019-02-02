@@ -17,6 +17,10 @@ ${a}\notin{M}$}: 表示 a 不属于 M.
 
 $M = \{m_1, m_2, m_3, \cdots, m_n\}$
 
+$M = \\{m_1, m_2, m_3, \cdots, m_n\\}$
+
+$M = \lbrace m_1, m_2, m_3, \cdots, m_n \rbrace$
+
 ## 1.2 集合相等
 
 ---
