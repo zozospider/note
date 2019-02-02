@@ -18,9 +18,9 @@
 
 ## 1.2 集合关系
 
-- 子集: 若 $x \in A$ 一定会导致 $x \in B$, 那么 $A \subset B$.
-- 关系: 若 $A \subset B$ 且 $B \subset C$, 那么 $A \subset C$.
-- 相等: 若 $A \subset B$ 且 $A \subset B$, 那么 $A = B$, 即集合 A 与集合 B 相等.
+- `相等`: 若 $A \subset B$ 且 $A \subset B$, 那么 $A = B$, 即集合 A 与集合 B 相等.
+- `子集`: 若 $x \in A$ 一定会导致 $x \in B$, 那么 $A \subset B$.
+- `关系`: 若 $A \subset B$ 且 $B \subset C$, 那么 $A \subset C$.
 
 ## 1.3 集合分类
 
@@ -35,6 +35,12 @@
 ---
 
 # 二. 集合的运算
+
+## 并集
+
+设 A 和 B 是两个集合, 由所有属于 A 或者属于 B 的元素组成的集合, 称为 A 与 B 的并集, 记作 $A \bigcup B$.
+
+$$A \bigcup B = \\{ x | x \in A 或 x \in B \\}$$
 
 ---
 
