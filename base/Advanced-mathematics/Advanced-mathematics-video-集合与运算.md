@@ -15,9 +15,10 @@ ${a}\in{M}$: 表示 a 属于 M.
 
 ${a}\notin{M}$}: 表示 a 不属于 M.
 
-$M = \\{m_1, m_2, m_3, \cdots, m_n\\}$
+$M = \\{m_1, m_2, m_3, \cdots, m_n\\}$: `列举法` 表示集合的所有元素.
 
-$M = \lbrace m_1, m_2, m_3, \cdots, m_n \rbrace$
+$M = \\{x|x所具有性质P\\}$
+
 
 ## 1.2 集合相等
 
