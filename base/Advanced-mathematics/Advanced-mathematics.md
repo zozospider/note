@@ -28,6 +28,6 @@ y=x^{3}, y=x^{3}
 ![](http://latex.codecogs.com/gif.latex?y=x^{3} , y=x^{3})
 
 
-![](http://latex.codecogs.com/gif.latex?a \\in M)
+![](http://latex.codecogs.com/gif.latex?a\\in M)
 
-![](http://latex.codecogs.com/gif.latex?a \\notin M)
+![](http://latex.codecogs.com/gif.latex?a\\notin M)
