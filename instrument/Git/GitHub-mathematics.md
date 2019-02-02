@@ -3,6 +3,7 @@
 
 - [机器学习-如何在github上写数学公式 - github由于无法加载JS，所以不暂时](http://cwiki.apachecn.org/pages/viewpage.action?pageId=8159393)
 - [MathJax使用LaTeX语法编写数学公式教程](https://www.zybuluo.com/knight/note/96093)
+- [Mathjax in hexo and gitbook](http://blog.cugxuan.cn/2018/11/16/Math/MathML-in-hexo-and-gitbook/)
 
 - 居中
 
