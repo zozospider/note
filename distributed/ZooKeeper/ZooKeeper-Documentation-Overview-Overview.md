@@ -43,7 +43,7 @@ The ZooKeeper implementation puts a premium on high performance, highly avaliabl
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-Documentation-Overview-Welcome/ZooKeeper-Service.jpg)
 
-The servers that make up the ZooKeeper service must all know about each other. They maintain an in-memory image of state, along with a transaction logs and snaopshots in a persistent store. As long as the majority of the servers are avaliable, the ZooKeeper service will be avaliable.
+The servers that make up the ZooKeeper service must all know about each other. They maintain an in-memory image of state, along with a transaction logs and snapshots in a persistent store. As long as the majority of the servers are avaliable, the ZooKeeper service will be avaliable.
 
 Client connect to a single ZooKeper server. `The client maintains a TCP connection through which it sends requests, gets responses, gets watch events, and sends hart beats.` If the TCP connection to server breaks, the client will connect to a diffrent server.
 
