@@ -1,7 +1,20 @@
+- [Document & Code](#document--code)
+- [一. 集合](#一-集合)
+    - [1.1 集合的概念](#11-集合的概念)
+    - [1.2 集合关系](#12-集合关系)
+    - [1.3 集合分类](#13-集合分类)
+- [二. 集合的运算](#二-集合的运算)
+    - [2.1 并集](#21-并集)
+    - [2.2 交集](#22-交集)
+    - [2.3 差集](#23-差集)
+    - [2.4 全集和补集](#24-全集和补集)
+- [三. 区间与邻域](#三-区间与邻域)
 
 # Document & Code
 
-* [../Advanced-mathematics-video](https://github.com/zozospider/note/blob/master/base/Advanced-mathematics/Advanced-mathematics-video.md)
+- (需要 chrome 插件 `MathJax Plugin for Github` 支持)
+
+- [../Advanced-mathematics-video](https://github.com/zozospider/note/blob/master/base/Advanced-mathematics/Advanced-mathematics-video.md)
 
 ---
 
