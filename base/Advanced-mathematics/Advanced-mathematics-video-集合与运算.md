@@ -12,8 +12,6 @@
 
 # Document & Code
 
-- (需要 chrome 插件 `MathJax Plugin for Github` 支持)
-
 - [../Advanced-mathematics-video](https://github.com/zozospider/note/blob/master/base/Advanced-mathematics/Advanced-mathematics-video.md)
 
 ---

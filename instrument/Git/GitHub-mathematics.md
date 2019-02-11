@@ -1,5 +1,5 @@
 
-# MathJax test (需要 chrome 插件 `MathJax Plugin for Github` 支持)
+# MathJax test (需要 Chrome 插件 `MathJax Plugin for Github` 支持)
 
 - [机器学习-如何在github上写数学公式 - github由于无法加载JS，所以不暂时](http://cwiki.apachecn.org/pages/viewpage.action?pageId=8159393)
 - [MathJax使用LaTeX语法编写数学公式教程](https://www.zybuluo.com/knight/note/96093)
