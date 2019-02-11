@@ -28,3 +28,11 @@
   - 数据发布/订阅 & 负载均衡 & 命名服务 & 分布式协调/通知 & 集群管理 & Master 选举 & 分布式锁 & 分布式队列
   - Haoop & HBase & Kafka & Dubbo & JStorm
   - Configurator
+
+---
+
+# Paxos 算法
+
+- [如何浅显易懂地解说 Paxos 的算法?](https://www.zhihu.com/question/19787937)
+- [paxos 算法](https://www.processon.com/view/59c2295ae4b0bc4fef8a436d)
+
