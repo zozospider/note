@@ -27,9 +27,9 @@
 
 # ZooKeeper
 
-`ZooKeeper is a distributed, open-source coordination service for distributed applications.`
+__ZooKeeper is a distributed, open-source coordination service for distributed applications.__
 
-Coordination services are notoriously hard to get right. They are especially prone to errors such as race conditions and deadlock. `The motivation behind ZooKeeper is to relieve distributed applications the responsibility of implementing coordination services from scratch.`
+Coordination services are notoriously hard to get right. They are especially prone to errors such as race conditions and deadlock. __The motivation behind ZooKeeper is to relieve distributed applications the responsibility of implementing coordination services from scratch.__
 
 ---
 
