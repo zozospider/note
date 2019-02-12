@@ -90,7 +90,9 @@ Clients can set a watch on a znodes. A watch will be triggered and removed when 
 ZooKeeper is very fast and very simple. Since its goal, though, is to be a basis of the constraction of more complicated services, such as synchronization, it provides a set of guarantees. These are:
 - __Sequential Consistency__: Updates from a client will be applied in the order that they were sent.
 - __Atomicity__: Updates either succeed or fail. No partial results.
-
+- __Single System Image__: A client will see the same view of the service regardless of the server that it connects to.
+- __Reliability__: Once an update has been applied, it will persist from that time forward until a client overwrites the update.
+- __Timeliness__: the clients view of the system is guaranteed to be up-to-date within a certain time bound.
 
 # Simple API
 
