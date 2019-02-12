@@ -12,6 +12,8 @@ HashMap 在 put() 方法中, 关键步骤有两个:
 - 1. 通过 hash(key) 方法获取一个 hash 的中间值: 进行一系列位运算, 其中调用了 k.hashCode() 方法.
 - 2. 通过 indexFor(hash, table.length) 方法获取一个 i 中间值: 进行 `h & (length-1)` 运算, 其中 length 的值为 16, 计算出的 i 的值在 0 ~ 15 范围内.
 
+注: 参考 `Redis` 16384 hash slots 存放规则.
+
 ```java
 public class HashMap<K,V>
     extends AbstractMap<K,V>
