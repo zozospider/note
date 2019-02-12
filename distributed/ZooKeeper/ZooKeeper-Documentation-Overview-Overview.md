@@ -55,7 +55,7 @@ __ZooKeeper stamps each update with a number that reflects the order of all ZooK
 
 ## ZooKeeper is fast
 
-__It is especially fast in read-dominant wokloads.__ ZooKeeper applications run on thousands of machines, and it performs best where reads are more common than writes, at radios of around 10:1.
+__It is especially fast in `read-dominant` workloads.__ ZooKeeper applications run on thousands of machines, and it performs best where reads are more common than writes, at radios of around 10:1.
 
 ---
 
