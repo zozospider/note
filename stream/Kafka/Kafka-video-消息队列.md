@@ -17,6 +17,10 @@ Flume 具有以下缺点:
 
 以下为 b2 方案示例:
 
-![image]()
+![image](https://raw.githubusercontent.com/zozospider/note/master/stream/Kafka/Kafka-video-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/Flume-%E5%A2%9E%E5%8A%A0%E6%B6%88%E8%B4%B9%E8%80%85.png)
+
+# 二. 消息队列系统预期效果
+
+为解决 Flume 作为消息队列的缺点, 需要一个新的消息队列系统, 以下为该新系统的预期效果:
 
 
