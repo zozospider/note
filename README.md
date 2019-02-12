@@ -1,7 +1,7 @@
 # link
 
-- [Mathematics](https://github.com/zozospider/note/tree/master/Mathematics)
-  - [Advanced-mathematics](https://github.com/zozospider/note/tree/master/Mathematics/Advanced-mathematics)
+- Mathematics
+  - Advanced-mathematics
     - [Advanced-mathematics-video](https://github.com/zozospider/note/blob/master/Mathematics/Advanced-mathematics/Advanced-mathematics-video.md)
 
 - [base](https://github.com/zozospider/note/tree/master/base)
