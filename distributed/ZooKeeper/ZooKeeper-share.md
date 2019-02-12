@@ -35,4 +35,4 @@
 
 - [如何浅显易懂地解说 Paxos 的算法?](https://www.zhihu.com/question/19787937)
 - [paxos 算法](https://www.processon.com/view/59c2295ae4b0bc4fef8a436d)
-
+- [数据一致性与 Paxos 算法](https://my.oschina.net/fileoptions/blog/1825760)
