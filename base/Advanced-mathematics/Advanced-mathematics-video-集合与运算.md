@@ -83,24 +83,24 @@ $A = \\{ x | 0 < x \leq 1\\}$ 的补集是 $A^c = \\{ x | x \leq 0 或 x > 1\\}$
 
 ### 3.2 开区间
 
-$(a, b) = \\{ x | a < x < b \\}$
+$$(a, b) = \\{ x | a < x < b \\}$$
 
 ### 3.3 闭区间
 
-$[a, b] = \\{ x | a \geq x \leq b \\}$
+$$[a, b] = \\{ x | a \geq x \leq b \\}$$
 
 ### 3.4 半开闭区间
 
-$[a, b) = \\{ x | a \geq x < b \\}$
+$$[a, b) = \\{ x | a \geq x < b \\}$$
 
-$(a, b] = \\{ x | a < x \leq b \\}$
+$$(a, b] = \\{ x | a < x \leq b \\}$$
 
 ### 3.5 无限区间
 
-$[a, +\infty) = \\{ x | a \geq x \\}$
+$$[a, +\infty) = \\{ x | a \geq x \\}$$
 
-$(-\infty, b] = \\{ x | x \leq b \\}$
+$$(-\infty, b] = \\{ x | x \leq b \\}$$
 
-全体实数的集合 R 记作 $(-\infty, +\infty)$
+全体实数的集合 R 记作: $(-\infty, +\infty)$
 
 ---
