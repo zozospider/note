@@ -7,6 +7,7 @@
 - base
   - English
     - [English](https://github.com/zozospider/note/blob/master/base/English/English.md)
+    - [English-video](https://github.com/zozospider/note/blob/master/base/English/English-video.md)
   - Design-Patterns
     - [Design-Patterns](https://github.com/zozospider/note/blob/master/base/Design-Patterns/Design-Patterns.md)
   - Linux
