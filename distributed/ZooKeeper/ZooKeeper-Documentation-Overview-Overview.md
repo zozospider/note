@@ -37,7 +37,7 @@ Coordination services are notoriously hard to get right. They are especially pro
 
 ## ZooKeeper is simple
 
-Unlike a typical file system, which is designed for storage, `ZooKeeper data is kept in-memory, which means ZooKeeper can acheive high throughput and low latency numbers.`
+Unlike a typical file system, which is designed for storage, __ZooKeeper data is kept in-memory, which means ZooKeeper can acheive high throughput and low latency numbers.__
 
 The ZooKeeper implementation puts a premium on high performance, highly avaliable, strictly ordered access. The performance aspects of ZooKeeper means it can be used in large, distributed systems. The reliability aspects keep it from being a single point of failure. The strict ordering means that sophisticated synchronization primitives can ben implemented at the client.
 
@@ -47,11 +47,11 @@ The ZooKeeper implementation puts a premium on high performance, highly avaliabl
 
 The servers that make up the ZooKeeper service must all know about each other. They maintain an in-memory image of state, along with a transaction logs and snapshots in a persistent store. As long as the majority of the servers are avaliable, the ZooKeeper service will be avaliable.
 
-Client connect to a single ZooKeper server. `The client maintains a TCP connection through which it sends requests, gets responses, gets watch events, and sends hart beats.` If the TCP connection to server breaks, the client will connect to a diffrent server.
+Client connect to a single ZooKeper server. __The client maintains a TCP connection through which it sends requests, gets responses, gets watch events, and sends hart beats.__ If the TCP connection to server breaks, the client will connect to a diffrent server.
 
 ## ZooKeeper is ordered
 
-`ZooKeeper stamps each update with a number that reflects the order of all ZooKeeper transactions.`
+__ZooKeeper stamps each update with a number that reflects the order of all ZooKeeper transactions.__
 
 ## ZooKeeper is fast
 
@@ -61,7 +61,7 @@ __It is especially fast in read-dominant wokloads.__ ZooKeeper applications run 
 
 # Data model and the hierarchical namespace
 
-The namespace provided by ZooKeeper is much like that of a standard file system. `Evey node in ZooKeeper's namespace is identified by a path.`
+The namespace provided by ZooKeeper is much like that of a standard file system. __Evey node in ZooKeeper's namespace is identified by a path.__
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-Documentation-Overview-Welcome/ZooKeepers-Hierarchical-Namespace.jpg)
 
@@ -69,13 +69,13 @@ The namespace provided by ZooKeeper is much like that of a standard file system.
 
 # Nodes and ephemeral nodes
 
-Unlike is standard file systems, `each node in a ZooKeeper namespace can have data associated with it as well as children.` It is like a file-system that allows a file to also be a directory. (`ZooKeeper was designed to store coordination data: status information, configuration, local infomation, etc., so the data stored at each node is usually small, in the byte to kilobyte range.`)
+Unlike is standard file systems, __each node in a ZooKeeper namespace can have data associated with it as well as children.__ It is like a file-system that allows a file to also be a directory. (__ZooKeeper was designed to store coordination data: status information, configuration, local infomation, etc., so the data stored at each node is usually small, in the byte to kilobyte range.__)
 
-`Znodes maintain a stat structure that includes version numbers for data changes, ACL changes, and timestamps, to allow cache validations and coordinated updates. Each time a znode's data changes, the version number increases.`
+__Znodes maintain a stat structure that includes version numbers for data changes, ACL changes, and timestamps, to allow cache validations and coordinated updates. Each time a znode's data changes, the version number increases.__
 
-`The data stored at each znode in a namespace is read and written atomically.` Reads get all the data bytes associated with a znode and a write replaces all the data. `Each znode has an Access Control List (ACL) that restricts who can do what.`
+__The data stored at each znode in a namespace is read and written atomically.__ Reads get all the data bytes associated with a znode and a write replaces all the data. __Each znode has an Access Control List (ACL) that restricts who can do what.__
 
-`ZooKeeper also has the notion of ephemeral nodes. These znodes exists as long as the session that created the znode is active. When sessin ends the znode is deleted.`
+__ZooKeeper also has the notion of ephemeral nodes. These znodes exists as long as the session that created the znode is active. When sessin ends the znode is deleted.__
 
 ---
 
@@ -88,7 +88,8 @@ Clients can set a watch on a znodes. A watch will be triggered and removed when 
 # Guarantees
 
 ZooKeeper is very fast and very simple. Since its goal, though, is to be a basis of the constraction of more complicated services, such as synchronization, it provides a set of guarantees. These are:
-- `Sequential Consistency`: Updates from a client will be applied in the order that they were sent.
+- __Sequential Consistency__: Updates from a client will be applied in the order that they were sent.
+- __Atomicity__: Updates either succeed or fail. No partial results.
 
 
 # Simple API
