@@ -55,7 +55,7 @@ Client connect to a single ZooKeper server. `The client maintains a TCP connecti
 
 ## ZooKeeper is fast
 
-`It is especially fast in read-dominant wokloads.` ZooKeeper applications run on thousands of machines, and it performs best where reads are more common than writes, at radios of around 10:1.
+__It is especially fast in read-dominant wokloads.__ ZooKeeper applications run on thousands of machines, and it performs best where reads are more common than writes, at radios of around 10:1.
 
 ---
 
@@ -87,6 +87,8 @@ Clients can set a watch on a znodes. A watch will be triggered and removed when 
 
 # Guarantees
 
+ZooKeeper is very fast and very simple. Since its goal, though, is to be a basis of the constraction of more complicated services, such as synchronization, it provides a set of guarantees. These are:
+- `Sequential Consistency`: Updates from a client will be applied in the order that they were sent.
 
 
 # Simple API
