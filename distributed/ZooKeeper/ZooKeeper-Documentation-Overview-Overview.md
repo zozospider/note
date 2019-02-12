@@ -94,7 +94,19 @@ ZooKeeper is very fast and very simple. Since its goal, though, is to be a basis
 - __Reliability__: Once an update has been applied, it will persist from that time forward until a client overwrites the update.
 - __Timeliness__: the clients view of the system is guaranteed to be up-to-date within a certain time bound.
 
+---
+
 # Simple API
+
+One of the design goals of ZooKeeper is provide a very simple programming interface. As a result, it supports only these operations:
+
+- __create__: create a node at a location in the tree.
+- __delete__: delete a node.
+- __exists__: test if a node exists at a location.
+- __get data__: reads the data from a node.
+- __set data__: writes data to a node.
+- __get children__: retrieves a list of children of a node.
+- __sync__: waits for data to be propagated.
 
 ---
 
