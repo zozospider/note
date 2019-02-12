@@ -1,3 +1,4 @@
+
 - [Document & Code](#document--code)
 - [一. 集合](#一-集合)
     - [1.1 集合的概念](#11-集合的概念)
@@ -12,7 +13,7 @@
 
 # Document & Code
 
-- [../Advanced-mathematics-video](https://github.com/zozospider/note/blob/master/base/Advanced-mathematics/Advanced-mathematics-video.md)
+- [../Advanced-mathematics-video](https://github.com/zozospider/note/blob/master/Mathematics/Advanced-mathematics/Advanced-mathematics-video.md)
 
 ---
 

@@ -1,10 +1,12 @@
 # link
 
+- [Mathematics](https://github.com/zozospider/note/tree/master/Mathematics)
+  - [Advanced-mathematics](https://github.com/zozospider/note/tree/master/Mathematics/Advanced-mathematics)
+    - [Advanced-mathematics-video](https://github.com/zozospider/note/blob/master/Mathematics/Advanced-mathematics/Advanced-mathematics-video.md)
+
 - [base](https://github.com/zozospider/note/tree/master/base)
   - [English](https://github.com/zozospider/note/tree/master/base/English)
     - [English](https://github.com/zozospider/note/blob/master/base/English/English.md)
-  - [Advanced-mathematics](https://github.com/zozospider/note/tree/master/base/Advanced-mathematics)
-    - [Advanced-mathematics-video](https://github.com/zozospider/note/blob/master/base/Advanced-mathematics/Advanced-mathematics-video.md)
   - [Design-Patterns](https://github.com/zozospider/note/tree/master/base/Design-Patterns)
     - [Design-Patterns](https://github.com/zozospider/note/blob/master/base/Design-Patterns/Design-Patterns.md)
   - [Linux](https://github.com/zozospider/note/tree/master/base/Linux)
@@ -61,12 +63,15 @@
 
 # skill
 
-## base
-- English
+## Mathematics
+- Calculus
 - Advanced mathematics
 - Linear algebra
 - data structures
 - algorithm
+
+## base
+- English
 - Design Patterns
 - Linux
 - concept
