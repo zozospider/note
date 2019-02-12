@@ -81,7 +81,7 @@ __ZooKeeper also has the notion of ephemeral nodes. These znodes exists as long 
 
 # Conditional updates and watches
 
-Clients can set a watch on a znodes. A watch will be triggered and removed when the znode changes. When a watch is triggered the client receives a packet saying that the znode has changed. And if the connection between the client and one of the Zookeeper servers broken, the client will recevie a local notification.
+Clients can set a watch on a znodes. __A watch will be triggered and removed when the znode changes. When a watch is triggered the client receives a packet saying that the znode has changed. And if the connection between the client and one of the Zookeeper servers broken, the client will recevie a local notification.__
 
 ---
 
