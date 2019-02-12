@@ -49,6 +49,7 @@
 - [instrument](https://github.com/zozospider/note/tree/master/instrument)
   - [Git](https://github.com/zozospider/note/tree/master/instrument/Git)
     - [Git](https://github.com/zozospider/note/blob/master/instrument/Git/Git.md)
+    - [GitHub-mathematics](https://github.com/zozospider/note/blob/master/instrument/Git/GitHub-mathematics.md)
   - [Maven](https://github.com/zozospider/note/tree/master/instrument/Maven)
     - [Maven](https://github.com/zozospider/note/blob/master/instrument/Maven/Maven.md)
   - [IntelliJ-IDEA](https://github.com/zozospider/note/tree/master/instrument/IntelliJ-IDEA)
