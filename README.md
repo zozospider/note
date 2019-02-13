@@ -63,6 +63,8 @@
     - [IntelliJ-IDEA](https://github.com/zozospider/note/blob/master/instrument/IntelliJ-IDEA/IntelliJ-IDEA.md)
   - Mac
     - [Mac](https://github.com/zozospider/note/blob/master/instrument/Mac/Mac.md)
+  - Geogebra
+    - [Geogebra](https://github.com/zozospider/note/blob/master/instrument/Geogebra/Geogebra.md)
 
 ---
 
