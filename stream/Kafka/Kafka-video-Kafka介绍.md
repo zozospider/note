@@ -83,3 +83,11 @@ Kafka 是一个分布式消息队列, Kafka 对消息保存时根据 `Topic` 进
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/stream/Kafka/Kafka-video-Kafka%E4%BB%8B%E7%BB%8D/Kafka%E8%AF%A6%E7%BB%86%E6%9E%B6%E6%9E%84.png)
 
+- __Producer__: 消息生产者, 向 Kafka Broker 发消息的客户端.
+- __Broker__: 一台 Kafka 服务器就是一个 Broker, 一个集群由多个 Broker 组成, 一个 Broker 可以容纳多个 Topic.
+- __Topic__: 相同类型数据的集合.
+- __Partition__: 为了实现扩展性, 一个大的 Topic 可以分布到多个 Broker 上, 一个 Topic 可以分为多个 Partition, 每个 Partition 是有序的队列. Partition 中的每条消息都会被分配一个有序的 id (即 Offset). Kafka 只保证同一个 Partition 中的顺序, 不保证一个 Topic (多个 Partition) 的整个顺序.
+- __Leader Follower__: 每一个 Partition 会有一个 Leader 和若干个 Follower, Leader 负责所有的读写操作, Follower 只负责备份 Leader 的数据.
+- __Consumer__: 消息消费者, 向 Kafka Broker 取消息的客户端.
+- __Consumer Group__: 这是 Kafka 用来实现一个 Topic 消息广播 (发送给所有的 Consumer) 和单播 (发送给任意一个 Consumer) 的手段. 一个 Topic 可以有多个 Consumer Group. Topic 的消息会复制 (只是概念上的, 不是真复制) 到所有的 Consumer Group, 但每个 Partition 只会把消息发给该 Consumer Group 中的某一个 Consumer. 如果需要实现广播, 只需要每个 Consumer 有一个独立的 Consumer Group 就可以了. 如果要实现单播, 只需要所有的 Consumer 在同一个 Consumer Group. 用 Consumer Group 还可以将 Consumer 进行自由的分组而不需要多次发送消息到不同的 Topic.
+- __Offset__: 偏移量.
