@@ -81,3 +81,5 @@ Kafka 是一个分布式消息队列, Kafka 对消息保存时根据 `Topic` 进
 
 以下为详细架构图:
 
+![image](https://raw.githubusercontent.com/zozospider/note/master/stream/Kafka/Kafka-video-Kafka%E4%BB%8B%E7%BB%8D/Kafka%E8%AF%A6%E7%BB%86%E6%9E%B6%E6%9E%84.png)
+
