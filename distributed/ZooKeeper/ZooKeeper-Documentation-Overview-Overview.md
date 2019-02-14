@@ -43,7 +43,7 @@ The ZooKeeper implementation puts a premium on high performance, highly avaliabl
 
 ## ZooKeeper is replicated
 
-![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-Documentation-Overview-Welcome/ZooKeeper-Service.jpg)
+![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-Documentation-Overview-Overview/ZooKeeper-Service.jpg)
 
 The servers that make up the ZooKeeper service must all know about each other. They maintain an in-memory image of state, along with a transaction logs and snapshots in a persistent store. As long as the majority of the servers are avaliable, the ZooKeeper service will be avaliable.
 
@@ -63,7 +63,7 @@ __It is especially fast in `read-dominant` workloads.__ ZooKeeper applications r
 
 The namespace provided by ZooKeeper is much like that of a standard file system. __Evey node in ZooKeeper's namespace is identified by a path.__
 
-![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-Documentation-Overview-Welcome/ZooKeepers-Hierarchical-Namespace.jpg)
+![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-Documentation-Overview-Overview/ZooKeepers-Hierarchical-Namespace.jpg)
 
 ---
 
@@ -111,6 +111,12 @@ One of the design goals of ZooKeeper is provide a very simple programming interf
 ---
 
 # Implementation
+
+With the exception of the request processor, each of the servers that make up the ZooKeeper service replicates its own copy of each of components.
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-Documentation-Overview-Overview/zkcomponents.jpg)
+
+
 
 ---
 
