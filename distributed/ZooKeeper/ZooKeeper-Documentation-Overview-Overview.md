@@ -116,6 +116,10 @@ With the exception of the request processor, each of the servers that make up th
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-Documentation-Overview-Overview/zkcomponents.jpg)
 
+__The replicated database is an in-memory database containing the entire data tree. Updates are logged to disk for recoverability, and writes are serialized to disk before they are applied to the in-memory database.__
+
+__Every ZooKeeper server services clients. Clients connect to exactly one server to submit irequests. Read requests are serviced from the local replica of each server databases. Requests that change the state of the service, write requests, are processed by an agreement protocol.__
+
 
 
 ---
