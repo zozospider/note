@@ -114,7 +114,7 @@ One of the design goals of ZooKeeper is provide a very simple programming interf
 
 With the exception of the request processor, each of the servers that make up the ZooKeeper service replicates its own copy of each of components.
 
-![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-Documentation-Overview-Overview/zkcomponents.jpg)
+![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-Documentation-Overview-Overview/ZooKeeper-Components.jpg)
 
 __The replicated database is an in-memory database containing the entire data tree. Updates are logged to disk for recoverability, and writes are serialized to disk before they are applied to the in-memory database.__
 
@@ -128,9 +128,15 @@ __ZooKeeper uses a custom atomic messaging protocol.__ When the leader receives 
 
 # Uses
 
+The programming interface to ZooKeeper is deliberately simple.
+
 ---
 
 # Performance
+
+__ZooKeeper is designed to be highly performant.__ But is it? The result of ZooKeeper's development team at `Yahoo! Research` indicate that it is. __It is especially high performance in applications where reads outnumber writes, since writes involve synchronizing the state of all servers. (Reads outnumbering writes is typically the case for a coordination service.)__
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-Documentation-Overview-Overview/ZooKeeper-Throughput-as-the-Read-Write-Ratio-Varies.jpg)
 
 ---
 
