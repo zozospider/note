@@ -21,51 +21,51 @@
     - [concept-question](https://github.com/zozospider/note/blob/master/base/concept/concept-question.md)
 
 - data
-  - Regular-Expression
+  - __Regular-Expression__
     - [Regular-Expression](https://github.com/zozospider/note/blob/master/data/Regular-Expression/Regular-Expression.md)
 
 - Java
-  - JDK
+  - __JDK__
     - [JDK-source-code](https://github.com/zozospider/note/blob/master/Java/JDK/JDK-source-code.md)
-  - JVM
+  - __JVM__
     - [JVM-memory-model](https://github.com/zozospider/note/blob/master/Java/JVM/JVM-memory-model.md)
 
 - network
-  - DNS
+  - __DNS__
     - [DNS](https://github.com/zozospider/note/blob/master/network/DNS/DNS.md)
 
 - Microservice
-  - Spring-Boot
+  - __Spring-Boot__
     - [Spring-Boot-2.x](https://github.com/zozospider/note/blob/master/Microservice/Spring-Boot/Spring-Boot-2.x.md)
 
 - distributed
-  - ZooKeeper
+  - __ZooKeeper__
     - [ZooKeeper-Documentation](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-Documentation.md)
     - [ZooKeeper-book](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book.md)
     - [ZooKeeper-video](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-video.md)
     - [ZooKeeper-share](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-share.md)
 
 - store
-  - MySQL
+  - __MySQL__
     - [MySQL-command] (https://github.com/zozospider/note/blob/master/store/MySQL/MySQL-command.md)
-  - Elasticsearch
+  - __Elasticsearch__
     - [Elasticsearch-Best-Practices](https://github.com/zozospider/note/blob/master/store/Elasticsearch/Elasticsearch-Best-Practices.md)
 
 - stream
-  - Kafka
+  - __Kafka__
     - [Kafka-video](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video.md)
 
 - instrument
-  - Git
+  - __Git__
     - [Git](https://github.com/zozospider/note/blob/master/instrument/Git/Git.md)
     - [GitHub-mathematics](https://github.com/zozospider/note/blob/master/instrument/Git/GitHub-mathematics.md)
-  - Maven
+  - __Maven__
     - [Maven](https://github.com/zozospider/note/blob/master/instrument/Maven/Maven.md)
-  - IntelliJ-IDEA
+  - __IntelliJ-IDEA__
     - [IntelliJ-IDEA](https://github.com/zozospider/note/blob/master/instrument/IntelliJ-IDEA/IntelliJ-IDEA.md)
-  - Mac
+  - __Mac__
     - [Mac](https://github.com/zozospider/note/blob/master/instrument/Mac/Mac.md)
-  - Geogebra
+  - __Geogebra__
     - [Geogebra](https://github.com/zozospider/note/blob/master/instrument/Geogebra/Geogebra.md)
 
 ---
