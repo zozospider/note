@@ -120,7 +120,9 @@ __The replicated database is an in-memory database containing the entire data tr
 
 __Every ZooKeeper server services clients. Clients connect to exactly one server to submit irequests. Read requests are serviced from the local replica of each server databases. Requests that change the state of the service, write requests, are processed by an agreement protocol.__
 
+__As part of the agreement protocol all write requests from clients are forwarded to a single server, called the `leader`. The rest of the ZooKeeper servers, called `follower`, receive message proposals from the leader and agree upon message delivery. The `messaging layer` takes care of replacing leaders of failures and syncing followers with leaders.__
 
+__ZooKeeper uses a custom atomic messaging protocol.__ When the leader receives a write request, it calculates what the state of the system is when the write is to be applied and transforms this into a transaction that captures this new state.
 
 ---
 
