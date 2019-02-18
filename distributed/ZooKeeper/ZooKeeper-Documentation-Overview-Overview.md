@@ -142,6 +142,17 @@ __ZooKeeper is designed to be highly performant.__ But is it? The result of ZooK
 
 # Reliability
 
+To show the behavior of the system over time as failure are injected we ran a ZooKeeper service made up of 7 machines. We run the same saturation benchmark as before, but this time we kept the write percentage at a constant 30%, which is a conservative ratio of our expected workloads.
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-Documentation-Overview-Overview/Reliability-in-the-Presence-of-Errors.jpg)
+
+The events marked in the figure are the following:
+- `1`: Failure and recovery of a follower.
+- `2`: Failure and recovery of a diffrent follower.
+- `3`: Failure of the leader.
+- `4`: Failure and recovery of two followers.
+- `5`: Failure of another leader.
+
 ---
 
 # The ZooKeeper Project
