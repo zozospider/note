@@ -1,10 +1,19 @@
 
+---
+
+# Document & Code
+
+- [../Kafka-video](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video.md)
+
+---
 
 # 安装
 
+[下载地址](http://kafka.apache.org/downloads)
+
 # 配置
 
-`config/server.properties` 具有如下属性:
+`config/server.properties` 具有如下部分属性:
 
 ```properties
 # broker 的全局唯一编号, 不能重复
@@ -59,3 +68,87 @@ log.retention.hours=168
 zookeeper.connect=localhost:2181
 ```
 
+# 命令
+
+## 启动集群
+
+注意需要先确保配置的 ZooKeeper 集群可用.
+
+前台启动方式如下:
+```
+bin/kafka-server-start.sh config/server.properties &
+```
+
+后台启动方式如下:
+```
+bin/kafka-server-start.sh -daemons config/server.properties
+```
+
+启动后 logs 目录如下:
+```
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ tree logs
+logs
+├── cleaner-offset-checkpoint
+├── controller.log
+├── kafka-authorizer.log
+├── kafka-request.log
+├── kafkaServer-gc.log.0.current
+├── log-cleaner.log
+├── log-start-offset-checkpoint
+├── meta.properties
+├── recovery-point-offset-checkpoint
+├── replication-offset-checkpoint
+├── server.log
+└── state-change.log
+
+0 directories, 12 files
+```
+
+## 关闭集群
+
+依次在三台机器上运行如下命令:
+```
+bin/kafka-server-stop.sh stop
+```
+
+## 查看当前服务器中的所有 Topic
+
+```
+bin/kafka-topics.sh --zookeeper localhost:2181 --list
+```
+
+## 创建 Topic
+
+```
+bin/kafka-topics.sh --zookeeper localhost:2181 --create --topic first --partitions 3 --replication-factor 2
+```
+
+创建后 logs 目录如下:
+```
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ tree logs
+logs
+├── cleaner-offset-checkpoint
+├── controller.log
+├── first-1
+│   ├── 00000000000000000000.index
+│   ├── 00000000000000000000.log
+│   ├── 00000000000000000000.timeindex
+│   └── leader-epoch-checkpoint
+├── first-2
+│   ├── 00000000000000000000.index
+│   ├── 00000000000000000000.log
+│   ├── 00000000000000000000.timeindex
+│   └── leader-epoch-checkpoint
+├── kafka-authorizer.log
+├── kafka-request.log
+├── kafkaServer-gc.log.0.current
+├── log-cleaner.log
+├── log-start-offset-checkpoint
+├── meta.properties
+├── recovery-point-offset-checkpoint
+├── replication-offset-checkpoint
+├── server.log
+└── state-change.log
+
+2 directories, 20 files
+```
