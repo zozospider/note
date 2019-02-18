@@ -162,4 +162,6 @@ The are a few important observations from this graph:
 
 # The ZooKeeper Project
 
+ZooKeeper has been [successfuly used](https://cwiki.apache.org/confluence/display/ZOOKEEPER/PoweredBy) in many industrial applications.
+
 ---
