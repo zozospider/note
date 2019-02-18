@@ -46,6 +46,8 @@
     - [ZooKeeper-share](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-share.md)
 
 - store
+  - MySQL
+    - [MySQL-command] (https://github.com/zozospider/note/blob/master/store/MySQL/MySQL-command.md)
   - Elasticsearch
     - [Elasticsearch-Best-Practices](https://github.com/zozospider/note/blob/master/store/Elasticsearch/Elasticsearch-Best-Practices.md)
 
