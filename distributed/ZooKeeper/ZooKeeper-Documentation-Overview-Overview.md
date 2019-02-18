@@ -153,6 +153,11 @@ The events marked in the figure are the following:
 - `4`: Failure and recovery of two followers.
 - `5`: Failure of another leader.
 
+The are a few important observations from this graph:
+- __If followers fail and recover quickly, then ZooKeeper is able to sustain a high throughput despite the failure.__
+- __The leader election algorithm allows for the system to recover fast enough to prevent throughput from dropping substantially.__ In our observations, ZooKeeper takes less than 200ms to elect a new leaders.
+- __As followers recover, ZooKeeper is able to raise throughput again once they start processing requests.__
+
 ---
 
 # The ZooKeeper Project
