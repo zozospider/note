@@ -24,6 +24,13 @@ export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 source ~/.bash_profile
 ```
 
+# 安装 tree
+
+在 root 用户下运行如下命令:
+```
+yum -y install tree
+```
+
 # Python
 
 
