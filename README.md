@@ -47,7 +47,7 @@
 
 - store
   - __MySQL__
-    - [MySQL-command] (https://github.com/zozospider/note/blob/master/store/MySQL/MySQL-command.md)
+    - [MySQL-command](https://github.com/zozospider/note/blob/master/store/MySQL/MySQL-command.md)
   - __Elasticsearch__
     - [Elasticsearch-Best-Practices](https://github.com/zozospider/note/blob/master/store/Elasticsearch/Elasticsearch-Best-Practices.md)
 
