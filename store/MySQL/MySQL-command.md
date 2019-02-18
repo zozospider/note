@@ -8,7 +8,7 @@ mysql> create database game_manager default character set utf8 collate utf8_gene
 
 ## 查看编码
 ```
-mysql> show variables like'%char%';
+mysql> show variables like '%char%';
 ```
 
 ## 查看 MySQL 版本
