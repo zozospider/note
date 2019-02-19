@@ -97,7 +97,7 @@ bin/kafka-server-start.sh config/server.properties &
 
 后台启动方式如下:
 ```
-bin/kafka-server-start.sh -daemons config/server.properties
+bin/kafka-server-start.sh -daemon config/server.properties
 ```
 
 启动后 logs 目录如下:
