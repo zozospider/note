@@ -238,3 +238,24 @@ logs
 
 如上, 三台机器中的 `logs/first-0`, `logs/first-1`, `logs/first-2` 文件夹表示的是名为 `fist` 的 Topic 有 3 个 partitions 分区 (分别为 `0` 号 partition 分区, `1` 号 partition 分区，`2` 号 partition 分区) 且每个分区有 2 个 replication-factor 副本因子. 
 
+## 3.5 查看 Topic
+
+执行如下命令查看名为 `first` 的 Topic 信息:
+```
+bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --describe --topic first
+```
+
+命令执行后显示如下信息:
+```
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --describe --topic first
+Topic:first     PartitionCount:3        ReplicationFactor:2     Configs:
+        Topic: first    Partition: 0    Leader: 1       Replicas: 1,2   Isr: 1,2
+        Topic: first    Partition: 1    Leader: 2       Replicas: 2,3   Isr: 2,3
+        Topic: first    Partition: 2    Leader: 3       Replicas: 3,1   Isr: 3,1
+```
+
+如上, 表示如下:
+- 名为 `fist` 的 Topic 有 3 个 partitions 分区, 每个 partition 有 2 个副本因子, 1 个 Leader.
+- `0` 号 partition 分区的 2 个副本因子在 `1` 号 broker 机器和 `2` 号 broker 机器上存储, 且 `1` 号 broker 机器为 Leader.
+- `1` 号 partition 分区的 2 个副本因子在 `2` 号 broker 机器和 `3` 号 broker 机器上存储, 且 `2` 号 broker 机器为 Leader.
+- `2` 号 partition 分区的 2 个副本因子在 `3` 号 broker 机器和 `1` 号 broker 机器上存储, 且 `3` 号 broker 机器为 Leader.
