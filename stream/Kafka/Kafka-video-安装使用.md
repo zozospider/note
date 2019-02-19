@@ -257,7 +257,7 @@ Topic:first     PartitionCount:3        ReplicationFactor:2     Configs:
 - `1` 号 partition 分区的 2 个副本因子在 `2` 号 broker 机器和 `3` 号 broker 机器上存储, 且 `2` 号 broker 机器为 Leader. InSyncReplication 正在同步的副本在 `2` 号 broker 机器和 `3` 号 broker 机器上.
 - `2` 号 partition 分区的 2 个副本因子在 `3` 号 broker 机器和 `1` 号 broker 机器上存储, 且 `3` 号 broker 机器为 Leader. InSyncReplication 正在同步的副本在 `3` 号 broker 机器和 `1` 号 broker 机器上.
 
-如果此时通过如下命令模拟 3 号机器挂掉:
+此时通过模拟 3 号机器挂掉, 并再次查看名为 `first` 的 Topic 信息:
 ```
 [zozo@VM_0_3_centos kafka_2.12-2.1.0]$ jps
 25746 Kafka
@@ -265,16 +265,65 @@ Topic:first     PartitionCount:3        ReplicationFactor:2     Configs:
 29580 Jps
 [zozo@VM_0_3_centos kafka_2.12-2.1.0]$ kill -9 25746
 [zozo@VM_0_3_centos kafka_2.12-2.1.0]$ jps
-29619 Jps
+30487 Jps
 23850 QuorumPeerMain
-```
-
-再次查看名为 `first` 的 Topic 信息:
-```
 [zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --describe --topic first
 Topic:first     PartitionCount:3        ReplicationFactor:2     Configs:
         Topic: first    Partition: 0    Leader: 1       Replicas: 1,2   Isr: 1,2
         Topic: first    Partition: 1    Leader: 2       Replicas: 2,3   Isr: 2
         Topic: first    Partition: 2    Leader: 1       Replicas: 3,1   Isr: 1
+```
+
+此时再次启动 3 号机器的服务, 并再次查看名为 `first` 的 Topic 信息:
+```
+[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ jps
+30487 Jps
+23850 QuorumPeerMain
+[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ bin/kafka-server-start.sh -daemon config/server.properties
+[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ jps
+30873 Jps
+23850 QuorumPeerMain
+30783 Kafka
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --describe --topic first
+Topic:first     PartitionCount:3        ReplicationFactor:2     Configs:
+        Topic: first    Partition: 0    Leader: 1       Replicas: 1,2   Isr: 1,2
+        Topic: first    Partition: 1    Leader: 2       Replicas: 2,3   Isr: 2,3
+        Topic: first    Partition: 2    Leader: 1       Replicas: 3,1   Isr: 1,3
+```
+
+如上, 如需要再次平衡, 可执行相应的平衡命令.
+
+## 3.6 删除 Topic
+
+运行如下命令删除名为 `first` 的 Topic:
+```
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --delete --topic first
+Topic first is marked for deletion.
+Note: This will have no impact if delete.topic.enable is not set to true.
+```
+
+在执行上述命令一段时间后再次查看三台机器的 `logs` 目录, 发现 `logs/first-0`, `logs/first-1`, `logs/first-2` 文件夹已经被删除:
+```
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ tree logs
+logs
+|-- cleaner-offset-checkpoint
+|-- controller.log
+|-- controller.log.2019-02-19-21
+|-- kafka-authorizer.log
+|-- kafka-request.log
+|-- kafkaServer-gc.log.0.current
+|-- kafkaServer.out
+|-- log-cleaner.log
+|-- log-cleaner.log.2019-02-19-21
+|-- log-start-offset-checkpoint
+|-- meta.properties
+|-- recovery-point-offset-checkpoint
+|-- replication-offset-checkpoint
+|-- server.log
+|-- server.log.2019-02-19-21
+|-- state-change.log
+`-- state-change.log.2019-02-19-21
+
+0 directories, 17 files
 ```
 
