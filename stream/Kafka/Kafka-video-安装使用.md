@@ -7,11 +7,11 @@
 
 ---
 
-# 安装
+# 一. 安装
 
 [下载地址](http://kafka.apache.org/downloads)
 
-# 配置
+# 二. 配置
 
 `config/server.properties` 具有如下部分属性, 可参考 [Kafka配置文件 server.properties 三个版本](https://blog.csdn.net/l1028386804/article/details/79194929):
 
@@ -84,9 +84,9 @@ log.retention.hours=168
 zookeeper.connect=localhost:2181
 ```
 
-# 命令
+# 三. 命令
 
-## 启动集群
+## 3.1 启动集群
 
 注意需要先确保配置的 ZooKeeper 集群可用.
 
@@ -100,7 +100,7 @@ bin/kafka-server-start.sh config/server.properties &
 bin/kafka-server-start.sh -daemon config/server.properties
 ```
 
-启动后 logs 目录如下:
+启动后三台机器的 logs 目录如下:
 ```
 [zozo@VM_0_6_centos kafka_2.12-2.1.0]$ tree logs
 logs
@@ -120,51 +120,119 @@ logs
 0 directories, 12 files
 ```
 
-## 关闭集群
+## 3.2 关闭集群
 
 依次在三台机器上运行如下命令:
 ```
 bin/kafka-server-stop.sh stop
 ```
 
-## 查看当前服务器中的所有 Topic
+## 3.3 查看当前服务器中的所有 Topic
 
+运行如下命令列出所有 Topic:
 ```
 bin/kafka-topics.sh --zookeeper localhost:2181 --list
 ```
 
-## 创建 Topic
+## 3.4 创建 Topic
 
+运行如下命令创建一个名为 first 的 Topic, 设置 3 个 partition 分区, 2 个 replication-factor 副本因子:
 ```
 bin/kafka-topics.sh --zookeeper localhost:2181 --create --topic first --partitions 3 --replication-factor 2
 ```
 
-创建后 logs 目录如下:
+创建后三台机器的 logs 目录如下:
+
+第 1 台机的 logs 目录如下:
 ```
 [zozo@VM_0_6_centos kafka_2.12-2.1.0]$ tree logs
 logs
-├── cleaner-offset-checkpoint
-├── controller.log
-├── first-1
-│   ├── 00000000000000000000.index
-│   ├── 00000000000000000000.log
-│   ├── 00000000000000000000.timeindex
-│   └── leader-epoch-checkpoint
-├── first-2
-│   ├── 00000000000000000000.index
-│   ├── 00000000000000000000.log
-│   ├── 00000000000000000000.timeindex
-│   └── leader-epoch-checkpoint
-├── kafka-authorizer.log
-├── kafka-request.log
-├── kafkaServer-gc.log.0.current
-├── log-cleaner.log
-├── log-start-offset-checkpoint
-├── meta.properties
-├── recovery-point-offset-checkpoint
-├── replication-offset-checkpoint
-├── server.log
-└── state-change.log
+|-- cleaner-offset-checkpoint
+|-- controller.log
+|-- first-0
+|   |-- 00000000000000000000.index
+|   |-- 00000000000000000000.log
+|   |-- 00000000000000000000.timeindex
+|   `-- leader-epoch-checkpoint
+|-- first-2
+|   |-- 00000000000000000000.index
+|   |-- 00000000000000000000.log
+|   |-- 00000000000000000000.timeindex
+|   `-- leader-epoch-checkpoint
+|-- kafka-authorizer.log
+|-- kafka-request.log
+|-- kafkaServer-gc.log.0.current
+|-- kafkaServer.out
+|-- log-cleaner.log
+|-- log-start-offset-checkpoint
+|-- meta.properties
+|-- recovery-point-offset-checkpoint
+|-- replication-offset-checkpoint
+|-- server.log
+`-- state-change.log
 
-2 directories, 20 files
+2 directories, 21 files
 ```
+
+第 2 台机的 logs 目录如下:
+```
+[zozo@VM_0_17_centos kafka_2.12-2.1.0]$ tree logs
+logs
+|-- cleaner-offset-checkpoint
+|-- controller.log
+|-- first-0
+|   |-- 00000000000000000000.index
+|   |-- 00000000000000000000.log
+|   |-- 00000000000000000000.timeindex
+|   `-- leader-epoch-checkpoint
+|-- first-1
+|   |-- 00000000000000000000.index
+|   |-- 00000000000000000000.log
+|   |-- 00000000000000000000.timeindex
+|   `-- leader-epoch-checkpoint
+|-- kafka-authorizer.log
+|-- kafka-request.log
+|-- kafkaServer-gc.log.0.current
+|-- kafkaServer.out
+|-- log-cleaner.log
+|-- log-start-offset-checkpoint
+|-- meta.properties
+|-- recovery-point-offset-checkpoint
+|-- replication-offset-checkpoint
+|-- server.log
+`-- state-change.log
+
+2 directories, 21 files
+```
+
+第 3 台机的 logs 目录如下:
+```
+[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ tree logs
+logs
+|-- cleaner-offset-checkpoint
+|-- controller.log
+|-- first-1
+|   |-- 00000000000000000000.index
+|   |-- 00000000000000000000.log
+|   |-- 00000000000000000000.timeindex
+|   `-- leader-epoch-checkpoint
+|-- first-2
+|   |-- 00000000000000000000.index
+|   |-- 00000000000000000000.log
+|   |-- 00000000000000000000.timeindex
+|   `-- leader-epoch-checkpoint
+|-- kafka-authorizer.log
+|-- kafka-request.log
+|-- kafkaServer-gc.log.0.current
+|-- kafkaServer.out
+|-- log-cleaner.log
+|-- log-start-offset-checkpoint
+|-- meta.properties
+|-- recovery-point-offset-checkpoint
+|-- replication-offset-checkpoint
+|-- server.log
+`-- state-change.log
+
+2 directories, 21 files
+```
+
