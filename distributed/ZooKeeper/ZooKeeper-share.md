@@ -31,6 +31,10 @@
 
 ---
 
+# 书
+
+- [ZooKeeper Distributed Process Coordination](https://t.hao0.me/files/zookeeper.pdf)
+
 # Paxos 算法
 
 - [如何浅显易懂地解说 Paxos 的算法?](https://www.zhihu.com/question/19787937)
