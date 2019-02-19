@@ -13,12 +13,28 @@
 
 # 配置
 
-`config/server.properties` 具有如下部分属性:
+`config/server.properties` 具有如下部分属性, 可参考 [Kafka配置文件 server.properties 三个版本](https://blog.csdn.net/l1028386804/article/details/79194929):
 
 ```properties
 # broker 的全局唯一编号, 不能重复
 # The id of the broker. This must be set to a unique integer for each broker.
 broker.id=0
+
+# 套接字服务器坚挺的地址, 如果没有配置, 就使用 java.net.InetAddress.getCanonicalHostName() 的返回值
+# The address the socket server listens on. It will get the value returned from 
+# java.net.InetAddress.getCanonicalHostName() if not configured.
+#   FORMAT:
+#     listeners = listener_name://host_name:port
+#   EXAMPLE:
+#     listeners = PLAINTEXT://your.host.name:9092
+#listeners=PLAINTEXT://:9092
+
+# 节点的主机名会通知给生产者和消费者. 
+# 如果配置了 "listeners" 就使用 "listeners" 的值, 否则就使用java.net.InetAddress.getCanonicalHostName() 的返回值
+# Hostname and port the broker will advertise to producers and consumers. If not set, 
+# it uses the value for "listeners" if configured.  Otherwise, it will use the value
+# returned from java.net.InetAddress.getCanonicalHostName().
+#advertised.listeners=PLAINTEXT://your.host.name:9092
 
 # 处理网络请求的线程数量
 # The number of threads that the server uses for receiving requests from the network and sending responses to the network
