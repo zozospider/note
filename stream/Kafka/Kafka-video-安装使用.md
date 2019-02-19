@@ -131,7 +131,8 @@ bin/kafka-server-stop.sh stop
 
 运行如下命令列出所有 Topic:
 ```
-bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --list
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --zookeeeper localhost:211 --list
+first
 ```
 
 ## 3.4 创建 Topic
