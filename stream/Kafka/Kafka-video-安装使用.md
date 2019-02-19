@@ -138,7 +138,8 @@ bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --list
 
 运行如下命令创建一个名为 first 的 Topic, 设置 3 个 partition 分区, 2 个 replication-factor 副本因子:
 ```
-bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --create --topic first --partitions 3 --replication-factor 2
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --create --topic first --partitions 3 --replication-factor 2
+Created topic "first".
 ```
 
 创建后三台机器的 logs 目录如下:
@@ -242,11 +243,6 @@ logs
 
 执行如下命令查看名为 `first` 的 Topic 信息:
 ```
-bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --describe --topic first
-```
-
-命令执行后显示如下信息:
-```
 [zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --describe --topic first
 Topic:first     PartitionCount:3        ReplicationFactor:2     Configs:
         Topic: first    Partition: 0    Leader: 1       Replicas: 1,2   Isr: 1,2
@@ -259,3 +255,25 @@ Topic:first     PartitionCount:3        ReplicationFactor:2     Configs:
 - `0` 号 partition 分区的 2 个副本因子在 `1` 号 broker 机器和 `2` 号 broker 机器上存储, 且 `1` 号 broker 机器为 Leader. InSyncReplication 正在同步的副本在 `1` 号 broker 机器和 `2` 号 broker 机器上.
 - `1` 号 partition 分区的 2 个副本因子在 `2` 号 broker 机器和 `3` 号 broker 机器上存储, 且 `2` 号 broker 机器为 Leader. InSyncReplication 正在同步的副本在 `2` 号 broker 机器和 `3` 号 broker 机器上.
 - `2` 号 partition 分区的 2 个副本因子在 `3` 号 broker 机器和 `1` 号 broker 机器上存储, 且 `3` 号 broker 机器为 Leader. InSyncReplication 正在同步的副本在 `3` 号 broker 机器和 `1` 号 broker 机器上.
+
+如果此时通过如下命令模拟 3 号机器挂掉:
+```
+[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ jps
+25746 Kafka
+23850 QuorumPeerMain
+29580 Jps
+[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ kill -9 25746
+[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ jps
+29619 Jps
+23850 QuorumPeerMain
+```
+
+再次查看名为 `first` 的 Topic 信息:
+```
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --describe --topic first
+Topic:first     PartitionCount:3        ReplicationFactor:2     Configs:
+        Topic: first    Partition: 0    Leader: 1       Replicas: 1,2   Isr: 1,2
+        Topic: first    Partition: 1    Leader: 2       Replicas: 2,3   Isr: 2
+        Topic: first    Partition: 2    Leader: 1       Replicas: 3,1   Isr: 1
+```
+
