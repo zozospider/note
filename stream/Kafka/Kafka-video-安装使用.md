@@ -131,14 +131,14 @@ bin/kafka-server-stop.sh stop
 
 运行如下命令列出所有 Topic:
 ```
-bin/kafka-topics.sh --zookeeper localhost:2181 --list
+bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --list
 ```
 
 ## 3.4 创建 Topic
 
 运行如下命令创建一个名为 first 的 Topic, 设置 3 个 partition 分区, 2 个 replication-factor 副本因子:
 ```
-bin/kafka-topics.sh --zookeeper localhost:2181 --create --topic first --partitions 3 --replication-factor 2
+bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --create --topic first --partitions 3 --replication-factor 2
 ```
 
 创建后三台机器的 logs 目录如下:
@@ -235,4 +235,6 @@ logs
 
 2 directories, 21 files
 ```
+
+如上, 三台机器中的 `logs/first-0`, `logs/first-1`, `logs/first-2` 文件夹表示的是名为 `fist` 的 Topic 有 3 个 partitions 分区 (分别为 `0` 号 partition 分区, `1` 号 partition 分区，`2` 号 partition 分区) 且每个分区有 2 个 replication-factor 副本因子. 
 
