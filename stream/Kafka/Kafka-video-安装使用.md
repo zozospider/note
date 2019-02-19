@@ -256,6 +256,6 @@ Topic:first     PartitionCount:3        ReplicationFactor:2     Configs:
 
 如上, 表示如下:
 - 名为 `fist` 的 Topic 有 3 个 partitions 分区, 每个 partition 有 2 个副本因子, 1 个 Leader.
-- `0` 号 partition 分区的 2 个副本因子在 `1` 号 broker 机器和 `2` 号 broker 机器上存储, 且 `1` 号 broker 机器为 Leader.
-- `1` 号 partition 分区的 2 个副本因子在 `2` 号 broker 机器和 `3` 号 broker 机器上存储, 且 `2` 号 broker 机器为 Leader.
-- `2` 号 partition 分区的 2 个副本因子在 `3` 号 broker 机器和 `1` 号 broker 机器上存储, 且 `3` 号 broker 机器为 Leader.
+- `0` 号 partition 分区的 2 个副本因子在 `1` 号 broker 机器和 `2` 号 broker 机器上存储, 且 `1` 号 broker 机器为 Leader. InSyncReplication 正在同步的副本在 `1` 号 broker 机器和 `2` 号 broker 机器上.
+- `1` 号 partition 分区的 2 个副本因子在 `2` 号 broker 机器和 `3` 号 broker 机器上存储, 且 `2` 号 broker 机器为 Leader. InSyncReplication 正在同步的副本在 `2` 号 broker 机器和 `3` 号 broker 机器上.
+- `2` 号 partition 分区的 2 个副本因子在 `3` 号 broker 机器和 `1` 号 broker 机器上存储, 且 `3` 号 broker 机器为 Leader. InSyncReplication 正在同步的副本在 `3` 号 broker 机器和 `1` 号 broker 机器上.
