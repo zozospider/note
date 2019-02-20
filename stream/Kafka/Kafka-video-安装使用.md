@@ -139,7 +139,7 @@ first
 
 运行如下命令创建一个名为 first 的 Topic, 设置 3 个 partition 分区, 2 个 replication-factor 副本因子:
 ```
-[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --create --topic first --partitions 3 --replication-factor 2
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --create --zookeeper 172.16.0.6:2181 --partitions 3 --replication-factor 2 --topic first
 Created topic "first".
 ```
 
