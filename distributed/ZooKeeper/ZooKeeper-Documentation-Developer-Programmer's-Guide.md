@@ -43,7 +43,11 @@
 
 # 二. The ZooKeeper Data Model
 
+__ZooKeeper has a hierarchal name space, much like a distributed file system. The only diffrence is that each node in the namespace can have data associated with it as well as children. It is like having a file system that allows a file to also be a directory.__ 
+
 ## 2.1 ZNodes
+
+Every node in a ZooKeeper tree is refered to as a `znode`. 
 
 ### 2.1.1 Watches
 
