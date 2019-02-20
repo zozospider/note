@@ -47,7 +47,7 @@ __ZooKeeper has a hierarchal name space, much like a distributed file system. Th
 
 ## 2.1 ZNodes
 
-Every node in a ZooKeeper tree is refered to as a `znode`. 
+Every node in a ZooKeeper tree is refered to as a `znode`. Znodes maintain a stat structure that includes version numbers for data changes, acl changes. The stat structure also has timestamps. __Each time a znode's data changes, the version number increases. For instance, whenever a client retrieves data, it also receives the version of the data. And when a client performs an update or a delete, it must supply the version of the data of the znode it is changing. If the version it supplies doesn't match the actual version of the data, the update will fail.__
 
 ### 2.1.1 Watches
 
