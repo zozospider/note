@@ -2,8 +2,8 @@
 # Document & Code
 
 - ZooKeeper Concepts and Basics
-  - [../Introduction](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book2-Introduction.md)
-  - [../Getting-to-Grips-with-ZooKeeper](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book2-Getting-to-Grips-with-ZooKeeper.md)
+  - [Introduction](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book2-Introduction.md)
+  - [Getting-to-Grips-with-ZooKeeper](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book2-Getting-to-Grips-with-ZooKeeper.md)
 - Programming with ZooKeeper
   - [Getting-Started-with-the-ZooKeeper-API](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book2-Getting-Started-with-the-ZooKeeper-API.md)
   - [Dealing-with-State-Change](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book2-Dealing-with-State-Change.md)
