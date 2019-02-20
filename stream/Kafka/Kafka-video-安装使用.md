@@ -368,3 +368,39 @@ Option                                   Description
 [2019-02-20 21:09:10,226] WARN [Consumer clientId=consumer-1, groupId=console-consumer-93281] Error while fetching metadata with correlation id 16 : {test=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)
 [2019-02-20 21:09:10,639] WARN [Consumer clientId=consumer-1, groupId=console-consumer-93281] Error while fetching metadata with correlation id 24 : {test=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)
 ```
+
+## 3.7 查看 log
+
+通过 `strings` 命令可以查看 logs 目录下的 .log 文件内容:
+```
+[zozo@VM_0_6_centos first-1]$ pwd
+/home/zozo/app/kafka/five/kafka_2.12-2.1.0/logs/first-1
+[zozo@VM_0_6_centos first-1]$ ll
+总用量 20520
+-rw-rw-r-- 1 zozo zozo 10485760 2月  20 20:52 00000000000000000000.index
+-rw-rw-r-- 1 zozo zozo       73 2月  20 21:11 00000000000000000000.log
+-rw-rw-r-- 1 zozo zozo 10485756 2月  20 20:52 00000000000000000000.timeindex
+-rw-rw-r-- 1 zozo zozo        8 2月  20 20:52 leader-epoch-checkpoint
+[zozo@VM_0_6_centos first-1]$ strings 00000000000000000000.log
+hello
+```
+
+部分文件会出现无法 `strings` 命令解析的现象:
+```
+[zozo@VM_0_6_centos first-0]$ pwd
+/home/zozo/app/kafka/five/kafka_2.12-2.1.0/logs/first-0
+[zozo@VM_0_6_centos first-0]$ ll
+总用量 20520
+-rw-rw-r-- 1 zozo zozo 10485760 2月  20 20:52 00000000000000000000.index
+-rw-rw-r-- 1 zozo zozo       71 2月  20 21:13 00000000000000000000.log
+-rw-rw-r-- 1 zozo zozo 10485756 2月  20 20:52 00000000000000000000.timeindex
+-rw-rw-r-- 1 zozo zozo        8 2月  20 21:13 leader-epoch-checkpoint
+[zozo@VM_0_6_centos first-0]$ strings 00000000000000000000.log
+[zozo@VM_0_6_centos first-0]$ cat 00000000000000000000.log
+;�t�i
+
+44i
+
+44��������������why
+```
+
