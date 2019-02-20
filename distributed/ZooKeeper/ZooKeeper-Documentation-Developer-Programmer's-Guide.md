@@ -51,11 +51,21 @@ Every node in a ZooKeeper tree is refered to as a `znode`. Znodes maintain a sta
 
 ### 2.1.1 Watches
 
+Clients can set watches on znodes. __Changes to that znode trigger the watch and then clear the watch. When a watch triggers, ZooKeeper sends the client a notification.__
+
 ### 2.1.2 Data Access
+
+__The data stored at each znode in a namespace is read and writen atomically. Reads get all the data bytes associated with a znode and writes replaces all the data. Each znode has an Access Control List (ACL) that restricts who can do what.__
+
+ZooKeeper was not designed to be a general database or large object store. Instead, it manages coordination data. A common property of the various forms of coordination data is that they are relatively small: measured in kilobytes. __If large data storage is needed, the usually pattern of dealing with such data is to store it on a bulk storage syste, such as NFS or HDFS, and store pointers to the storage locations in ZooKeeper.__
 
 ### 2.1.3 Ephemeral Nodes
 
+ZooKeeper also has the notion of `ephemeral nodes`. __These nodes exists as long as the session that created the znode is active. When the session ends the znode is deleted. Because of this behavior ephemeral znodes are not allowed to have children.__
+
 ### 2.1.4 Sequence Nodes -- Unique Naming
+
+__When creating a znode you can also request that ZooKeeper append a monotonically increasing counter to the end of the path. This counter is unique to the parent znode. The counter used to store the next sequence number is signed int (4 bytes) maintained by the parent node, the counter will overflow when incremented beyond 2147483647.__
 
 ## 2.2 Time in ZooKeeper
 
