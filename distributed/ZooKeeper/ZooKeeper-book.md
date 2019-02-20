@@ -16,6 +16,6 @@
   - [zozospider/note-distributed-zookeeper-video](https://github.com/zozospider/note-distributed-zookeeper-video)
 
 - book
-  - [从 Paxos 到 Zookeeper: 分布式一致性原理与实践](https://www.amazon.cn/dp/B00RECRKPK?qid=1550680716)
+  - [从 Paxos 到 Zookeeper: 分布式一致性原理与实践](https://www.amazon.cn/dp/B00RECRKPK)
 
 ---

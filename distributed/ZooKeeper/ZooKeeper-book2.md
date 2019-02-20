@@ -17,6 +17,6 @@
     - [Running-ZooKeeper](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book2-Running-ZooKeeper.md)
 
 - book
-  - [ZooKeeper: Distributed Process Coordination (English Edition)](https://www.amazon.cn/dp/1449361307/ref=tmm_pap_swatch_0?_encoding=UTF8&qid=1550641315&sr=8-20)
+  - [ZooKeeper: Distributed Process Coordination (English Edition)](https://www.amazon.cn/dp/1449361307)
 
 ---
