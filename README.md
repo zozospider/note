@@ -42,6 +42,7 @@
   - __ZooKeeper__
     - [ZooKeeper-Documentation](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-Documentation.md)
     - [ZooKeeper-book](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book.md)
+    - [ZooKeeper-book2](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book2.md)
     - [ZooKeeper-video](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-video.md)
     - [ZooKeeper-share](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-share.md)
 
