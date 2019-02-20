@@ -71,8 +71,23 @@ __When creating a znode you can also request that ZooKeeper append a monotonical
 
 - __`Zxid`__: __Every change to the ZooKeeper state receives a stamp in the form of a `zxid` (ZooKeeper Transaction Id). This exposes the total ordering of all changes to ZooKeeper. Each change will have a unique zxid and if zxid1 is smaller than zxid2 then zxid1 is happened before zxid2.__
 - __`Version numbers`__: Every change to a node will cause an increase to one of the version numbers of that node. The three version numbers are version (number of changes to the data of a znode), cversion (number of changes to the children of a znode), aversion (number of changes to the ACL of a znode).
+- __`Ticks`__
+- __`Real time`__
 
 ## 2.3 ZooKeeper Stat Structure
+
+The Stat structure for each znode in ZooKeeper is made up of the following fields:
+- __`czxid`__: The zxid of the change that caused this znode to be created.
+- __`mzxid`__: The zxid of the change that last modified this znode.
+- __`pzxid`__: The zxid of the change that last modified children of this znode.
+- __`ctime`__: The time in milliseconds from epoch when this znode was created.
+- __`mtime`__: The time in milliseconds from epoch when this znode was last modified.
+- __`version`__: The number of changes to the data of this znode.
+- __`cversion`__: The number of changes to the children of this znode.
+- __`aversion`__: The number of changes to the ACL of this znode.
+- __`ephemeralOwner`__: The session if the the owner of this znode if the znode is an ephemeral node. If it is not an ephemeral node, it will be zero.
+- __`dataLength`__: The length of the data field of this znode.
+- __`numChildren`__: The number of children of this znode.
 
 ---
 
