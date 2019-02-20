@@ -69,6 +69,9 @@ __When creating a znode you can also request that ZooKeeper append a monotonical
 
 ## 2.2 Time in ZooKeeper
 
+- __`Zxid`__: __Every change to the ZooKeeper state receives a stamp in the form of a `zxid` (ZooKeeper Transaction Id). This exposes the total ordering of all changes to ZooKeeper. Each change will have a unique zxid and if zxid1 is smaller than zxid2 then zxid1 is happened before zxid2.__
+- __`Version numbers`__: Every change to a node will cause an increase to one of the version numbers of that node. The three version numbers are version (number of changes to the data of a znode), cversion (number of changes to the children of a znode), aversion (number of changes to the ACL of a znode).
+
 ## 2.3 ZooKeeper Stat Structure
 
 ---
