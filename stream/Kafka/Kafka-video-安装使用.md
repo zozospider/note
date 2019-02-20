@@ -357,7 +357,7 @@ Option                                   Description
 ...
 ```
 
-如果出现如下错误表示消费了一个不存在的 topic (These error are just Kafka’s way of telling us the topics didn’t exist but were created.):
+如果出现如下错误表示消费了一个名为 `test` 的不存在的 topic (These error are just Kafka’s way of telling us the topics didn’t exist but were created.):
 ```
 [zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-console-consumer.sh --bootstrap-server 172.16.0.6:9092 --topic test --from-beginning
 [2019-02-20 21:09:08,834] WARN [Consumer clientId=consumer-1, groupId=console-consumer-93281] Error while fetching metadata with correlation id 2 : {test=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)
@@ -385,7 +385,7 @@ Option                                   Description
 hello
 ```
 
-部分文件会出现无法 `strings` 命令解析的现象:
+部分文件会出现无法 `strings` 命令解析的现象, 如下所示:
 ```
 [zozo@VM_0_6_centos first-0]$ pwd
 /home/zozo/app/kafka/five/kafka_2.12-2.1.0/logs/first-0
