@@ -327,3 +327,44 @@ logs
 0 directories, 17 files
 ```
 
+## 3.7 生产消息
+
+通过连接 kafka 的 broker 进行生产:
+```
+[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ bin/kafka-console-producer.sh --broker-list 172.16.0.6:9092 --topic first
+>hello
+>why
+```
+
+## 3.8 消费消息
+
+通过连接 kafka 的 server 进行消费, 其中, `--from-beginning` 表示从头开始读:
+```
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-console-consumer.sh --bootstrap-server 172.16.0.6:9092 --topic first --from-beginning
+hello
+why
+```
+
+通过连接 ZooKeeper 进行消费 (新版本已废除, 会报如下错误):
+```
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-console-consumer.sh --zookeeper 172.16.0.6:2181 --topic first --from-beginning
+zookeeper is not a recognized option
+Option                                   Description
+------                                   -----------
+--bootstrap-server <String: server to    REQUIRED: The server(s) to connect to.
+  connect to>
+--consumer-property <String:             A mechanism to pass user-defined
+...
+```
+
+如果出现如下错误表示消费了一个不存在的 topic (These error are just Kafka’s way of telling us the topics didn’t exist but were created.):
+```
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-console-consumer.sh --bootstrap-server 172.16.0.6:9092 --topic test --from-beginning
+[2019-02-20 21:09:08,834] WARN [Consumer clientId=consumer-1, groupId=console-consumer-93281] Error while fetching metadata with correlation id 2 : {test=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)
+[2019-02-20 21:09:08,957] WARN [Consumer clientId=consumer-1, groupId=console-consumer-93281] Error while fetching metadata with correlation id 6 : {test=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)
+[2019-02-20 21:09:09,062] WARN [Consumer clientId=consumer-1, groupId=console-consumer-93281] Error while fetching metadata with correlation id 7 : {test=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)
+[2019-02-20 21:09:09,167] WARN [Consumer clientId=consumer-1, groupId=console-consumer-93281] Error while fetching metadata with correlation id 8 : {test=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)
+[2019-02-20 21:09:09,986] WARN [Consumer clientId=consumer-1, groupId=console-consumer-93281] Error while fetching metadata with correlation id 12 : {test=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)
+[2019-02-20 21:09:10,226] WARN [Consumer clientId=consumer-1, groupId=console-consumer-93281] Error while fetching metadata with correlation id 16 : {test=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)
+[2019-02-20 21:09:10,639] WARN [Consumer clientId=consumer-1, groupId=console-consumer-93281] Error while fetching metadata with correlation id 24 : {test=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)
+```
