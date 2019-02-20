@@ -1,4 +1,18 @@
 
+- [Document & Code](#document--code)
+- [一. 安装](#一-安装)
+- [二. 配置](#二-配置)
+- [三. 命令](#三-命令)
+    - [3.1 启动集群](#31-启动集群)
+    - [3.2 关闭集群](#32-关闭集群)
+    - [3.3 查看当前服务器中的所有 Topic](#33-查看当前服务器中的所有-topic)
+    - [3.4 创建 Topic](#34-创建-topic)
+    - [3.5 查看 Topic & 平衡 Leader](#35-查看-topic--平衡-leader)
+    - [3.6 删除 Topic](#36-删除-topic)
+    - [3.7 生产消息](#37-生产消息)
+    - [3.8 消费消息](#38-消费消息)
+    - [3.9 查看 log](#39-查看-log)
+
 ---
 
 # Document & Code
@@ -10,6 +24,8 @@
 # 一. 安装
 
 [下载地址](http://kafka.apache.org/downloads)
+
+---
 
 # 二. 配置
 
@@ -83,6 +99,8 @@ log.retention.hours=168
 # root directory for all kafka znodes.
 zookeeper.connect=localhost:2181
 ```
+
+---
 
 # 三. 命令
 
@@ -240,58 +258,68 @@ logs
 
 如上, 三台机器中的 `logs/first-0`, `logs/first-1`, `logs/first-2` 文件夹表示的是名为 `fist` 的 Topic 有 3 个 partitions 分区 (分别为 `0` 号 partition 分区, `1` 号 partition 分区，`2` 号 partition 分区) 且每个分区有 2 个 replication-factor 副本因子. 
 
-## 3.5 查看 Topic
+## 3.5 查看 Topic & 平衡 Leader
 
 执行如下命令查看名为 `first` 的 Topic 信息:
 ```
-[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --describe --topic first
-Topic:first     PartitionCount:3        ReplicationFactor:2     Configs:
-        Topic: first    Partition: 0    Leader: 1       Replicas: 1,2   Isr: 1,2
-        Topic: first    Partition: 1    Leader: 2       Replicas: 2,3   Isr: 2,3
-        Topic: first    Partition: 2    Leader: 3       Replicas: 3,1   Isr: 3,1
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --describe --zookeeper 172.16.0.6:2181 --topic first
+Topic:first	PartitionCount:3	ReplicationFactor:2	Configs:
+	Topic: first	Partition: 0	Leader: 3	Replicas: 3,1	Isr: 3,1
+	Topic: first	Partition: 1	Leader: 1	Replicas: 1,2	Isr: 1,2
+	Topic: first	Partition: 2	Leader: 2	Replicas: 2,3	Isr: 2,3
 ```
 
 如上, 表示如下:
 - 名为 `fist` 的 Topic 有 3 个 partitions 分区, 每个 partition 有 2 个副本因子, 1 个 Leader.
-- `0` 号 partition 分区的 2 个副本因子在 `1` 号 broker 机器和 `2` 号 broker 机器上存储, 且 `1` 号 broker 机器为 Leader. InSyncReplication 正在同步的副本在 `1` 号 broker 机器和 `2` 号 broker 机器上.
-- `1` 号 partition 分区的 2 个副本因子在 `2` 号 broker 机器和 `3` 号 broker 机器上存储, 且 `2` 号 broker 机器为 Leader. InSyncReplication 正在同步的副本在 `2` 号 broker 机器和 `3` 号 broker 机器上.
-- `2` 号 partition 分区的 2 个副本因子在 `3` 号 broker 机器和 `1` 号 broker 机器上存储, 且 `3` 号 broker 机器为 Leader. InSyncReplication 正在同步的副本在 `3` 号 broker 机器和 `1` 号 broker 机器上.
+- `0` 号 partition 分区的 2 个副本因子在 `3` 号 broker 机器和 `1` 号 broker 机器上存储, 且 `3` 号 broker 机器为 Leader. InSyncReplication 正在同步的副本在 `3` 号 broker 机器和 `1` 号 broker 机器上.
+- `1` 号 partition 分区的 2 个副本因子在 `1` 号 broker 机器和 `2` 号 broker 机器上存储, 且 `1` 号 broker 机器为 Leader. InSyncReplication 正在同步的副本在 `1` 号 broker 机器和 `2` 号 broker 机器上.
+- `2` 号 partition 分区的 2 个副本因子在 `2` 号 broker 机器和 `3` 号 broker 机器上存储, 且 `2` 号 broker 机器为 Leader. InSyncReplication 正在同步的副本在 `2` 号 broker 机器和 `3` 号 broker 机器上.
 
 此时通过模拟 3 号机器挂掉, 并再次查看名为 `first` 的 Topic 信息:
 ```
 [zozo@VM_0_3_centos kafka_2.12-2.1.0]$ jps
-25746 Kafka
 23850 QuorumPeerMain
-29580 Jps
-[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ kill -9 25746
+25963 Jps
+30783 Kafka
+[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ kill -9 30783
 [zozo@VM_0_3_centos kafka_2.12-2.1.0]$ jps
-30487 Jps
+26003 Jps
 23850 QuorumPeerMain
-[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --describe --topic first
-Topic:first     PartitionCount:3        ReplicationFactor:2     Configs:
-        Topic: first    Partition: 0    Leader: 1       Replicas: 1,2   Isr: 1,2
-        Topic: first    Partition: 1    Leader: 2       Replicas: 2,3   Isr: 2
-        Topic: first    Partition: 2    Leader: 1       Replicas: 3,1   Isr: 1
+[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --describe --zookeeper 172.16.0.6:2181 --topic first
+Topic:first	PartitionCount:3	ReplicationFactor:2	Configs:
+	Topic: first	Partition: 0	Leader: 1	Replicas: 3,1	Isr: 1
+	Topic: first	Partition: 1	Leader: 1	Replicas: 1,2	Isr: 1,2
+	Topic: first	Partition: 2	Leader: 2	Replicas: 2,3	Isr: 2
 ```
 
 此时再次启动 3 号机器的服务, 并再次查看名为 `first` 的 Topic 信息:
 ```
 [zozo@VM_0_3_centos kafka_2.12-2.1.0]$ jps
-30487 Jps
 23850 QuorumPeerMain
+26413 Jps
 [zozo@VM_0_3_centos kafka_2.12-2.1.0]$ bin/kafka-server-start.sh -daemon config/server.properties
 [zozo@VM_0_3_centos kafka_2.12-2.1.0]$ jps
-30873 Jps
+26771 Jps
 23850 QuorumPeerMain
-30783 Kafka
-[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --describe --topic first
-Topic:first     PartitionCount:3        ReplicationFactor:2     Configs:
-        Topic: first    Partition: 0    Leader: 1       Replicas: 1,2   Isr: 1,2
-        Topic: first    Partition: 1    Leader: 2       Replicas: 2,3   Isr: 2,3
-        Topic: first    Partition: 2    Leader: 1       Replicas: 3,1   Isr: 1,3
+26731 Kafka
+[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --describe --zookeeper 172.16.0.6:2181 --topic first
+Topic:first	PartitionCount:3	ReplicationFactor:2	Configs:
+	Topic: first	Partition: 0	Leader: 1	Replicas: 3,1	Isr: 1,3
+	Topic: first	Partition: 1	Leader: 1	Replicas: 1,2	Isr: 1,2
+	Topic: first	Partition: 2	Leader: 2	Replicas: 2,3	Isr: 2,3
 ```
 
-如上, 如需要再次平衡, 可执行相应的平衡命令.
+如上, 如需要再次平衡 Leader, 可执行如下的再平衡命令:
+```
+[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ bin/kafka-preferred-replica-election.sh --zookeeper 172.16.0.6:2181
+Created preferred replica election path with __consumer_offsets-22,__consumer_offsets-30,__consumer_offsets-8,__consumer_offsets-21,__consumer_offsets-4,__consumer_offsets-27,__consumer_offsets-7,__consumer_offsets-9,first-1,__consumer_offsets-46,__consumer_offsets-25,__consumer_offsets-35,__consumer_offsets-41,__consumer_offsets-33,__consumer_offsets-23,__consumer_offsets-49,__consumer_offsets-47,__consumer_offsets-16,test-0,__consumer_offsets-28,__consumer_offsets-31,__consumer_offsets-36,__consumer_offsets-42,__consumer_offsets-3,__consumer_offsets-18,first-2,__consumer_offsets-37,first-0,__consumer_offsets-15,__consumer_offsets-24,__consumer_offsets-38,__consumer_offsets-17,__consumer_offsets-48,__consumer_offsets-19,__consumer_offsets-11,__consumer_offsets-13,__consumer_offsets-2,__consumer_offsets-43,__consumer_offsets-6,__consumer_offsets-14,__consumer_offsets-20,__consumer_offsets-0,__consumer_offsets-44,__consumer_offsets-39,__consumer_offsets-12,__consumer_offsets-45,__consumer_offsets-1,__consumer_offsets-5,__consumer_offsets-26,__consumer_offsets-29,__consumer_offsets-34,__consumer_offsets-10,__consumer_offsets-32,__consumer_offsets-40
+Successfully started preferred replica election for partitions Set(__consumer_offsets-22, __consumer_offsets-30, __consumer_offsets-8, __consumer_offsets-21, __consumer_offsets-4, __consumer_offsets-27, __consumer_offsets-7, __consumer_offsets-9, first-1, __consumer_offsets-46, __consumer_offsets-25, __consumer_offsets-35, __consumer_offsets-41, __consumer_offsets-33, __consumer_offsets-23, __consumer_offsets-49, __consumer_offsets-47, __consumer_offsets-16, test-0, __consumer_offsets-28, __consumer_offsets-31, __consumer_offsets-36, __consumer_offsets-42, __consumer_offsets-3, __consumer_offsets-18, first-2, __consumer_offsets-37, first-0, __consumer_offsets-15, __consumer_offsets-24, __consumer_offsets-38, __consumer_offsets-17, __consumer_offsets-48, __consumer_offsets-19, __consumer_offsets-11, __consumer_offsets-13, __consumer_offsets-2, __consumer_offsets-43, __consumer_offsets-6, __consumer_offsets-14, __consumer_offsets-20, __consumer_offsets-0, __consumer_offsets-44, __consumer_offsets-39, __consumer_offsets-12, __consumer_offsets-45, __consumer_offsets-1, __consumer_offsets-5, __consumer_offsets-26, __consumer_offsets-29, __consumer_offsets-34, __consumer_offsets-10, __consumer_offsets-32, __consumer_offsets-40)
+[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --describe --zookeeper 172.16.0.6:2181 --topic first
+Topic:first	PartitionCount:3	ReplicationFactor:2	Configs:
+	Topic: first	Partition: 0	Leader: 3	Replicas: 3,1	Isr: 1,3
+	Topic: first	Partition: 1	Leader: 1	Replicas: 1,2	Isr: 1,2
+	Topic: first	Partition: 2	Leader: 2	Replicas: 2,3	Isr: 2,3
+```
 
 ## 3.6 删除 Topic
 
@@ -369,7 +397,7 @@ Option                                   Description
 [2019-02-20 21:09:10,639] WARN [Consumer clientId=consumer-1, groupId=console-consumer-93281] Error while fetching metadata with correlation id 24 : {test=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)
 ```
 
-## 3.7 查看 log
+## 3.9 查看 log
 
 通过 `strings` 命令可以查看 logs 目录下的 .log 文件内容:
 ```
@@ -404,3 +432,4 @@ hello
 44��������������why
 ```
 
+---
