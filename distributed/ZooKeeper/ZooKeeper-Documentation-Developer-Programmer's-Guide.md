@@ -99,6 +99,8 @@ A ZooKeeper client establishes a session with the ZooKeeper service by creating 
 
 To create a client session the application code must provide a connection string containing a comma separated list of host:port pairs, each corresponding to a ZooKeeper server. __The ZooKeeper client library will pick an arbitrary server and try to connect to it. If this connection fails, or if the client becomes disconnected from the server or any reason, the client will automatically try the next server in the list, until a connection is (re-)established.__
 
+__When a client gets a handle to the ZooKeeper service, ZooKeeper creates a ZooKeeper session, represented as a 64-bit number, that it assigns to the client. If the client connects to a diffrent ZooKeeper server, it will send the session id as a part of the connection handshake. As a security measure, the server creates a password for the session id that any ZooKeeper server can validate. The password is sent to the client with the session id when the client establishes the session. The client sends this password with the session id whenever it reestablishes the session with a new server.__
+
 ---
 
 # 四. ZooKeeper Watches
