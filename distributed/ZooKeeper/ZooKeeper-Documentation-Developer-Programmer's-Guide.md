@@ -97,6 +97,7 @@ A ZooKeeper client establishes a session with the ZooKeeper service by creating 
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-Documentation-Developer-Programmer's-Guide/state_dia.jpg)
 
+To create a client session the application code must provide a connection string containing a comma separated list of host:port pairs, each corresponding to a ZooKeeper server. __The ZooKeeper client library will pick an arbitrary server and try to connect to it. If this connection fails, or if the client becomes disconnected from the server or any reason, the client will automatically try the next server in the list, until a connection is (re-)established.__
 
 ---
 
