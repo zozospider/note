@@ -93,6 +93,11 @@ The Stat structure for each znode in ZooKeeper is made up of the following field
 
 # 三. ZooKeeper Sessions
 
+A ZooKeeper client establishes a session with the ZooKeeper service by creating a handle to the service using a language binding. Once created, the handle starts of in the CONNECTING state and the client library tries to connect to the one of the servers that make up the ZooKeeper service at which point it switches to the CONNECTED state. During normal operation will be in one of these two states. If an unrecoverable error occurs, such as session expiration or authentication failure, or if the application explicitly closes the handle, the handle will move to the CLOSED state. The following figure shows the possible state transitions of a ZooKeeper client:
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/distributed/ZooKeeper/ZooKeeper-Documentation-Developer-Programmer's-Guide/state_dia.jpg)
+
+
 ---
 
 # 四. ZooKeeper Watches
