@@ -107,9 +107,15 @@ __Session expiration is managed by the ZooKeeper cluster itself, not by the clie
 
 __The session is kept alive by requests sent by the client. If the session is idle for a period of time that would timeout the session, the client will send a PING request to keep the session alive.__
 
+`SessionMovedException`: // TODO
+
+Another parameter to the ZooKeeper session establishment call is the default watcher. Watchers are notified when any state change occurs in the client.
+
 ---
 
 # 四. ZooKeeper Watches
+
+
 
 ## 4.1 Semantics of Watches
 
