@@ -101,6 +101,12 @@ To create a client session the application code must provide a connection string
 
 __When a client gets a handle to the ZooKeeper service, ZooKeeper creates a ZooKeeper session, represented as a 64-bit number, that it assigns to the client. If the client connects to a diffrent ZooKeeper server, it will send the session id as a part of the connection handshake. As a security measure, the server creates a password for the session id that any ZooKeeper server can validate. The password is sent to the client with the session id when the client establishes the session. The client sends this password with the session id whenever it reestablishes the session with a new server.__
 
+When connectivity between the client and at least one of the servers is re-established, the session will either again transition to the `connected` state (if reconnected within timeout value) or it will transition to the `expired` state (if reconnected after the session timeout). __It is not advisable to create a new session object (a new ZooKeeper.class or zookeeper handle in the c binding) for disconnection. The ZK client library will handle reconnect for you. Only create a new session when you are notified of session expiration (mandatory).__
+
+__Session expiration is managed by the ZooKeeper cluster itself, not by the client. When the ZK client establishes a session with the cluster it provides a `timeout` value detailed above. This value is used by the cluster to determine when the client's session expires. Expirations happens when the cluster does not hear from the client with the specified session timeout period (i.e. no heartbeat). At session expiration the cluster will delete any/all emphameral nodes owned by that session and immediately notify any/all connected clients of the change (anyone watching those znodes).__ At this point the client of the expired session is still disconnected from the cluster, it will not be nofified of the session expiration until/unless it is able to re-establish a connection to the cluster. __The client will stay in disconnected state until TCP connection is re-established with the cluster, at which point the watcher of the expired session will receive the `session expired` notification.__
+
+__The session is kept alive by requests sent by the client. If the session is idle for a period of time that would timeout the session, the client will send a PING request to keep the session alive.__
+
 ---
 
 # 四. ZooKeeper Watches
