@@ -115,7 +115,10 @@ Another parameter to the ZooKeeper session establishment call is the default wat
 
 # 四. ZooKeeper Watches
 
-
+__Here is ZooKeeper's definition of a watch: a watch event is one-time trigger, sent to the client that set the watch, which occurs when the data for which the watch was set changes.__ There are three key points to consider in this definition of a watch:
+- __One-time trigger__: One watch event will be sent to the client when the data has changed.
+- __Set to the client__: Network delays or other factors may cause diffrent clients to see watches and return codes from updates at diffrent times. The key point is that everything seen by the diffrent clients will have a consistent order.
+- __The data for which the watch was set__: 
 
 ## 4.1 Semantics of Watches
 
