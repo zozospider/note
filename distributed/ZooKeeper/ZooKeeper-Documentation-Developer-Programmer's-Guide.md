@@ -118,13 +118,29 @@ Another parameter to the ZooKeeper session establishment call is the default wat
 __Here is ZooKeeper's definition of a watch: a watch event is one-time trigger, sent to the client that set the watch, which occurs when the data for which the watch was set changes.__ There are three key points to consider in this definition of a watch:
 - __One-time trigger__: One watch event will be sent to the client when the data has changed.
 - __Set to the client__: Network delays or other factors may cause diffrent clients to see watches and return codes from updates at diffrent times. The key point is that everything seen by the diffrent clients will have a consistent order.
-- __The data for which the watch was set__: 
+- __The data for which the watch was set__: Thus, setData() will trigger data watches for the znode being set (assuming the set is successful). A successful create() will trigger a data watch for the znode being created and a child watch for the parent znode. A successful delete() will trigger both a data watch and a child watch (since there can be no more children) for a znode being deleted as well as watch for the parent znode.
 
 ## 4.1 Semantics of Watches
 
+We can set watches with the three calls that read the state of ZooKeeper: exists, getData, and getChildren. The following list details the events that a watch can trigger and calls that enable then:
+- __Created event__: Enabled with a call to `exists`.
+- __Deleted event__: Enabled with a call to `exists`, `getData`, and `getChildren`.
+- __Changed event__: Enabled with a call to `exists` and `getData`.
+- __Child event__: Enabled with a call to `getChildren`.
+
 ## 4.2 What ZooKeeper Guarantees about Watches
 
+With regard to watches, ZooKeeper maintains these guarantees:
+- Watches are ordered with respect to other events, other watches, and asynchronous replies. The ZooKeeper client libraries ensures that everything is dispatched in order.
+- A client will see a watch event for a znode it is watching before seeing the new data that corresponds to that znode.
+- The order of watch events from ZooKeeper corresponds to the order of the updates as seen by the ZooKeeper service.
+
 ## 4.3 Things to Remember about Watches
+
+- __Watches are one time trggers;__ if you get a watch event and you want to get notified of future changes, you must set another watch.
+- __Because watches are one time triggers and there is latency between getting the event and sending a new request to get a watch you cannot reliably see every change that happens to a node in ZooKeeper.__
+- A watch object, or function/context pair, will only be triggered once for a given notification. For example, if the same watch object is registered for an exists and a getData call for the same file and that file is then deleted, the watch object would only be invoked once with the deletion notification for the file.
+- 
 
 ---
 
