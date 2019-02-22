@@ -140,11 +140,17 @@ With regard to watches, ZooKeeper maintains these guarantees:
 - __Watches are one time trggers;__ if you get a watch event and you want to get notified of future changes, you must set another watch.
 - __Because watches are one time triggers and there is latency between getting the event and sending a new request to get a watch you cannot reliably see every change that happens to a node in ZooKeeper.__
 - A watch object, or function/context pair, will only be triggered once for a given notification. For example, if the same watch object is registered for an exists and a getData call for the same file and that file is then deleted, the watch object would only be invoked once with the deletion notification for the file.
-- 
+- When you disconnect from a server (for example, when the server fails), you will not get any watches until the connection is reestablished. For this reason session events are sent to all outstanding watch handlers.
 
 ---
 
 # 五. ZooKeeper access control using ACLs
+
+ZooKeeper uses ACLs to control access to its znodes (the data nodes of a ZooKeeper data tree). Unlike standard UNIX permissions, a ZooKeeper node is not limited by the three standard scopes for user (owner of the file), group, and world (other). __ZooKeeper does not have a notion of an owner of a znode. Instead, an ACL specifies sets of ids and permissions that are associated with those ids.__
+
+Note also that an ACL pertains only to a specific znode. In particular it does not apply to children. For example, if `/app` is only readable by ip:172.16.16.1 and `/app/status` is world readable, anyone will be able to read `/app/status`; __ACLs are not recursive.__
+
+
 
 ## 5.1 ACL Permissions
 
