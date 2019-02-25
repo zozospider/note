@@ -35,7 +35,7 @@
 
 每个 Partition 中的消息都是有序的, 生产的消息被不断追加到 Partition log 上, 其中的每一个消息都被赋予了一个唯一的 offset 值.
 
-# 分区的原因
+## 分区的原因
 
 - 方便在集群中扩展, 每个 Partition 可以通过调整以适应它所在的机器, 而一个 Topic 又可以有多个 Partition, 因此整个集群就可以适应任意大小的数据了.
 
@@ -201,3 +201,23 @@ public final class Utils {
     }
 }
 ```
+
+# 副本
+
+同一个 Partition 可能会有多个 Replication (对应 server.properties 配置中的 default.replication=N). 在没有 Replication 的情况下, 一旦 Broker 宕机, 其上所有 Partition 的数据都不可被消费, 同时 Producer 也不能将数据存于其上的 Partition. 引入 Replication 之后, 同一个 Partition 可能会有多个 Replication, 而这时需要在这些 Replication 之间选出一个 Leader, Producer 和 Consumer 只与这个 Leader 交互, 其他 Replication 作为 Follower 从 Leader 中复制数据.
+
+# 应答机制
+
+![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7/Kafka-ACK.png?raw=true)
+
+如上图所示, 有如下步骤:
+- a. Producer 连接 Kafka 集群后获取相关 Partition 对应的 Leader 节点.
+- b. Producer 将消息发送给该 Leader.
+- c. Leader 将消息写入本地 Log.
+- d. Followers 从 Leader pull 消息, 写入本地 log 后向 Leader 发送 ACK.
+- e. Leader 收到所有 ISR 中的 Replication 的 ACK 后, 增加 HW (High Watermark, 最后 commit 的 offset) 并向 Producer 发送 ACK.
+
+Kafka 生成数据时的应答机制 (ACK) 有如下取值:
+- 取值为 `0`: 生产者发送数据后, 不关心数据是否到达 Kafka, 直接发送下一条, 这种方式效率高但数据丢失可能性大.
+- 取值为 `1` (默认): 生产者发送数据后, 需要等待 Leader 应答, 如果应答成功, 则发送下一条, 这种方式在 Leader 宕机时但 Follower 还未同步数据的时候会存在数据丢失.
+- 取值为 `-1`: 生产者发送数据后, 需要等待所有副本 (Leader + Follower) 应答, 这种方式最安全但效率最低.
