@@ -27,7 +27,21 @@
 
 // TODO
 
-# 文件存储
+# 分区
+
+消息发送时都被发送到一个 Topic, 其本质就是一个目录, 而 Topic 是由一些 Partition Logs (分区日志) 组成, 其组织结构如下图:
+
+![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7/log_anatomy.png?raw=true)
+
+每个 Partition 中的消息都是有序的, 生产的消息被不断追加到 Partition log 上, 其中的每一个消息都被赋予了一个唯一的 offset 值.
+
+# 分区的原因
+
+- 方便在集群中扩展, 每个 Partition 可以通过调整以适应它所在的机器, 而一个 Topic 又可以有多个 Partition, 因此整个集群就可以适应任意大小的数据了.
+
+- 可以提高并发, 因为可以以 Partition 为单位读写.
+
+## 文件存储
 
 每个 Partition 中的消息都是有序的, 生产的消息被不断追加到 Partition log 上, 每个消息都被赋予了一个唯一的 offset.
 
@@ -54,7 +68,7 @@
 1004 > 29
 ```
 
-# 分区原则
+## 分区原则
 
 - 指定了 partition, 则直接使用.
 - 未指定 partition 但指定了 key, 通过 key 进行 hash 算出 partion.

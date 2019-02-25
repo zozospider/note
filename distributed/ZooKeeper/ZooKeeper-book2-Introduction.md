@@ -22,6 +22,14 @@
 
 ---
 
+In the past, each application was a single program running on a single computer with a single CPU. Today, things have changed. In the Big Data and Cloud Computing world, applications are made up of many independent programs running on an ever-changing set of computers.
+
+Coordinating the actions of these independent programs is far more difficult than writing a single program to run on a single computer.
+
+ZooKeeper was designed to be a robust service that enables application developers to focus mainly on their application logic rather than coordination.
+
+When designing an application with ZooKeeper, one ideally separates application data from control or coordination data.
+
 # I. The ZooKeeper Mission
 
 ## 1.1 How the World Survived without ZooKeeper
