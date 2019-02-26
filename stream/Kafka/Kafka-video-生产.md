@@ -225,4 +225,7 @@ Kafka 生成数据时的应答机制 (ACK) 有如下取值:
 
 # 生产数据
 
-![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7/Kafka%E9%9B%B6%E6%8B%B7%E8%B4%9D.png?raw=true)
+![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7/kafka%E7%94%9F%E4%BA%A7%E6%95%B0%E6%8D%AE.png?raw=true)
+
+双端队列可参考:
+- [Double-ended queue](https://en.wikipedia.org/wiki/Double-ended_queue)
