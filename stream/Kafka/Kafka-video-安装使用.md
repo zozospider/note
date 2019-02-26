@@ -8,10 +8,11 @@
     - [3.3 查看当前服务器中的所有 Topic](#33-查看当前服务器中的所有-topic)
     - [3.4 创建 Topic](#34-创建-topic)
     - [3.5 查看 Topic & 平衡 Leader](#35-查看-topic--平衡-leader)
-    - [3.6 删除 Topic](#36-删除-topic)
-    - [3.7 生产消息](#37-生产消息)
-    - [3.8 消费消息](#38-消费消息)
-    - [3.9 查看 log](#39-查看-log)
+    - [3.6 创建 Topic 的 Partition 和 Replication-factor 参数](#36-创建-topic-的-partition-和-replication-factor-参数)
+    - [3.7 删除 Topic](#37-删除-topic)
+    - [3.8 生产消息](#38-生产消息)
+    - [3.9 消费消息](#39-消费消息)
+    - [3.10 查看 log](#310-查看-log)
 
 ---
 
