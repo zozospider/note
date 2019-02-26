@@ -228,3 +228,36 @@ Kafka 生成数据时的应答机制 (ACK) 有如下取值:
 ![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7/kafka%E7%94%9F%E4%BA%A7%E6%95%B0%E6%8D%AE.png?raw=true)
 
 如上图, data 将数据发送到双端队列 (参考 [Double-ended queue](https://en.wikipedia.org/wiki/Double-ended_queue)), Sender 从双端队列中取数据 (按数据量和时间批量取数据), 并发送到 Kafka 集群, 如果发送失败, 会将数据放入双端队列尾部 (保证顺序性) 重新发送 (视 ACK 机制而定).
+
+# 保存数据
+
+```scala
+/**
+ * A message. The format of an N byte message is the following:
+ *
+ * If magic byte is 0
+ *
+ * 1. 1 byte "magic" identifier to allow format changes
+ *
+ * 2. 4 byte CRC32 of the payload
+ *
+ * 3. N - 5 byte payload
+ *
+ * If magic byte is 1
+ *
+ * 1. 1 byte "magic" identifier to allow format changes
+ *
+ * 2. 1 byte "attributes" identifier to allow annotations on the message independent of the version (e.g. compression enabled, type of codec used)
+ *
+ * 3. 4 byte CRC32 of the payload
+ *
+ * 4. N - 6 byte payload
+ * 
+ */
+class Message(val buffer: ByteBuffer) {
+  
+  import kafka.message.Message._
+
+  ...
+}
+```
