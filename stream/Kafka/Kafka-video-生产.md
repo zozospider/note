@@ -14,6 +14,7 @@
   - [Linux 中的零拷贝技术，第 1 部分](https://www.ibm.com/developerworks/cn/linux/l-cn-zerocopy1/index.html)
   - [Linux 中直接 I/O 机制的介绍](https://www.ibm.com/developerworks/cn/linux/l-cn-directio/)
   - [Kafka相关内容总结（存储和性能）](https://www.w3xue.com/exp/article/20191/16157.html)
+  - [Double-ended queue](https://en.wikipedia.org/wiki/Double-ended_queue)
 
 ---
 
@@ -220,4 +221,8 @@ public final class Utils {
 Kafka 生成数据时的应答机制 (ACK) 有如下取值:
 - 取值为 `0`: 生产者发送数据后, 不关心数据是否到达 Kafka, 直接发送下一条, 这种方式效率高但数据丢失可能性大.
 - 取值为 `1` (默认): 生产者发送数据后, 需要等待 Leader 应答, 如果应答成功, 则发送下一条, 这种方式在 Leader 宕机时但 Follower 还未同步数据的时候会存在数据丢失.
-- 取值为 `-1`: 生产者发送数据后, 需要等待所有副本 (Leader + Follower) 应答, 这种方式最安全但效率最低.
+- 取值为 `-1` / `all`: 生产者发送数据后, 需要等待所有副本 (Leader + Follower) 应答, 这种方式最安全但效率最低.
+
+# 生产数据
+
+![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7/Kafka%E9%9B%B6%E6%8B%B7%E8%B4%9D.png?raw=true)
