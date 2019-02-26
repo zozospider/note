@@ -321,7 +321,33 @@ Topic:first	PartitionCount:3	ReplicationFactor:2	Configs:
 	Topic: first	Partition: 2	Leader: 2	Replicas: 2,3	Isr: 2,3
 ```
 
-## 3.6 删除 Topic
+## 3.6 创建 Topic 的 Partition 和 Replication-factor 参数
+
+- 创建 Topic 时, 当指定的 Partition 数量大于 Broker 机器数量时, 可以创建成功, 如下:
+```
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --create --zookeeper 172.16.0.6:2181 --partitions 4 --replication-factor 2 --topic second
+Created topic "second".
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --describe --zookeeper 172.16.0.6:2181 --topic second
+Topic:second	PartitionCount:4	ReplicationFactor:2	Configs:
+	Topic: second	Partition: 0	Leader: 2	Replicas: 2,1	Isr: 2,1
+	Topic: second	Partition: 1	Leader: 3	Replicas: 3,2	Isr: 3,2
+	Topic: second	Partition: 2	Leader: 1	Replicas: 1,3	Isr: 1,3
+	Topic: second	Partition: 3	Leader: 2	Replicas: 2,3	Isr: 2,3
+```
+
+如上所示, `2` 机器上有 2 个 Leader, `3` 机器上有 3 个 Replication.
+
+- 创建 Topic 时, 当指定的 replication-factor 数量大于 Broker 机器数量时, 会创建失败, 如下:
+```
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --create --zookeeper 172.16.0.6:2181 --partitions 3 --replication-factor 4 --topic third
+Error while executing topic command : Replication factor: 4 larger than available brokers: 3.
+[2019-02-26 21:14:46,048] ERROR org.apache.kafka.common.errors.InvalidReplicationFactorException: Replication factor: 4 larger than available brokers: 3.
+ (kafka.admin.TopicCommand$)
+```
+
+如上所示, 因为副本数量大于机器数量时, 同一台机器会存在多于 1 个相同分区的副本, 没有意义, 所以创建失败.
+
+## 3.7 删除 Topic
 
 运行如下命令删除名为 `first` 的 Topic:
 ```
@@ -355,7 +381,7 @@ logs
 0 directories, 17 files
 ```
 
-## 3.7 生产消息
+## 3.8 生产消息
 
 通过连接 kafka 的 broker 进行生产:
 ```
@@ -364,7 +390,7 @@ logs
 >why
 ```
 
-## 3.8 消费消息
+## 3.9 消费消息
 
 通过连接 kafka 的 server 进行消费, 其中, `--from-beginning` 表示从头开始读:
 ```
@@ -397,7 +423,7 @@ Option                                   Description
 [2019-02-20 21:09:10,639] WARN [Consumer clientId=consumer-1, groupId=console-consumer-93281] Error while fetching metadata with correlation id 24 : {test=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)
 ```
 
-## 3.9 查看 log
+## 3.10 查看 log
 
 通过 `strings` 命令可以查看 logs 目录下的 .log 文件内容:
 ```
