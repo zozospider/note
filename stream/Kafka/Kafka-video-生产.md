@@ -229,3 +229,5 @@ Kafka 生成数据时的应答机制 (ACK) 有如下取值:
 
 双端队列可参考:
 - [Double-ended queue](https://en.wikipedia.org/wiki/Double-ended_queue)
+
+如上图, data 将数据发送到双端队列, Sender 从双端队列中取数据 (按数据量和时间批量取数据), 并发送到 Kafka 集群, 如果发送失败, 会将数据放入双端队列尾部 (保证顺序性) 重新发送 (视 ACK 机制而定).
