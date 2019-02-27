@@ -276,6 +276,6 @@ Kafka 生成数据时的应答机制 (ACK) 有如下取值:
 
 ![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7%E5%92%8C%E6%B6%88%E8%B4%B9/Kafka%E6%B6%88%E8%B4%B9%E6%95%B0%E6%8D%AE.png?raw=true)
 
-Broker 或 Consumer 发生变化时, 可能会触发再平衡, 再平衡需遵守的规则如下 (右下图, 左下图):
+如上图所示, Broker 或 Consumer 发生变化时, 可能会触发再平衡 (右下图, 左下图), 再平衡需遵守的规则如下:
 - 一个分区只能被同一个消费者组中的一个消费者消费 / 同一个消费者组中的多个消费者不能消费一个分区: 否则会出现重复消费且无法保证顺序 (右上图).
 - 同一个消费者组中的一个消费者可以消费多个分区 (左下图).
