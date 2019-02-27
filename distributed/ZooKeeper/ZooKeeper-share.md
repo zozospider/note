@@ -39,3 +39,8 @@
 - [如何浅显易懂地解说 Paxos 的算法?](https://www.zhihu.com/question/19787937)
 - [paxos 算法](https://www.processon.com/view/59c2295ae4b0bc4fef8a436d)
 - [数据一致性与 Paxos 算法](https://my.oschina.net/fileoptions/blog/1825760)
+
+# 其他
+
+- [尴尬了！Spring Cloud微服务注册中心Eureka 2.x停止维护了咋办？【石杉的架构笔记】](https://juejin.im/post/5c7431f2f265da2db0739755)
+

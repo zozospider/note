@@ -271,3 +271,9 @@ Kafka 生成数据时的应答机制 (ACK) 有如下取值:
 参考资料如下:
 - [Kafka水位(high watermark)与leader epoch的讨论](https://www.cnblogs.com/huxi2b/p/7453543.html)
 - [深入分析Kafka高可用性](https://zhuanlan.zhihu.com/p/46658003)
+
+# 消费数据
+
+同一个消费者组中的一个消费者可以消费多个分区, 一个分区只能被同一个消费者组中的一个消费者消费, 同一个消费者组中的多个消费者不能消费一个分区 (无法保证顺序).
+
+![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7/kafka%E7%94%9F%E4%BA%A7%E6%95%B0%E6%8D%AE.png?raw=true)

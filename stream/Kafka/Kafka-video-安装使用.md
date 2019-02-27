@@ -400,6 +400,57 @@ hello
 why
 ```
 
+查看三台机器的 `logs` 目录, 有如下 offsets 文件夹:
+```
+[zozo@VM_0_17_centos logs]$ pwd
+/home/zozo/app/kafka/five/kafka_2.12-2.1.0/logs
+[zozo@VM_0_17_centos logs]$ ll
+总用量 1584
+-rw-rw-r-- 1 zozo zozo      4 2月  19 22:37 cleaner-offset-checkpoint
+drwxrwxr-x 2 zozo zozo   4096 2月  20 21:57 __consumer_offsets-1
+drwxrwxr-x 2 zozo zozo   4096 2月  20 21:57 __consumer_offsets-10
+drwxrwxr-x 2 zozo zozo   4096 2月  20 21:57 __consumer_offsets-13
+drwxrwxr-x 2 zozo zozo   4096 2月  20 21:57 __consumer_offsets-16
+drwxrwxr-x 2 zozo zozo   4096 2月  20 21:57 __consumer_offsets-19
+drwxrwxr-x 2 zozo zozo   4096 2月  20 21:57 __consumer_offsets-22
+drwxrwxr-x 2 zozo zozo   4096 2月  20 21:57 __consumer_offsets-25
+drwxrwxr-x 2 zozo zozo   4096 2月  20 21:57 __consumer_offsets-28
+drwxrwxr-x 2 zozo zozo   4096 2月  20 21:57 __consumer_offsets-31
+drwxrwxr-x 2 zozo zozo   4096 2月  20 21:57 __consumer_offsets-34
+drwxrwxr-x 2 zozo zozo   4096 2月  20 21:57 __consumer_offsets-37
+drwxrwxr-x 2 zozo zozo   4096 2月  20 21:57 __consumer_offsets-4
+drwxrwxr-x 2 zozo zozo   4096 2月  20 21:57 __consumer_offsets-40
+drwxrwxr-x 2 zozo zozo   4096 2月  20 21:57 __consumer_offsets-43
+drwxrwxr-x 2 zozo zozo   4096 2月  20 21:57 __consumer_offsets-46
+drwxrwxr-x 2 zozo zozo   4096 2月  20 21:57 __consumer_offsets-49
+drwxrwxr-x 2 zozo zozo   4096 2月  20 21:57 __consumer_offsets-7
+-rw-rw-r-- 1 zozo zozo    271 2月  23 02:01 controller.log
+-rw-rw-r-- 1 zozo zozo    307 2月  19 21:28 controller.log.2019-02-19-21
+drwxrwxr-x 2 zozo zozo   4096 2月  23 02:01 first-1
+drwxrwxr-x 2 zozo zozo   4096 2月  20 21:57 first-2
+-rw-rw-r-- 1 zozo zozo      0 2月  19 21:28 kafka-authorizer.log
+-rw-rw-r-- 1 zozo zozo      0 2月  19 21:28 kafka-request.log
+-rw-rw-r-- 1 zozo zozo 128277 2月  27 11:22 kafkaServer-gc.log.0.current
+-rw-rw-r-- 1 zozo zozo 280143 2月  27 12:58 kafkaServer.out
+-rw-rw-r-- 1 zozo zozo    422 2月  19 22:37 log-cleaner.log
+-rw-rw-r-- 1 zozo zozo    172 2月  19 21:28 log-cleaner.log.2019-02-19-21
+-rw-rw-r-- 1 zozo zozo      4 2月  27 12:58 log-start-offset-checkpoint
+-rw-rw-r-- 1 zozo zozo     54 2月  19 21:28 meta.properties
+-rw-rw-r-- 1 zozo zozo    463 2月  27 12:58 recovery-point-offset-checkpoint
+-rw-rw-r-- 1 zozo zozo    463 2月  27 12:59 replication-offset-checkpoint
+drwxrwxr-x 2 zozo zozo   4096 2月  26 21:12 second-0
+drwxrwxr-x 2 zozo zozo   4096 2月  26 21:12 second-1
+drwxrwxr-x 2 zozo zozo   4096 2月  26 21:12 second-3
+-rw-rw-r-- 1 zozo zozo    942 2月  27 12:58 server.log
+-rw-rw-r-- 1 zozo zozo  33514 2月  19 21:58 server.log.2019-02-19-21
+-rw-rw-r-- 1 zozo zozo   6293 2月  19 22:58 server.log.2019-02-19-22
+-rw-rw-r-- 1 zozo zozo    942 2月  19 23:58 server.log.2019-02-19-23
+-rw-rw-r-- 1 zozo zozo   4430 2月  26 21:12 state-change.log
+-rw-rw-r-- 1 zozo zozo   3202 2月  19 21:30 state-change.log.2019-02-19-21
+```
+
+如上的 `__consumer_offsets-xx` 文件夹用于记录消费者的 offset 信息, 三台机一共 50 个文件夹. 另外, Kafka 也支持将 offset 信息保存在第三方服务 (如 Redis).
+
 通过连接 ZooKeeper 进行消费 (新版本已废除, 会报如下错误):
 ```
 [zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-console-consumer.sh --zookeeper 172.16.0.6:2181 --topic first --from-beginning
