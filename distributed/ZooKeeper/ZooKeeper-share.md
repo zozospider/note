@@ -1,5 +1,5 @@
 
-# 大纲
+## 大纲
 
 `ZooKeeper 原理与实践`
 
@@ -29,19 +29,30 @@
   - Haoop & HBase & Kafka & Dubbo & JStorm
   - Configurator
 
+## 参考资料
+
+- 书
+  - [ZooKeeper Distributed Process Coordination](https://t.hao0.me/files/zookeeper.pdf)
+
+- Paxos 算法
+  - [如何浅显易懂地解说 Paxos 的算法?](https://www.zhihu.com/question/19787937)
+  - [paxos 算法](https://www.processon.com/view/59c2295ae4b0bc4fef8a436d)
+  - [数据一致性与 Paxos 算法](https://my.oschina.net/fileoptions/blog/1825760)
+
+- 其他
+  - [尴尬了！Spring Cloud微服务注册中心Eureka 2.x停止维护了咋办？【石杉的架构笔记】](https://juejin.im/post/5c7431f2f265da2db0739755)
+
+
 ---
 
-# 书
+# ZooKeeper 概念
 
-- [ZooKeeper Distributed Process Coordination](https://t.hao0.me/files/zookeeper.pdf)
+## 介绍
 
-# Paxos 算法
+分布式系统中的进程通信有两种选择: 直接通过网络进行信息交换, 或读写某些共享存储. ZooKeeper 使用共享存储模型来实现应用间的协作和同步原语.
 
-- [如何浅显易懂地解说 Paxos 的算法?](https://www.zhihu.com/question/19787937)
-- [paxos 算法](https://www.processon.com/view/59c2295ae4b0bc4fef8a436d)
-- [数据一致性与 Paxos 算法](https://my.oschina.net/fileoptions/blog/1825760)
-
-# 其他
-
-- [尴尬了！Spring Cloud微服务注册中心Eureka 2.x停止维护了咋办？【石杉的架构笔记】](https://juejin.im/post/5c7431f2f265da2db0739755)
+提问: 进程间通信有哪几种方式?
+- [Linux进程间通信的几种方式总结--linux内核剖析（七）](https://blog.csdn.net/gatieme/article/details/50908749)
+- [进程间通信IPC (InterProcess Communication)](https://www.jianshu.com/p/c1015f5ffa74)
+- [目前linux进程间通信的常用方法是什么(pipe？信号量？消息队列？)?](https://www.zhihu.com/question/23995948)
 
