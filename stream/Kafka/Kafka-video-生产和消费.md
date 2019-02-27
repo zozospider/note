@@ -121,6 +121,12 @@ class Message(val buffer: ByteBuffer) {
 }
 ```
 
+无论消息是否被消费, Kafka 都会保留所有消息, 有两种策略删除旧数据:
+- 基于时间: log.retention.hours=168
+- 基于大小: log.retention.bytes=1073741824
+
+需要注意, 因为 Kafka 读取特定消息的时间复杂度为 O(1), 即与文件大小无关, 所以删除过期文件与提高 Kafka 性能无关.
+
 ## 3.3 分区原则
 
 - 指定了 partition, 则直接使用.
