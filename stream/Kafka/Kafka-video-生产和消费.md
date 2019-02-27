@@ -22,7 +22,7 @@
 
 # 零拷贝
 
-![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7/Kafka%E9%9B%B6%E6%8B%B7%E8%B4%9D.png?raw=true)
+![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7%E5%92%8C%E6%B6%88%E8%B4%B9/Kafka%E9%9B%B6%E6%8B%B7%E8%B4%9D.png?raw=true)
 
 // TODO
 
@@ -34,7 +34,7 @@
 
 消息发送时都被发送到一个 Topic, 其本质就是一个目录, 而 Topic 是由一些 Partition Logs (分区日志) 组成, 其组织结构如下图:
 
-![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7/log_anatomy.png?raw=true)
+![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7%E5%92%8C%E6%B6%88%E8%B4%B9/log_anatomy.png?raw=true)
 
 每个 Partition 中的消息都是有序的, 生产的消息被不断追加到 Partition log 上, 其中的每一个消息都被赋予了一个唯一的 offset 值.
 
@@ -243,7 +243,7 @@ public final class Utils {
 
 # 应答机制
 
-![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7/Kafka-ACK.png?raw=true)
+![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7%E5%92%8C%E6%B6%88%E8%B4%B9/Kafka-ACK.png?raw=true)
 
 如上图所示, 有如下步骤:
 - a. Producer 连接 Kafka 集群后获取相关 Partition 对应的 Leader 节点.
@@ -259,7 +259,7 @@ Kafka 生成数据时的应答机制 (ACK) 有如下取值:
 
 # 生产数据
 
-![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7/kafka%E7%94%9F%E4%BA%A7%E6%95%B0%E6%8D%AE.png?raw=true)
+![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7%E5%92%8C%E6%B6%88%E8%B4%B9/kafka%E7%94%9F%E4%BA%A7%E6%95%B0%E6%8D%AE.png?raw=true)
 
 如上图, data 将数据发送到双端队列 (参考 [Double-ended queue](https://en.wikipedia.org/wiki/Double-ended_queue)), Sender 从双端队列中取数据 (按数据量和时间批量取数据), 并发送到 Kafka 集群, 如果发送失败, 会将数据放入双端队列尾部 (保证顺序性) 重新发送 (视 ACK 机制而定).
 
@@ -276,4 +276,4 @@ Kafka 生成数据时的应答机制 (ACK) 有如下取值:
 
 同一个消费者组中的一个消费者可以消费多个分区, 一个分区只能被同一个消费者组中的一个消费者消费, 同一个消费者组中的多个消费者不能消费一个分区 (无法保证顺序).
 
-![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7/kafka%E7%94%9F%E4%BA%A7%E6%95%B0%E6%8D%AE.png?raw=true)
+![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7%E5%92%8C%E6%B6%88%E8%B4%B9/Kafka%E6%B6%88%E8%B4%B9%E6%95%B0%E6%8D%AE.png?raw=true)
