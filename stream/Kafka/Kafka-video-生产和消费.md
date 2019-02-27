@@ -20,6 +20,7 @@
   - [../Kafka-video](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video.md)
 
 - link
+  - [通过零拷贝实现有效数据传输](https://www.ibm.com/developerworks/cn/java/j-zerocopy/)
   - [零拷贝底层实现原理](https://juejin.im/entry/59b740fdf265da06633d02cf)
   - [浅析Linux中的零拷贝技术](https://www.jianshu.com/p/fad3339e3448)
   - [Linux 中的零拷贝技术，第 1 部分](https://www.ibm.com/developerworks/cn/linux/l-cn-zerocopy1/index.html)
@@ -35,11 +36,17 @@
 
 ![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7%E5%92%8C%E6%B6%88%E8%B4%B9/Kafka%E9%9B%B6%E6%8B%B7%E8%B4%9D.png?raw=true)
 
-// TODO
+零拷贝参考如下资料:
+- [通过零拷贝实现有效数据传输](https://www.ibm.com/developerworks/cn/java/j-zerocopy/)
+- [零拷贝底层实现原理](https://juejin.im/entry/59b740fdf265da06633d02cf)
+- [浅析Linux中的零拷贝技术](https://www.jianshu.com/p/fad3339e3448)
+- [Linux 中的零拷贝技术，第 1 部分](https://www.ibm.com/developerworks/cn/linux/l-cn-zerocopy1/index.html)
+- [Linux 中直接 I/O 机制的介绍](https://www.ibm.com/developerworks/cn/linux/l-cn-directio/)
 
 # 二. 预读 & 后写
 
-// TODO
+参考如下资料:
+- [Kafka相关内容总结（存储和性能）](https://www.w3xue.com/exp/article/20191/16157.html)
 
 # 三. 分区
 
@@ -279,7 +286,7 @@ Kafka 生成数据时的应答机制 (ACK) 有如下取值:
 - __HW__: High watermark
 - __LEO__: Log end offset
 
-参考资料如下:
+参考如下资料:
 - [Kafka水位(high watermark)与leader epoch的讨论](https://www.cnblogs.com/huxi2b/p/7453543.html)
 - [深入分析Kafka高可用性](https://zhuanlan.zhihu.com/p/46658003)
 
