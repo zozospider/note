@@ -15,6 +15,8 @@
   - [Linux 中直接 I/O 机制的介绍](https://www.ibm.com/developerworks/cn/linux/l-cn-directio/)
   - [Kafka相关内容总结（存储和性能）](https://www.w3xue.com/exp/article/20191/16157.html)
   - [Double-ended queue](https://en.wikipedia.org/wiki/Double-ended_queue)
+  - [Kafka水位(high watermark)与leader epoch的讨论](https://www.cnblogs.com/huxi2b/p/7453543.html)
+  - [深入分析Kafka高可用性](https://zhuanlan.zhihu.com/p/46658003)
 
 ---
 
