@@ -449,7 +449,7 @@ drwxrwxr-x 2 zozo zozo   4096 2月  26 21:12 second-3
 -rw-rw-r-- 1 zozo zozo   3202 2月  19 21:30 state-change.log.2019-02-19-21
 ```
 
-如上的 `__consumer_offsets-xx` 文件夹用于记录消费者的 offset 信息, 三台机一共 50 个文件夹. 另外, Kafka 也支持将 offset 信息保存在第三方服务 (如 Redis).
+如上的一系列 `__consumer_offsets-xx` 文件夹在三台机器上共有 50 个文件夹, 表示名为 `__consumer_offsets` 的 Topic 有 50 个 Partition, 用于记录消费者的 offset 信息. 另外, Kafka 也支持将 offset 信息保存在第三方服务 (如 Redis).
 
 通过连接 ZooKeeper 进行消费 (新版本已废除, 会报如下错误):
 ```

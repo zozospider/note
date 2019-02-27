@@ -303,3 +303,156 @@ Kafka 生成数据时的应答机制 (ACK) 有如下取值:
 如上图所示, Broker 或 Consumer 发生变化时, 可能会触发再平衡 (右下图, 左下图), 再平衡遵守如下规则:
 - 一个分区只能被同一个消费者组中的一个消费者消费 / 同一个消费者组中的多个消费者不能消费一个分区, 否则会出现重复消费且无法保证顺序 (右上图).
 - 同一个消费者组中的一个消费者可以消费多个分区 (左下图).
+
+# 九. ZooKeeper 存储结构
+
+参考如下资料:
+- [apache kafka系列之在zookeeper中存储结构](https://blog.csdn.net/lizhitao/article/details/23744675)
+- [跟我学Kafka之zookeeper的存储结构](https://www.jianshu.com/p/3e9cedc8ed03)
+- [kafka自学之路--zookeeper中存储结构](https://cloud.tencent.com/developer/article/1018468)
+
+```
+[zozo@VM_0_6_centos bin]$ ./zkCli.sh
+Connecting to localhost:2181
+...
+[zk: localhost:2181(CONNECTED) 0] ls /
+[cluster, controller_epoch, controller, brokers, zookeeper, admin, isr_change_notification, consumers, log_dir_event_notification, latest_producer_id_block, config]
+[zk: localhost:2181(CONNECTED) 1] ls /cluster
+[id]
+[zk: localhost:2181(CONNECTED) 2] ls /cluster/id
+[]
+[zk: localhost:2181(CONNECTED) 3] get /cluster/id
+{"version":"1","id":"HApw8pLOT3-qhrqtyo5oFQ"}
+cZxid = 0x100000018
+ctime = Tue Feb 19 21:28:44 CST 2019
+mZxid = 0x100000018
+mtime = Tue Feb 19 21:28:44 CST 2019
+pZxid = 0x100000018
+cversion = 0
+dataVersion = 0
+aclVersion = 0
+ephemeralOwner = 0x0
+dataLength = 45
+numChildren = 0
+```
+
+如上所示, Kafka 会在 ZooKeeper 上建立多个目录存储元数据. `/cluster/id` 表示当前集群的 ID 为 `HApw8pLOT3-qhrqtyo5oFQ`.
+
+```
+[zk: localhost:2181(CONNECTED) 4] ls /controller
+[]
+[zk: localhost:2181(CONNECTED) 5] get /controller
+{"version":1,"brokerid":3,"timestamp":"1550858501807"}
+cZxid = 0x10000018f
+ctime = Sat Feb 23 02:01:41 CST 2019
+mZxid = 0x10000018f
+mtime = Sat Feb 23 02:01:41 CST 2019
+pZxid = 0x10000018f
+cversion = 0
+dataVersion = 0
+aclVersion = 0
+ephemeralOwner = 0x301a7caf7e70002
+dataLength = 54
+numChildren = 0
+```
+
+如上所示, `/controller` 表示集群控制器, 其值指定了由第 `3` 台机器来控制集群的行为, 如分区处理, 再平衡等.
+
+```
+[zk: localhost:2181(CONNECTED) 6] ls /controller_epoch
+[]
+[zk: localhost:2181(CONNECTED) 7] get /controller_epoch
+2
+cZxid = 0x10000001a
+ctime = Tue Feb 19 21:28:45 CST 2019
+mZxid = 0x10000018f
+mtime = Sat Feb 23 02:01:41 CST 2019
+pZxid = 0x10000001a
+cversion = 0
+dataVersion = 2
+aclVersion = 0
+ephemeralOwner = 0x0
+dataLength = 1
+numChildren = 0
+```
+
+如上所示, `/controller_epoch` 表示集群累计进行了 `2` 次 Leader 竞选.
+
+```
+[zk: localhost:2181(CONNECTED) 8] ls /brokers
+[ids, topics, seqid]
+[zk: localhost:2181(CONNECTED) 9] ls /brokers/ids
+[1, 2, 3]
+[zk: localhost:2181(CONNECTED) 10] ls /brokers/ids/1
+[]
+[zk: localhost:2181(CONNECTED) 11] get /brokers/ids/1
+{"listener_security_protocol_map":{"PLAINTEXT":"PLAINTEXT"},"endpoints":["PLAINTEXT://172.16.0.6:9092"],"jmx_port":-1,"host":"172.16.0.6","timestamp":"1550858517088","port":9092,"version":4}
+cZxid = 0x100000195
+ctime = Sat Feb 23 02:01:57 CST 2019
+mZxid = 0x100000195
+mtime = Sat Feb 23 02:01:57 CST 2019
+pZxid = 0x100000195
+cversion = 0
+dataVersion = 0
+aclVersion = 0
+ephemeralOwner = 0x106c91921af001a
+dataLength = 190
+numChildren = 0
+```
+
+如上所示, `/brokers/ids` 表示集群一共有 id 为 `1`, `2`, `3` 的三个 broker, 其中, `/brokers/ids/1` 记录了第 `1` 个 broker 的信息.
+
+```
+[zk: localhost:2181(CONNECTED) 12] ls /brokers
+[ids, topics, seqid]
+[zk: localhost:2181(CONNECTED) 13] ls /brokers/topics
+[test, first, __consumer_offsets, second]
+[zk: localhost:2181(CONNECTED) 14] ls /brokers/topics/first
+[partitions]
+[zk: localhost:2181(CONNECTED) 15] get /brokers/topics/first
+{"version":1,"partitions":{"2":[2,3],"1":[1,2],"0":[3,1]}}
+cZxid = 0x100000092
+ctime = Wed Feb 20 20:52:42 CST 2019
+mZxid = 0x100000092
+mtime = Wed Feb 20 20:52:42 CST 2019
+pZxid = 0x100000094
+cversion = 1
+dataVersion = 0
+aclVersion = 0
+ephemeralOwner = 0x0
+dataLength = 58
+numChildren = 1
+[zk: localhost:2181(CONNECTED) 16] ls /brokers/topics/first/partitions
+[0, 1, 2]
+[zk: localhost:2181(CONNECTED) 17] ls /brokers/topics/first/partitions/1
+[state]
+[zk: localhost:2181(CONNECTED) 18] ls /brokers/topics/first/partitions/1/state
+[]
+[zk: localhost:2181(CONNECTED) 19] get /brokers/topics/first/partitions/1/state
+{"controller_epoch":2,"leader":2,"version":1,"leader_epoch":2,"isr":[2,1]}
+cZxid = 0x100000099
+ctime = Wed Feb 20 20:52:42 CST 2019
+mZxid = 0x1000001a8
+mtime = Sat Feb 23 02:01:58 CST 2019
+pZxid = 0x100000099
+cversion = 0
+dataVersion = 3
+aclVersion = 0
+ephemeralOwner = 0x0
+dataLength = 74
+numChildren = 0
+[zk: localhost:2181(CONNECTED) 20] ls /brokers/topics/__consumer_offsets/partitions
+[44, 45, 46, 47, 48, 49, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43]
+```
+
+如上所示, `/brokers/topics` 记录了当前集群有 `test`, `first`, `__consumer_offsets`, `second` 这 4 个 topic, 其中 `/brokers/topics/first/partitions` 表示名为 `first` 的 partition 有 `0`, `1`, `2` 这 3 个分区. `/brokers/topics/__consumer_offsets/partitions` 表示名为 `__consumer_offsets` 的 partition 有 50 个分区.
+
+```
+[zk: localhost:2181(CONNECTED) 23] ls /consumers
+[]
+```
+
+如上所示, 当消费者连接 ZooKeeper 进行消费时 (新版本已废除), `/consumers` 记录了消费者组和消费者的元数据信息.
+
+查看消费情况请参考 `bin/kafka-consumer-groups.sh` 脚本使用说明: [Kafka-Documentation](http://kafka.apache.org/documentation/#basic_ops_consumer_lag).
+
