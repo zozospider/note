@@ -1,4 +1,6 @@
 
+# 总览
+
 ## 大纲
 
 `ZooKeeper 原理与实践`
@@ -25,6 +27,7 @@
   - JMX & 监控
   - 数据 & 连接 & 磁盘
 - ZooKeeper 应用
+  - shell 模拟分布式系统 (主从模式) 应用 ZooKeeper
   - 数据发布/订阅 & 负载均衡 & 命名服务 & 分布式协调/通知 & 集群管理 & Master 选举 & 分布式锁 & 分布式队列
   - Haoop & HBase & Kafka & Dubbo & JStorm
   - Configurator
