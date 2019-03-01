@@ -55,7 +55,7 @@
 分布式系统中的进程通信有两种选择: 直接通过网络进行信息交换, 或读写某些共享存储. ZooKeeper 使用共享存储模型来实现应用间的协作和同步原语.
 
 提问: 进程间通信有哪几种方式?
-- [Linux进程间通信的几种方式总结--linux内核剖析（七）](https://blog.csdn.net/gatieme/article/details/50908749)
 - [进程间通信IPC (InterProcess Communication)](https://www.jianshu.com/p/c1015f5ffa74)
+- [Linux进程间通信的几种方式总结--linux内核剖析（七）](https://blog.csdn.net/gatieme/article/details/50908749)
 - [目前linux进程间通信的常用方法是什么(pipe？信号量？消息队列？)?](https://www.zhihu.com/question/23995948)
 
