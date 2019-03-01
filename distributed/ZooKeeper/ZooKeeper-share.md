@@ -41,7 +41,8 @@
   - [如何浅显易懂地解说 Paxos 的算法?](https://www.zhihu.com/question/19787937)
   - [paxos 算法](https://www.processon.com/view/59c2295ae4b0bc4fef8a436d)
   - [数据一致性与 Paxos 算法](https://my.oschina.net/fileoptions/blog/1825760)
-
+  - [分布式系统Paxos算法](https://www.jdon.com/artichect/paxos.html)
+  
 - 其他
   - [尴尬了！Spring Cloud微服务注册中心Eureka 2.x停止维护了咋办？【石杉的架构笔记】](https://juejin.im/post/5c7431f2f265da2db0739755)
 
@@ -60,3 +61,7 @@
 - [Linux进程间通信的几种方式总结--linux内核剖析（七）](https://blog.csdn.net/gatieme/article/details/50908749)
 - [目前linux进程间通信的常用方法是什么(pipe？信号量？消息队列？)?](https://www.zhihu.com/question/23995948)
 - [semaphore和mutex的区别？](https://www.zhihu.com/question/47704079)
+
+## 角色, 通信, 会话
+
+session 周期
