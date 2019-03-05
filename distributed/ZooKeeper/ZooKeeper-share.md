@@ -8,7 +8,7 @@
 - 分布式系统特点
   - 集中式 & 分布式
   - ACID & CAP
-  - Paxos 算法 & ZAB 协议
+  - Paxos 算法 一致性 Hash 算法 & ZAB 协议
 - ZooKeeper 概念
   - 介绍
   - 数据与存储
@@ -38,13 +38,14 @@
 - 书
   - [ZooKeeper Distributed Process Coordination](https://t.hao0.me/files/zookeeper.pdf)
 
-- Paxos 算法
+- 算法
   - [如何浅显易懂地解说 Paxos 的算法?](https://www.zhihu.com/question/19787937)
   - [paxos 算法](https://www.processon.com/view/59c2295ae4b0bc4fef8a436d)
   - [数据一致性与 Paxos 算法](https://my.oschina.net/fileoptions/blog/1825760)
   - [分布式系统Paxos算法](https://www.jdon.com/artichect/paxos.html)
   - [Paxos Made Simple](https://www.microsoft.com/en-us/research/publication/paxos-made-simple/)
   - [一致性hash算法 - consistent hashing](https://blog.csdn.net/sparkliang/article/details/5279393)
+  - [每天进步一点点——五分钟理解一致性哈希算法(consistent hashing)](https://blog.csdn.net/cywosp/article/details/23397179)
 
 - 其他
   - [走向架构师之路](https://blog.csdn.net/cutesource/article/list/5)
