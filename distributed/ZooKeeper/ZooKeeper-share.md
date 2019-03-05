@@ -44,6 +44,7 @@
   - [数据一致性与 Paxos 算法](https://my.oschina.net/fileoptions/blog/1825760)
   - [分布式系统Paxos算法](https://www.jdon.com/artichect/paxos.html)
   - [Paxos Made Simple](https://www.microsoft.com/en-us/research/publication/paxos-made-simple/)
+  - [一致性hash算法 - consistent hashing](https://blog.csdn.net/sparkliang/article/details/5279393)
 
 - 其他
   - [走向架构师之路](https://blog.csdn.net/cutesource/article/list/5)
