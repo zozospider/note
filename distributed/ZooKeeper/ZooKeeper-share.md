@@ -45,6 +45,7 @@
   - [分布式系统Paxos算法](https://www.jdon.com/artichect/paxos.html)
   
 - 其他
+  - [走向架构师之路](https://blog.csdn.net/cutesource/article/list/5)
   - [尴尬了！Spring Cloud微服务注册中心Eureka 2.x停止维护了咋办？【石杉的架构笔记】](https://juejin.im/post/5c7431f2f265da2db0739755)
 
 
