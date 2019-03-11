@@ -28,7 +28,7 @@
     - 角色 (Leader, Follower, Observer)
     - 初始化 & 数据同步 & Leader 选举
     - 通信协议 (Jute) & 会话 (会话状态, 会话创建, 会话管理 (bucket), 会话清理, 重连)
-    - 请求处理
+    - 请求处理 & Watcher 触发
 - ZooKeeper 使用
   - 服务端 (单机 & 伪分布式 & 分布式)
   - 客户端 (shell & 四字命令 & Java API (ZooKeeper & Curator & ZKClient))
