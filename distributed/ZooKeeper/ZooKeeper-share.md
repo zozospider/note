@@ -22,7 +22,7 @@
   - 事务处理
     - 请求处理链
 - ZooKeeper 概念 (二)
-    - 介绍
+    - 介绍 & 特性
     - 数据结构 & 节点特性 & 版本 & ACL & Watcher
     - 事务日志 & 快照
     - 角色 (Leader, Follower, Observer)
