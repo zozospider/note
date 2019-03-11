@@ -6,9 +6,8 @@
 `ZooKeeper 原理与实践`
 
 - 分布式系统特点
-  - 集中式 & 分布式
-  - ACID & CAP
-  - Paxos 算法 一致性 Hash 算法 & ZAB 协议
+  - 集中式 & 分布式 & ACID & CAP
+  - 拜占庭将军 & Paxos (Multi-Paxos) 算法 & Raft 算法 & 一致性 Hash 算法 & ZAB 协议
 - ZooKeeper 概念
   - 介绍
   - 数据与存储
