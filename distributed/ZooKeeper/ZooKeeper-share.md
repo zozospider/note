@@ -39,6 +39,10 @@
   - [ZooKeeper Distributed Process Coordination](https://t.hao0.me/files/zookeeper.pdf)
 
 - 算法
+  - [分布式一致性与共识算法](https://draveness.me/consensus)
+  - [Paxos lecture (Raft user study)](https://www.youtube.com/watch?v=JEpsBg0AO6o)
+  - [漫画：什么是拜占庭将军问题？](https://blog.csdn.net/bjweimengshu/article/details/80222416)
+  - [漫画：什么是分布式事务？](https://blog.csdn.net/bjweimengshu/article/details/79607522)
   - [如何浅显易懂地解说 Paxos 的算法?](https://www.zhihu.com/question/19787937)
   - [paxos 算法](https://www.processon.com/view/59c2295ae4b0bc4fef8a436d)
   - [数据一致性与 Paxos 算法](https://my.oschina.net/fileoptions/blog/1825760)
