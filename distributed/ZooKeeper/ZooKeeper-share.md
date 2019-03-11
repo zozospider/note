@@ -40,6 +40,8 @@
 
 - 算法
   - [分布式一致性与共识算法](https://draveness.me/consensus)
+  - [分布式系统核心技术](https://yeasy.gitbooks.io/blockchain_guide/content/distribute_system/)
+  - [raft算法与paxos算法相比有什么优势，使用场景有什么差异？](https://www.zhihu.com/question/36648084)
   - [Paxos lecture (Raft user study)](https://www.youtube.com/watch?v=JEpsBg0AO6o)
   - [漫画：什么是拜占庭将军问题？](https://blog.csdn.net/bjweimengshu/article/details/80222416)
   - [漫画：什么是分布式事务？](https://blog.csdn.net/bjweimengshu/article/details/79607522)
