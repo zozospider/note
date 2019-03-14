@@ -5,7 +5,7 @@
 
 `ZooKeeper 原理与实践`
 
-- 分布式系统特点
+- 分布式系统
   - 集中式 & 分布式 & ACID & CAP
   - 拜占庭将军 & Paxos (Multi-Paxos) 算法 & Raft 算法 & 一致性 Hash 算法 & ZAB 协议
 - ZooKeeper 概念
@@ -47,6 +47,9 @@
   - [ZooKeeper Distributed Process Coordination](https://t.hao0.me/files/zookeeper.pdf)
 
 - 算法
+  - [分布式理论(一) - CAP定理](https://juejin.im/post/5b26634b6fb9a00e765e75d1)
+  - [比长狭还早，“不可能三角”的概念源来于此](http://www.sohu.com/a/297805900_100188881)
+  - [区块链共识机制的演进](http://www.cnblogs.com/studyzy/p/8849818.html)
   - [分布式一致性与共识算法](https://draveness.me/consensus)
   - [分布式系统核心技术](https://yeasy.gitbooks.io/blockchain_guide/content/distribute_system/)
   - [分布式系列文章——Paxos算法原理与推导](http://linbingdong.com/2017/04/17/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0%E2%80%94%E2%80%94Paxos%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86%E4%B8%8E%E6%8E%A8%E5%AF%BC/)
@@ -126,3 +129,11 @@ session 周期: 图2-6
   - 4.4.4 从节点等待分配新任务
   - 4.4.5 客户端等待任务的执行结果
 
+分布式系统是一个硬件或软件组件分布在不同的网络计算机上, 彼此之间仅仅通过消息传递进行通信和协调的系统.
+事务 (Transaction) 是由一系列对系统中数据进行访问与更新的操作所组成的一个程序执行逻辑单元 (Unit), 狭义上的事务特指数据库事务.
+分布式事务是指事务的参与者, 支持事务的服务器, 资源服务器以及事务管理器分别位于分布式系统的不同节点之上. 通常一个分布式事务会涉及对多个数据源或业务系统的操作.
+原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）和持久性（Durability）
+
+指数据在多个副本之间能够保持一致的特性 (严格的一致性)
+指系统提供的服务必须一直处于可用的状态, 每次请求都能获取到非错的响应 (不保证获取的数据为最新数据)
+分布式系统在遇到任何网络分区故障的时候, 仍然能够对外提供满足一致性和可用性的服务, 除非整个网络环境都发生了故障.
