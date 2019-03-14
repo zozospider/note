@@ -48,6 +48,9 @@
 
 - 算法
   - [分布式理论(一) - CAP定理](https://juejin.im/post/5b26634b6fb9a00e765e75d1)
+  - [分布式CAP定理，为什么不能同时满足三个特性？](https://blog.csdn.net/yeyazhishang/article/details/80758354)
+  - [分布式理论之CAP定理（布鲁尔定理）](https://segmentfault.com/a/1190000018011851)
+  - [请不要再称数据库是CP或者AP (Please stop calling databases CP or AP)](https://blog.the-pans.com/cap/)
   - [比长狭还早，“不可能三角”的概念源来于此](http://www.sohu.com/a/297805900_100188881)
   - [区块链共识机制的演进](http://www.cnblogs.com/studyzy/p/8849818.html)
   - [分布式一致性与共识算法](https://draveness.me/consensus)
@@ -137,3 +140,7 @@ session 周期: 图2-6
 指数据在多个副本之间能够保持一致的特性 (严格的一致性)
 指系统提供的服务必须一直处于可用的状态, 每次请求都能获取到非错的响应 (不保证获取的数据为最新数据)
 分布式系统在遇到任何网络分区故障的时候, 仍然能够对外提供满足一致性和可用性的服务, 除非整个网络环境都发生了故障.
+
+```sql
+SELECT * FROM TBL WHERE COL=1 ORDER BY timer DESC;
+```
