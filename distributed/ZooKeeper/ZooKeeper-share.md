@@ -49,6 +49,7 @@
 - 算法
   - [分布式理论(一) - CAP定理](https://juejin.im/post/5b26634b6fb9a00e765e75d1)
   - [分布式CAP定理，为什么不能同时满足三个特性？](https://blog.csdn.net/yeyazhishang/article/details/80758354)
+  - [[分布式]：分布式系统的CAP理论](https://blog.csdn.net/w372426096/article/details/80437198)
   - [分布式理论之CAP定理（布鲁尔定理）](https://segmentfault.com/a/1190000018011851)
   - [请不要再称数据库是CP或者AP (Please stop calling databases CP or AP)](https://blog.the-pans.com/cap/)
   - [比长狭还早，“不可能三角”的概念源来于此](http://www.sohu.com/a/297805900_100188881)
@@ -140,7 +141,6 @@ session 周期: 图2-6
 指数据在多个副本之间能够保持一致的特性 (严格的一致性)
 指系统提供的服务必须一直处于可用的状态, 每次请求都能获取到非错的响应 (不保证获取的数据为最新数据)
 分布式系统在遇到任何网络分区故障的时候, 仍然能够对外提供满足一致性和可用性的服务, 除非整个网络环境都发生了故障.
-
-```sql
-SELECT * FROM TBL WHERE COL=1 ORDER BY timer DESC;
-```
+一个分布式系统不可能同时满足一致性 (C: Consistency), 可用性 (A：Availability) 和分区容错性 (P: Partition tolerance) 这三个基本需求, 最多只能同时满足其中两项.
+BASE 是对 CAP 中一致性和可用性权衡的结果, 其来源于对大规模互联网系统分布式实践的总结, 是基于 CAP 定理逐步演化而来的, 其核心思想是即使无法做到强一致性, 但每个应用都可以根据自身的业务特点, 采用适当的方法来使系统达到最终一致性.
+Eventually consistent (最终一致性)
