@@ -49,3 +49,10 @@ mysql -uterrace -pTz#666 -h192.168.0.1 -P3306 game_manager < game_manager_201902
 mysql -uterrace -pTz#666 -h192.168.0.1 -P3306 game_manager < game_manager_20190218_table.sql
 mysql -uterrace -pTz#666 -h192.168.0.1 -P3306 game_manager < game_manager_20190218_data.sql
 ```
+
+## 命令行分页显示结果
+```
+mysql>pager less;
+mysql>show tables;
+mysql>show databases;
+```
