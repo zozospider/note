@@ -52,7 +52,7 @@ mysql -uterrace -pTz#666 -h192.168.0.1 -P3306 game_manager < game_manager_201902
 
 ## 命令行分页显示结果
 ```
-mysql>pager less;
+mysql>pager more;
 mysql>show tables;
 mysql>show databases;
 ```
