@@ -39,6 +39,8 @@
     - [Spring-Boot-2.x](https://github.com/zozospider/note/blob/master/Microservice/Spring-Boot/Spring-Boot-2.x.md)
 
 - distributed
+  - __Data-Intensive__
+    - [ZooKeeper-Documentation](https://github.com/zozospider/note/blob/master/distributed/Data-Intensive/Data-Intensive-book1cn.md)
   - __ZooKeeper__
     - [ZooKeeper-Documentation](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-Documentation.md)
     - [ZooKeeper-book](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book.md)
