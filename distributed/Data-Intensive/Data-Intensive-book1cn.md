@@ -21,6 +21,9 @@
 - book
   - [数据密集型应用系统设计](https://www.amazon.cn/dp/B07HGH8153)
 
+- link
+  - [GitHub/ept/ddia-references](https://github.com/ept/ddia-references)
+
 ---
 
 # 前言
