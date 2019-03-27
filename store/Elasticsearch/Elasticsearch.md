@@ -7,8 +7,8 @@
 
 # 升级
 
-[Upgrade Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-upgrade.html)
-[upgrading logstash](https://www.elastic.co/guide/en/logstash/current/upgrading-logstash.html)
+- [Upgrade Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-upgrade.html)
+- [upgrading logstash](https://www.elastic.co/guide/en/logstash/current/upgrading-logstash.html)
 
 __滚动升级__ 步骤:
 
