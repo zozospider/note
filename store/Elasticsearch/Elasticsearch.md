@@ -14,7 +14,7 @@ __滚动升级__ 步骤:
 
 1. Logstash
 - 1.1. 停止 Logstash 6.5.4.
-- 1.2. 如果为 persistent queue, 在 `logstash.yml` 文件配置 `queue.drain:true`.
+- 1.2. 如果为 persistent queue, 在 `logstash.yml` 文件配置 `queue.drain: true`.
 - 1.3. 重启 Logstash 6.5.4 使配置生效.
 - 1.4. 停止 Logstash 6.5.4, 并等待 queue 变空.
 - 1.5. 部署 Logstash 6.7.0, 拷贝 Logstash 6.5.4 配置到 6.7.0.
