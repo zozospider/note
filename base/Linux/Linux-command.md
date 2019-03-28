@@ -229,3 +229,9 @@ curator --config /home/user/app/curator/curator.yml /home/user/app/curator/actio
 > file
 ```
 
+# 查找过滤
+
+排除字符:
+```
+cat file | grep -v EXCLUDE
+```
