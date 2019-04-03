@@ -74,6 +74,7 @@
   - [尴尬了！Spring Cloud微服务注册中心Eureka 2.x停止维护了咋办？【石杉的架构笔记】](https://juejin.im/post/5c7431f2f265da2db0739755)
   - [Amazon “邮寄硬盘”传输数据这方法真的好吗？](http://www.chinastor.com/a/dashuju/100QH462015.html)
   - [数据快递服务 DES](https://www.huaweicloud.com/product/des.html)
+  - [PPT](https://www.beautiful.ai/)
 
 ---
 
