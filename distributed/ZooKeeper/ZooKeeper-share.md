@@ -68,6 +68,7 @@
   - [Paxos Made Simple](https://www.microsoft.com/en-us/research/publication/paxos-made-simple/)
   - [一致性hash算法 - consistent hashing](https://blog.csdn.net/sparkliang/article/details/5279393)
   - [每天进步一点点——五分钟理解一致性哈希算法(consistent hashing)](https://blog.csdn.net/cywosp/article/details/23397179)
+  - [深入浅出区块链](https://time.geekbang.org/column/intro/76)
 
 - 其他
   - [走向架构师之路](https://blog.csdn.net/cutesource/article/list/5)
