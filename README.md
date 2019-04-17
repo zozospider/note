@@ -57,6 +57,8 @@
 - stream
   - __Kafka__
     - [Kafka-video](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video.md)
+  - __Flume__
+    - [Flume-metrics](https://github.com/zozospider/note/blob/master/stream/Flume/Flume-metrics.md)
 
 - instrument
   - __Git__
