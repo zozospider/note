@@ -2,6 +2,7 @@
 # Document & Code
 
 - book
+  - [Designing Data-Intensive Applications](https://www.amazon.com/dp/1449373321)
   - [数据密集型应用系统设计](https://www.amazon.cn/dp/B07HGH8153)
 
 - link
