@@ -38,9 +38,16 @@
   - __Spring-Boot__
     - [Spring-Boot-2.x](https://github.com/zozospider/note/blob/master/Microservice/Spring-Boot/Spring-Boot-2.x.md)
 
+- data-system
+  - [data-system-book1-cn](https://github.com/zozospider/note/blob/master/data-system/data-system-book1-cn.md)
+  - __MySQL__
+    - [MySQL-command](https://github.com/zozospider/note/blob/master/data-system/MySQL/MySQL-command.md)
+  - __Elasticsearch__
+    - [Elasticsearch](https://github.com/zozospider/note/blob/master/data-system/Elasticsearch/Elasticsearch.md)
+  - __Flume__
+    - [Flume-metrics](https://github.com/zozospider/note/blob/master/data-system/Flume/Flume-metrics.md)
+
 - distributed
-  - __Data-Intensive__
-    - [Data-Intensive-book1cn](https://github.com/zozospider/note/blob/master/distributed/Data-Intensive/Data-Intensive-book1cn.md)
   - __ZooKeeper__
     - [ZooKeeper-Documentation](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-Documentation.md)
     - [ZooKeeper-book](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book.md)
@@ -48,17 +55,9 @@
     - [ZooKeeper-video](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-video.md)
     - [ZooKeeper-share](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-share.md)
 
-- store
-  - __MySQL__
-    - [MySQL-command](https://github.com/zozospider/note/blob/master/store/MySQL/MySQL-command.md)
-  - __Elasticsearch__
-    - [Elasticsearch](https://github.com/zozospider/note/blob/master/store/Elasticsearch/Elasticsearch.md)
-
 - stream
   - __Kafka__
     - [Kafka-video](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video.md)
-  - __Flume__
-    - [Flume-metrics](https://github.com/zozospider/note/blob/master/stream/Flume/Flume-metrics.md)
 
 - instrument
   - __Git__
