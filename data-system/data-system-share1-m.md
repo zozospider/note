@@ -51,7 +51,7 @@ aclVersion = 0
 ephemeralOwner = 0x2042db0dea60035
 dataLength = 24
 numChildren = 0
-[zk: localhost:2181(CONNECTED) 3]
+[zk: localhost:2181(CONNECTED) 3] 
 ```
 
 # step3 m1
