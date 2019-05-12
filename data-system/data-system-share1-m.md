@@ -101,8 +101,8 @@ Created /assign
 
 # step6 m1
 
-- 监控到 /workers 被创建，建立临时子节点 /workers/worker1.example.com（此时主机点会监控到 /workers 的子节点变化情况）
-- 监控到 /assign 被创建，建立子节点 /assign/worker1.example.com
+- 建立临时子节点 /workers/worker1.example.com（此时主机点会监控到 /workers 的子节点变化情况）
+- 建立子节点 /assign/worker1.example.com
 
 ```
 [zozo@VM_0_17_centos bin]$ ./zkCli.sh
@@ -120,7 +120,7 @@ Created /assign/worker1.example.com
 
 # step7 m3
 
-- 模拟客户端，添加 cmd 任务 /tasks/task-0000000000，监控 /tasks/task-0000000000 子节点。
+- 模拟客户端，添加 cmd 任务 /tasks/task-0000000000，监控 /tasks/task-0000000000 子节点
 
 ```
 [zozo@VM_0_6_centos bin]$ ./zkCli.sh
