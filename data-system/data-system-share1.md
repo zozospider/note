@@ -115,11 +115,11 @@ WATCHER::
 
 WatchedEvent state:SyncConnected type:None path:null
 [zk: localhost:2181(CONNECTED) 0] ls /
-[cluster, controller_epoch, controller, brokers, zookeeper, admin, isr_change_notification, consumers, log_dir_event_notification, latest_producer_id_block, config]
+[zookeeper]
 [zk: localhost:2181(CONNECTED) 1] create -e /master "master1.example.com:2223"
 Created /master
 [zk: localhost:2181(CONNECTED) 2] ls /
-[cluster, controller_epoch, controller, brokers, zookeeper, admin, isr_change_notification, consumers, log_dir_event_notification, latest_producer_id_block, config, master]
+[zookeeper, master]
 [zk: localhost:2181(CONNECTED) 3] get /master
 master1.example.com:2223
 cZxid = 0x1000005e1
@@ -161,7 +161,7 @@ WATCHER::
 
 WatchedEvent state:SyncConnected type:None path:null
 [zk: localhost:2181(CONNECTED) 0] ls /
-[cluster, controller, brokers, zookeeper, admin, isr_change_notification, log_dir_event_notification, master, controller_epoch, consumers, latest_producer_id_block, config, workers, tasks, assign]
+[zookeeper, master, workers, tasks, assign]
 [zk: localhost:2181(CONNECTED) 1] create -e /workers/worker1.example.com "worker1.example.com:2224"
 Created /workers/worker1.example.com
 [zk: localhost:2181(CONNECTED) 2] create /assign/worker1.example.com ""
@@ -224,7 +224,7 @@ WATCHER::
 
 WatchedEvent state:SyncConnected type:None path:null
 [zk: localhost:2181(CONNECTED) 0] ls /
-[cluster, controller_epoch, controller, brokers, zookeeper, admin, isr_change_notification, consumers, log_dir_event_notification, latest_producer_id_block, config, master]
+[zookeeper, master]
 [zk: localhost:2181(CONNECTED) 1] create -e /master "master2.example.com:2223"
 Node already exists: /master
 [zk: localhost:2181(CONNECTED) 2] stat /master true
@@ -246,7 +246,7 @@ WATCHER::
 WatchedEvent state:SyncConnected type:NodeDeleted path:/master
 
 [zk: localhost:2181(CONNECTED) 3] ls /
-[cluster, controller_epoch, controller, brokers, zookeeper, admin, isr_change_notification, consumers, log_dir_event_notification, latest_producer_id_block, config]
+[zookeeper]
 [zk: localhost:2181(CONNECTED) 4] create -e /master "master2.example.com:2223"
 Created /master
 [zk: localhost:2181(CONNECTED) 5] create /workers ""
@@ -256,7 +256,7 @@ Created /tasks
 [zk: localhost:2181(CONNECTED) 7] create /assign ""
 Created /assign
 [zk: localhost:2181(CONNECTED) 8] ls /
-[cluster, controller, brokers, zookeeper, admin, isr_change_notification, log_dir_event_notification, master, controller_epoch, consumers, latest_producer_id_block, config, workers, tasks, assign]
+[zookeeper, master, workers, tasks, assign]
 [zk: localhost:2181(CONNECTED) 9] ls /workers true
 []
 [zk: localhost:2181(CONNECTED) 10] ls /tasks true
@@ -311,7 +311,7 @@ WATCHER::
 
 WatchedEvent state:SyncConnected type:None path:null
 [zk: localhost:2181(CONNECTED) 0] ls /
-[cluster, controller, brokers, zookeeper, admin, isr_change_notification, log_dir_event_notification, master, controller_epoch, consumers, latest_producer_id_block, config, workers, tasks, assign]
+[zookeeper, master, workers, tasks, assign]
 [zk: localhost:2181(CONNECTED) 1] create -s /tasks/task- "cmd"
 Created /tasks/task-0000000000
 [zk: localhost:2181(CONNECTED) 2] ls /tasks/task-0000000000 true
