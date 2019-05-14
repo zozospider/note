@@ -60,6 +60,7 @@ numChildren = 0
 
 ```
 [zk: localhost:2181(CONNECTED) 4] 
+[zozo@VM_0_17_centos bin]$ 
 ```
 
 # step4 m2
