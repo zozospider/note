@@ -79,6 +79,9 @@
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/data-system/Hadoop/Hadoop-video1-%E4%BB%8EHadoop%E6%A1%86%E6%9E%B6%E8%AE%A8%E8%AE%BA%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%94%9F%E6%80%81/YARN%E6%9E%B6%E6%9E%84.png)
 
+以下为官网图片:
+![image](https://raw.githubusercontent.com/zozospider/note/master/data-system/Hadoop/Hadoop-video1-%E4%BB%8EHadoop%E6%A1%86%E6%9E%B6%E8%AE%A8%E8%AE%BA%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%94%9F%E6%80%81/yarn_architecture.gif)
+
 ---
 
 # MapReduce 架构概述
