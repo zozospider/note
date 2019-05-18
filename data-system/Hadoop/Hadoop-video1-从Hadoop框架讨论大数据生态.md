@@ -54,3 +54,34 @@
 - 高容错性
 
 ---
+
+# Hadoop 1.x 和 2.x 的区别
+
+- 1.x
+  - MapReduce (计算 + 资源调度)
+  - HDFS (数据存储)
+  - Common (辅助工具)
+- 2.x
+  - MapReduce (计算)
+  - YARN (资源调度)
+  - HDFS (数据存储)
+  - Common (辅助工具)
+
+# HDFS 架构概述
+
+- __NameNode (nm)__: 存储文件的元数据, 如文件名, 文件目录结构, 文件属性 (生成时间, 副本数, 文件权限), 以及每个文件的块列表和块所在的 DataNode 等.
+- __Secondary NameNode (2nm)__: 用来监控 HDFS 状态的辅助后台程序, 每个一段时间获取 HDFS 元数据的快照.
+- __DataNode (dn)__: 在本地文件系统存储文件块数据, 以及块数据的校验和.
+
+---
+
+# YARN 架构概述
+
+![image]()
+
+---
+
+# MapReduce 架构概述
+
+
+---
