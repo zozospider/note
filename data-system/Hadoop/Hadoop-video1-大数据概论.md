@@ -1,0 +1,8 @@
+
+# 大数据特点
+
+- Volume (大量)
+- Velocity (高速)
+- Variety (多样)
+- Value (低价值密度)
+

@@ -46,6 +46,8 @@
     - [Elasticsearch](https://github.com/zozospider/note/blob/master/data-system/Elasticsearch/Elasticsearch.md)
   - __Flume__
     - [Flume-metrics](https://github.com/zozospider/note/blob/master/data-system/Flume/Flume-metrics.md)
+  - __Hadoop__
+    - [Hadoop-video1](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1.md)
 
 - distributed
   - __ZooKeeper__
