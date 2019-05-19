@@ -17,6 +17,8 @@ export PATH=$JAVA_HOME/bin:$PATH
 export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 ```
 
+---
+
 # 目录结构
 
 - __bin__: 命令 (重要)
@@ -26,3 +28,5 @@ export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 - __libexec__: 本地库
 - __include__: 其他语言如 C 语言库
 - __share__: 说明文档, 案例
+
+---
