@@ -8,7 +8,7 @@
 
 拷贝一些 xml 文件到 input 文件夹下作为输入数据, 通过官方提供的 grep 案例, 找出 input 文件夹中符合正则表达式等文件内容, 将符合的内容输出到 output 文件夹下.
 
-以下为官网说明:
+- 以下为官网说明:
 
 By default, Hadoop is configured to run in a non-distributed mode, as a single Java process. This is useful for debugging.
 
@@ -21,7 +21,7 @@ The following example copies the unpacked conf directory to use as input and the
   $ cat output/*
 ```
 
-以下为实际运行成功效果:
+- 以下为实际运行成功效果:
 ```bash
 [zozo@VM_0_17_centos hadoop-2.7.2]$ mkdir input
 [zozo@VM_0_17_centos hadoop-2.7.2]$ cp etc/hadoop/*.xml input
@@ -455,7 +455,7 @@ drwxr-xr-x 4 zozo zozo  4096 1月  26 2016 share
 [zozo@VM_0_17_centos hadoop-2.7.2]$ 
 ```
 
-注意: 运行前需要确保 output 文件夹不存在, 否则会抛出异常, 如下所示:
+- 注意: 运行前需要确保 output 文件夹不存在, 否则会抛出异常, 如下所示:
 ```bash
 [zozo@VM_0_17_centos hadoop-2.7.2]$ ll
 总用量 60
