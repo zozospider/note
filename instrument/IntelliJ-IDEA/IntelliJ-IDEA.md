@@ -80,3 +80,12 @@ bogon:note-distributed-zookeeper-video zoz$
 3. 右键 - Git - add
 4. 右键 - Git - Commit Directory
 5. 右键 - Git - Repository - Push
+
+# Tomcat 配置
+
+- 正常流程: https://www.jianshu.com/p/6a462984ba99
+
+- 无 artifacts 问题: https://blog.csdn.net/zsy3313422/article/details/52583091
+
+- javax.servlet 包不存在的问题: https://blog.csdn.net/qq_41283865/article/details/81865806
+
