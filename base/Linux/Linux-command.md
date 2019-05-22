@@ -132,23 +132,15 @@ xz -zk Dir
 
 lzop 工具最适合在注重压缩速度的场合, 压缩文件时会新建 .lzo 文件, 而原文件保持不变 (使用 -U 选项除外)
 
-```
-`lzop -v test`: # 创建 test.lzo 压缩文件, 输出详细信息, 保留 test 文件不变
+- `lzop -v test`: 创建 test.lzo 压缩文件, 输出详细信息, 保留 test 文件不变
+- `lzop -Uv test`: 创建 test.lzo 压缩文件, 输出详细信息, 删除 test 文件
+- `lzop -t test.lzo`: 测试 test.lzo 压缩文件的完整性
+- `lzop –info test.lzo`: 列出 test.lzo 中各个文件的文件头
+- `lzop -l test.lzo`: 列出 test.lzo 中各个文件的压缩信息
+- `lzop –ls test.lzo`: 列出 test.lzo 文件的内容, 同 ls -l 功能
+- `cat test | lzop > t.lzo`: 压缩标准输入并定向到标准输出
+- `lzop -dv test.lzo`: 解压 test.lzo 得到 test 文件, 输出详细信息, 保留 test.lzo 不变
 
-`lzop -Uv test`: # 创建 test.lzo 压缩文件, 输出详细信息, 删除 test 文件
-
-`lzop -t test.lzo`: # 测试 test.lzo 压缩文件的完整性
-
-`lzop –info test.lzo`: # 列出 test.lzo 中各个文件的文件头
-
-`lzop -l test.lzo`: # 列出 test.lzo 中各个文件的压缩信息
-
-`lzop –ls test.lzo`: # 列出 test.lzo 文件的内容, 同 ls -l 功能
-
-`cat test | lzop > t.lzo`: # 压缩标准输入并定向到标准输出
-
-`lzop -dv test.lzo`: # 解压 test.lzo 得到 test 文件, 输出详细信息, 保留 test.lzo 不变
-```
 
 # 文件编码
 
