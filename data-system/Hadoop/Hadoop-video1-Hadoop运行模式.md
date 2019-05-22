@@ -1171,7 +1171,16 @@ starting datanode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zoz
 
 ### step3 浏览器控制台查看
 
+Hadoop 控制台 URL: http://193.112.38.200:50070
 
+以下为导航栏:
+
+- `Overview`: 总体介绍
+- `Datanodes`: 数据节点
+- `Datanode Volume Failures`: 
+- `Snapshot`: 
+- `Startup Progress`: 
+- `Utilities`: 
 
 ---
 
