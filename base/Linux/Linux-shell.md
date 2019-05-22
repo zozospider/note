@@ -48,3 +48,33 @@ sleep 1h   睡眠1小时
 - `$#`: 添加到 Shell 的参数个数
 - `$0`: Shell 本身文件名
 - `$1 ~ $n`: 添加到 Shell 的各参数值, $1 是第 1 个参数, $2 是第 2 个参数 ...
+
+params.sh 示例
+```bash
+#!/bin/bash
+printf "The complete list is %s\n" "$$"
+printf "The complete list is %s\n" "$!"
+printf "The complete list is %s\n" "$?"
+printf "The complete list is %s\n" "$*"
+printf "The complete list is %s\n" "$@"
+printf "The complete list is %s\n" "$#"
+printf "The complete list is %s\n" "$0"
+printf "The complete list is %s\n" "$1"
+printf "The complete list is %s\n" "$2
+```
+
+脚本执行结果
+```
+[Aric@localhost ~]$ bash params.sh 123456 QQ
+The complete list is 24249
+The complete list is
+The complete list is 0
+The complete list is 123456 QQ
+The complete list is 123456
+The complete list is QQ
+The complete list is 2
+The complete list is params.sh
+The complete list is 123456
+The complete list is QQ
+```
+
