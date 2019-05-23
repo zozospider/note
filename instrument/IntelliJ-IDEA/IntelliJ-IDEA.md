@@ -81,7 +81,7 @@ bogon:note-distributed-zookeeper-video zoz$
 4. 右键 - Git - Commit Directory
 5. 右键 - Git - Repository - Push
 
-# Tomcat 配置
+# Tomcat 配置 (设置自动更新资源, 默认首页打开 URL)
 
 - 正常流程: https://www.jianshu.com/p/6a462984ba99
 
