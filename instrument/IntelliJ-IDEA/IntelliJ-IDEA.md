@@ -89,3 +89,7 @@ bogon:note-distributed-zookeeper-video zoz$
 
 - javax.servlet 包不存在的问题: https://blog.csdn.net/qq_41283865/article/details/81865806
 
+# Tomcat 乱码
+
+- https://blog.csdn.net/weixin_36210698/article/details/79557695
+- https://www.cnblogs.com/vhua/p/idea_1.html
