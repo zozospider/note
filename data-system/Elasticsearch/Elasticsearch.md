@@ -48,3 +48,10 @@ PUT _cluster/settings
 3. 启动 Logstash 6.7.0.
 
 4. 重新部署 Kibana 6.7.0.
+
+# 超时时间
+
+设置超时时间 (默认 30s)
+
+- [ElasticSearch - RestHighLevelClient java.io.IOException: An existing connection was forcibly closed by the remote host](https://stackoverflow.com/questions/51348939/elasticsearch-resthighlevelclient-java-io-ioexception-an-existing-connection)
+- [Elastic Timeouts](https://www.elastic.co/guide/en/elasticsearch/client/java-rest/master/_timeouts.html)
