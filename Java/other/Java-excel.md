@@ -1,7 +1,9 @@
 
-# JAVA使用POI导出海量数据附源码
+# JAVA 使用 POI 导出海量数据附源码
 
-- [JAVA使用POI导出海量数据附源码](https://www.jianshu.com/p/4e873e66ee73)
+- [JAVA 使用 POI 导出海量数据附源码](https://www.jianshu.com/p/4e873e66ee73)
+
+注: 该方式可支持百万级数据导出到 Excel (已测试)
 
 - Maven 依赖
 ```xml
