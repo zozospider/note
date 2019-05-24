@@ -1177,10 +1177,51 @@ Hadoop 控制台 URL: http://193.112.38.200:50070
 
 - `Overview`: 总体介绍
 - `Datanodes`: 数据节点
-- `Datanode Volume Failures`: 
-- `Snapshot`: 
-- `Startup Progress`: 
-- `Utilities`: 
+- `Datanode Volume Failures`: 数据节点故障
+- `Snapshot`: 快照
+- `Startup Progress`: 启动处理
+- `Utilities`: 工具
+  - `Browse the file system`: 浏览文件系统
+	- `Logs`: 日志
+
+### hdfs 命令
+
+- 创建文件夹
+```
+[zozo@VM_0_17_centos hadoop-2.7.2]$ bin/hdfs dfs -mkdir -p /user/zozo/input
+```
+
+- 查看目录
+```
+[zozo@VM_0_17_centos hadoop-2.7.2]$ bin/hdfs dfs -ls /
+Found 1 items
+drwxr-xr-x   - zozo supergroup          0 2019-05-24 20:02 /user
+[zozo@VM_0_17_centos hadoop-2.7.2]$ bin/hdfs dfs -ls -R /
+drwxr-xr-x   - zozo supergroup          0 2019-05-24 20:02 /user
+drwxr-xr-x   - zozo supergroup          0 2019-05-24 20:02 /user/zozo
+drwxr-xr-x   - zozo supergroup          0 2019-05-24 20:02 /user/zozo/input
+```
+
+- 本地文件上传到 HDFS
+```
+[zozo@VM_0_17_centos hadoop-2.7.2]$ ll input-wordcount/
+总用量 4
+-rw-rw-r-- 1 zozo zozo 50 5月  19 21:12 wordcount.input
+[zozo@VM_0_17_centos hadoop-2.7.2]$ bin/hdfs dfs -put input-wordcount/wordcount.input /user/zozo/input
+[zozo@VM_0_17_centos hadoop-2.7.2]$ bin/hdfs dfs -ls -R /
+drwxr-xr-x   - zozo supergroup          0 2019-05-24 20:02 /user
+drwxr-xr-x   - zozo supergroup          0 2019-05-24 20:02 /user/zozo
+drwxr-xr-x   - zozo supergroup          0 2019-05-24 20:08 /user/zozo/input
+-rw-r--r--   1 zozo supergroup         50 2019-05-24 20:08 /user/zozo/input/wordcount.input
+```
+
+查看 HDFS 的文件信息
+
+![image]()
+
+![image]()
+
+- [hadoop问题解决：主机名称更改](https://blog.csdn.net/snowlive/article/details/69662882)
 
 ---
 
