@@ -1169,29 +1169,14 @@ starting datanode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zoz
 [zozo@VM_0_17_centos hadoop-2.7.2]$ 
 ```
 
-### step3 浏览器控制台查看
+### HDFS 命令
 
-Hadoop 控制台 URL: http://193.112.38.200:50070
-
-以下为导航栏:
-
-- `Overview`: 总体介绍
-- `Datanodes`: 数据节点
-- `Datanode Volume Failures`: 数据节点故障
-- `Snapshot`: 快照
-- `Startup Progress`: 启动处理
-- `Utilities`: 工具
-  - `Browse the file system`: 浏览文件系统
-	- `Logs`: 日志
-
-### hdfs 命令
-
-- 创建文件夹
+- HDFS 创建文件夹
 ```
 [zozo@VM_0_17_centos hadoop-2.7.2]$ bin/hdfs dfs -mkdir -p /user/zozo/input
 ```
 
-- 查看目录
+- HDFS 查看目录
 ```
 [zozo@VM_0_17_centos hadoop-2.7.2]$ bin/hdfs dfs -ls /
 Found 1 items
@@ -1214,6 +1199,31 @@ drwxr-xr-x   - zozo supergroup          0 2019-05-24 20:02 /user/zozo
 drwxr-xr-x   - zozo supergroup          0 2019-05-24 20:08 /user/zozo/input
 -rw-r--r--   1 zozo supergroup         50 2019-05-24 20:08 /user/zozo/input/wordcount.input
 ```
+
+- HDFS 查看文件信息
+```
+[zozo@VM_0_17_centos hadoop-2.7.2]$ bin/hdfs dfs -cat /user/zozo/input/wordcount.input
+hadoop yarn
+hadoop mapreduce
+yarn
+zozo zozo
+
+good
+```
+
+### 浏览器控制台查看
+
+Hadoop 控制台 URL: http://193.112.38.200:50070
+
+以下为导航栏:
+- `Overview`: 总体介绍
+- `Datanodes`: 数据节点
+- `Datanode Volume Failures`: 数据节点故障
+- `Snapshot`: 快照
+- `Startup Progress`: 启动处理
+- `Utilities`: 工具
+  - `Browse the file system`: 浏览文件系统
+	- `Logs`: 日志
 
 查看 HDFS 的文件信息
 
