@@ -3,6 +3,16 @@
 
 - [JAVA使用POI导出海量数据附源码](https://www.jianshu.com/p/4e873e66ee73)
 
+- Maven 依赖
+```xml
+<!--poi-ooxml-->
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>3.9</version>
+</dependency>
+```
+
 - ExcelUtile工具类
 ```java
 package com.br.monitor.utils;
