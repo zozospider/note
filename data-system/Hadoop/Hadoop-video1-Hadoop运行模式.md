@@ -993,6 +993,8 @@ zozo	2
 
 ## 启动 HDFS 并运行 MapReduce 程序
 
+注: 需要先配置 hostname 和 host
+
 ### step1 修改配置
 
 - 修改配置 `./etc/hadoop/hadoop-env.sh`
@@ -1009,7 +1011,7 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
 	<!-- 指定 HDFS 中 NameNode 的地址, 默认 file:/// -->
 	<property>
 		<name>fs.defaultFS</name>
-		<value>hdfs://172.16.0.17:9000</value>
+		<value>hdfs://vm017:9000</value>
 	</property>
 
 	<!-- 指定 Hadoop 运行时产生文件的存储目录, 默认 /tmp/hadoop-${user.name} -->
