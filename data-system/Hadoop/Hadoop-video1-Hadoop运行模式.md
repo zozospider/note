@@ -1122,7 +1122,7 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
 </configuration>
 ```
 
-### 2.1.2 step2 启动集群
+### 2.1.2 step2 启动 HDFS (NameNode, DataNode)
 
 - 格式化 NameNode (首次启动)
 
@@ -1359,14 +1359,9 @@ layoutVersion=-56
 ```
 [zozo@vm017 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start namenode
 starting namenode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-namenode-vm017.out
-[zozo@vm017 hadoop-2.7.2]$ 
-```
-
-完成后查看 Java 进程:
-```
 [zozo@vm017 hadoop-2.7.2]$ jps -m -l
 22034 org.apache.hadoop.hdfs.server.namenode.NameNode
-[zozo@vm017 hadoop-2.7.2]$
+[zozo@vm017 hadoop-2.7.2]$ 
 ```
 
 - 启动 DataNode (守护进程)
@@ -1374,11 +1369,6 @@ starting namenode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zoz
 ```
 [zozo@vm017 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start datanode
 starting datanode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-datanode-vm017.out
-[zozo@vm017 hadoop-2.7.2]$ 
-```
-
-完成后查看 Java 进程:
-```
 [zozo@vm017 hadoop-2.7.2]$ jps -m -l
 22034 org.apache.hadoop.hdfs.server.namenode.NameNode
 22282 org.apache.hadoop.hdfs.server.datanode.DataNode
@@ -1427,9 +1417,9 @@ zozo zozo
 good
 ```
 
-## 2.3 浏览器控制台查看
+## 2.3 浏览器查看 HDFS
 
-Hadoop 控制台 URL: http://193.112.38.200:50070
+HDFS 控制台 URL: http://193.112.38.200:50070
 
 以下为导航栏:
 - `Overview`: 总体介绍
@@ -1670,7 +1660,7 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
   <!-- 指定 MapReduce 运行在 YARN 上 -->
   <property>
     <name>mapreduce.framework.name</name>
-    <value>vm017</value>
+    <value>yarn</value>
     <!-- value: local -->
     <description>
       The runtime framework for executing MapReduce jobs. Can be one of local, classic or yarn.
@@ -1679,6 +1669,44 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
 
 </configuration>
 ```
+
+### 2.5.7 step2 启动 YARN (ResourceManager, NodeManager)
+
+- 启动 ResourceManager (守护进程)
+
+```
+[zozo@vm017 hadoop-2.7.2]$ sbin/yarn-daemon.sh start resourcemanager
+starting resourcemanager, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/yarn-zozo-resourcemanager-vm017.out
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+32245 org.apache.hadoop.yarn.server.resourcemanager.ResourceManager
+32474 sun.tools.jps.Jps -m -l
+8975 org.apache.hadoop.hdfs.server.namenode.NameNode
+9119 org.apache.hadoop.hdfs.server.datanode.DataNode
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- 启动 NodeManager (守护进程)
+
+```
+[zozo@vm017 hadoop-2.7.2]$ sbin/yarn-daemon.sh start nodemanager
+starting nodemanager, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/yarn-zozo-nodemanager-vm017.out
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+32245 org.apache.hadoop.yarn.server.resourcemanager.ResourceManager
+32521 org.apache.hadoop.yarn.server.nodemanager.NodeManager
+32652 sun.tools.jps.Jps -m -l
+8975 org.apache.hadoop.hdfs.server.namenode.NameNode
+9119 org.apache.hadoop.hdfs.server.datanode.DataNode
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+## 2.6 浏览器查看 YARN
+
+YARN 控制台 URL: http://193.112.38.200:8088
+
+以下为初始化首页
+
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BHDFS-1.png?raw=true)
+
 
 ---
 
