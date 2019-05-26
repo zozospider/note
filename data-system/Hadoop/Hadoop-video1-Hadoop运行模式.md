@@ -811,7 +811,7 @@ org.apache.hadoop.mapred.FileAlreadyExistsException: Output directory file:/home
 [zozo@VM_0_17_centos hadoop-2.7.2]$ 
 ```
 
-# WordCount 案例
+## WordCount 案例
 
 统计单词出现到次数.
 
@@ -992,7 +992,7 @@ zozo	2
 - [mapred-default.xml](http://hadoop.apache.org/docs/r2.7.2/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml)
 - [yarn-default.xml](http://hadoop.apache.org/docs/r2.7.2/hadoop-yarn/hadoop-yarn-common/yarn-default.xml)
 
-## 启动 HDFS 并运行 MapReduce 程序
+## 启动 HDFS
 
 注: 需要先配置 hostname 和 host
 
@@ -1271,7 +1271,7 @@ starting datanode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zoz
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-### HDFS 命令
+## HDFS 命令
 
 - HDFS 创建文件夹
 ```
@@ -1313,7 +1313,7 @@ zozo zozo
 good
 ```
 
-### 浏览器控制台查看
+## 浏览器控制台查看
 
 Hadoop 控制台 URL: http://193.112.38.200:50070
 
@@ -1332,6 +1332,138 @@ Hadoop 控制台 URL: http://193.112.38.200:50070
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BHDFS-1.png?raw=true)
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BHDFS-2.png?raw=true)
+
+## WordCount 案例
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.2.jar wordcount /user/zozo/input-wordcount /user/zozo/output-wordcount
+19/05/26 19:52:47 INFO Configuration.deprecation: session.id is deprecated. Instead, use dfs.metrics.session-id
+19/05/26 19:52:47 INFO jvm.JvmMetrics: Initializing JVM Metrics with processName=JobTracker, sessionId=
+19/05/26 19:52:48 INFO input.FileInputFormat: Total input paths to process : 1
+19/05/26 19:52:48 INFO mapreduce.JobSubmitter: number of splits:1
+19/05/26 19:52:48 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_local1405270075_0001
+19/05/26 19:52:48 INFO mapreduce.Job: The url to track the job: http://localhost:8080/
+19/05/26 19:52:48 INFO mapreduce.Job: Running job: job_local1405270075_0001
+19/05/26 19:52:48 INFO mapred.LocalJobRunner: OutputCommitter set in config null
+19/05/26 19:52:48 INFO output.FileOutputCommitter: File Output Committer Algorithm version is 1
+19/05/26 19:52:48 INFO mapred.LocalJobRunner: OutputCommitter is org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter
+19/05/26 19:52:48 INFO mapred.LocalJobRunner: Waiting for map tasks
+19/05/26 19:52:48 INFO mapred.LocalJobRunner: Starting task: attempt_local1405270075_0001_m_000000_0
+19/05/26 19:52:48 INFO output.FileOutputCommitter: File Output Committer Algorithm version is 1
+19/05/26 19:52:48 INFO mapred.Task:  Using ResourceCalculatorProcessTree : [ ]
+19/05/26 19:52:48 INFO mapred.MapTask: Processing split: hdfs://vm017:9000/user/zozo/input-wordcount/wordcount.input:0+50
+19/05/26 19:52:49 INFO mapred.MapTask: (EQUATOR) 0 kvi 26214396(104857584)
+19/05/26 19:52:49 INFO mapred.MapTask: mapreduce.task.io.sort.mb: 100
+19/05/26 19:52:49 INFO mapred.MapTask: soft limit at 83886080
+19/05/26 19:52:49 INFO mapred.MapTask: bufstart = 0; bufvoid = 104857600
+19/05/26 19:52:49 INFO mapred.MapTask: kvstart = 26214396; length = 6553600
+19/05/26 19:52:49 INFO mapred.MapTask: Map output collector class = org.apache.hadoop.mapred.MapTask$MapOutputBuffer
+19/05/26 19:52:49 INFO mapred.LocalJobRunner: 
+19/05/26 19:52:49 INFO mapred.MapTask: Starting flush of map output
+19/05/26 19:52:49 INFO mapred.MapTask: Spilling map output
+19/05/26 19:52:49 INFO mapred.MapTask: bufstart = 0; bufend = 81; bufvoid = 104857600
+19/05/26 19:52:49 INFO mapred.MapTask: kvstart = 26214396(104857584); kvend = 26214368(104857472); length = 29/6553600
+19/05/26 19:52:49 INFO mapred.MapTask: Finished spill 0
+19/05/26 19:52:49 INFO mapred.Task: Task:attempt_local1405270075_0001_m_000000_0 is done. And is in the process of committing
+19/05/26 19:52:49 INFO mapred.LocalJobRunner: map
+19/05/26 19:52:49 INFO mapred.Task: Task 'attempt_local1405270075_0001_m_000000_0' done.
+19/05/26 19:52:49 INFO mapred.LocalJobRunner: Finishing task: attempt_local1405270075_0001_m_000000_0
+19/05/26 19:52:49 INFO mapred.LocalJobRunner: map task executor complete.
+19/05/26 19:52:49 INFO mapred.LocalJobRunner: Waiting for reduce tasks
+19/05/26 19:52:49 INFO mapred.LocalJobRunner: Starting task: attempt_local1405270075_0001_r_000000_0
+19/05/26 19:52:49 INFO output.FileOutputCommitter: File Output Committer Algorithm version is 1
+19/05/26 19:52:49 INFO mapred.Task:  Using ResourceCalculatorProcessTree : [ ]
+19/05/26 19:52:49 INFO mapred.ReduceTask: Using ShuffleConsumerPlugin: org.apache.hadoop.mapreduce.task.reduce.Shuffle@31ef8b56
+19/05/26 19:52:49 INFO reduce.MergeManagerImpl: MergerManager: memoryLimit=334338464, maxSingleShuffleLimit=83584616, mergeThreshold=220663392, ioSortFactor=10, memToMemMergeOutputsThreshold=10
+19/05/26 19:52:49 INFO reduce.EventFetcher: attempt_local1405270075_0001_r_000000_0 Thread started: EventFetcher for fetching Map Completion Events
+19/05/26 19:52:49 INFO reduce.LocalFetcher: localfetcher#1 about to shuffle output of map attempt_local1405270075_0001_m_000000_0 decomp: 64 len: 68 to MEMORY
+19/05/26 19:52:49 INFO reduce.InMemoryMapOutput: Read 64 bytes from map-output for attempt_local1405270075_0001_m_000000_0
+19/05/26 19:52:49 INFO reduce.MergeManagerImpl: closeInMemoryFile -> map-output of size: 64, inMemoryMapOutputs.size() -> 1, commitMemory -> 0, usedMemory ->64
+19/05/26 19:52:49 WARN io.ReadaheadPool: Failed readahead on ifile
+EBADF: Bad file descriptor
+	at org.apache.hadoop.io.nativeio.NativeIO$POSIX.posix_fadvise(Native Method)
+	at org.apache.hadoop.io.nativeio.NativeIO$POSIX.posixFadviseIfPossible(NativeIO.java:267)
+	at org.apache.hadoop.io.nativeio.NativeIO$POSIX$CacheManipulator.posixFadviseIfPossible(NativeIO.java:146)
+	at org.apache.hadoop.io.ReadaheadPool$ReadaheadRequestImpl.run(ReadaheadPool.java:206)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+19/05/26 19:52:49 INFO reduce.EventFetcher: EventFetcher is interrupted.. Returning
+19/05/26 19:52:49 INFO mapred.LocalJobRunner: 1 / 1 copied.
+19/05/26 19:52:49 INFO reduce.MergeManagerImpl: finalMerge called with 1 in-memory map-outputs and 0 on-disk map-outputs
+19/05/26 19:52:49 INFO mapred.Merger: Merging 1 sorted segments
+19/05/26 19:52:49 INFO mapred.Merger: Down to the last merge-pass, with 1 segments left of total size: 57 bytes
+19/05/26 19:52:49 INFO reduce.MergeManagerImpl: Merged 1 segments, 64 bytes to disk to satisfy reduce memory limit
+19/05/26 19:52:49 INFO reduce.MergeManagerImpl: Merging 1 files, 68 bytes from disk
+19/05/26 19:52:49 INFO reduce.MergeManagerImpl: Merging 0 segments, 0 bytes from memory into reduce
+19/05/26 19:52:49 INFO mapred.Merger: Merging 1 sorted segments
+19/05/26 19:52:49 INFO mapred.Merger: Down to the last merge-pass, with 1 segments left of total size: 57 bytes
+19/05/26 19:52:49 INFO mapred.LocalJobRunner: 1 / 1 copied.
+19/05/26 19:52:49 INFO Configuration.deprecation: mapred.skip.on is deprecated. Instead, use mapreduce.job.skiprecords
+19/05/26 19:52:49 INFO mapred.Task: Task:attempt_local1405270075_0001_r_000000_0 is done. And is in the process of committing
+19/05/26 19:52:49 INFO mapred.LocalJobRunner: 1 / 1 copied.
+19/05/26 19:52:49 INFO mapred.Task: Task attempt_local1405270075_0001_r_000000_0 is allowed to commit now
+19/05/26 19:52:49 INFO output.FileOutputCommitter: Saved output of task 'attempt_local1405270075_0001_r_000000_0' to hdfs://vm017:9000/user/zozo/output-wordcount/_temporary/0/task_local1405270075_0001_r_000000
+19/05/26 19:52:49 INFO mapred.LocalJobRunner: reduce > reduce
+19/05/26 19:52:49 INFO mapred.Task: Task 'attempt_local1405270075_0001_r_000000_0' done.
+19/05/26 19:52:49 INFO mapred.LocalJobRunner: Finishing task: attempt_local1405270075_0001_r_000000_0
+19/05/26 19:52:49 INFO mapred.LocalJobRunner: reduce task executor complete.
+19/05/26 19:52:49 INFO mapreduce.Job: Job job_local1405270075_0001 running in uber mode : false
+19/05/26 19:52:49 INFO mapreduce.Job:  map 100% reduce 100%
+19/05/26 19:52:49 INFO mapreduce.Job: Job job_local1405270075_0001 completed successfully
+19/05/26 19:52:49 INFO mapreduce.Job: Counters: 35
+	File System Counters
+		FILE: Number of bytes read=547388
+		FILE: Number of bytes written=1149896
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=100
+		HDFS: Number of bytes written=42
+		HDFS: Number of read operations=13
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=4
+	Map-Reduce Framework
+		Map input records=6
+		Map output records=8
+		Map output bytes=81
+		Map output materialized bytes=68
+		Input split bytes=124
+		Combine input records=8
+		Combine output records=5
+		Reduce input groups=5
+		Reduce shuffle bytes=68
+		Reduce input records=5
+		Reduce output records=5
+		Spilled Records=10
+		Shuffled Maps =1
+		Failed Shuffles=0
+		Merged Map outputs=1
+		GC time elapsed (ms)=0
+		Total committed heap usage (bytes)=545259520
+	Shuffle Errors
+		BAD_ID=0
+		CONNECTION=0
+		IO_ERROR=0
+		WRONG_LENGTH=0
+		WRONG_MAP=0
+		WRONG_REDUCE=0
+	File Input Format Counters 
+		Bytes Read=50
+	File Output Format Counters 
+		Bytes Written=42
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfs -ls /user/zozo/output-wordcount
+Found 2 items
+-rw-r--r--   1 zozo supergroup          0 2019-05-26 19:52 /user/zozo/output-wordcount/_SUCCESS
+-rw-r--r--   1 zozo supergroup         42 2019-05-26 19:52 /user/zozo/output-wordcount/part-r-00000
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfs -cat /user/zozo/output-wordcount/part-r-00000
+good	1
+hadoop	2
+mapreduce	1
+yarn	2
+zozo	2
+[zozo@vm017 hadoop-2.7.2]$ 
+```
 
 ---
 
