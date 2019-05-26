@@ -1440,6 +1440,9 @@ HDFS 控制台 URL: http://193.112.38.200:50070
 ## 2.4 WordCount 案例
 
 ```
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfs -ls /user/zozo/input-wordcount
+Found 1 items
+-rw-r--r--   1 zozo supergroup         50 2019-05-26 18:30 /user/zozo/input-wordcount/wordcount.input
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.2.jar wordcount /user/zozo/input-wordcount /user/zozo/output-wordcount
 19/05/26 19:52:47 INFO Configuration.deprecation: session.id is deprecated. Instead, use dfs.metrics.session-id
 19/05/26 19:52:47 INFO jvm.JvmMetrics: Initializing JVM Metrics with processName=JobTracker, sessionId=
@@ -1706,6 +1709,105 @@ YARN 控制台 URL: http://193.112.38.200:8088
 以下为初始化首页
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BYARN-1.png?raw=true)
+
+## 2.7 WordCount 案例
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfs -ls /user/zozo/input-wordcount
+Found 1 items
+-rw-r--r--   1 zozo supergroup         50 2019-05-26 18:30 /user/zozo/input-wordcount/wordcount.input
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.2.jar wordcount /user/zozo/input-wordcount /user/zozo/output-wordcount-2
+19/05/26 23:04:00 INFO client.RMProxy: Connecting to ResourceManager at vm017/172.16.0.17:8032
+19/05/26 23:04:01 INFO input.FileInputFormat: Total input paths to process : 1
+19/05/26 23:04:02 INFO mapreduce.JobSubmitter: number of splits:1
+19/05/26 23:04:02 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1558881403273_0001
+19/05/26 23:04:03 INFO impl.YarnClientImpl: Submitted application application_1558881403273_0001
+19/05/26 23:04:03 INFO mapreduce.Job: The url to track the job: http://vm017:8088/proxy/application_1558881403273_0001/
+19/05/26 23:04:03 INFO mapreduce.Job: Running job: job_1558881403273_0001
+19/05/26 23:04:14 INFO mapreduce.Job: Job job_1558881403273_0001 running in uber mode : false
+19/05/26 23:04:14 INFO mapreduce.Job:  map 0% reduce 0%
+19/05/26 23:04:20 INFO mapreduce.Job:  map 100% reduce 0%
+19/05/26 23:04:25 INFO mapreduce.Job:  map 100% reduce 100%
+19/05/26 23:04:26 INFO mapreduce.Job: Job job_1558881403273_0001 completed successfully
+19/05/26 23:04:26 INFO mapreduce.Job: Counters: 49
+	File System Counters
+		FILE: Number of bytes read=68
+		FILE: Number of bytes written=235105
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=174
+		HDFS: Number of bytes written=42
+		HDFS: Number of read operations=6
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=2
+	Job Counters 
+		Launched map tasks=1
+		Launched reduce tasks=1
+		Data-local map tasks=1
+		Total time spent by all maps in occupied slots (ms)=3349
+		Total time spent by all reduces in occupied slots (ms)=2936
+		Total time spent by all map tasks (ms)=3349
+		Total time spent by all reduce tasks (ms)=2936
+		Total vcore-milliseconds taken by all map tasks=3349
+		Total vcore-milliseconds taken by all reduce tasks=2936
+		Total megabyte-milliseconds taken by all map tasks=3429376
+		Total megabyte-milliseconds taken by all reduce tasks=3006464
+	Map-Reduce Framework
+		Map input records=6
+		Map output records=8
+		Map output bytes=81
+		Map output materialized bytes=68
+		Input split bytes=124
+		Combine input records=8
+		Combine output records=5
+		Reduce input groups=5
+		Reduce shuffle bytes=68
+		Reduce input records=5
+		Reduce output records=5
+		Spilled Records=10
+		Shuffled Maps =1
+		Failed Shuffles=0
+		Merged Map outputs=1
+		GC time elapsed (ms)=338
+		CPU time spent (ms)=1500
+		Physical memory (bytes) snapshot=427196416
+		Virtual memory (bytes) snapshot=4209008640
+		Total committed heap usage (bytes)=302514176
+	Shuffle Errors
+		BAD_ID=0
+		CONNECTION=0
+		IO_ERROR=0
+		WRONG_LENGTH=0
+		WRONG_MAP=0
+		WRONG_REDUCE=0
+	File Input Format Counters 
+		Bytes Read=50
+	File Output Format Counters 
+		Bytes Written=42
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfs -ls /user/zozo/output-wordcount-2
+Found 2 items
+-rw-r--r--   1 zozo supergroup          0 2019-05-26 23:04 /user/zozo/output-wordcount-2/_SUCCESS
+-rw-r--r--   1 zozo supergroup         42 2019-05-26 23:04 /user/zozo/output-wordcount-2/part-r-00000
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfs -cat /user/zozo/output-wordcount-2/part-r-00000
+good	1
+hadoop	2
+mapreduce	1
+yarn	2
+zozo	2
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+在此过程中通过浏览器查看 YARN 的相关信息, 可监控到作业运行中的如下变化:
+
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BYARN-1.png?raw=true)
+
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BYARN-1.png?raw=true)
+
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BYARN-1.png?raw=true)
+
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BYARN-1.png?raw=true)
+
 
 
 ---
