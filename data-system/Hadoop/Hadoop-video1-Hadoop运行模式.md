@@ -1159,6 +1159,8 @@ drwxrwxr-x 2 zozo zozo 4096 5月  22 21:19 current
 
 将 `./etc/hadoop/hdfs-site.xml` 配置的的 `dfs.namenode.name.dir` 和 `dfs.datanode.data.dir` 这两个指定目录删除.
 
+注: 需要将 name 和 data 文件夹都删除, 否则可能出现 namenode 和 datanode 的 clusterID (集群 ID) 不一致的情况.
+
 将 ``./etc/hadoop/core-site.xml`` 配置的 `fs.defaultFS` 这个指定目录删除.
 
 执行命令 `bin/hdfs namenode -format`, 完成后数据被全部清除, 产生一个新的 HDFS.
@@ -1238,6 +1240,44 @@ Formatting using clusterid: CID-1267ccd5-4b0b-4a85-b0b5-d97decec672a
 SHUTDOWN_MSG: Shutting down NameNode at vm017/172.16.0.17
 ************************************************************/
 [zozo@vm017 hadoop-2.7.2]$ 
+```
+
+完成后查看 data 目录, 有如下文件产生, 正常情况下, name 和 data 文件夹下的 clusterID 会一致:
+```
+[zozo@vm017 current]$ pwd
+/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/name/current
+[zozo@vm017 current]$ ll
+总用量 1044
+-rw-rw-r-- 1 zozo zozo 1048576 5月  26 19:52 edits_inprogress_0000000000000000001
+-rw-rw-r-- 1 zozo zozo     351 5月  26 18:22 fsimage_0000000000000000000
+-rw-rw-r-- 1 zozo zozo      62 5月  26 18:22 fsimage_0000000000000000000.md5
+-rw-rw-r-- 1 zozo zozo       2 5月  26 18:26 seen_txid
+-rw-rw-r-- 1 zozo zozo     203 5月  26 18:22 VERSION
+[zozo@vm017 current]$ cat VERSION 
+#Sun May 26 18:22:20 CST 2019
+namespaceID=530423119
+clusterID=CID-1267ccd5-4b0b-4a85-b0b5-d97decec672a
+cTime=0
+storageType=NAME_NODE
+blockpoolID=BP-1771539892-172.16.0.17-1558866140038
+layoutVersion=-63
+[zozo@vm017 current]$ 
+
+[zozo@vm017 current]$ pwd
+/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data/current
+[zozo@vm017 current]$ ll
+总用量 8
+drwx------ 4 zozo zozo 4096 5月  26 18:27 BP-1771539892-172.16.0.17-1558866140038
+-rw-rw-r-- 1 zozo zozo  229 5月  26 18:27 VERSION
+[zozo@vm017 current]$ cat VERSION 
+#Sun May 26 18:27:14 CST 2019
+storageID=DS-e526874a-f794-4ad3-8262-cadcdc4d47df
+clusterID=CID-1267ccd5-4b0b-4a85-b0b5-d97decec672a
+cTime=0
+datanodeUuid=4dd7eacb-8177-41ee-8986-5b5092b00e69
+storageType=DATA_NODE
+layoutVersion=-56
+[zozo@vm017 current]$ 
 ```
 
 - 启动 NameNode (守护进程)
@@ -1464,6 +1504,8 @@ yarn	2
 zozo	2
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
+
+
 
 ---
 
