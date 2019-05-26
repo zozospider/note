@@ -1,8 +1,9 @@
 
 # 本地运行模式
 
-- 文档: https://hadoop.apache.org/docs/r2.7.2/
+在本地运行模式 (默认运行模式) 下, Hadoop 读取本地文件 (而非 HDFS) 并将结果输出到本地路径 (而非 HDFS) 下.
 
+- 文档: https://hadoop.apache.org/docs/r2.7.2/hadoop-project-dist/hadoop-common/SingleCluster.html
 
 ## Grep 案例
 
@@ -1326,7 +1327,7 @@ Hadoop 控制台 URL: http://193.112.38.200:50070
   - `Browse the file system`: 浏览文件系统
 	- `Logs`: 日志
 
-查看 HDFS 的文件信息
+以下为通过 `Utilities` - `Browse the file system` 查看 HDFS 的文件信息
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BHDFS-1.png?raw=true)
 
