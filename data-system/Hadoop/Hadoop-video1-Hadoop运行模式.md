@@ -1,11 +1,22 @@
+- [一. 本地运行模式](#一-本地运行模式)
+    - [1.1 Grep 案例](#11-grep-案例)
+    - [1.2 WordCount 案例](#12-wordcount-案例)
+- [二. 伪分布式运行模式](#二-伪分布式运行模式)
+    - [2.1 启动 HDFS](#21-启动-hdfs)
+        - [2.1.1 step1 修改配置](#211-step1-修改配置)
+        - [2.1.2 step2 启动集群](#212-step2-启动集群)
+    - [2.2 HDFS 命令](#22-hdfs-命令)
+    - [2.3 浏览器控制台查看](#23-浏览器控制台查看)
+    - [2.4 WordCount 案例](#24-wordcount-案例)
+- [三. 完全分布式运行模式](#三-完全分布式运行模式)
 
-# 本地运行模式
+# 一. 本地运行模式
 
 在本地运行模式 (默认运行模式) 下, Hadoop 读取本地文件 (而非 HDFS) 并将结果输出到本地路径 (而非 HDFS) 下.
 
 - 文档: https://hadoop.apache.org/docs/r2.7.2/hadoop-project-dist/hadoop-common/SingleCluster.html
 
-## Grep 案例
+## 1.1 Grep 案例
 
 拷贝一些 xml 文件到 input 文件夹下作为输入数据, 通过官方提供的 grep 案例, 找出 input 文件夹中符合正则表达式等文件内容, 将符合的内容输出到 output 文件夹下.
 
@@ -811,7 +822,7 @@ org.apache.hadoop.mapred.FileAlreadyExistsException: Output directory file:/home
 [zozo@VM_0_17_centos hadoop-2.7.2]$ 
 ```
 
-## WordCount 案例
+## 1.2 WordCount 案例
 
 统计单词出现到次数.
 
@@ -984,7 +995,7 @@ zozo	2
 
 ---
 
-# 伪分布式运行模式
+# 二. 伪分布式运行模式
 
 配置文件说明:
 - [core-default.xml](http://hadoop.apache.org/docs/r2.7.2/hadoop-project-dist/hadoop-common/core-default.xml)
@@ -992,11 +1003,11 @@ zozo	2
 - [mapred-default.xml](http://hadoop.apache.org/docs/r2.7.2/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml)
 - [yarn-default.xml](http://hadoop.apache.org/docs/r2.7.2/hadoop-yarn/hadoop-yarn-common/yarn-default.xml)
 
-## 启动 HDFS
+## 2.1 启动 HDFS
 
 注: 需要先配置 hostname 和 host
 
-### step1 修改配置
+### 2.1.1 step1 修改配置
 
 - 修改配置 `./etc/hadoop/hadoop-env.sh`
 ```bash
@@ -1048,7 +1059,7 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
 </configuration>
 ```
 
-### step2 启动集群
+### 2.1.2 step2 启动集群
 
 - 格式化 NameNode (首次启动)
 
@@ -1311,7 +1322,7 @@ starting datanode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zoz
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-## HDFS 命令
+## 2.2 HDFS 命令
 
 - HDFS 创建文件夹
 ```
@@ -1353,7 +1364,7 @@ zozo zozo
 good
 ```
 
-## 浏览器控制台查看
+## 2.3 浏览器控制台查看
 
 Hadoop 控制台 URL: http://193.112.38.200:50070
 
@@ -1373,7 +1384,7 @@ Hadoop 控制台 URL: http://193.112.38.200:50070
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BHDFS-2.png?raw=true)
 
-## WordCount 案例
+## 2.4 WordCount 案例
 
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.2.jar wordcount /user/zozo/input-wordcount /user/zozo/output-wordcount
@@ -1505,10 +1516,12 @@ zozo	2
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
+## 2.5 启动 YARN 并运行 MapReduce 程序
+
 
 
 ---
 
-# 完全分布式运行模式
+# 三. 完全分布式运行模式
 
 ---
