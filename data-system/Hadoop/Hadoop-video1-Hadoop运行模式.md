@@ -1022,6 +1022,24 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
 
 - 修改配置 `./etc/hadoop/core-site.xml`
 ```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
 <configuration>
   <!-- 指定 HDFS 中 NameNode 的地址, 默认 file:/// -->
   <property>
@@ -1045,6 +1063,24 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
 
 - 修改配置 `./etc/hadoop/hdfs-site.xml` (可选)
 ```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
 <configuration>
   <!-- 指定 HDFS 副本数, 默认 3 -->
   <property>
@@ -1553,8 +1589,22 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
 - 修改配置 `./etc/hadoop/yarn-site.xml`
 
 ```xml
+<?xml version="1.0"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
 <configuration>
- <!-- Reducer 获取数据的方式, 默认无 -->
+  <!-- Reducer 获取数据的方式, 默认无 -->
   <property>
     <name>yarn.nodemanager.aux-services</name>
     <value>mapreduce_shuffle</value>
