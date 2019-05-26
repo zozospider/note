@@ -2,13 +2,19 @@
     - [1.1 Grep 案例](#11-grep-案例)
     - [1.2 WordCount 案例](#12-wordcount-案例)
 - [二. 伪分布式运行模式](#二-伪分布式运行模式)
-    - [2.1 启动 HDFS](#21-启动-hdfs)
+    - [2.1 启动 HDFS 并运行 MapReduce 程序](#21-启动-hdfs-并运行-mapreduce-程序)
         - [2.1.1 step1 修改配置](#211-step1-修改配置)
-        - [2.1.2 step2 启动集群](#212-step2-启动集群)
+        - [2.1.2 step2 启动 HDFS (NameNode, DataNode)](#212-step2-启动-hdfs-namenode-datanode)
     - [2.2 HDFS 命令](#22-hdfs-命令)
-    - [2.3 浏览器控制台查看](#23-浏览器控制台查看)
+    - [2.3 浏览器查看 HDFS](#23-浏览器查看-hdfs)
     - [2.4 WordCount 案例](#24-wordcount-案例)
+    - [2.5 启动 YARN 并运行 MapReduce 程序](#25-启动-yarn-并运行-mapreduce-程序)
+        - [2.5.6 step1 修改配置](#256-step1-修改配置)
+        - [2.5.7 step2 启动 YARN (ResourceManager, NodeManager)](#257-step2-启动-yarn-resourcemanager-nodemanager)
+    - [2.6 浏览器查看 YARN](#26-浏览器查看-yarn)
+    - [2.7 WordCount 案例](#27-wordcount-案例)
 - [三. 完全分布式运行模式](#三-完全分布式运行模式)
+
 
 # 一. 本地运行模式
 
@@ -1003,7 +1009,7 @@ zozo	2
 - [mapred-default.xml](http://hadoop.apache.org/docs/r2.7.2/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml)
 - [yarn-default.xml](http://hadoop.apache.org/docs/r2.7.2/hadoop-yarn/hadoop-yarn-common/yarn-default.xml)
 
-## 2.1 启动 HDFS
+## 2.1 启动 HDFS 并运行 MapReduce 程序
 
 注: 需要先配置 hostname 和 host
 
@@ -1800,14 +1806,13 @@ zozo	2
 
 在此过程中通过浏览器查看 YARN 的相关信息, 可监控到作业运行中的如下变化:
 
-![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BYARN-1.png?raw=true)
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BYARN-wordcount1.png?raw=true)
 
-![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BYARN-1.png?raw=true)
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BYARN-wordcount2.png?raw=true)
 
-![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BYARN-1.png?raw=true)
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BYARN-wordcount3.png?raw=true)
 
-![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BYARN-1.png?raw=true)
-
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BYARN-wordcount4.png?raw=true)
 
 
 ---
