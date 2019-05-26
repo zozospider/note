@@ -5,16 +5,15 @@
     - [2.1 启动 HDFS 并运行 MapReduce 程序](#21-启动-hdfs-并运行-mapreduce-程序)
         - [2.1.1 step1 修改配置](#211-step1-修改配置)
         - [2.1.2 step2 启动 HDFS (NameNode, DataNode)](#212-step2-启动-hdfs-namenode-datanode)
-    - [2.2 HDFS 命令](#22-hdfs-命令)
-    - [2.3 浏览器查看 HDFS](#23-浏览器查看-hdfs)
-    - [2.4 WordCount 案例](#24-wordcount-案例)
-    - [2.5 启动 YARN 并运行 MapReduce 程序](#25-启动-yarn-并运行-mapreduce-程序)
-        - [2.5.6 step1 修改配置](#256-step1-修改配置)
-        - [2.5.7 step2 启动 YARN (ResourceManager, NodeManager)](#257-step2-启动-yarn-resourcemanager-nodemanager)
-    - [2.6 浏览器查看 YARN](#26-浏览器查看-yarn)
-    - [2.7 WordCount 案例](#27-wordcount-案例)
+        - [2.1.3 HDFS 命令](#213-hdfs-命令)
+        - [2.1.4 浏览器查看 HDFS](#214-浏览器查看-hdfs)
+        - [2.1.5 WordCount 案例](#215-wordcount-案例)
+    - [2.2 启动 YARN 并运行 MapReduce 程序](#22-启动-yarn-并运行-mapreduce-程序)
+        - [2.2.1 step1 修改配置](#221-step1-修改配置)
+        - [2.2.2 step2 启动 YARN (ResourceManager, NodeManager)](#222-step2-启动-yarn-resourcemanager-nodemanager)
+        - [2.2.3 浏览器查看 YARN](#223-浏览器查看-yarn)
+        - [2.2.4 WordCount 案例](#224-wordcount-案例)
 - [三. 完全分布式运行模式](#三-完全分布式运行模式)
-
 
 # 一. 本地运行模式
 
@@ -1381,7 +1380,7 @@ starting datanode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zoz
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-## 2.2 HDFS 命令
+### 2.1.3 HDFS 命令
 
 - HDFS 创建文件夹
 ```
@@ -1423,7 +1422,7 @@ zozo zozo
 good
 ```
 
-## 2.3 浏览器查看 HDFS
+### 2.1.4 浏览器查看 HDFS
 
 HDFS 控制台 URL: http://193.112.38.200:50070
 
@@ -1443,7 +1442,7 @@ HDFS 控制台 URL: http://193.112.38.200:50070
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BHDFS-2.png?raw=true)
 
-## 2.4 WordCount 案例
+### 2.1.5 WordCount 案例
 
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfs -ls /user/zozo/input-wordcount
@@ -1578,9 +1577,9 @@ zozo	2
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-## 2.5 启动 YARN 并运行 MapReduce 程序
+## 2.2 启动 YARN 并运行 MapReduce 程序
 
-### 2.5.6 step1 修改配置
+### 2.2.1 step1 修改配置
 
 - 修改配置 `./etc/hadoop/yarn-env.sh`
 
@@ -1679,7 +1678,7 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
 </configuration>
 ```
 
-### 2.5.7 step2 启动 YARN (ResourceManager, NodeManager)
+### 2.2.2 step2 启动 YARN (ResourceManager, NodeManager)
 
 - 启动 ResourceManager (守护进程)
 
@@ -1708,7 +1707,7 @@ starting nodemanager, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/yarn-zo
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-## 2.6 浏览器查看 YARN
+### 2.2.3 浏览器查看 YARN
 
 YARN 控制台 URL: http://193.112.38.200:8088
 
@@ -1716,7 +1715,7 @@ YARN 控制台 URL: http://193.112.38.200:8088
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BYARN-1.png?raw=true)
 
-## 2.7 WordCount 案例
+### 2.2.4 WordCount 案例
 
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfs -ls /user/zozo/input-wordcount
