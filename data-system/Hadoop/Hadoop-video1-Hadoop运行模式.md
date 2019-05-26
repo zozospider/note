@@ -1023,53 +1023,59 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
 - 修改配置 `./etc/hadoop/core-site.xml`
 ```xml
 <configuration>
-	<!-- 指定 HDFS 中 NameNode 的地址, 默认 file:/// -->
-	<property>
-		<name>fs.defaultFS</name>
-		<value>hdfs://vm017:9000</value>
-	</property>
+  <!-- 指定 HDFS 中 NameNode 的地址, 默认 file:/// -->
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://vm017:9000</value>
+    <description>
+      The name of the default file system. A URI whose scheme and authority determine the FileSystem implementation. The uri's scheme determines the config property (fs.SCHEME.impl) naming the FileSystem implementation class. The uri's authority is used to determine the host, port, etc. for a filesystem.
+    </description>
+  </property>
 
-	<!-- 指定 Hadoop 运行时产生文件的存储目录, 默认 /tmp/hadoop-${user.name} -->
-	<property>
-		<name>hadoop.tmp.dir</name>
-		<value>/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp</value>
-	</property>
+  <!-- 指定 Hadoop 运行时产生文件的存储目录, 默认 /tmp/hadoop-${user.name} -->
+  <property>
+    <name>hadoop.tmp.dir</name>
+    <value>/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp</value>
+    <description>
+      A base for other temporary directories.
+    </description>
+  </property>
 <configuration>
 ```
 
 - 修改配置 `./etc/hadoop/hdfs-site.xml` (可选)
 ```xml
 <configuration>
-	<!-- 指定 HDFS 副本数, 默认 3 -->
+  <!-- 指定 HDFS 副本数, 默认 3 -->
   <property>
     <name>dfs.replication</name>
     <value>1</value>
-		<description>
-			Default block replication. The actual number of replications can be specified when the file is created. The default is used if replication is not specified in create time.
-		</description>
+    <description>
+      Default block replication. The actual number of replications can be specified when the file is created. The default is used if replication is not specified in create time.
+    </description>
   </property>
 
-	<!-- namenode 元数据存储目录 -->
-	<!--
-	<property>
-		<name>dfs.namenode.name.dir</name>
-		<value>file://${hadoop.tmp.dir}/dfs/name</value>
-		<description>
-			Determines where on the local filesystem the DFS name node should store the name table(fsimage). If this is a comma-delimited list of directories then the name table is replicated in all of the directories, for redundancy.
-		</description>
-	</property>
-	-->
+  <!-- namenode 元数据存储目录 -->
+  <!--
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value>file://${hadoop.tmp.dir}/dfs/name</value>
+    <description>
+      Determines where on the local filesystem the DFS name node should store the name table(fsimage). If this is a comma-delimited list of directories then the name table is replicated in all of the directories, for redundancy.
+    </description>
+  </property>
+  -->
 
-	<!-- datanode 上数据块的物理存储位置 -->
-	<!--
-	<property>
-		<name>dfs.datanode.data.dir</name>
-		<value>file://${hadoop.tmp.dir}/dfs/data</value>
-		<description>
-			Determines where on the local filesystem an DFS data node should store its blocks. If this is a comma-delimited list of directories, then data will be stored in all named directories, typically on different devices. The directories should be tagged with corresponding storage types ([SSD]/[DISK]/[ARCHIVE]/[RAM_DISK]) for HDFS storage policies. The default storage type will be DISK if the directory does not have a storage type tagged explicitly. Directories that do not exist will be created if local filesystem permission allows.
-		</description>
-	</property>
-	-->
+  <!-- datanode 上数据块的物理存储位置 -->
+  <!--
+  <property>
+    <name>dfs.datanode.data.dir</name>
+    <value>file://${hadoop.tmp.dir}/dfs/data</value>
+    <description>
+      Determines where on the local filesystem an DFS data node should store its blocks. If this is a comma-delimited list of directories, then data will be stored in all named directories, typically on different devices. The directories should be tagged with corresponding storage types ([SSD]/[DISK]/[ARCHIVE]/[RAM_DISK]) for HDFS storage policies. The default storage type will be DISK if the directory does not have a storage type tagged explicitly. Directories that do not exist will be created if local filesystem permission allows.
+    </description>
+  </property>
+  -->
 </configuration>
 ```
 
@@ -1548,23 +1554,23 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
 
 ```xml
 <configuration>
-	<!-- Reducer 获取数据的方式, 默认无 -->
-	<property>
-		<name>yarn.nodemanager.aux-services</name>
-		<value>mapreduce_shuffle</value>
-		<description>
-			A comma separated list of services where service name should only contain a-zA-Z0-9_ and can not start with numbers
-		</description>
-	</property>
+ <!-- Reducer 获取数据的方式, 默认无 -->
+  <property>
+    <name>yarn.nodemanager.aux-services</name>
+    <value>mapreduce_shuffle</value>
+    <description>
+      A comma separated list of services where service name should only contain a-zA-Z0-9_ and can not start with numbers
+    </description>
+  </property>
 
-	<!-- 指定 YARN 的 ResourceManager 对应节点的 hostname, 默认 0.0.0.0 -->
-	<property>
-		<name>yarn.resourcemanager.hostname</name>
-		<value>vm017</value>
-		<description>
-			The hostname of the RM.
-		</description>
-	</property>
+  <!-- 指定 YARN 的 ResourceManager 对应节点的 hostname, 默认 0.0.0.0 -->
+  <property>
+    <name>yarn.resourcemanager.hostname</name>
+    <value>vm017</value>
+    <description>
+      The hostname of the RM.
+    </description>
+  </property>
 <configuration>
 ```
 
