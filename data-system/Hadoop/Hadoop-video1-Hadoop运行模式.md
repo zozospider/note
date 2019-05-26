@@ -1813,6 +1813,9 @@ zozo	2
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BYARN-wordcount4.png?raw=true)
 
+### 2.2.5 配置历史服务器
+
+### 2.2.6 配置日志聚集
 
 ---
 
