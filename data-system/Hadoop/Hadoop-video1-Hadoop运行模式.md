@@ -1041,23 +1041,27 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
 <!-- Put site-specific property overrides in this file. -->
 
 <configuration>
-  <!-- 指定 HDFS 中 NameNode 的地址, 默认 file:/// -->
+
+  <!-- 指定 HDFS 中 NameNode 的地址 -->
   <property>
     <name>fs.defaultFS</name>
     <value>hdfs://vm017:9000</value>
+		<!-- value: file:/// -->
     <description>
       The name of the default file system. A URI whose scheme and authority determine the FileSystem implementation. The uri's scheme determines the config property (fs.SCHEME.impl) naming the FileSystem implementation class. The uri's authority is used to determine the host, port, etc. for a filesystem.
     </description>
   </property>
 
-  <!-- 指定 Hadoop 运行时产生文件的存储目录, 默认 /tmp/hadoop-${user.name} -->
+  <!-- 指定 Hadoop 运行时产生文件的存储目录 -->
   <property>
     <name>hadoop.tmp.dir</name>
     <value>/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp</value>
+		<!-- value: /tmp/hadoop-${user.name} -->
     <description>
       A base for other temporary directories.
     </description>
   </property>
+
 <configuration>
 ```
 
@@ -1082,10 +1086,12 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
 <!-- Put site-specific property overrides in this file. -->
 
 <configuration>
-  <!-- 指定 HDFS 副本数, 默认 3 -->
+
+  <!-- 指定 HDFS 副本数 -->
   <property>
     <name>dfs.replication</name>
     <value>1</value>
+		<!-- value: 3 -->
     <description>
       Default block replication. The actual number of replications can be specified when the file is created. The default is used if replication is not specified in create time.
     </description>
@@ -1112,6 +1118,7 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
     </description>
   </property>
   -->
+
 </configuration>
 ```
 
@@ -1604,24 +1611,73 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
   limitations under the License. See accompanying LICENSE file.
 -->
 <configuration>
-  <!-- Reducer 获取数据的方式, 默认无 -->
+
+  <!-- Reducer 获取数据的方式 -->
   <property>
     <name>yarn.nodemanager.aux-services</name>
     <value>mapreduce_shuffle</value>
+    <!-- value: -->
     <description>
       A comma separated list of services where service name should only contain a-zA-Z0-9_ and can not start with numbers
     </description>
   </property>
 
-  <!-- 指定 YARN 的 ResourceManager 对应节点的 hostname, 默认 0.0.0.0 -->
+  <!-- 指定 YARN 的 ResourceManager 对应节点的 hostname -->
   <property>
     <name>yarn.resourcemanager.hostname</name>
     <value>vm017</value>
+		<!-- value: 0.0.0.0 -->
     <description>
       The hostname of the RM.
     </description>
   </property>
+
 <configuration>
+```
+
+- 修改配置 `./etc/hadoop/mapred-env.sh`
+
+```bash
+# export JAVA_HOME=/home/y/libexec/jdk1.6.0/
+
+# custom
+export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
+```
+
+- 修改配置 `./etc/hadoop/mapred-site.xml`
+
+```xml
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+
+  <!-- 指定 MapReduce 运行在 YARN 上 -->
+  <property>
+    <name>mapreduce.framework.name</name>
+    <value>vm017</value>
+    <!-- value: local -->
+    <description>
+      The runtime framework for executing MapReduce jobs. Can be one of local, classic or yarn.
+    </description>
+  </property>
+
+</configuration>
 ```
 
 ---
