@@ -1815,6 +1815,71 @@ zozo	2
 
 ### 2.2.5 配置历史服务器
 
+- 修改配置 `./etc/hadoop/mapred-site.xml`
+
+```xml
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+
+  <!-- 历史服务器端地址 -->
+  <property>
+    <name>mapreduce.jobhistory.address</name>
+    <value>vm017:10020</value>
+    <!-- value: 0.0.0.0:10020 -->
+    <description>
+      MapReduce JobHistory Server IPC host:port
+    </description>
+  </property>
+
+  <!-- 历史服务器端 web 端地址 -->
+  <property>
+    <name>mapreduce.jobhistory.webapp.address</name>
+    <value>vm017:19888</value>
+    <!-- value: 0.0.0.0:19888 -->
+    <description>
+      MapReduce JobHistory Server Web UI host:port
+    </description>
+  </property>
+
+</configuration>
+```
+
+- 启动历史服务器
+
+```
+[zozo@vm017 hadoop-2.7.2]$ sbin/mr-jobhistory-daemon.sh start historyserver
+starting historyserver, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/mapred-zozo-historyserver-vm017.out
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+32245 org.apache.hadoop.yarn.server.resourcemanager.ResourceManager
+16040 sun.tools.jps.Jps -m -l
+15976 org.apache.hadoop.mapreduce.v2.hs.JobHistoryServer
+32521 org.apache.hadoop.yarn.server.nodemanager.NodeManager
+8975 org.apache.hadoop.hdfs.server.namenode.NameNode
+9119 org.apache.hadoop.hdfs.server.datanode.DataNode
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- 浏览器查看
+
+
+
 ### 2.2.6 配置日志聚集
 
 ---
