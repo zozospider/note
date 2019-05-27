@@ -1878,7 +1878,7 @@ starting historyserver, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/mapre
 
 - 浏览器查看
 
-YARN 首页, 通过点击对应任务的 `History` 按钮进入
+进入 [YARN 首页](http://193.112.38.200:8088), 通过点击对应任务的 `History` 按钮进入
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8B%E5%8E%86%E5%8F%B2%E6%9C%8D%E5%8A%A1%E5%99%A81.png?raw=true)
 
@@ -1903,6 +1903,117 @@ YARN 首页, 通过点击对应任务的 `History` 按钮进入
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8B%E5%8E%86%E5%8F%B2%E6%9C%8D%E5%8A%A1%E5%99%A86.png?raw=true)
 
 ### 2.2.6 配置日志聚集
+
+- 停止历史服务器
+
+```
+[zozo@vm017 hadoop-2.7.2]$ sbin/mr-jobhistory-daemon.sh stop historyserver
+stopping historyserver
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+19873 sun.tools.jps.Jps -m -l
+32245 org.apache.hadoop.yarn.server.resourcemanager.ResourceManager
+32521 org.apache.hadoop.yarn.server.nodemanager.NodeManager
+8975 org.apache.hadoop.hdfs.server.namenode.NameNode
+9119 org.apache.hadoop.hdfs.server.datanode.DataNode
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- 停止 YARN NodeManager
+
+```
+[zozo@vm017 hadoop-2.7.2]$ sbin/yarn-daemon.sh stop nodemanager
+stopping nodemanager
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+32245 org.apache.hadoop.yarn.server.resourcemanager.ResourceManager
+20014 sun.tools.jps.Jps -m -l
+8975 org.apache.hadoop.hdfs.server.namenode.NameNode
+9119 org.apache.hadoop.hdfs.server.datanode.DataNode
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- 停止 YARN ResourceManager
+
+```
+[zozo@vm017 hadoop-2.7.2]$ sbin/yarn-daemon.sh stop resourcemanager
+stopping resourcemanager
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+8975 org.apache.hadoop.hdfs.server.namenode.NameNode
+9119 org.apache.hadoop.hdfs.server.datanode.DataNode
+20143 sun.tools.jps.Jps -m -l
+[zozo@vm017 hadoop-2.7.2]$
+```
+
+- 修改配置 `./etc/hadoop/yarn-site.xml`
+
+```xml
+<?xml version="1.0"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+<configuration>
+
+  <!-- 开启日志聚集功能 -->
+  <property>
+    <name>yarn.log-aggregation-enable</name>
+    <value>true</value>
+    <!-- value: false -->
+    <description>
+      Whether to enable log aggregation. Log aggregation collects each container's logs and moves these logs onto a file-system, for e.g. HDFS, after the application completes. Users can configure the "yarn.nodemanager.remote-app-log-dir" and "yarn.nodemanager.remote-app-log-dir-suffix" properties to determine where these logs are moved to. Users can access the logs via the Application Timeline Server.
+    </description>
+  </property>
+
+  <!-- 日志保留时间设置 7 天 -->
+  <property>
+    <name>yarn.log-aggregation.retain-seconds</name>
+    <value>604800</value>
+    <!-- value: -1 -->
+    <description>
+      How long to keep aggregation logs before deleting them. -1 disables. Be careful set this too small and you will spam the name node.
+    </description>
+  </property>
+
+<configuration>
+```
+
+- 启动 YARN ResourceManager
+
+```
+[zozo@vm017 hadoop-2.7.2]$ sbin/yarn-daemon.sh start resourcemanager
+```
+
+- 启动 YARN NodeManager
+
+```
+[zozo@vm017 hadoop-2.7.2]$ sbin/yarn-daemon.sh start nodemanager
+```
+
+- 启动历史服务器
+
+```
+[zozo@vm017 hadoop-2.7.2]$ sbin/mr-jobhistory-daemon.sh start historyserver
+```
+
+- 重跑一个 WordCount 案例
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.2.jar wordcount /user/zozo/input-wordcount /user/zozo/output-wordcount-21
+```
+
+- 浏览器查看
+
+进入 [YARN 首页](http://193.112.38.200:8088), 通过点击对应任务的 `History` 按钮进入 `Overview`
+
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8B%E5%8E%86%E5%8F%B2%E6%9C%8D%E5%8A%A1%E5%99%A81.png?raw=true)
 
 ---
 
