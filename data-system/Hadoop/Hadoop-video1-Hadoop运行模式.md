@@ -1878,7 +1878,7 @@ starting historyserver, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/mapre
 
 - 浏览器查看
 
-
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8B%E5%8E%86%E5%8F%B2%E6%9C%8D%E5%8A%A1%E5%99%A8.png?raw=true)
 
 ### 2.2.6 配置日志聚集
 
