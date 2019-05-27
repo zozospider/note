@@ -2011,9 +2011,17 @@ stopping resourcemanager
 
 - 浏览器查看
 
-进入 [YARN 首页](http://193.112.38.200:8088), 通过点击对应任务的 `History` 按钮进入 `Overview`
+进入 [YARN 首页](http://193.112.38.200:8088), 通过点击对应任务的 `History` 按钮进入 `Overview`, 然后点击 `Logs` 按钮
 
-![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8B%E5%8E%86%E5%8F%B2%E6%9C%8D%E5%8A%A1%E5%99%A81.png?raw=true)
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8B%E6%97%A5%E5%BF%971.png?raw=true)
+
+`Logs` 首页, 可再次点击 `here` 进入详情
+
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8B%E6%97%A5%E5%BF%972.png?raw=true)
+
+`here`
+
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8B%E6%97%A5%E5%BF%973.png?raw=true)
 
 ---
 
