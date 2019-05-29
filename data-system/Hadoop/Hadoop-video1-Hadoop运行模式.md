@@ -2219,7 +2219,7 @@ export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 
 集群部署规划如下:
 
-| 模块 / 节点 | __vm017__ | __vm03__ | __vm06__ | __vm03__ |
+| 模块 / 节点 | __vm017__ | __vm06__ | __vm03__ |
 | :--- | :--- | :--- | :--- |
 | __HDFS__ | DataNode | DataNode | DataNode |
 |  | __NameNode__ | __SecondaryNameNode__ |  |
