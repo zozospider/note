@@ -19,6 +19,10 @@
     - [3.1 准备 3 台机器](#31-准备-3-台机器)
     - [3.2 安装 JDK, Hadoop, 配置环境变量](#32-安装-jdk-hadoop-配置环境变量)
     - [3.3 配置集群](#33-配置集群)
+        - [3.3.1 修改 Hadoop 配置](#331-修改-hadoop-配置)
+        - [3.3.2 修改 HDFS 配置](#332-修改-hdfs-配置)
+        - [3.3.3 修改 YARN 配置](#333-修改-yarn-配置)
+        - [3.3.4 修改 MapReduce 配置](#334-修改-mapreduce-配置)
 
 # 一. 本地运行模式
 
@@ -1020,6 +1024,7 @@ zozo	2
 ### 2.1.1 step1 修改配置
 
 - 修改配置 `./etc/hadoop/hadoop-env.sh`
+
 ```bash
 # The only required environment variable is JAVA_HOME.  All others are optional.  When running a distributed configuration it is best to set JAVA_HOME in this file, so that it is correctly defined on remote nodes.
 # 唯一需要的环境变量是JAVA_HOME. 所有其他都是可选的. 运行分布式配置时, 最好在此文件中设置 JAVA_HOME, 以便在远程节点上正确定义它.
@@ -1031,6 +1036,7 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
 ```
 
 - 修改配置 `./etc/hadoop/core-site.xml`
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
@@ -1076,6 +1082,7 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
 ```
 
 - 修改配置 `./etc/hadoop/hdfs-site.xml` (可选)
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
@@ -2032,6 +2039,25 @@ stopping resourcemanager
 
 # 三. 完全分布式运行模式
 
+集群部署规划如下:
+
+| 模块 / 节点 | __vm017__ | __vm06__ | __vm03__ |
+| :--- | :--- | :--- | :--- |
+| __HDFS__ | DataNode | DataNode | DataNode |
+|  | __NameNode__ | __SecondaryNameNode__ |  |
+| __YARN__ | NodeManager | NodeManager | NodeManager |
+|  |  |  | __ResourceManager__ |
+
+| 节点 / 模块 | __HDFS__ | __YARN__ |
+| :--- | :--- | :--- |
+| __vm017__ | DataNode | NodeManager |
+|  | __NameNode__ |  |
+| __vm06__ | DataNode | NodeManager |
+|  | __SecondaryNameNode__ |  |
+| __vm03__ | DataNode | NodeManager |
+|  |  | __ResourceManager__ |
+
+集群操作步骤如下:
 - 准备 3 台机器
 - 安装 JDK, Hadoop, 配置环境变量
 - 配置集群
@@ -2217,24 +2243,239 @@ export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 
 ## 3.3 配置集群
 
-集群部署规划如下:
+集群配置如下 (3 台机的配置一样):
 
-| 模块 / 节点 | __vm017__ | __vm06__ | __vm03__ |
-| :--- | :--- | :--- | :--- |
-| __HDFS__ | DataNode | DataNode | DataNode |
-|  | __NameNode__ | __SecondaryNameNode__ |  |
-| __YARN__ | NodeManager | NodeManager | NodeManager |
-|  |  |  | __ResourceManager__ |
+### 3.3.1 修改 Hadoop 配置
 
-| 节点 / 模块 | __HDFS__ | __YARN__ |
-| :--- | :--- | :--- |
-| __vm017__ | DataNode | NodeManager |
-|  | __NameNode__ |  |
-| __vm06__ | DataNode | NodeManager |
-|  | __SecondaryNameNode__ |  |
-| __vm03__ | DataNode | NodeManager |
-|  |  | __ResourceManager__ |
+- 1. 修改配置 `./etc/hadoop/hadoop-env.sh`
 
+```bash
+# The only required environment variable is JAVA_HOME.  All others are optional.  When running a distributed configuration it is best to set JAVA_HOME in this file, so that it is correctly defined on remote nodes.
+# 唯一需要的环境变量是JAVA_HOME. 所有其他都是可选的. 运行分布式配置时, 最好在此文件中设置 JAVA_HOME, 以便在远程节点上正确定义它.
+# The java implementation to use.
+# export JAVA_HOME=${JAVA_HOME}
+
+# custom
+export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
+```
+
+- 2. 修改配置 `./etc/hadoop/core-site.xml`
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+
+  <!-- 指定 HDFS 中 NameNode 的地址 -->
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://vm017:9000</value>
+		<!-- value: file:/// -->
+    <description>
+      The name of the default file system. A URI whose scheme and authority determine the FileSystem implementation. The uri's scheme determines the config property (fs.SCHEME.impl) naming the FileSystem implementation class. The uri's authority is used to determine the host, port, etc. for a filesystem.
+    </description>
+  </property>
+
+  <!-- 指定 Hadoop 运行时产生文件的存储目录 -->
+  <property>
+    <name>hadoop.tmp.dir</name>
+    <value>/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp</value>
+		<!-- value: /tmp/hadoop-${user.name} -->
+    <description>
+      A base for other temporary directories.
+    </description>
+  </property>
+
+<configuration>
+```
+
+### 3.3.2 修改 HDFS 配置
+
+- 1. 修改配置 `./etc/hadoop/hdfs-site.xml`
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+
+  <!-- 指定 Hadoop SecondaryNameNode 的地址 -->
+  <property>
+    <name>dfs.namenode.secondary.http-address</name>
+    <value>vm06:50090</value>
+		<!-- value: 0.0.0.0:50090 -->
+    <description>
+      The secondary namenode http server address and port.
+    </description>
+  </property>
+
+  <!-- 指定 HDFS 副本数 -->
+	<!--
+  <property>
+    <name>dfs.replication</name>
+    <value>3</value>
+    <description>
+      Default block replication. The actual number of replications can be specified when the file is created. The default is used if replication is not specified in create time.
+    </description>
+  </property>
+	-->
+
+  <!-- namenode 元数据存储目录 -->
+  <!--
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value>file://${hadoop.tmp.dir}/dfs/name</value>
+    <description>
+      Determines where on the local filesystem the DFS name node should store the name table(fsimage). If this is a comma-delimited list of directories then the name table is replicated in all of the directories, for redundancy.
+    </description>
+  </property>
+  -->
+
+  <!-- datanode 上数据块的物理存储位置 -->
+  <!--
+  <property>
+    <name>dfs.datanode.data.dir</name>
+    <value>file://${hadoop.tmp.dir}/dfs/data</value>
+    <description>
+      Determines where on the local filesystem an DFS data node should store its blocks. If this is a comma-delimited list of directories, then data will be stored in all named directories, typically on different devices. The directories should be tagged with corresponding storage types ([SSD]/[DISK]/[ARCHIVE]/[RAM_DISK]) for HDFS storage policies. The default storage type will be DISK if the directory does not have a storage type tagged explicitly. Directories that do not exist will be created if local filesystem permission allows.
+    </description>
+  </property>
+  -->
+
+</configuration>
+```
+
+### 3.3.3 修改 YARN 配置
+
+- 1. 修改配置 `./etc/hadoop/yarn-env.sh`
+
+```bash
+# some Java parameters
+# export JAVA_HOME=/home/y/libexec/jdk1.6.0/
+
+# custom
+export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
+```
+
+- 2. 修改配置 `./etc/hadoop/yarn-site.xml`
+
+```xml
+<?xml version="1.0"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+<configuration>
+
+  <!-- Reducer 获取数据的方式 -->
+  <property>
+    <name>yarn.nodemanager.aux-services</name>
+    <value>mapreduce_shuffle</value>
+    <!-- value: -->
+    <description>
+      A comma separated list of services where service name should only contain a-zA-Z0-9_ and can not start with numbers
+    </description>
+  </property>
+
+  <!-- 指定 YARN 的 ResourceManager 对应节点的 hostname -->
+  <property>
+    <name>yarn.resourcemanager.hostname</name>
+    <value>vm03</value>
+		<!-- value: 0.0.0.0 -->
+    <description>
+      The hostname of the RM.
+    </description>
+  </property>
+
+<configuration>
+```
+
+### 3.3.4 修改 MapReduce 配置
+
+- 1. 修改配置 `./etc/hadoop/mapred-env.sh`
+
+```bash
+# export JAVA_HOME=/home/y/libexec/jdk1.6.0/
+
+# custom
+export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
+```
+
+- 2. 修改配置 `./etc/hadoop/mapred-site.xml`
+
+```xml
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+
+  <!-- 指定 MapReduce 运行在 YARN 上 -->
+  <property>
+    <name>mapreduce.framework.name</name>
+    <value>yarn</value>
+    <!-- value: local -->
+    <description>
+      The runtime framework for executing MapReduce jobs. Can be one of local, classic or yarn.
+    </description>
+  </property>
+
+</configuration>
+```
 
 
 
