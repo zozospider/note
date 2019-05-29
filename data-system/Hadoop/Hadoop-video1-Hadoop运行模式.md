@@ -2035,4 +2035,167 @@ stopping resourcemanager
 - 群起
 - 测试
 
+## 3.1 准备 3 台机器
+
+配置 hostname 和 host
+
+- vm06
+```
+[root@VM_0_6_centos ~]# cat /etc/hostname
+vm06
+[root@VM_0_6_centos ~]# cat /etc/cloud/templates/hosts.redhat.tmpl
+## template:jinja
+{#
+This file /etc/cloud/templates/hosts.redhat.tmpl is only utilized
+if enabled in cloud-config.  Specifically, in order to enable it
+you need to add the following to config:
+  manage_etc_hosts: True
+-#}
+# Your system has configured 'manage_etc_hosts' as True.
+# As a result, if you wish for changes to this file to persist
+# then you will need to either
+# a.) make changes to the master file in /etc/cloud/templates/hosts.redhat.tmpl
+# b.) change or remove the value of 'manage_etc_hosts' in
+#     /etc/cloud/cloud.cfg or cloud-config from user-data
+#
+# The following lines are desirable for IPv4 capable hosts
+127.0.0.1 {{fqdn}} {{hostname}}
+127.0.0.1 localhost.localdomain localhost
+127.0.0.1 localhost4.localdomain4 localhost4
+
+172.16.0.6 vm06 vm06
+172.16.0.17 vm017 vm017
+172.16.0.3 vm03 vm03
+
+# The following lines are desirable for IPv6 capable hosts
+::1 {{fqdn}} {{hostname}}
+::1 localhost.localdomain localhost
+::1 localhost6.localdomain6 localhost6
+
+[root@VM_0_6_centos ~]# reboot
+
+
+[root@vm06 ~]# cat /etc/hosts
+# Your system has configured 'manage_etc_hosts' as True.
+# As a result, if you wish for changes to this file to persist
+# then you will need to either
+# a.) make changes to the master file in /etc/cloud/templates/hosts.redhat.tmpl
+# b.) change or remove the value of 'manage_etc_hosts' in
+#     /etc/cloud/cloud.cfg or cloud-config from user-data
+#
+# The following lines are desirable for IPv4 capable hosts
+127.0.0.1 VM_0_6_centos VM_0_6_centos
+127.0.0.1 localhost.localdomain localhost
+127.0.0.1 localhost4.localdomain4 localhost4
+
+172.16.0.6 vm06 vm06
+172.16.0.17 vm017 vm017
+172.16.0.3 vm03 vm03
+
+# The following lines are desirable for IPv6 capable hosts
+::1 VM_0_6_centos VM_0_6_centos
+::1 localhost.localdomain localhost
+::1 localhost6.localdomain6 localhost6
+
+[root@vm06 ~]#
+```
+
+- vm017
+```
+[root@VM_0_17_centos ~]# cat /etc/hostname
+vm017
+[root@VM_0_17_centos ~]# cat /etc/cloud/templates/hosts.redhat.tmpl
+## template:jinja
+{#
+This file /etc/cloud/templates/hosts.redhat.tmpl is only utilized
+if enabled in cloud-config.  Specifically, in order to enable it
+you need to add the following to config:
+  manage_etc_hosts: True
+-#}
+127.0.0.1 {{fqdn}} {{hostname}}
+127.0.0.1 localhost.localdomain localhost
+127.0.0.1 localhost4.localdomain4 localhost4
+
+172.16.0.6 vm06 vm06
+172.16.0.17 vm017 vm017
+172.16.0.3 vm03 vm03
+
+::1 {{fqdn}} {{hostname}}
+::1 localhost.localdomain localhost
+::1 localhost6.localdomain6 localhost6
+
+[root@VM_0_6_centos ~]# reboot
+
+
+[root@vm017 ~]# cat /etc/hosts
+127.0.0.1 VM_0_17_centos VM_0_17_centos
+127.0.0.1 localhost.localdomain localhost
+127.0.0.1 localhost4.localdomain4 localhost4
+
+::1 VM_0_17_centos VM_0_17_centos
+::1 localhost.localdomain localhost
+::1 localhost6.localdomain6 localhost6
+
+[root@vm017 ~]#
+```
+
+- vm03
+```
+[root@VM_0_3_centos ~]# cat /etc/hostname
+vm03
+[root@VM_0_3_centos ~]# cat /etc/cloud/templates/hosts.redhat.tmpl
+## template:jinja
+{#
+This file /etc/cloud/templates/hosts.redhat.tmpl is only utilized
+if enabled in cloud-config.  Specifically, in order to enable it
+you need to add the following to config:
+  manage_etc_hosts: True
+-#}
+# Your system has configured 'manage_etc_hosts' as True.
+# As a result, if you wish for changes to this file to persist
+# then you will need to either
+# a.) make changes to the master file in /etc/cloud/templates/hosts.redhat.tmpl
+# b.) change or remove the value of 'manage_etc_hosts' in
+#     /etc/cloud/cloud.cfg or cloud-config from user-data
+#
+# The following lines are desirable for IPv4 capable hosts
+127.0.0.1 {{fqdn}} {{hostname}}
+127.0.0.1 localhost.localdomain localhost
+127.0.0.1 localhost4.localdomain4 localhost4
+
+172.16.0.6 vm06 vm06
+172.16.0.17 vm017 vm017
+172.16.0.3 vm03 vm03
+
+# The following lines are desirable for IPv6 capable hosts
+::1 {{fqdn}} {{hostname}}
+::1 localhost.localdomain localhost
+::1 localhost6.localdomain6 localhost6
+
+[root@VM_0_6_centos ~]# reboot
+
+
+[root@vm03 ~]# cat /etc/hosts
+# Your system has configured 'manage_etc_hosts' as True.
+# As a result, if you wish for changes to this file to persist
+# then you will need to either
+# a.) make changes to the master file in /etc/cloud/templates/hosts.redhat.tmpl
+# b.) change or remove the value of 'manage_etc_hosts' in
+#     /etc/cloud/cloud.cfg or cloud-config from user-data
+#
+# The following lines are desirable for IPv4 capable hosts
+127.0.0.1 VM_0_3_centos VM_0_3_centos
+127.0.0.1 localhost.localdomain localhost
+127.0.0.1 localhost4.localdomain4 localhost4
+
+# The following lines are desirable for IPv6 capable hosts
+::1 VM_0_3_centos VM_0_3_centos
+::1 localhost.localdomain localhost
+::1 localhost6.localdomain6 localhost6
+
+[root@vm03 ~]#
+```
+
+
+
 ---
