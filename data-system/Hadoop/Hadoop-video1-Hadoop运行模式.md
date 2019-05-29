@@ -2215,17 +2215,17 @@ export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 | 模块 / 节点 | vm017 | vm03 | vm06 |
 | :--- | :--- | :--- | :--- |
 | HDFS | DataNode | DataNode | DataNode |
-|  | NameNode |  | SecondaryNameNode |
+|  | __NameNode__ |  | __SecondaryNameNode__ |
 | YARN | NodeManager | NodeManager | NodeManager |
-|  |  | ResourceManager |  |
+|  |  | __ResourceManager__ |  |
 
 | 节点 / 模块 | HDFS | YARN |
 | :--- | :--- | :--- |
 | vm017 | DataNode | NodeManager |
-|  | NameNode |  |
+|  | __NameNode__ |  |
 | vm03 | DataNode | NodeManager |
-|  |  | ResourceManager |
+|  |  | __ResourceManager__ |
 | vm06 | DataNode | NodeManager |
-|  | SecondaryNameNode |  |
+|  | __SecondaryNameNode__ |  |
 
 ---
