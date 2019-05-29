@@ -2212,11 +2212,20 @@ export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 
 ## 3.3 配置集群
 
-| 模块 | vm017 | vm03 | vm06 |
+| 模块 / 节点 | vm017 | vm03 | vm06 |
 | :--- | :--- | :--- | :--- |
-| HDFS | NameNode |  | SecondaryNameNode |
-|  | DataNode | DataNode | DataNode |
-| YARN |  | ResourceManager |  |
-|  | NodeManager | NodeManager | NodeManager |
+| HDFS | DataNode | DataNode | DataNode |
+|  | NameNode |  | SecondaryNameNode |
+| YARN | NodeManager | NodeManager | NodeManager |
+|  |  | ResourceManager |  |
+
+| 节点 / 模块 | HDFS | YARN |
+| :--- | :--- | :--- |
+| vm017 | DataNode | NodeManager |
+|  | NameNode |  |
+| vm03 | DataNode | NodeManager |
+|  |  | ResourceManager |
+| vm06 | DataNode | NodeManager |
+|  | SecondaryNameNode |  |
 
 ---
