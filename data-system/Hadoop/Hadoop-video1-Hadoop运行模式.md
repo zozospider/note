@@ -2217,20 +2217,25 @@ export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 
 ## 3.3 配置集群
 
-| 模块 / 节点 | __vm017__ | __vm03__ | __vm06__ |
+集群部署规划如下:
+
+| 模块 / 节点 | __vm017__ | __vm03__ | __vm06__ | __vm03__ |
 | :--- | :--- | :--- | :--- |
 | __HDFS__ | DataNode | DataNode | DataNode |
-|  | __NameNode__ |  | __SecondaryNameNode__ |
+|  | __NameNode__ | __SecondaryNameNode__ |  |
 | __YARN__ | NodeManager | NodeManager | NodeManager |
-|  |  | __ResourceManager__ |  |
+|  |  |  | __ResourceManager__ |
 
 | 节点 / 模块 | __HDFS__ | __YARN__ |
 | :--- | :--- | :--- |
 | __vm017__ | DataNode | NodeManager |
 |  | __NameNode__ |  |
-| __vm03__ | DataNode | NodeManager |
-|  |  | __ResourceManager__ |
 | __vm06__ | DataNode | NodeManager |
 |  | __SecondaryNameNode__ |  |
+| __vm03__ | DataNode | NodeManager |
+|  |  | __ResourceManager__ |
+
+
+
 
 ---
