@@ -5,7 +5,7 @@ Apache 版本官网和下载地址如下:
 - 官网地址: http://hadoop.apache.org/
 - 下载地址: https://archive.apache.org/dist/hadoop/common/
 
-下载后解压到指定路径, 并配置环境变量:
+下载后解压到指定路径, 并配置环境变量, 以下为 `~/.bash_profile` 内容:
 ```bash
 # set hadoop
 export HADOOP_HOME=/home/zozo/app/hadoop/hadoop-2.7.2

@@ -2196,6 +2196,27 @@ you need to add the following to config:
 [root@vm03 ~]#
 ```
 
+## 3.2 安装 JDK, Hadoop, 配置环境变量
 
+以下为 `~/.bash_profile` 内容:
+```
+# set hadoop
+export HADOOP_HOME=/home/zozo/app/hadoop/hadoop-2.7.2
+export PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH
+
+# set java
+export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+```
+
+## 3.3 配置集群
+
+| 模块 | vm017 | vm03 | vm06 |
+| :--- | :--- | :--- | :--- |
+| HDFS | NameNode |  | SecondaryNameNode |
+|  | DataNode | DataNode | DataNode |
+| YARN |  | ResourceManager |  |
+|  | NodeManager | NodeManager | NodeManager |
 
 ---
