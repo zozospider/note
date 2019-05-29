@@ -2027,4 +2027,12 @@ stopping resourcemanager
 
 # 三. 完全分布式运行模式
 
+- 准备 3 台机器
+- 安装 JDK, Hadoop, 配置环境变量
+- 配置集群
+- 单点启动
+- 配置 ssh
+- 群起
+- 测试
+
 ---
