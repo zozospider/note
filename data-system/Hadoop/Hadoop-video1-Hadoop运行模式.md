@@ -13,7 +13,12 @@
         - [2.2.2 step2 启动 YARN (ResourceManager, NodeManager)](#222-step2-启动-yarn-resourcemanager-nodemanager)
         - [2.2.3 浏览器查看 YARN](#223-浏览器查看-yarn)
         - [2.2.4 WordCount 案例](#224-wordcount-案例)
+        - [2.2.5 配置历史服务器](#225-配置历史服务器)
+        - [2.2.6 配置日志聚集](#226-配置日志聚集)
 - [三. 完全分布式运行模式](#三-完全分布式运行模式)
+    - [3.1 准备 3 台机器](#31-准备-3-台机器)
+    - [3.2 安装 JDK, Hadoop, 配置环境变量](#32-安装-jdk-hadoop-配置环境变量)
+    - [3.3 配置集群](#33-配置集群)
 
 # 一. 本地运行模式
 
@@ -2212,20 +2217,20 @@ export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 
 ## 3.3 配置集群
 
-| 模块 / 节点 | vm017 | vm03 | vm06 |
+| 模块 / 节点 | __vm017__ | __vm03__ | __vm06__ |
 | :--- | :--- | :--- | :--- |
-| HDFS | DataNode | DataNode | DataNode |
+| __HDFS__ | DataNode | DataNode | DataNode |
 |  | __NameNode__ |  | __SecondaryNameNode__ |
-| YARN | NodeManager | NodeManager | NodeManager |
+| __YARN__ | NodeManager | NodeManager | NodeManager |
 |  |  | __ResourceManager__ |  |
 
-| 节点 / 模块 | HDFS | YARN |
+| 节点 / 模块 | __HDFS__ | __YARN__ |
 | :--- | :--- | :--- |
-| vm017 | DataNode | NodeManager |
+| __vm017__ | DataNode | NodeManager |
 |  | __NameNode__ |  |
-| vm03 | DataNode | NodeManager |
+| __vm03__ | DataNode | NodeManager |
 |  |  | __ResourceManager__ |
-| vm06 | DataNode | NodeManager |
+| __vm06__ | DataNode | NodeManager |
 |  | __SecondaryNameNode__ |  |
 
 ---
