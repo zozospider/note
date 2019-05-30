@@ -2334,7 +2334,7 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
   <property>
     <name>dfs.namenode.secondary.http-address</name>
     <value>vm06:50090</value>
-		<!-- value: 0.0.0.0:50090 -->
+    <!-- value: 0.0.0.0:50090 -->
     <description>
       The secondary namenode http server address and port.
     </description>
@@ -2421,7 +2421,7 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
   <property>
     <name>yarn.resourcemanager.hostname</name>
     <value>vm03</value>
-		<!-- value: 0.0.0.0 -->
+    <!-- value: 0.0.0.0 -->
     <description>
       The hostname of the RM.
     </description>
