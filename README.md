@@ -20,24 +20,6 @@
     - [concept](https://github.com/zozospider/note/blob/master/base/concept/concept.md)
     - [concept-question](https://github.com/zozospider/note/blob/master/base/concept/concept-question.md)
 
-- data
-  - __Regular-Expression__
-    - [Regular-Expression](https://github.com/zozospider/note/blob/master/data/Regular-Expression/Regular-Expression.md)
-
-- Java
-  - __JDK__
-    - [JDK-source-code](https://github.com/zozospider/note/blob/master/Java/JDK/JDK-source-code.md)
-  - __JVM__
-    - [JVM-memory-model](https://github.com/zozospider/note/blob/master/Java/JVM/JVM-memory-model.md)
-
-- network
-  - __DNS__
-    - [DNS](https://github.com/zozospider/note/blob/master/network/DNS/DNS.md)
-
-- Microservice
-  - __Spring-Boot__
-    - [Spring-Boot-2.x](https://github.com/zozospider/note/blob/master/Microservice/Spring-Boot/Spring-Boot-2.x.md)
-
 - data-system
   - [data-system-book1-cn](https://github.com/zozospider/note/blob/master/data-system/data-system-book1-cn.md)
   - __MySQL__
@@ -56,6 +38,24 @@
     - [ZooKeeper-book2](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-book2.md)
     - [ZooKeeper-video](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-video.md)
     - [ZooKeeper-share](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-share.md)
+
+- data
+  - __Regular-Expression__
+    - [Regular-Expression](https://github.com/zozospider/note/blob/master/data/Regular-Expression/Regular-Expression.md)
+
+- Java
+  - __JDK__
+    - [JDK-source-code](https://github.com/zozospider/note/blob/master/Java/JDK/JDK-source-code.md)
+  - __JVM__
+    - [JVM-memory-model](https://github.com/zozospider/note/blob/master/Java/JVM/JVM-memory-model.md)
+
+- network
+  - __DNS__
+    - [DNS](https://github.com/zozospider/note/blob/master/network/DNS/DNS.md)
+
+- Microservice
+  - __Spring-Boot__
+    - [Spring-Boot-2.x](https://github.com/zozospider/note/blob/master/Microservice/Spring-Boot/Spring-Boot-2.x.md)
 
 - stream
   - __Kafka__
