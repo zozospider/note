@@ -2296,7 +2296,7 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
   <property>
     <name>hadoop.tmp.dir</name>
     <value>/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp</value>
-		<!-- value: /tmp/hadoop-${user.name} -->
+    <!-- value: /tmp/hadoop-${user.name} -->
     <description>
       A base for other temporary directories.
     </description>
