@@ -19,10 +19,10 @@
     - [hdfs-default.xml](http://hadoop.apache.org/docs/r2.7.2/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml)
     - [yarn-default.xml](http://hadoop.apache.org/docs/r2.7.2/hadoop-yarn/hadoop-yarn-common/yarn-default.xml)
     - [mapred-default.xml](http://hadoop.apache.org/docs/r2.7.2/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml)
- - conf
-   - [core-default.xml](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1/core-default.xml)
-    - [hdfs-default.xml](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1/hdfs-default.xml)
-    - [yarn-default.xml](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1/yarn-default.xml)
-    - [mapred-default.xml](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1/mapred-default.xml)
+   - conf
+     - [core-default.xml](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1/core-default.xml)
+      - [hdfs-default.xml](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1/hdfs-default.xml)
+      - [yarn-default.xml](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1/yarn-default.xml)
+      - [mapred-default.xml](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1/mapred-default.xml)
 
 ---

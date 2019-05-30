@@ -2286,7 +2286,7 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
   <property>
     <name>fs.defaultFS</name>
     <value>hdfs://vm017:9000</value>
-		<!-- value: file:/// -->
+    <!-- value: file:/// -->
     <description>
       The name of the default file system. A URI whose scheme and authority determine the FileSystem implementation. The uri's scheme determines the config property (fs.SCHEME.impl) naming the FileSystem implementation class. The uri's authority is used to determine the host, port, etc. for a filesystem.
     </description>
