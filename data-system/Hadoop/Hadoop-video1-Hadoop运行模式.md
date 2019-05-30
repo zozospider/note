@@ -2067,7 +2067,7 @@ stopping resourcemanager
 - 安装 JDK, Hadoop, 配置环境变量
 - 配置集群
 - 集群每个节点单独启动
-- 配置 ssh
+- 配置 SSH 免密登录
 - 群起
 - 测试
 
@@ -2738,6 +2738,27 @@ hadoop-2.7.2-data/tmp/dfs/data:
 ### 3.4.4 浏览器查看 HDFS
 
 访问 [HDFS 控制台](http://193.112.38.200:50070) 检查是否可用
+
+## 3.5 配置 SSH 免密登录
+
+- 因为 vm017 为 NameNode, 需要配置 SSH 免密登录其他节点.
+- 因为 vm03 为 NodeManager, 需要配置 SSH 免密登录其他节点.
+
+- link
+  - [SSH免密登录原理及实现](https://blog.csdn.net/qq_26907251/article/details/78804367)
+  - [SSH免密登录原理及配置](https://my.oschina.net/binxin/blog/651565)
+
+![image]()
+
+`~/.ssh` 目录下文件说明:
+
+| 文件 | 说明 |
+| :--- | :--- |
+| `~/.ssh/know_hosts` | 记录 SSH 访问过计算机的公钥 (public key) |
+| `~/.ssh/id_rsa` | 生成的私钥 |
+| `~/.ssh/id_rsa.pub` | 生成的公钥 |
+| `~/.ssh/authorized_keys` | 存放授权过的免密登录服务器公钥 |
+
 
 
 ---
