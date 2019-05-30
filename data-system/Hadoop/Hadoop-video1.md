@@ -11,12 +11,16 @@
 
 
 - link
-  - [尚硅谷大数据之Hadoop](https://www.bilibili.com/video/av32081351)
-  - [Apache Hadoop 2.7.2](https://hadoop.apache.org/docs/r2.7.2/)
-  - [core-default.xml](http://hadoop.apache.org/docs/r2.7.2/hadoop-project-dist/hadoop-common/core-default.xml)
-  - [hdfs-default.xml](http://hadoop.apache.org/docs/r2.7.2/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml)
-  - [mapred-default.xml](http://hadoop.apache.org/docs/r2.7.2/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml)
-  - [yarn-default.xml](http://hadoop.apache.org/docs/r2.7.2/hadoop-yarn/hadoop-yarn-common/yarn-default.xml)
+  - video
+    - [尚硅谷大数据之Hadoop](https://www.bilibili.com/video/av32081351)
+  - site
+    - [Apache Hadoop 2.7.2](https://hadoop.apache.org/docs/r2.7.2/)
+    - [core-default.xml](http://hadoop.apache.org/docs/r2.7.2/hadoop-project-dist/hadoop-common/core-default.xml)
+    - [hdfs-default.xml](http://hadoop.apache.org/docs/r2.7.2/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml)
+    - [mapred-default.xml](http://hadoop.apache.org/docs/r2.7.2/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml)
+    - [yarn-default.xml](http://hadoop.apache.org/docs/r2.7.2/hadoop-yarn/hadoop-yarn-common/yarn-default.xml)
+ - conf
+   - []()
 
 
 ---
