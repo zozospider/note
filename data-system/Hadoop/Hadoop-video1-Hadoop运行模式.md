@@ -2341,7 +2341,7 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
   </property>
 
   <!-- 指定 HDFS 副本数 -->
-	<!--
+  <!--
   <property>
     <name>dfs.replication</name>
     <value>3</value>
@@ -2349,7 +2349,7 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
       Default block replication. The actual number of replications can be specified when the file is created. The default is used if replication is not specified in create time.
     </description>
   </property>
-	-->
+  -->
 
   <!-- namenode 元数据存储目录 -->
   <!--
