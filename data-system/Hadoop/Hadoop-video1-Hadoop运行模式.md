@@ -28,6 +28,9 @@
         - [3.4.2 vm06: 启动 DataNode](#342-vm06-启动-datanode)
         - [3.4.3 vm03: 启动 DataNode](#343-vm03-启动-datanode)
         - [3.4.4 浏览器查看 HDFS](#344-浏览器查看-hdfs)
+    - [3.5 配置 SSH 免密登录](#35-配置-ssh-免密登录)
+
+---
 
 # 一. 本地运行模式
 
@@ -2748,7 +2751,7 @@ hadoop-2.7.2-data/tmp/dfs/data:
   - [SSH免密登录原理及实现](https://blog.csdn.net/qq_26907251/article/details/78804367)
   - [SSH免密登录原理及配置](https://my.oschina.net/binxin/blog/651565)
 
-![image]()
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/SSH%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E5%8E%9F%E7%90%86.png?raw=true)
 
 `~/.ssh` 目录下文件说明:
 
