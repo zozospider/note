@@ -29,6 +29,11 @@
         - [3.4.3 vm03: 启动 DataNode](#343-vm03-启动-datanode)
         - [3.4.4 浏览器查看 HDFS](#344-浏览器查看-hdfs)
     - [3.5 配置 SSH 免密登录](#35-配置-ssh-免密登录)
+        - [3.5.1 vm017 生成密钥](#351-vm017-生成密钥)
+        - [3.5.2 vm017 发送 authorized_keys](#352-vm017-发送-authorized_keys)
+        - [3.5.3 确认 vm06, vm03, vm017 的文件权限](#353-确认-vm06-vm03-vm017-的文件权限)
+        - [3.5.4 vm017 测试免密登录](#354-vm017-测试免密登录)
+        - [3.5.5 vm03 同样配置免密登录所有节点](#355-vm03-同样配置免密登录所有节点)
 
 ---
 
@@ -2751,7 +2756,7 @@ hadoop-2.7.2-data/tmp/dfs/data:
 
 - link
   - [SSH免密登录原理及实现](https://blog.csdn.net/qq_26907251/article/details/78804367)  (参考: 图)
-	- [ssh免密码登录配置方法](https://blog.csdn.net/universe_hao/article/details/52296811)  (参考: 操作)
+  - [ssh免密码登录配置方法](https://blog.csdn.net/universe_hao/article/details/52296811)  (参考: 操作)
   - [SSH免密登录原理及配置](https://my.oschina.net/binxin/blog/651565)  (参考: 权限)
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/SSH%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E5%8E%9F%E7%90%86.png?raw=true)
@@ -2971,7 +2976,7 @@ drwx------  2 zozo zozo  4096 6月   1 16:48 .ssh
 [zozo@vm06 .ssh]$
 ```
 
-### 3.5.4 测试免密登录
+### 3.5.4 vm017 测试免密登录
 
 在 __vm017__ 上测试免密登录 __vm06__, __vm03__, __vm017__:
 ```
@@ -2992,6 +2997,79 @@ Last login: Sat Jun  1 16:42:32 2019 from 14.29.126.59
 Connection to 172.16.0.17 closed.
 [zozo@vm017 .ssh]$
 ```
+
+### 3.5.5 vm03 同样配置免密登录所有节点
+
+在 __vm03__ 执行类似的操作, 同样配置免密登录所有节点, 完成后如下:
+
+- 以下为 __vm017__ 的 `~/.ssh` 文件夹内容:
+```
+[zozo@vm017 .ssh]$ pwd
+/home/zozo/.ssh
+[zozo@vm017 .ssh]$ ll
+总用量 16
+-rw------- 1 zozo zozo  783 6月   1 17:55 authorized_keys
+-rw------- 1 zozo zozo 1675 6月   1 15:16 id_rsa
+-rw-r--r-- 1 zozo zozo  392 6月   1 15:16 id_rsa.pub
+-rw-r--r-- 1 zozo zozo  517 6月   1 17:30 known_hosts
+[zozo@vm017 .ssh]$ cat authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFK2ZAzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz3vjfwAN5SMLS6zNDA/VFVHbB3BwNCw0P2HwnReaBzqxpxg0TChQWors04yj2+XYQXc632goKf+BPj8EvBPPNkq4Ea/lv+JaI/G4ZtuvvvvvvFhGuHYVzjPC6w9TSxhR+gQJhlGbFCwqqqqqqqqqqqqqqqqqqqqqqqqqqqqCtq9G2YKbe7alFZuS7JzjvlYkMc/HxKSahNy+q1qhI+51AXUG0T7l+edt//jh0TDlWVfUrhuTX/yi91v0haixxxxx0MzSaUNqARtqrerefveqerffvfhsfhrtybvhyfbvgfyxm8JynLJn zozo@vm03
+[zozo@vm017 .ssh]$
+```
+
+- 以下为 __vm016__ 的 `~/.ssh` 文件夹内容:
+```
+[zozo@vm06 .ssh]$ pwd
+/home/zozo/.ssh
+[zozo@vm06 .ssh]$ ll
+总用量 8
+-rw------- 1 zozo zozo 783 6月   1 17:55 authorized_keys
+-rw-r--r-- 1 zozo zozo 345 6月   1 15:11 known_hosts
+[zozo@vm06 .ssh]$ cat authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFK2ZAzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz3vjfwAN5SMLS6zNDA/VFVHbB3BwNCw0P2HwnReaBzqxpxg0TChQWors04yj2+XYQXc632goKf+BPj8EvBPPNkq4Ea/lv+JaI/G4ZtuvvvvvvFhGuHYVzjPC6w9TSxhR+gQJhlGbFCwqqqqqqqqqqqqqqqqqqqqqqqqqqqqCtq9G2YKbe7alFZuS7JzjvlYkMc/HxKSahNy+q1qhI+51AXUG0T7l+edt//jh0TDlWVfUrhuTX/yi91v0haixxxxx0MzSaUNqARtqrerefveqerffvfhsfhrtybvhyfbvgfyxm8JynLJn zozo@vm03
+[zozo@vm06 .ssh]$
+```
+
+- 以下为 __vm03__ 的 `~/.ssh` 文件夹内容:
+```
+[zozo@vm03 .ssh]$ pwd
+/home/zozo/.ssh
+[zozo@vm03 .ssh]$ ll
+总用量 16
+-rw------- 1 zozo zozo  783 6月   1 17:56 authorized_keys
+-rw------- 1 zozo zozo 1679 6月   1 17:54 id_rsa
+-rw-r--r-- 1 zozo zozo  391 6月   1 17:54 id_rsa.pub
+-rw-r--r-- 1 zozo zozo  517 6月   1 17:56 known_hosts
+[zozo@vm03 .ssh]$ cat authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFK2ZAzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz3vjfwAN5SMLS6zNDA/VFVHbB3BwNCw0P2HwnReaBzqxpxg0TChQWors04yj2+XYQXc632goKf+BPj8EvBPPNkq4Ea/lv+JaI/G4ZtuvvvvvvFhGuHYVzjPC6w9TSxhR+gQJhlGbFCwqqqqqqqqqqqqqqqqqqqqqqqqqqqqCtq9G2YKbe7alFZuS7JzjvlYkMc/HxKSahNy+q1qhI+51AXUG0T7l+edt//jh0TDlWVfUrhuTX/yi91v0haixxxxx0MzSaUNqARtqrerefveqerffvfhsfhrtybvhyfbvgfyxm8JynLJn zozo@vm03
+[zozo@vm03 .ssh]$
+```
+
+- 以下为在 __vm013__ 上测试免密登录 __vm017__, __vm06__, __vm03__:
+```
+[zozo@vm03 .ssh]$ ssh zozo@172.16.0.17
+Last login: Sat Jun  1 17:33:35 2019 from 172.16.0.17
+[zozo@vm017 ~]$ exit
+登出
+Connection to 172.16.0.17 closed.
+[zozo@vm03 .ssh]$ ssh zozo@172.16.0.6
+Last login: Sat Jun  1 17:09:32 2019 from 172.16.0.17
+[zozo@vm06 ~]$ exit
+登出
+Connection to 172.16.0.6 closed.
+[zozo@vm03 .ssh]$ ssh zozo@172.16.0.3
+Last login: Sat Jun  1 17:09:45 2019 from 172.16.0.17
+[zozo@vm03 ~]$ exit
+登出
+Connection to 172.16.0.3 closed.
+[zozo@vm03 .ssh]$
+```
+
+---
+
 
 
 ---
