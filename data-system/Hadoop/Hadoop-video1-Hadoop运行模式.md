@@ -2744,8 +2744,10 @@ hadoop-2.7.2-data/tmp/dfs/data:
 
 ## 3.5 配置 SSH 免密登录
 
-- 因为 __vm017__ 为 NameNode, 需要配置 SSH 免密登录其他节点.
-- 因为 __vm03__ 为 NodeManager, 需要配置 SSH 免密登录其他节点.
+- 因为 __vm017__ 为 NameNode, 需要配置 SSH 免密登录所有节点. 这样在调用 `start-all.sh` 脚本时, 无需输入密码.
+- 因为 __vm03__ 为 NodeManager, 需要配置 SSH 免密登录所有节点.
+
+注: 需要配置免密登录所有节点 (包括本机).
 
 - link
   - [SSH免密登录原理及实现](https://blog.csdn.net/qq_26907251/article/details/78804367)  (参考: 图)
@@ -2758,12 +2760,12 @@ hadoop-2.7.2-data/tmp/dfs/data:
 
 | 文件 | 说明 |
 | :--- | :--- |
-| `~/.ssh/know_hosts` | 记录 SSH 访问过计算机的公钥 (public key) |
-| `~/.ssh/id_rsa` | 生成的私钥 |
-| `~/.ssh/id_rsa.pub` | 生成的公钥 |
-| `~/.ssh/authorized_keys` | 存放授权过的免密登录服务器公钥 |
+| `~/.ssh/know_hosts` | 记录 SSH 访问过的其他服务器 |
+| `~/.ssh/id_rsa` | 本机生成的私钥 |
+| `~/.ssh/id_rsa.pub` | 本机生成的公钥 (可免密登录其他服务器) |
+| `~/.ssh/authorized_keys` | 存放已授权其他服务器 (可免密登录本机 (包括本机)) 的公钥 |
 
-以下以 vm017 免密登录到其他两台机器的具体步骤, vm03 类似操作:
+以下以 __vm017__ 免密登录到所有机器的具体步骤, __vm03__ 类似操作:
 
 ### 3.5.1 vm017 生成密钥
 
@@ -2777,7 +2779,7 @@ hadoop-2.7.2-data/tmp/dfs/data:
 [zozo@vm017 .ssh]$
 ```
 
-在 __vm017__ `~/.ssh` 目录下执行以下命令, 通过 RSA 算法进行加密, 提示输入三次回车后, 该目录下将会产生 `id_rsa` (私钥), `id_rsa.pub` (公钥) 文件:
+在 __vm017__ `~/.ssh` 目录下执行以下命令, 通过 RSA 算法 (非对称加密算法) 进行加密, 提示输入 3 次回车后, 该目录下将会产生 `id_rsa` (私钥), `id_rsa.pub` (公钥) 文件:
 ```
 [zozo@vm017 .ssh]$ pwd
 /home/zozo/.ssh
@@ -2815,7 +2817,7 @@ The key's randomart image is:
 
 ### 3.5.2 vm017 发送 authorized_keys
 
-将 __vm017__ 的公钥发送给 __vm06__ 和 __vm03__, 完成后 __vm06__ 和 __vm03__ 会生成 `~/.ssh/authorized_keys` 文件, 且该文件内容和 vm017 的 `~/.ssh/id_rsa.pub` 相同.
+将 __vm017__ 的公钥发送给 __vm06__, __vm03__, __vm017__ 完成后 __vm06__, __vm03__, __vm017__ 会生成 `~/.ssh/authorized_keys` 文件, 且该文件内容和 __vm017__ 的 `~/.ssh/id_rsa.pub` 相同.
 
 - 以下为 __vm017__ 的操作:
 ```
@@ -2850,15 +2852,31 @@ Number of key(s) added: 1
 Now try logging into the machine, with:   "ssh 'zozo@172.16.0.3'"
 and check to make sure that only the key(s) you wanted were added.
 
+[zozo@vm017 .ssh]$ ssh-copy-id zozo@172.16.0.17
+/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/zozo/.ssh/id_rsa.pub"
+The authenticity of host '172.16.0.17 (172.16.0.17)' can't be established.
+ECDSA key fingerprint is SHA256:+ThGOg/FjnUGE1evxEs2R4173M48Nmq9RMJbHNALqFI.
+ECDSA key fingerprint is MD5:16:a6:bb:11:fd:c5:a7:5b:7b:c9:35:04:4a:2e:12:5b.
+Are you sure you want to continue connecting (yes/no)? yes
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+zozo@172.16.0.17's password:
+
+Number of key(s) added: 1
+
+Now try logging into the machine, with:   "ssh 'zozo@172.16.0.17'"
+and check to make sure that only the key(s) you wanted were added.
+
 [zozo@vm017 .ssh]$ ll
-总用量 12
+总用量 16
+-rw------- 1 zozo zozo  392 6月   1 17:30 authorized_keys
 -rw------- 1 zozo zozo 1675 6月   1 15:16 id_rsa
 -rw-r--r-- 1 zozo zozo  392 6月   1 15:16 id_rsa.pub
--rw-r--r-- 1 zozo zozo  344 5月  30 20:17 known_hosts
+-rw-r--r-- 1 zozo zozo  517 6月   1 17:30 known_hosts
 [zozo@vm017 .ssh]$
 ```
 
-- 以下为 __vm06__ 的操作:
+- 以下为 __vm06__ 的 `~/.ssh/authorized_keys` 文件:
 ```
 [zozo@vm06 .ssh]$ pwd
 /home/zozo/.ssh
@@ -2871,7 +2889,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbb
 [zozo@vm06 .ssh]$
 ```
 
-- 以下为 __vm03__ 的操作:
+- 以下为 __vm03__ 的 `~/.ssh/authorized_keys` 文件:
 ```
 [zozo@vm03 .ssh]$ pwd
 /home/zozo/.ssh
@@ -2884,9 +2902,24 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbb
 [zozo@vm03 .ssh]$
 ```
 
-## 3.5.3 确认 vm06 和 vm03 的文件权限
+- 以下为 __vm017__ 的 `~/.ssh/authorized_keys` 文件:
+```
+[zozo@vm017 .ssh]$ pwd
+/home/zozo/.ssh
+[zozo@vm017 .ssh]$ ll
+总用量 16
+-rw------- 1 zozo zozo  392 6月   1 17:30 authorized_keys
+-rw------- 1 zozo zozo 1675 6月   1 15:16 id_rsa
+-rw-r--r-- 1 zozo zozo  392 6月   1 15:16 id_rsa.pub
+-rw-r--r-- 1 zozo zozo  517 6月   1 17:30 known_hosts
+[zozo@vm017 .ssh]$ cat authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
+[zozo@vm017 .ssh]$
+```
 
-需要确保 __vm06__ 和 __vm03__ 的 `~/.ssh` 文件夹权限为 `700`, `~/.ssh/authorized_keys` 文件权限为 `600`, 如下:
+## 3.5.3 确认 vm06, vm03, vm017 的文件权限
+
+需要确保 __vm06__, __vm03__, __vm017__ 的 `~/.ssh` 文件夹权限为 `700`, `~/.ssh/authorized_keys` 文件权限为 `600`, 如下:
 ```
 [zozo@vm06 ~]$ pwd
 /home/zozo
@@ -2940,7 +2973,7 @@ drwx------  2 zozo zozo  4096 6月   1 16:48 .ssh
 
 ## 3.5.4 测试免密登录
 
-在 __vm017__ 上测试免密登录 __vm06__ 和 __vm03__:
+在 __vm017__ 上测试免密登录 __vm06__, __vm03__, __vm017__:
 ```
 [zozo@vm017 .ssh]$ ssh zozo@172.16.0.6
 Last login: Sat Jun  1 15:12:09 2019 from 172.16.0.3
@@ -2952,6 +2985,11 @@ Last login: Sat Jun  1 15:11:05 2019 from 172.16.0.6
 [zozo@vm03 ~]$ exit
 登出
 Connection to 172.16.0.3 closed.
+[zozo@vm017 .ssh]$ ssh zozo@172.16.0.17
+Last login: Sat Jun  1 16:42:32 2019 from 14.29.126.59
+[zozo@vm017 ~]$ exit
+登出
+Connection to 172.16.0.17 closed.
 [zozo@vm017 .ssh]$
 ```
 
