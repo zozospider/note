@@ -2917,7 +2917,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbb
 [zozo@vm017 .ssh]$
 ```
 
-## 3.5.3 确认 vm06, vm03, vm017 的文件权限
+### 3.5.3 确认 vm06, vm03, vm017 的文件权限
 
 需要确保 __vm06__, __vm03__, __vm017__ 的 `~/.ssh` 文件夹权限为 `700`, `~/.ssh/authorized_keys` 文件权限为 `600`, 如下:
 ```
@@ -2971,7 +2971,7 @@ drwx------  2 zozo zozo  4096 6月   1 16:48 .ssh
 [zozo@vm06 .ssh]$
 ```
 
-## 3.5.4 测试免密登录
+### 3.5.4 测试免密登录
 
 在 __vm017__ 上测试免密登录 __vm06__, __vm03__, __vm017__:
 ```
