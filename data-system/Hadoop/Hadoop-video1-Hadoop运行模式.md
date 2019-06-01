@@ -3068,8 +3068,6 @@ Connection to 172.16.0.3 closed.
 [zozo@vm03 .ssh]$
 ```
 
----
-
 
 
 ---
