@@ -2078,7 +2078,7 @@ stopping resourcemanager
 
 配置 hostname 和 host
 
-- vm06
+- __vm06__
 ```
 [root@VM_0_6_centos ~]# cat /etc/hostname
 vm06
@@ -2139,7 +2139,7 @@ you need to add the following to config:
 [root@vm06 ~]#
 ```
 
-- vm017
+- __vm017__
 ```
 [root@VM_0_17_centos ~]# cat /etc/hostname
 vm017
@@ -2178,7 +2178,7 @@ you need to add the following to config:
 [root@vm017 ~]#
 ```
 
-- vm03
+- __vm03__
 ```
 [root@VM_0_3_centos ~]# cat /etc/hostname
 vm03
@@ -2489,7 +2489,7 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
 
 ### 3.4.1 vm017: 格式化, 启动 NameNode, DataNode
 
-- 1. 在 vm017 上执行格式化, 成功后会在当前节点生成 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/name` 目录
+- 1. 在 __vm017__ 上执行格式化, 成功后会在当前节点生成 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/name` 目录
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hdfs namenode -format
 19/05/30 20:31:21 INFO namenode.NameNode: STARTUP_MSG:
@@ -2593,7 +2593,7 @@ hadoop-2.7.2-data/tmp/dfs/name/current:
 [zozo@vm017 hadoop]$
 ```
 
-- 2. 在 vm017 上启动 NameNode
+- 2. 在 __vm017__ 上启动 NameNode
 ```
 [zozo@vm017 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start namenode
 starting namenode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-namenode-vm017.out
@@ -2603,7 +2603,7 @@ starting namenode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zoz
 [zozo@vm017 hadoop-2.7.2]$
 ```
 
-- 3. 在 vm017 上启动 DataNode, 成功后会在当前节点生成 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data` 目录
+- 3. 在 __vm017__ 上启动 DataNode, 成功后会在当前节点生成 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data` 目录
 ```
 [zozo@vm017 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start datanode
 starting datanode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-datanode-vm017.out
@@ -2674,7 +2674,7 @@ hadoop-2.7.2-data/tmp/dfs/name/current:
 
 ### 3.4.2 vm06: 启动 DataNode
 
-- 1. 在 vm06 上启动 DataNode, 成功后会在当前节点生成 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data` 目录
+- 1. 在 __vm06__ 上启动 DataNode, 成功后会在当前节点生成 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data` 目录
 ```
 [zozo@vm06 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start datanode
 starting datanode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-datanode-vm06.out
@@ -2707,7 +2707,7 @@ hadoop-2.7.2-data/tmp/dfs/data:
 
 ### 3.4.3 vm03: 启动 DataNode
 
-- 1. 在 vm03 上启动 DataNode, 成功后会在当前节点生成 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data` 目录
+- 1. 在 __vm03__ 上启动 DataNode, 成功后会在当前节点生成 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data` 目录
 ```
 [zozo@vm03 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start datanode
 starting datanode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-datanode-vm03.out
@@ -2744,12 +2744,13 @@ hadoop-2.7.2-data/tmp/dfs/data:
 
 ## 3.5 配置 SSH 免密登录
 
-- 因为 vm017 为 NameNode, 需要配置 SSH 免密登录其他节点.
-- 因为 vm03 为 NodeManager, 需要配置 SSH 免密登录其他节点.
+- 因为 __vm017__ 为 NameNode, 需要配置 SSH 免密登录其他节点.
+- 因为 __vm03__ 为 NodeManager, 需要配置 SSH 免密登录其他节点.
 
 - link
-  - [SSH免密登录原理及实现](https://blog.csdn.net/qq_26907251/article/details/78804367)
-  - [SSH免密登录原理及配置](https://my.oschina.net/binxin/blog/651565)
+  - [SSH免密登录原理及实现](https://blog.csdn.net/qq_26907251/article/details/78804367)  (参考: 图)
+	- [ssh免密码登录配置方法](https://blog.csdn.net/universe_hao/article/details/52296811)  (参考: 操作)
+  - [SSH免密登录原理及配置](https://my.oschina.net/binxin/blog/651565)  (参考: 权限)
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/SSH%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E5%8E%9F%E7%90%86.png?raw=true)
 
@@ -2762,6 +2763,197 @@ hadoop-2.7.2-data/tmp/dfs/data:
 | `~/.ssh/id_rsa.pub` | 生成的公钥 |
 | `~/.ssh/authorized_keys` | 存放授权过的免密登录服务器公钥 |
 
+以下以 vm017 免密登录到其他两台机器的具体步骤, vm03 类似操作:
+
+### 3.5.1 vm017 生成密钥
+
+如果没有 `~/.ssh`, 可以先通过 ssh 登录其他机器, 就会产生 `~/.ssh/known_hosts` 文件, 如下:
+```
+[zozo@vm017 .ssh]$ pwd
+/home/zozo/.ssh
+[zozo@vm017 .ssh]$ cat known_hosts
+172.16.0.3 ecdsa-sha2-nistp256 AAAAE2VjZHNhLxxxxxxxxxxxxxxxxxxxOxBeGA7kqpUJGNbIz0EC0Mqwi0FJNc+V1aQkmx8c+olPBBUhVFSGHxyyyyyyyyyyyyyyyyyyyyys2No=
+172.16.0.6 ecdsa-sha2-nistp256 AAAAE2VjZHNxxxxxxxxxxxxxxxxxxxOxBeGA7kqpUJGNbIz0EC0Mqwi0FJNc+V1YXMY+Z3zzzzzzzzzzzzzzejRVJ/gQ3OU67ybhgwwwwwwwwwwwwN8crgYxw=
+[zozo@vm017 .ssh]$
+```
+
+在 __vm017__ `~/.ssh` 目录下执行以下命令, 通过 RSA 算法进行加密, 提示输入三次回车后, 该目录下将会产生 `id_rsa` (私钥), `id_rsa.pub` (公钥) 文件:
+```
+[zozo@vm017 .ssh]$ pwd
+/home/zozo/.ssh
+[zozo@vm017 .ssh]$ ll
+总用量 4
+-rw-r--r-- 1 zozo zozo 344 5月  30 20:17 known_hosts
+[zozo@vm017 .ssh]$ ssh-keygen -t rsa
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/zozo/.ssh/id_rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/zozo/.ssh/id_rsa.
+Your public key has been saved in /home/zozo/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:iscm/wJxOeN04zld8YgSOhQc3TdfTqLwMLW5DC7hIVs zozo@vm017
+The key's randomart image is:
++---[RSA 2048]----+
+|     .o+ . ..    |
+|      o o = +o. o|
+|     ..oE..BoB = |
+|    . O=++.o=.o .|
+|     =.*S=..o    |
+|    .o..+..      |
+|    o.=  .       |
+|     =.          |
+|      .o.        |
++----[SHA256]-----+
+[zozo@vm017 .ssh]$ ll
+总用量 12
+-rw------- 1 zozo zozo 1675 6月   1 15:16 id_rsa
+-rw-r--r-- 1 zozo zozo  392 6月   1 15:16 id_rsa.pub
+-rw-r--r-- 1 zozo zozo  344 5月  30 20:17 known_hosts
+[zozo@vm017 .ssh]$
+```
+
+### 3.5.2 vm017 发送 authorized_keys
+
+将 __vm017__ 的公钥发送给 __vm06__ 和 __vm03__, 完成后 __vm06__ 和 __vm03__ 会生成 `~/.ssh/authorized_keys` 文件, 且该文件内容和 vm017 的 `~/.ssh/id_rsa.pub` 相同.
+
+- 以下为 __vm017__ 的操作:
+```
+[zozo@vm017 .ssh]$ pwd
+/home/zozo/.ssh
+[zozo@vm017 .ssh]$ ll
+总用量 12
+-rw------- 1 zozo zozo 1675 6月   1 15:16 id_rsa
+-rw-r--r-- 1 zozo zozo  392 6月   1 15:16 id_rsa.pub
+-rw-r--r-- 1 zozo zozo  344 5月  30 20:17 known_hosts
+[zozo@vm017 .ssh]$ cat id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
+[zozo@vm017 .ssh]$ ssh-copy-id zozo@172.16.0.6
+/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/zozo/.ssh/id_rsa.pub"
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+zozo@172.16.0.6's password:
+
+Number of key(s) added: 1
+
+Now try logging into the machine, with:   "ssh 'zozo@172.16.0.6'"
+and check to make sure that only the key(s) you wanted were added.
+
+[zozo@vm017 .ssh]$ ssh-copy-id zozo@172.16.0.3
+/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/zozo/.ssh/id_rsa.pub"
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+zozo@172.16.0.3's password:
+
+Number of key(s) added: 1
+
+Now try logging into the machine, with:   "ssh 'zozo@172.16.0.3'"
+and check to make sure that only the key(s) you wanted were added.
+
+[zozo@vm017 .ssh]$ ll
+总用量 12
+-rw------- 1 zozo zozo 1675 6月   1 15:16 id_rsa
+-rw-r--r-- 1 zozo zozo  392 6月   1 15:16 id_rsa.pub
+-rw-r--r-- 1 zozo zozo  344 5月  30 20:17 known_hosts
+[zozo@vm017 .ssh]$
+```
+
+- 以下为 __vm06__ 的操作:
+```
+[zozo@vm06 .ssh]$ pwd
+/home/zozo/.ssh
+[zozo@vm06 .ssh]$ ll
+总用量 8
+-rw------- 1 zozo zozo 392 6月   1 16:48 authorized_keys
+-rw-r--r-- 1 zozo zozo 345 6月   1 15:11 known_hosts
+[zozo@vm06 .ssh]$ cat authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
+[zozo@vm06 .ssh]$
+```
+
+- 以下为 __vm03__ 的操作:
+```
+[zozo@vm03 .ssh]$ pwd
+/home/zozo/.ssh
+[zozo@vm03 .ssh]$ ll
+总用量 8
+-rw------- 1 zozo zozo 392 6月   1 16:51 authorized_keys
+-rw-r--r-- 1 zozo zozo 345 6月   1 15:12 known_hosts
+[zozo@vm03 .ssh]$ cat authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
+[zozo@vm03 .ssh]$
+```
+
+## 3.5.3 确认 vm06 和 vm03 的文件权限
+
+需要确保 __vm06__ 和 __vm03__ 的 `~/.ssh` 文件夹权限为 `700`, `~/.ssh/authorized_keys` 文件权限为 `600`, 如下:
+```
+[zozo@vm06 ~]$ pwd
+/home/zozo
+[zozo@vm06 ~]$ ls -al
+总用量 88
+drwx------  6 zozo zozo  4096 6月   1 15:10 .
+drwxr-xr-x. 5 root root  4096 11月 30 2018 ..
+drwxrwxr-x  6 zozo zozo  4096 5月  19 16:19 app
+-rw-------  1 zozo zozo 37895 6月   1 17:00 .bash_history
+-rw-r--r--  1 zozo zozo    18 8月   3 2017 .bash_logout
+-rw-r--r--  1 zozo zozo   602 5月  29 20:06 .bash_profile
+-rw-r--r--  1 zozo zozo   231 8月   3 2017 .bashrc
+drwxrwxr-x  3 zozo zozo  4096 11月 30 2018 .cache
+drwxrwxr-x  3 zozo zozo  4096 11月 30 2018 .config
+drwx------  2 zozo zozo  4096 6月   1 16:48 .ssh
+-rw-------  1 zozo zozo 10105 5月  29 21:07 .viminfo
+[zozo@vm06 ~]$ cd .ssh
+[zozo@vm06 .ssh]$ ll
+总用量 8
+-rw------- 1 zozo zozo 392 6月   1 16:48 authorized_keys
+-rw-r--r-- 1 zozo zozo 345 6月   1 15:11 known_hosts
+[zozo@vm06 .ssh]$
+```
+
+如果如果权限不对需要进行设置, 如下所示:
+```
+[zozo@vm06 ~]$ pwd
+/home/zozo
+[zozo@vm06 ~]$ chmod 700 .ssh
+[zozo@vm06 ~]$ ls -al
+总用量 88
+drwx------  6 zozo zozo  4096 6月   1 15:10 .
+drwxr-xr-x. 5 root root  4096 11月 30 2018 ..
+drwxrwxr-x  6 zozo zozo  4096 5月  19 16:19 app
+-rw-------  1 zozo zozo 38049 6月   1 17:01 .bash_history
+-rw-r--r--  1 zozo zozo    18 8月   3 2017 .bash_logout
+-rw-r--r--  1 zozo zozo   602 5月  29 20:06 .bash_profile
+-rw-r--r--  1 zozo zozo   231 8月   3 2017 .bashrc
+drwxrwxr-x  3 zozo zozo  4096 11月 30 2018 .cache
+drwxrwxr-x  3 zozo zozo  4096 11月 30 2018 .config
+drwx------  2 zozo zozo  4096 6月   1 16:48 .ssh
+-rw-------  1 zozo zozo 10105 5月  29 21:07 .viminfo
+[zozo@vm06 ~]$ cd .ssh
+[zozo@vm06 .ssh]$ chmod 600 authorized_keys
+[zozo@vm06 .ssh]$ ll
+总用量 8
+-rw------- 1 zozo zozo 392 6月   1 16:48 authorized_keys
+-rw-r--r-- 1 zozo zozo 345 6月   1 15:11 known_hosts
+[zozo@vm06 .ssh]$
+```
+
+## 3.5.4 测试免密登录
+
+在 __vm017__ 上测试免密登录 __vm06__ 和 __vm03__:
+```
+[zozo@vm017 .ssh]$ ssh zozo@172.16.0.6
+Last login: Sat Jun  1 15:12:09 2019 from 172.16.0.3
+[zozo@vm06 ~]$ exit
+登出
+Connection to 172.16.0.6 closed.
+[zozo@vm017 .ssh]$ ssh zozo@172.16.0.3
+Last login: Sat Jun  1 15:11:05 2019 from 172.16.0.6
+[zozo@vm03 ~]$ exit
+登出
+Connection to 172.16.0.3 closed.
+[zozo@vm017 .ssh]$
+```
 
 
 ---
