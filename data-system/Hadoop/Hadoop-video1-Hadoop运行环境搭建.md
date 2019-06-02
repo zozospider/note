@@ -167,25 +167,7 @@ vm017
 
 ## 2.1 案例说明
 
-下面为一个完全分布式的免密登录案例:
-
-集群部署规划如下:
-
-| 模块 / 节点 | __vm017__ | __vm06__ | __vm03__ |
-| :--- | :--- | :--- | :--- |
-| __HDFS__ | DataNode | DataNode | DataNode |
-|  | __NameNode__ | __SecondaryNameNode__ |  |
-| __YARN__ | NodeManager | NodeManager | NodeManager |
-|  |  |  | __ResourceManager__ |
-
-| 节点 / 模块 | __HDFS__ | __YARN__ |
-| :--- | :--- | :--- |
-| __vm017__ | DataNode | NodeManager |
-|  | __NameNode__ |  |
-| __vm06__ | DataNode | NodeManager |
-|  | __SecondaryNameNode__ |  |
-| __vm03__ | DataNode | NodeManager |
-|  |  | __ResourceManager__ |
+下面为一个完全分布式的免密登录案例, 集群部署规划请参考: [Hadoop-video1-Hadoop运行模式 - 完全分布式运行模式](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F.md#%E4%B8%89-%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F).
 
 - 因为 __vm017__ 为 NameNode, 需要配置 SSH 免密登录所有节点. 这样在调用 `start-all.sh` 脚本时, 无需输入密码.
 - 因为 __vm03__ 为 NodeManager, 需要配置 SSH 免密登录所有节点.
