@@ -210,34 +210,34 @@ vm017
 /home/zozo/.ssh
 [zozo@vm017 .ssh]$ ll
 总用量 4
--rw-r--r-- 1 zozo zozo 344 5月  30 20:17 known_hosts
+-rw-r--r-- 1 zozo zozo 344 6月   2 00:58 known_hosts
 [zozo@vm017 .ssh]$ ssh-keygen -t rsa
 Generating public/private rsa key pair.
-Enter file in which to save the key (/home/zozo/.ssh/id_rsa):
-Enter passphrase (empty for no passphrase):
-Enter same passphrase again:
+Enter file in which to save the key (/home/zozo/.ssh/id_rsa): 
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
 Your identification has been saved in /home/zozo/.ssh/id_rsa.
 Your public key has been saved in /home/zozo/.ssh/id_rsa.pub.
 The key fingerprint is:
-SHA256:iscm/wJxOeN04zld8YgSOhQc3TdfTqLwMLW5DC7hIVs zozo@vm017
+SHA256:H7RRF9m0ZKYrFDwmaXuc6aWtGDADQdtxZp5vvQB1KrY zozo@vm017
 The key's randomart image is:
 +---[RSA 2048]----+
-|     .o+ . ..    |
-|      o o = +o. o|
-|     ..oE..BoB = |
-|    . O=++.o=.o .|
-|     =.*S=..o    |
-|    .o..+..      |
-|    o.=  .       |
-|     =.          |
-|      .o.        |
+|    .o.. +oo..oO.|
+|     .o *+o=+.* o|
+|     ....*Bo+. . |
+|       +.o*B...  |
+|        SE==+o   |
+|         o.+o..  |
+|          + ..   |
+|         . .     |
+|                 |
 +----[SHA256]-----+
 [zozo@vm017 .ssh]$ ll
 总用量 12
--rw------- 1 zozo zozo 1675 6月   1 15:16 id_rsa
--rw-r--r-- 1 zozo zozo  392 6月   1 15:16 id_rsa.pub
--rw-r--r-- 1 zozo zozo  344 5月  30 20:17 known_hosts
-[zozo@vm017 .ssh]$
+-rw------- 1 zozo zozo 1675 6月   2 21:15 id_rsa
+-rw-r--r-- 1 zozo zozo  392 6月   2 21:15 id_rsa.pub
+-rw-r--r-- 1 zozo zozo  344 6月   2 00:58 known_hosts
+[zozo@vm017 .ssh]$ 
 ```
 
 ## 2.3 vm017 发送 authorized_keys
@@ -250,16 +250,16 @@ The key's randomart image is:
 /home/zozo/.ssh
 [zozo@vm017 .ssh]$ ll
 总用量 12
--rw------- 1 zozo zozo 1675 6月   1 15:16 id_rsa
--rw-r--r-- 1 zozo zozo  392 6月   1 15:16 id_rsa.pub
--rw-r--r-- 1 zozo zozo  344 5月  30 20:17 known_hosts
+-rw------- 1 zozo zozo 1675 6月   2 21:15 id_rsa
+-rw-r--r-- 1 zozo zozo  392 6月   2 21:15 id_rsa.pub
+-rw-r--r-- 1 zozo zozo  344 6月   2 00:58 known_hosts
 [zozo@vm017 .ssh]$ cat id_rsa.pub
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
 [zozo@vm017 .ssh]$ ssh-copy-id zozo@172.16.0.6
 /usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/zozo/.ssh/id_rsa.pub"
 /usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
 /usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
-zozo@172.16.0.6's password:
+zozo@172.16.0.6's password: 
 
 Number of key(s) added: 1
 
@@ -270,7 +270,7 @@ and check to make sure that only the key(s) you wanted were added.
 /usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/zozo/.ssh/id_rsa.pub"
 /usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
 /usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
-zozo@172.16.0.3's password:
+zozo@172.16.0.3's password: 
 
 Number of key(s) added: 1
 
@@ -280,12 +280,12 @@ and check to make sure that only the key(s) you wanted were added.
 [zozo@vm017 .ssh]$ ssh-copy-id zozo@172.16.0.17
 /usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/zozo/.ssh/id_rsa.pub"
 The authenticity of host '172.16.0.17 (172.16.0.17)' can't be established.
-ECDSA key fingerprint is SHA256:+ThGOg/FjnUGE1evxEs2R4173M48Nmq9RMJbHNALqFI.
-ECDSA key fingerprint is MD5:16:a6:bb:11:fd:c5:a7:5b:7b:c9:35:04:4a:2e:12:5b.
+ECDSA key fingerprint is SHA256:Kk12fwMCj4TPJR5olofwoLAgrh9k1VFUje88psnLa0Y.
+ECDSA key fingerprint is MD5:d9:78:f0:dd:27:c7:b9:fc:6b:c3:ef:2e:52:de:84:94.
 Are you sure you want to continue connecting (yes/no)? yes
 /usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
 /usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
-zozo@172.16.0.17's password:
+zozo@172.16.0.17's password: 
 
 Number of key(s) added: 1
 
@@ -294,11 +294,11 @@ and check to make sure that only the key(s) you wanted were added.
 
 [zozo@vm017 .ssh]$ ll
 总用量 16
--rw------- 1 zozo zozo  392 6月   1 17:30 authorized_keys
--rw------- 1 zozo zozo 1675 6月   1 15:16 id_rsa
--rw-r--r-- 1 zozo zozo  392 6月   1 15:16 id_rsa.pub
--rw-r--r-- 1 zozo zozo  517 6月   1 17:30 known_hosts
-[zozo@vm017 .ssh]$
+-rw------- 1 zozo zozo  392 6月   2 21:17 authorized_keys
+-rw------- 1 zozo zozo 1675 6月   2 21:15 id_rsa
+-rw-r--r-- 1 zozo zozo  392 6月   2 21:15 id_rsa.pub
+-rw-r--r-- 1 zozo zozo  517 6月   2 21:17 known_hosts
+[zozo@vm017 .ssh]$ 
 ```
 
 - 以下为 __vm06__ 的 `~/.ssh/authorized_keys` 文件:
@@ -307,8 +307,8 @@ and check to make sure that only the key(s) you wanted were added.
 /home/zozo/.ssh
 [zozo@vm06 .ssh]$ ll
 总用量 8
--rw------- 1 zozo zozo 392 6月   1 16:48 authorized_keys
--rw-r--r-- 1 zozo zozo 345 6月   1 15:11 known_hosts
+-rw------- 1 zozo zozo 392 6月   2 21:16 authorized_keys
+-rw-r--r-- 1 zozo zozo 345 6月   2 21:13 known_hosts
 [zozo@vm06 .ssh]$ cat authorized_keys
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
 [zozo@vm06 .ssh]$
@@ -320,8 +320,8 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbb
 /home/zozo/.ssh
 [zozo@vm03 .ssh]$ ll
 总用量 8
--rw------- 1 zozo zozo 392 6月   1 16:51 authorized_keys
--rw-r--r-- 1 zozo zozo 345 6月   1 15:12 known_hosts
+-rw------- 1 zozo zozo 392 6月   2 21:16 authorized_keys
+-rw-r--r-- 1 zozo zozo 345 6月   2 21:14 known_hosts
 [zozo@vm03 .ssh]$ cat authorized_keys
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
 [zozo@vm03 .ssh]$
@@ -333,10 +333,10 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbb
 /home/zozo/.ssh
 [zozo@vm017 .ssh]$ ll
 总用量 16
--rw------- 1 zozo zozo  392 6月   1 17:30 authorized_keys
--rw------- 1 zozo zozo 1675 6月   1 15:16 id_rsa
--rw-r--r-- 1 zozo zozo  392 6月   1 15:16 id_rsa.pub
--rw-r--r-- 1 zozo zozo  517 6月   1 17:30 known_hosts
+-rw------- 1 zozo zozo  392 6月   2 21:17 authorized_keys
+-rw------- 1 zozo zozo 1675 6月   2 21:15 id_rsa
+-rw-r--r-- 1 zozo zozo  392 6月   2 21:15 id_rsa.pub
+-rw-r--r-- 1 zozo zozo  517 6月   2 21:17 known_hosts
 [zozo@vm017 .ssh]$ cat authorized_keys
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
 [zozo@vm017 .ssh]$
@@ -349,24 +349,24 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbb
 [zozo@vm06 ~]$ pwd
 /home/zozo
 [zozo@vm06 ~]$ ls -al
-总用量 88
-drwx------  6 zozo zozo  4096 6月   1 15:10 .
-drwxr-xr-x. 5 root root  4096 11月 30 2018 ..
-drwxrwxr-x  6 zozo zozo  4096 5月  19 16:19 app
--rw-------  1 zozo zozo 37895 6月   1 17:00 .bash_history
--rw-r--r--  1 zozo zozo    18 8月   3 2017 .bash_logout
--rw-r--r--  1 zozo zozo   602 5月  29 20:06 .bash_profile
--rw-r--r--  1 zozo zozo   231 8月   3 2017 .bashrc
-drwxrwxr-x  3 zozo zozo  4096 11月 30 2018 .cache
-drwxrwxr-x  3 zozo zozo  4096 11月 30 2018 .config
-drwx------  2 zozo zozo  4096 6月   1 16:48 .ssh
--rw-------  1 zozo zozo 10105 5月  29 21:07 .viminfo
+总用量 44
+drwx------  6 zozo zozo 4096 6月   2 21:13 .
+drwxr-xr-x. 3 root root 4096 6月   2 00:27 ..
+drwxrwxr-x  4 zozo zozo 4096 6月   2 00:31 app
+-rw-------  1 zozo zozo 1317 6月   2 21:19 .bash_history
+-rw-r--r--  1 zozo zozo   18 10月 31 2018 .bash_logout
+-rw-r--r--  1 zozo zozo  478 6月   2 19:23 .bash_profile
+-rw-r--r--  1 zozo zozo  231 10月 31 2018 .bashrc
+drwxrwxr-x  3 zozo zozo 4096 6月   2 00:27 .cache
+drwxrwxr-x  3 zozo zozo 4096 6月   2 00:27 .config
+drwx------  2 zozo zozo 4096 6月   2 21:16 .ssh
+-rw-------  1 zozo zozo 2264 6月   2 21:02 .viminfo
 [zozo@vm06 ~]$ cd .ssh
 [zozo@vm06 .ssh]$ ll
 总用量 8
--rw------- 1 zozo zozo 392 6月   1 16:48 authorized_keys
--rw-r--r-- 1 zozo zozo 345 6月   1 15:11 known_hosts
-[zozo@vm06 .ssh]$
+-rw------- 1 zozo zozo 392 6月   2 21:16 authorized_keys
+-rw-r--r-- 1 zozo zozo 345 6月   2 21:13 known_hosts
+[zozo@vm06 .ssh]$ 
 ```
 
 如果如果权限不对需要进行设置, 如下所示:
@@ -375,47 +375,86 @@ drwx------  2 zozo zozo  4096 6月   1 16:48 .ssh
 /home/zozo
 [zozo@vm06 ~]$ chmod 700 .ssh
 [zozo@vm06 ~]$ ls -al
-总用量 88
-drwx------  6 zozo zozo  4096 6月   1 15:10 .
-drwxr-xr-x. 5 root root  4096 11月 30 2018 ..
-drwxrwxr-x  6 zozo zozo  4096 5月  19 16:19 app
--rw-------  1 zozo zozo 38049 6月   1 17:01 .bash_history
--rw-r--r--  1 zozo zozo    18 8月   3 2017 .bash_logout
--rw-r--r--  1 zozo zozo   602 5月  29 20:06 .bash_profile
--rw-r--r--  1 zozo zozo   231 8月   3 2017 .bashrc
-drwxrwxr-x  3 zozo zozo  4096 11月 30 2018 .cache
-drwxrwxr-x  3 zozo zozo  4096 11月 30 2018 .config
-drwx------  2 zozo zozo  4096 6月   1 16:48 .ssh
--rw-------  1 zozo zozo 10105 5月  29 21:07 .viminfo
+总用量 44
+drwx------  6 zozo zozo 4096 6月   2 21:13 .
+drwxr-xr-x. 3 root root 4096 6月   2 00:27 ..
+drwxrwxr-x  4 zozo zozo 4096 6月   2 00:31 app
+-rw-------  1 zozo zozo 1317 6月   2 21:19 .bash_history
+-rw-r--r--  1 zozo zozo   18 10月 31 2018 .bash_logout
+-rw-r--r--  1 zozo zozo  478 6月   2 19:23 .bash_profile
+-rw-r--r--  1 zozo zozo  231 10月 31 2018 .bashrc
+drwxrwxr-x  3 zozo zozo 4096 6月   2 00:27 .cache
+drwxrwxr-x  3 zozo zozo 4096 6月   2 00:27 .config
+drwx------  2 zozo zozo 4096 6月   2 21:16 .ssh
+-rw-------  1 zozo zozo 2264 6月   2 21:02 .viminfo
 [zozo@vm06 ~]$ cd .ssh
 [zozo@vm06 .ssh]$ chmod 600 authorized_keys
 [zozo@vm06 .ssh]$ ll
 总用量 8
--rw------- 1 zozo zozo 392 6月   1 16:48 authorized_keys
--rw-r--r-- 1 zozo zozo 345 6月   1 15:11 known_hosts
+-rw------- 1 zozo zozo 392 6月   2 21:16 authorized_keys
+-rw-r--r-- 1 zozo zozo 345 6月   2 21:13 known_hosts
 [zozo@vm06 .ssh]$
 ```
 
 ## 2.5 vm017 测试免密登录
 
 在 __vm017__ 上测试免密登录 __vm06__, __vm03__, __vm017__:
+
+注: 需要确保执行过以下命令, 以防止程序进行免密登录时被阻塞:
+- `ssh zozo@172.16.0.6`
+- `ssh zozo@172.16.0.3`
+- `ssh zozo@172.16.0.17`
+- `ssh zozo@vm06`
+- `ssh zozo@vm03`
+- `ssh zozo@vm017`
+
 ```
 [zozo@vm017 .ssh]$ ssh zozo@172.16.0.6
-Last login: Sat Jun  1 15:12:09 2019 from 172.16.0.3
+Last login: Sun Jun  2 21:14:58 2019 from 172.16.0.3
 [zozo@vm06 ~]$ exit
 登出
 Connection to 172.16.0.6 closed.
 [zozo@vm017 .ssh]$ ssh zozo@172.16.0.3
-Last login: Sat Jun  1 15:11:05 2019 from 172.16.0.6
+Last login: Sun Jun  2 21:14:17 2019 from 172.16.0.6
 [zozo@vm03 ~]$ exit
 登出
 Connection to 172.16.0.3 closed.
 [zozo@vm017 .ssh]$ ssh zozo@172.16.0.17
-Last login: Sat Jun  1 16:42:32 2019 from 14.29.126.59
+Last login: Sun Jun  2 21:14:43 2019 from 172.16.0.3
 [zozo@vm017 ~]$ exit
 登出
 Connection to 172.16.0.17 closed.
-[zozo@vm017 .ssh]$
+[zozo@vm017 .ssh]$ ssh zozo@vm06
+The authenticity of host 'vm06 (172.16.0.6)' can't be established.
+ECDSA key fingerprint is SHA256:odAtmg5Gk7TWYOzjA99mToiA1lvAYZpTui1oJDzTCbs.
+ECDSA key fingerprint is MD5:60:f8:4c:1a:55:65:3b:9e:21:45:d9:48:7b:3c:5b:99.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'vm06' (ECDSA) to the list of known hosts.
+Last login: Sun Jun  2 21:21:11 2019 from 172.16.0.17
+[zozo@vm06 ~]$ exit
+登出
+Connection to vm06 closed.
+[zozo@vm017 .ssh]$ ssh zozo@vm03
+The authenticity of host 'vm03 (172.16.0.3)' can't be established.
+ECDSA key fingerprint is SHA256:ni5oCV3u7hyekAh8N7JLptJ4VW2jPeGMWMslKR7uZfI.
+ECDSA key fingerprint is MD5:e3:14:b2:bd:ba:7e:9b:8b:78:69:87:01:33:17:14:9c.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'vm03' (ECDSA) to the list of known hosts.
+Last login: Sun Jun  2 21:21:18 2019 from 172.16.0.17
+[zozo@vm03 ~]$ exit
+登出
+Connection to vm03 closed.
+[zozo@vm017 .ssh]$ ssh zozo@vm017
+The authenticity of host 'vm017 (172.16.0.17)' can't be established.
+ECDSA key fingerprint is SHA256:Kk12fwMCj4TPJR5olofwoLAgrh9k1VFUje88psnLa0Y.
+ECDSA key fingerprint is MD5:d9:78:f0:dd:27:c7:b9:fc:6b:c3:ef:2e:52:de:84:94.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'vm017' (ECDSA) to the list of known hosts.
+Last login: Sun Jun  2 21:21:24 2019 from 172.16.0.17
+[zozo@vm017 ~]$ exit
+登出
+Connection to vm017 closed.
+[zozo@vm017 .ssh]$ 
 ```
 
 ## 2.6 vm03 同样配置免密登录所有节点
@@ -428,24 +467,24 @@ Connection to 172.16.0.17 closed.
 /home/zozo/.ssh
 [zozo@vm017 .ssh]$ ll
 总用量 16
--rw------- 1 zozo zozo  783 6月   1 17:55 authorized_keys
--rw------- 1 zozo zozo 1675 6月   1 15:16 id_rsa
--rw-r--r-- 1 zozo zozo  392 6月   1 15:16 id_rsa.pub
--rw-r--r-- 1 zozo zozo  517 6月   1 17:30 known_hosts
+-rw------- 1 zozo zozo  783 6月   2 21:28 authorized_keys
+-rw------- 1 zozo zozo 1675 6月   2 21:15 id_rsa
+-rw-r--r-- 1 zozo zozo  392 6月   2 21:15 id_rsa.pub
+-rw-r--r-- 1 zozo zozo 1016 6月   2 21:22 known_hosts
 [zozo@vm017 .ssh]$ cat authorized_keys
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFK2ZAzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz3vjfwAN5SMLS6zNDA/VFVHbB3BwNCw0P2HwnReaBzqxpxg0TChQWors04yj2+XYQXc632goKf+BPj8EvBPPNkq4Ea/lv+JaI/G4ZtuvvvvvvFhGuHYVzjPC6w9TSxhR+gQJhlGbFCwqqqqqqqqqqqqqqqqqqqqqqqqqqqqCtq9G2YKbe7alFZuS7JzjvlYkMc/HxKSahNy+q1qhI+51AXUG0T7l+edt//jh0TDlWVfUrhuTX/yi91v0haixxxxx0MzSaUNqARtqrerefveqerffvfhsfhrtybvhyfbvgfyxm8JynLJn zozo@vm03
 [zozo@vm017 .ssh]$
 ```
 
-- 以下为 __vm016__ 的 `~/.ssh` 文件夹内容:
+- 以下为 __vm06__ 的 `~/.ssh` 文件夹内容:
 ```
 [zozo@vm06 .ssh]$ pwd
 /home/zozo/.ssh
 [zozo@vm06 .ssh]$ ll
 总用量 8
--rw------- 1 zozo zozo 783 6月   1 17:55 authorized_keys
--rw-r--r-- 1 zozo zozo 345 6月   1 15:11 known_hosts
+-rw------- 1 zozo zozo 783 6月   2 21:28 authorized_keys
+-rw-r--r-- 1 zozo zozo 517 6月   2 21:20 known_hosts
 [zozo@vm06 .ssh]$ cat authorized_keys
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFK2ZAzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz3vjfwAN5SMLS6zNDA/VFVHbB3BwNCw0P2HwnReaBzqxpxg0TChQWors04yj2+XYQXc632goKf+BPj8EvBPPNkq4Ea/lv+JaI/G4ZtuvvvvvvFhGuHYVzjPC6w9TSxhR+gQJhlGbFCwqqqqqqqqqqqqqqqqqqqqqqqqqqqqCtq9G2YKbe7alFZuS7JzjvlYkMc/HxKSahNy+q1qhI+51AXUG0T7l+edt//jh0TDlWVfUrhuTX/yi91v0haixxxxx0MzSaUNqARtqrerefveqerffvfhsfhrtybvhyfbvgfyxm8JynLJn zozo@vm03
@@ -458,34 +497,64 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFK2ZAzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz3vjf
 /home/zozo/.ssh
 [zozo@vm03 .ssh]$ ll
 总用量 16
--rw------- 1 zozo zozo  783 6月   1 17:56 authorized_keys
--rw------- 1 zozo zozo 1679 6月   1 17:54 id_rsa
--rw-r--r-- 1 zozo zozo  391 6月   1 17:54 id_rsa.pub
--rw-r--r-- 1 zozo zozo  517 6月   1 17:56 known_hosts
+-rw------- 1 zozo zozo  783 6月   2 21:28 authorized_keys
+-rw------- 1 zozo zozo 1675 6月   2 21:27 id_rsa
+-rw-r--r-- 1 zozo zozo  391 6月   2 21:27 id_rsa.pub
+-rw-r--r-- 1 zozo zozo 1016 6月   2 21:30 known_hosts
 [zozo@vm03 .ssh]$ cat authorized_keys
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFK2ZAzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz3vjfwAN5SMLS6zNDA/VFVHbB3BwNCw0P2HwnReaBzqxpxg0TChQWors04yj2+XYQXc632goKf+BPj8EvBPPNkq4Ea/lv+JaI/G4ZtuvvvvvvFhGuHYVzjPC6w9TSxhR+gQJhlGbFCwqqqqqqqqqqqqqqqqqqqqqqqqqqqqCtq9G2YKbe7alFZuS7JzjvlYkMc/HxKSahNy+q1qhI+51AXUG0T7l+edt//jh0TDlWVfUrhuTX/yi91v0haixxxxx0MzSaUNqARtqrerefveqerffvfhsfhrtybvhyfbvgfyxm8JynLJn zozo@vm03
 [zozo@vm03 .ssh]$
 ```
 
-- 以下为在 __vm013__ 上测试免密登录 __vm017__, __vm06__, __vm03__:
+- 以下为在 __vm03__ 上测试免密登录 __vm017__, __vm06__, __vm03__:
 ```
 [zozo@vm03 .ssh]$ ssh zozo@172.16.0.17
-Last login: Sat Jun  1 17:33:35 2019 from 172.16.0.17
+Last login: Sun Jun  2 21:22:14 2019 from 172.16.0.17
 [zozo@vm017 ~]$ exit
 登出
 Connection to 172.16.0.17 closed.
 [zozo@vm03 .ssh]$ ssh zozo@172.16.0.6
-Last login: Sat Jun  1 17:09:32 2019 from 172.16.0.17
+Last login: Sun Jun  2 21:25:42 2019 from 172.16.0.17
 [zozo@vm06 ~]$ exit
 登出
 Connection to 172.16.0.6 closed.
 [zozo@vm03 .ssh]$ ssh zozo@172.16.0.3
-Last login: Sat Jun  1 17:09:45 2019 from 172.16.0.17
+Last login: Sun Jun  2 21:22:01 2019 from 172.16.0.17
 [zozo@vm03 ~]$ exit
 登出
 Connection to 172.16.0.3 closed.
-[zozo@vm03 .ssh]$
+[zozo@vm03 .ssh]$ ssh zozo@vm017
+The authenticity of host 'vm017 (172.16.0.17)' can't be established.
+ECDSA key fingerprint is SHA256:Kk12fwMCj4TPJR5olofwoLAgrh9k1VFUje88psnLa0Y.
+ECDSA key fingerprint is MD5:d9:78:f0:dd:27:c7:b9:fc:6b:c3:ef:2e:52:de:84:94.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'vm017' (ECDSA) to the list of known hosts.
+Last login: Sun Jun  2 21:30:00 2019 from 172.16.0.3
+[zozo@vm017 ~]$ exit
+登出
+Connection to vm017 closed.
+[zozo@vm03 .ssh]$ ssh zozo@vm06
+The authenticity of host 'vm06 (172.16.0.6)' can't be established.
+ECDSA key fingerprint is SHA256:odAtmg5Gk7TWYOzjA99mToiA1lvAYZpTui1oJDzTCbs.
+ECDSA key fingerprint is MD5:60:f8:4c:1a:55:65:3b:9e:21:45:d9:48:7b:3c:5b:99.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'vm06' (ECDSA) to the list of known hosts.
+Last login: Sun Jun  2 21:29:50 2019 from 172.16.0.3
+[zozo@vm06 ~]$ exit
+登出
+Connection to vm06 closed.
+[zozo@vm03 .ssh]$ ssh zozo@vm03
+The authenticity of host 'vm03 (172.16.0.3)' can't be established.
+ECDSA key fingerprint is SHA256:ni5oCV3u7hyekAh8N7JLptJ4VW2jPeGMWMslKR7uZfI.
+ECDSA key fingerprint is MD5:e3:14:b2:bd:ba:7e:9b:8b:78:69:87:01:33:17:14:9c.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'vm03' (ECDSA) to the list of known hosts.
+Last login: Sun Jun  2 21:30:06 2019 from 172.16.0.3
+[zozo@vm03 ~]$ exit
+登出
+Connection to vm03 closed.
+[zozo@vm03 .ssh]$ 
 ```
 
 ---
