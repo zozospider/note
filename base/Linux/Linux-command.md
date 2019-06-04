@@ -249,3 +249,27 @@ curator --config /home/user/app/curator/curator.yml /home/user/app/curator/actio
 ```
 cat file | grep -v EXCLUDE
 ```
+
+# 打开文件数
+
+- 通过以下命令可以查看用户级别支持的最大打开文件数
+```
+ulimit -n
+```
+
+- 也可以通过以下命令查看, 其中 `open files` 为最大打开文件数
+```
+ulimit -a
+```
+
+- 通过以下命令可以查看系统级别支持的最大打开文件数
+```
+cat /proc/sys/fs/file-max
+```
+
+- 也可以通过以下命令查看, 其中 `fs.file-max` 为最大打开文件数
+```
+sysctl -a
+sysctl -a | grep fs
+```
+
