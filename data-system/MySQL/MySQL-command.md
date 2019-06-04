@@ -50,9 +50,15 @@ mysql -uterrace -pTz#666 -h192.168.0.1 -P3306 game_manager < game_manager_201902
 mysql -uterrace -pTz#666 -h192.168.0.1 -P3306 game_manager < game_manager_20190218_data.sql
 ```
 
-## 命令行分页显示结果
+# 命令行分页显示结果
 ```
 mysql>pager more;
 mysql>show tables;
 mysql>show databases;
 ```
+
+# 更改字段类型
+```sql
+ALTER TABLE tbl MODIFY COLUMN col int(11);
+```
+
