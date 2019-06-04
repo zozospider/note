@@ -29,11 +29,6 @@
         - [3.4.3 vm03: 启动 DataNode](#343-vm03-启动-datanode)
         - [3.4.4 浏览器查看 HDFS](#344-浏览器查看-hdfs)
     - [3.5 配置 SSH 免密登录](#35-配置-ssh-免密登录)
-        - [3.5.1 vm017 生成密钥](#351-vm017-生成密钥)
-        - [3.5.2 vm017 发送 authorized_keys](#352-vm017-发送-authorized_keys)
-        - [3.5.3 确认 vm06, vm03, vm017 的文件权限](#353-确认-vm06-vm03-vm017-的文件权限)
-        - [3.5.4 vm017 测试免密登录](#354-vm017-测试免密登录)
-        - [3.5.5 vm03 同样配置免密登录所有节点](#355-vm03-同样配置免密登录所有节点)
 
 ---
 
@@ -2081,178 +2076,11 @@ stopping resourcemanager
 
 ## 3.1 准备 3 台机器
 
-配置 hostname 和 host
-
-- __vm06__
-```
-[root@VM_0_6_centos ~]# cat /etc/hostname
-vm06
-[root@VM_0_6_centos ~]# cat /etc/cloud/templates/hosts.redhat.tmpl
-## template:jinja
-{#
-This file /etc/cloud/templates/hosts.redhat.tmpl is only utilized
-if enabled in cloud-config.  Specifically, in order to enable it
-you need to add the following to config:
-  manage_etc_hosts: True
--#}
-# Your system has configured 'manage_etc_hosts' as True.
-# As a result, if you wish for changes to this file to persist
-# then you will need to either
-# a.) make changes to the master file in /etc/cloud/templates/hosts.redhat.tmpl
-# b.) change or remove the value of 'manage_etc_hosts' in
-#     /etc/cloud/cloud.cfg or cloud-config from user-data
-#
-# The following lines are desirable for IPv4 capable hosts
-127.0.0.1 {{fqdn}} {{hostname}}
-127.0.0.1 localhost.localdomain localhost
-127.0.0.1 localhost4.localdomain4 localhost4
-
-172.16.0.6 vm06 vm06
-172.16.0.17 vm017 vm017
-172.16.0.3 vm03 vm03
-
-# The following lines are desirable for IPv6 capable hosts
-::1 {{fqdn}} {{hostname}}
-::1 localhost.localdomain localhost
-::1 localhost6.localdomain6 localhost6
-
-[root@VM_0_6_centos ~]# reboot
-
-
-[root@vm06 ~]# cat /etc/hosts
-# Your system has configured 'manage_etc_hosts' as True.
-# As a result, if you wish for changes to this file to persist
-# then you will need to either
-# a.) make changes to the master file in /etc/cloud/templates/hosts.redhat.tmpl
-# b.) change or remove the value of 'manage_etc_hosts' in
-#     /etc/cloud/cloud.cfg or cloud-config from user-data
-#
-# The following lines are desirable for IPv4 capable hosts
-127.0.0.1 VM_0_6_centos VM_0_6_centos
-127.0.0.1 localhost.localdomain localhost
-127.0.0.1 localhost4.localdomain4 localhost4
-
-172.16.0.6 vm06 vm06
-172.16.0.17 vm017 vm017
-172.16.0.3 vm03 vm03
-
-# The following lines are desirable for IPv6 capable hosts
-::1 VM_0_6_centos VM_0_6_centos
-::1 localhost.localdomain localhost
-::1 localhost6.localdomain6 localhost6
-
-[root@vm06 ~]#
-```
-
-- __vm017__
-```
-[root@VM_0_17_centos ~]# cat /etc/hostname
-vm017
-[root@VM_0_17_centos ~]# cat /etc/cloud/templates/hosts.redhat.tmpl
-## template:jinja
-{#
-This file /etc/cloud/templates/hosts.redhat.tmpl is only utilized
-if enabled in cloud-config.  Specifically, in order to enable it
-you need to add the following to config:
-  manage_etc_hosts: True
--#}
-127.0.0.1 {{fqdn}} {{hostname}}
-127.0.0.1 localhost.localdomain localhost
-127.0.0.1 localhost4.localdomain4 localhost4
-
-172.16.0.6 vm06 vm06
-172.16.0.17 vm017 vm017
-172.16.0.3 vm03 vm03
-
-::1 {{fqdn}} {{hostname}}
-::1 localhost.localdomain localhost
-::1 localhost6.localdomain6 localhost6
-
-[root@VM_0_6_centos ~]# reboot
-
-
-[root@vm017 ~]# cat /etc/hosts
-127.0.0.1 VM_0_17_centos VM_0_17_centos
-127.0.0.1 localhost.localdomain localhost
-127.0.0.1 localhost4.localdomain4 localhost4
-
-::1 VM_0_17_centos VM_0_17_centos
-::1 localhost.localdomain localhost
-::1 localhost6.localdomain6 localhost6
-
-[root@vm017 ~]#
-```
-
-- __vm03__
-```
-[root@VM_0_3_centos ~]# cat /etc/hostname
-vm03
-[root@VM_0_3_centos ~]# cat /etc/cloud/templates/hosts.redhat.tmpl
-## template:jinja
-{#
-This file /etc/cloud/templates/hosts.redhat.tmpl is only utilized
-if enabled in cloud-config.  Specifically, in order to enable it
-you need to add the following to config:
-  manage_etc_hosts: True
--#}
-# Your system has configured 'manage_etc_hosts' as True.
-# As a result, if you wish for changes to this file to persist
-# then you will need to either
-# a.) make changes to the master file in /etc/cloud/templates/hosts.redhat.tmpl
-# b.) change or remove the value of 'manage_etc_hosts' in
-#     /etc/cloud/cloud.cfg or cloud-config from user-data
-#
-# The following lines are desirable for IPv4 capable hosts
-127.0.0.1 {{fqdn}} {{hostname}}
-127.0.0.1 localhost.localdomain localhost
-127.0.0.1 localhost4.localdomain4 localhost4
-
-172.16.0.6 vm06 vm06
-172.16.0.17 vm017 vm017
-172.16.0.3 vm03 vm03
-
-# The following lines are desirable for IPv6 capable hosts
-::1 {{fqdn}} {{hostname}}
-::1 localhost.localdomain localhost
-::1 localhost6.localdomain6 localhost6
-
-[root@VM_0_6_centos ~]# reboot
-
-
-[root@vm03 ~]# cat /etc/hosts
-# Your system has configured 'manage_etc_hosts' as True.
-# As a result, if you wish for changes to this file to persist
-# then you will need to either
-# a.) make changes to the master file in /etc/cloud/templates/hosts.redhat.tmpl
-# b.) change or remove the value of 'manage_etc_hosts' in
-#     /etc/cloud/cloud.cfg or cloud-config from user-data
-#
-# The following lines are desirable for IPv4 capable hosts
-127.0.0.1 VM_0_3_centos VM_0_3_centos
-127.0.0.1 localhost.localdomain localhost
-127.0.0.1 localhost4.localdomain4 localhost4
-
-# The following lines are desirable for IPv6 capable hosts
-::1 VM_0_3_centos VM_0_3_centos
-::1 localhost.localdomain localhost
-::1 localhost6.localdomain6 localhost6
-
-[root@vm03 ~]#
-```
+配置 hostname 和 host, 请参考: [Hadoop-video1-Hadoop运行环境搭建 - hostname 和 host 设置 (本地, 伪分布式, 完全分布式都需要配置)](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA.md#%E4%B8%80-hostname-%E5%92%8C-host-%E8%AE%BE%E7%BD%AE-%E6%9C%AC%E5%9C%B0-%E4%BC%AA%E5%88%86%E5%B8%83%E5%BC%8F-%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E9%83%BD%E9%9C%80%E8%A6%81%E9%85%8D%E7%BD%AE)
 
 ## 3.2 安装 JDK, Hadoop, 配置环境变量
 
-以下为 `~/.bash_profile` 内容:
-```
-# set hadoop
-export HADOOP_HOME=/home/zozo/app/hadoop/hadoop-2.7.2
-export PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH
-
-# set java
-export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
-export PATH=$JAVA_HOME/bin:$PATH
-export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
-```
+请参考: [Hadoop-video1-Hadoop运行环境搭建 - 下载解压, 配置环境变量 (本地, 伪分布式, 完全分布式都需要配置)](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA.md#%E4%B8%89-%E4%B8%8B%E8%BD%BD%E8%A7%A3%E5%8E%8B-%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F-%E6%9C%AC%E5%9C%B0-%E4%BC%AA%E5%88%86%E5%B8%83%E5%BC%8F-%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E9%83%BD%E9%9C%80%E8%A6%81%E9%85%8D%E7%BD%AE)
 
 ## 3.3 配置集群
 
@@ -2497,105 +2325,104 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
 - 1. 在 __vm017__ 上执行格式化, 成功后会在当前节点生成 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/name` 目录
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hdfs namenode -format
-19/05/30 20:31:21 INFO namenode.NameNode: STARTUP_MSG:
+19/06/02 21:03:30 INFO namenode.NameNode: STARTUP_MSG: 
 /************************************************************
 STARTUP_MSG: Starting NameNode
 STARTUP_MSG:   host = vm017/172.16.0.17
 STARTUP_MSG:   args = [-format]
 STARTUP_MSG:   version = 2.7.2
-STARTUP_MSG:   classpath = /home/zozo/app/hadoop/hadoop-2.7.2/etc/hadoop:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/log4j-1.2.17.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jets3t-0.9.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/protobuf-java-2.5.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/snappy-java-1.0.4.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/hamcrest-core-1.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/zookeeper-3.4.6.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/netty-3.6.2.Final.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jettison-1.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jaxb-impl-2.2.3-1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/activation-1.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-beanutils-1.7.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-configuration-1.6.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-httpclient-3.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-logging-1.1.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/apacheds-kerberos-codec-2.0.0-M15.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/hadoop-auth-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/stax-api-1.0-2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jackson-xc-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/curator-framework-2.7.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-collections-3.2.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/mockito-all-1.8.5.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/hadoop-annotations-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/xmlenc-0.52.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/htrace-core-3.1.0-incubating.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-math3-3.1.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/xz-1.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/java-xmlbuilder-0.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/slf4j-api-1.7.10.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/gson-2.2.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jetty-util-6.1.26.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/api-asn1-api-1.0.0-M20.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-beanutils-core-1.8.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/curator-client-2.7.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jsr305-3.0.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/avro-1.7.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/paranamer-2.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-net-3.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jersey-core-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/guava-11.0.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jaxb-api-2.2.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-io-2.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-cli-1.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jsp-api-2.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jetty-6.1.26.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/httpclient-4.2.5.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/apacheds-i18n-2.0.0-M15.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/api-util-1.0.0-M20.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jackson-mapper-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/junit-4.11.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/curator-recipes-2.7.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-codec-1.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-lang-2.6.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-digester-1.8.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jackson-jaxrs-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-compress-1.4.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jackson-core-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/asm-3.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/httpcore-4.2.5.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jersey-server-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jersey-json-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jsch-0.1.42.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/servlet-api-2.5.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/hadoop-common-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/hadoop-nfs-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/hadoop-common-2.7.2-tests.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/log4j-1.2.17.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/protobuf-java-2.5.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/netty-3.6.2.Final.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-logging-1.1.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/xmlenc-0.52.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-daemon-1.0.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/htrace-core-3.1.0-incubating.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jetty-util-6.1.26.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/netty-all-4.0.23.Final.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jsr305-3.0.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/xml-apis-1.3.04.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jersey-core-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/guava-11.0.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-io-2.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-cli-1.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/leveldbjni-all-1.8.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jetty-6.1.26.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/xercesImpl-2.9.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jackson-mapper-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-codec-1.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-lang-2.6.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jackson-core-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/asm-3.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jersey-server-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/servlet-api-2.5.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/hadoop-hdfs-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/hadoop-hdfs-2.7.2-tests.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/hadoop-hdfs-nfs-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/guice-servlet-3.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/log4j-1.2.17.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/protobuf-java-2.5.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/javax.inject-1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/guice-3.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/zookeeper-3.4.6.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/netty-3.6.2.Final.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jettison-1.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jaxb-impl-2.2.3-1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/activation-1.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-logging-1.1.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/stax-api-1.0-2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-xc-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-collections-3.2.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/xz-1.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jetty-util-6.1.26.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jsr305-3.0.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-core-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/guava-11.0.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/aopalliance-1.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-guice-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jaxb-api-2.2.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-io-2.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-cli-1.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/leveldbjni-all-1.8.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jetty-6.1.26.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-mapper-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-codec-1.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-lang-2.6.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-jaxrs-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/zookeeper-3.4.6-tests.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-compress-1.4.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-core-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/asm-3.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-client-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-server-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-json-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/servlet-api-2.5.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-api-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-registry-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-applicationhistoryservice-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-applications-distributedshell-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-common-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-tests-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-applications-unmanaged-am-launcher-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-resourcemanager-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-sharedcachemanager-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-common-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-nodemanager-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-web-proxy-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-client-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/guice-servlet-3.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/log4j-1.2.17.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/protobuf-java-2.5.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/javax.inject-1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/snappy-java-1.0.4.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/hamcrest-core-1.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/guice-3.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/netty-3.6.2.Final.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/hadoop-annotations-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/xz-1.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/avro-1.7.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/paranamer-2.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/jersey-core-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/aopalliance-1.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/jersey-guice-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/commons-io-2.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/leveldbjni-all-1.8.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/jackson-mapper-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/junit-4.11.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/commons-compress-1.4.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/jackson-core-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/asm-3.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/jersey-server-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-shuffle-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-core-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-app-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.7.2-tests.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-plugins-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-common-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/contrib/capacity-scheduler/*.jar
+STARTUP_MSG:   classpath = /home/zozo/app/hadoop/hadoop-2.7.2/etc/hadoop:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/xz-1.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/httpcore-4.2.5.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/apacheds-i18n-2.0.0-M15.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/curator-client-2.7.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/protobuf-java-2.5.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/xmlenc-0.52.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-lang-2.6.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/htrace-core-3.1.0-incubating.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/mockito-all-1.8.5.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/hadoop-auth-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-beanutils-core-1.8.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/curator-recipes-2.7.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/apacheds-kerberos-codec-2.0.0-M15.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/java-xmlbuilder-0.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jaxb-api-2.2.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jackson-jaxrs-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/paranamer-2.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jersey-json-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jersey-server-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jackson-core-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-httpclient-3.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-beanutils-1.7.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jsp-api-2.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jackson-xc-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jsr305-3.0.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/api-util-1.0.0-M20.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/guava-11.0.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-net-3.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-codec-1.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/activation-1.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-digester-1.8.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jets3t-0.9.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/httpclient-4.2.5.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jersey-core-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/hadoop-annotations-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/servlet-api-2.5.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/stax-api-1.0-2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/junit-4.11.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/gson-2.2.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-logging-1.1.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-cli-1.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jetty-util-6.1.26.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/slf4j-api-1.7.10.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/asm-3.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jettison-1.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-math3-3.1.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-collections-3.2.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/avro-1.7.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jetty-6.1.26.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/zookeeper-3.4.6.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jsch-0.1.42.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/log4j-1.2.17.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/api-asn1-api-1.0.0-M20.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-configuration-1.6.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/curator-framework-2.7.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-compress-1.4.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/netty-3.6.2.Final.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/snappy-java-1.0.4.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-io-2.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/hamcrest-core-1.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jaxb-impl-2.2.3-1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jackson-mapper-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/hadoop-nfs-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/hadoop-common-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/hadoop-common-2.7.2-tests.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/protobuf-java-2.5.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/xmlenc-0.52.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-lang-2.6.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/htrace-core-3.1.0-incubating.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/xml-apis-1.3.04.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jersey-server-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-daemon-1.0.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jackson-core-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jsr305-3.0.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/guava-11.0.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/xercesImpl-2.9.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-codec-1.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jersey-core-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/servlet-api-2.5.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-logging-1.1.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-cli-1.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jetty-util-6.1.26.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/asm-3.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/netty-all-4.0.23.Final.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/leveldbjni-all-1.8.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jetty-6.1.26.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/log4j-1.2.17.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/netty-3.6.2.Final.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-io-2.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jackson-mapper-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/hadoop-hdfs-nfs-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/hadoop-hdfs-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/hadoop-hdfs-2.7.2-tests.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/xz-1.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/aopalliance-1.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/protobuf-java-2.5.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/javax.inject-1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-lang-2.6.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/zookeeper-3.4.6-tests.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-client-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-guice-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jaxb-api-2.2.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-jaxrs-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-json-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-server-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-core-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-xc-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jsr305-3.0.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/guava-11.0.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-codec-1.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/activation-1.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-core-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/servlet-api-2.5.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/stax-api-1.0-2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-logging-1.1.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-cli-1.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jetty-util-6.1.26.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/asm-3.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/leveldbjni-all-1.8.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jettison-1.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-collections-3.2.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jetty-6.1.26.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/zookeeper-3.4.6.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/log4j-1.2.17.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/guice-servlet-3.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-compress-1.4.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/netty-3.6.2.Final.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/guice-3.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-io-2.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jaxb-impl-2.2.3-1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-mapper-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-web-proxy-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-nodemanager-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-applications-unmanaged-am-launcher-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-resourcemanager-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-tests-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-sharedcachemanager-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-applications-distributedshell-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-registry-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-applicationhistoryservice-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-common-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-client-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-api-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-common-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/xz-1.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/aopalliance-1.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/protobuf-java-2.5.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/javax.inject-1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/jersey-guice-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/paranamer-2.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/jersey-server-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/jackson-core-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/jersey-core-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/hadoop-annotations-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/junit-4.11.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/asm-3.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/leveldbjni-all-1.8.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/avro-1.7.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/log4j-1.2.17.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/guice-servlet-3.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/commons-compress-1.4.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/netty-3.6.2.Final.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/snappy-java-1.0.4.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/guice-3.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/commons-io-2.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/hamcrest-core-1.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/jackson-mapper-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-core-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-shuffle-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-plugins-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-app-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.7.2-tests.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-common-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/contrib/capacity-scheduler/*.jar
 STARTUP_MSG:   build = https://git-wip-us.apache.org/repos/asf/hadoop.git -r b165c4fe8a74265c792ce23f546c64604acf0e41; compiled by 'jenkins' on 2016-01-26T00:08Z
 STARTUP_MSG:   java = 1.8.0_192
 ************************************************************/
-19/05/30 20:31:21 INFO namenode.NameNode: registered UNIX signal handlers for [TERM, HUP, INT]
-19/05/30 20:31:21 INFO namenode.NameNode: createNameNode [-format]
-Formatting using clusterid: CID-e92be087-6559-483e-ad41-fed34226abe1
-19/05/30 20:31:22 INFO namenode.FSNamesystem: No KeyProvider found.
-19/05/30 20:31:22 INFO namenode.FSNamesystem: fsLock is fair:true
-19/05/30 20:31:22 INFO blockmanagement.DatanodeManager: dfs.block.invalidate.limit=1000
-19/05/30 20:31:22 INFO blockmanagement.DatanodeManager: dfs.namenode.datanode.registration.ip-hostname-check=true
-19/05/30 20:31:22 INFO blockmanagement.BlockManager: dfs.namenode.startup.delay.block.deletion.sec is set to 000:00:00:00.000
-19/05/30 20:31:22 INFO blockmanagement.BlockManager: The block deletion will start around 2019 五月 30 20:31:22
-19/05/30 20:31:22 INFO util.GSet: Computing capacity for map BlocksMap
-19/05/30 20:31:22 INFO util.GSet: VM type       = 64-bit
-19/05/30 20:31:22 INFO util.GSet: 2.0% max memory 889 MB = 17.8 MB
-19/05/30 20:31:22 INFO util.GSet: capacity      = 2^21 = 2097152 entries
-19/05/30 20:31:22 INFO blockmanagement.BlockManager: dfs.block.access.token.enable=false
-19/05/30 20:31:22 INFO blockmanagement.BlockManager: defaultReplication         = 3
-19/05/30 20:31:22 INFO blockmanagement.BlockManager: maxReplication             = 512
-19/05/30 20:31:22 INFO blockmanagement.BlockManager: minReplication             = 1
-19/05/30 20:31:22 INFO blockmanagement.BlockManager: maxReplicationStreams      = 2
-19/05/30 20:31:22 INFO blockmanagement.BlockManager: replicationRecheckInterval = 3000
-19/05/30 20:31:22 INFO blockmanagement.BlockManager: encryptDataTransfer        = false
-19/05/30 20:31:22 INFO blockmanagement.BlockManager: maxNumBlocksToLog          = 1000
-19/05/30 20:31:22 INFO namenode.FSNamesystem: fsOwner             = zozo (auth:SIMPLE)
-19/05/30 20:31:22 INFO namenode.FSNamesystem: supergroup          = supergroup
-19/05/30 20:31:22 INFO namenode.FSNamesystem: isPermissionEnabled = true
-19/05/30 20:31:22 INFO namenode.FSNamesystem: HA Enabled: false
-19/05/30 20:31:22 INFO namenode.FSNamesystem: Append Enabled: true
-19/05/30 20:31:23 INFO util.GSet: Computing capacity for map INodeMap
-19/05/30 20:31:23 INFO util.GSet: VM type       = 64-bit
-19/05/30 20:31:23 INFO util.GSet: 1.0% max memory 889 MB = 8.9 MB
-19/05/30 20:31:23 INFO util.GSet: capacity      = 2^20 = 1048576 entries
-19/05/30 20:31:23 INFO namenode.FSDirectory: ACLs enabled? false
-19/05/30 20:31:23 INFO namenode.FSDirectory: XAttrs enabled? true
-19/05/30 20:31:23 INFO namenode.FSDirectory: Maximum size of an xattr: 16384
-19/05/30 20:31:23 INFO namenode.NameNode: Caching file names occuring more than 10 times
-19/05/30 20:31:23 INFO util.GSet: Computing capacity for map cachedBlocks
-19/05/30 20:31:23 INFO util.GSet: VM type       = 64-bit
-19/05/30 20:31:23 INFO util.GSet: 0.25% max memory 889 MB = 2.2 MB
-19/05/30 20:31:23 INFO util.GSet: capacity      = 2^18 = 262144 entries
-19/05/30 20:31:23 INFO namenode.FSNamesystem: dfs.namenode.safemode.threshold-pct = 0.9990000128746033
-19/05/30 20:31:23 INFO namenode.FSNamesystem: dfs.namenode.safemode.min.datanodes = 0
-19/05/30 20:31:23 INFO namenode.FSNamesystem: dfs.namenode.safemode.extension     = 30000
-19/05/30 20:31:23 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.window.num.buckets = 10
-19/05/30 20:31:23 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.num.users = 10
-19/05/30 20:31:23 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.windows.minutes = 1,5,25
-19/05/30 20:31:23 INFO namenode.FSNamesystem: Retry cache on namenode is enabled
-19/05/30 20:31:23 INFO namenode.FSNamesystem: Retry cache will use 0.03 of total heap and retry cache entry expiry time is 600000 millis
-19/05/30 20:31:23 INFO util.GSet: Computing capacity for map NameNodeRetryCache
-19/05/30 20:31:23 INFO util.GSet: VM type       = 64-bit
-19/05/30 20:31:23 INFO util.GSet: 0.029999999329447746% max memory 889 MB = 273.1 KB
-19/05/30 20:31:23 INFO util.GSet: capacity      = 2^15 = 32768 entries
-19/05/30 20:31:23 INFO namenode.FSImage: Allocated new BlockPoolId: BP-1307457662-172.16.0.17-1559219483117
-19/05/30 20:31:23 INFO common.Storage: Storage directory /home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/name has been successfully formatted.
-19/05/30 20:31:23 INFO namenode.NNStorageRetentionManager: Going to retain 1 images with txid >= 0
-19/05/30 20:31:23 INFO util.ExitUtil: Exiting with status 0
-19/05/30 20:31:23 INFO namenode.NameNode: SHUTDOWN_MSG:
+19/06/02 21:03:30 INFO namenode.NameNode: registered UNIX signal handlers for [TERM, HUP, INT]
+19/06/02 21:03:30 INFO namenode.NameNode: createNameNode [-format]
+Formatting using clusterid: CID-a0449250-8d30-4a06-992e-02cfc8068501
+19/06/02 21:03:30 INFO namenode.FSNamesystem: No KeyProvider found.
+19/06/02 21:03:30 INFO namenode.FSNamesystem: fsLock is fair:true
+19/06/02 21:03:30 INFO blockmanagement.DatanodeManager: dfs.block.invalidate.limit=1000
+19/06/02 21:03:30 INFO blockmanagement.DatanodeManager: dfs.namenode.datanode.registration.ip-hostname-check=true
+19/06/02 21:03:30 INFO blockmanagement.BlockManager: dfs.namenode.startup.delay.block.deletion.sec is set to 000:00:00:00.000
+19/06/02 21:03:30 INFO blockmanagement.BlockManager: The block deletion will start around 2019 六月 02 21:03:30
+19/06/02 21:03:30 INFO util.GSet: Computing capacity for map BlocksMap
+19/06/02 21:03:30 INFO util.GSet: VM type       = 64-bit
+19/06/02 21:03:30 INFO util.GSet: 2.0% max memory 889 MB = 17.8 MB
+19/06/02 21:03:30 INFO util.GSet: capacity      = 2^21 = 2097152 entries
+19/06/02 21:03:30 INFO blockmanagement.BlockManager: dfs.block.access.token.enable=false
+19/06/02 21:03:30 INFO blockmanagement.BlockManager: defaultReplication         = 3
+19/06/02 21:03:30 INFO blockmanagement.BlockManager: maxReplication             = 512
+19/06/02 21:03:30 INFO blockmanagement.BlockManager: minReplication             = 1
+19/06/02 21:03:30 INFO blockmanagement.BlockManager: maxReplicationStreams      = 2
+19/06/02 21:03:30 INFO blockmanagement.BlockManager: replicationRecheckInterval = 3000
+19/06/02 21:03:30 INFO blockmanagement.BlockManager: encryptDataTransfer        = false
+19/06/02 21:03:30 INFO blockmanagement.BlockManager: maxNumBlocksToLog          = 1000
+19/06/02 21:03:30 INFO namenode.FSNamesystem: fsOwner             = zozo (auth:SIMPLE)
+19/06/02 21:03:30 INFO namenode.FSNamesystem: supergroup          = supergroup
+19/06/02 21:03:30 INFO namenode.FSNamesystem: isPermissionEnabled = true
+19/06/02 21:03:30 INFO namenode.FSNamesystem: HA Enabled: false
+19/06/02 21:03:30 INFO namenode.FSNamesystem: Append Enabled: true
+19/06/02 21:03:31 INFO util.GSet: Computing capacity for map INodeMap
+19/06/02 21:03:31 INFO util.GSet: VM type       = 64-bit
+19/06/02 21:03:31 INFO util.GSet: 1.0% max memory 889 MB = 8.9 MB
+19/06/02 21:03:31 INFO util.GSet: capacity      = 2^20 = 1048576 entries
+19/06/02 21:03:31 INFO namenode.FSDirectory: ACLs enabled? false
+19/06/02 21:03:31 INFO namenode.FSDirectory: XAttrs enabled? true
+19/06/02 21:03:31 INFO namenode.FSDirectory: Maximum size of an xattr: 16384
+19/06/02 21:03:31 INFO namenode.NameNode: Caching file names occuring more than 10 times
+19/06/02 21:03:31 INFO util.GSet: Computing capacity for map cachedBlocks
+19/06/02 21:03:31 INFO util.GSet: VM type       = 64-bit
+19/06/02 21:03:31 INFO util.GSet: 0.25% max memory 889 MB = 2.2 MB
+19/06/02 21:03:31 INFO util.GSet: capacity      = 2^18 = 262144 entries
+19/06/02 21:03:31 INFO namenode.FSNamesystem: dfs.namenode.safemode.threshold-pct = 0.9990000128746033
+19/06/02 21:03:31 INFO namenode.FSNamesystem: dfs.namenode.safemode.min.datanodes = 0
+19/06/02 21:03:31 INFO namenode.FSNamesystem: dfs.namenode.safemode.extension     = 30000
+19/06/02 21:03:31 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.window.num.buckets = 10
+19/06/02 21:03:31 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.num.users = 10
+19/06/02 21:03:31 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.windows.minutes = 1,5,25
+19/06/02 21:03:31 INFO namenode.FSNamesystem: Retry cache on namenode is enabled
+19/06/02 21:03:31 INFO namenode.FSNamesystem: Retry cache will use 0.03 of total heap and retry cache entry expiry time is 600000 millis
+19/06/02 21:03:31 INFO util.GSet: Computing capacity for map NameNodeRetryCache
+19/06/02 21:03:31 INFO util.GSet: VM type       = 64-bit
+19/06/02 21:03:31 INFO util.GSet: 0.029999999329447746% max memory 889 MB = 273.1 KB
+19/06/02 21:03:31 INFO util.GSet: capacity      = 2^15 = 32768 entries
+19/06/02 21:03:31 INFO namenode.FSImage: Allocated new BlockPoolId: BP-958959802-172.16.0.17-1559480611076
+19/06/02 21:03:31 INFO common.Storage: Storage directory /home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/name has been successfully formatted.
+19/06/02 21:03:31 INFO namenode.NNStorageRetentionManager: Going to retain 1 images with txid >= 0
+19/06/02 21:03:31 INFO util.ExitUtil: Exiting with status 0
+19/06/02 21:03:31 INFO namenode.NameNode: SHUTDOWN_MSG: 
 /************************************************************
 SHUTDOWN_MSG: Shutting down NameNode at vm017/172.16.0.17
 ************************************************************/
-[zozo@vm017 hadoop-2.7.2]$
 [zozo@vm017 hadoop-2.7.2]$ cd ..
 [zozo@vm017 hadoop]$ ll
-总用量 207296
+总用量 207092
 drwxr-xr-x 9 zozo zozo      4096 1月  26 2016 hadoop-2.7.2
-drwxrwxr-x 3 zozo zozo      4096 5月  30 20:31 hadoop-2.7.2-data
--rw-r--r-- 1 zozo zozo 212046774 5月  29 00:35 hadoop-2.7.2.tar.gz
+drwxrwxr-x 3 zozo zozo      4096 6月   2 21:03 hadoop-2.7.2-data
+-rw-r--r-- 1 zozo zozo 212046774 6月   2 00:46 hadoop-2.7.2.tar.gz
 [zozo@vm017 hadoop]$ ll -R hadoop-2.7.2-data
 hadoop-2.7.2-data:
 总用量 4
-drwxrwxr-x 3 zozo zozo 4096 5月  30 20:31 tmp
+drwxrwxr-x 3 zozo zozo 4096 6月   2 21:03 tmp
 
 hadoop-2.7.2-data/tmp:
 总用量 4
-drwxrwxr-x 3 zozo zozo 4096 5月  30 20:31 dfs
+drwxrwxr-x 3 zozo zozo 4096 6月   2 21:03 dfs
 
 hadoop-2.7.2-data/tmp/dfs:
 总用量 4
-drwxrwxr-x 3 zozo zozo 4096 5月  30 20:31 name
+drwxrwxr-x 3 zozo zozo 4096 6月   2 21:03 name
 
 hadoop-2.7.2-data/tmp/dfs/name:
 总用量 4
-drwxrwxr-x 2 zozo zozo 4096 5月  30 20:31 current
+drwxrwxr-x 2 zozo zozo 4096 6月   2 21:03 current
 
 hadoop-2.7.2-data/tmp/dfs/name/current:
 总用量 16
--rw-rw-r-- 1 zozo zozo 351 5月  30 20:31 fsimage_0000000000000000000
--rw-rw-r-- 1 zozo zozo  62 5月  30 20:31 fsimage_0000000000000000000.md5
--rw-rw-r-- 1 zozo zozo   2 5月  30 20:31 seen_txid
--rw-rw-r-- 1 zozo zozo 204 5月  30 20:31 VERSION
-[zozo@vm017 hadoop]$
+-rw-rw-r-- 1 zozo zozo 351 6月   2 21:03 fsimage_0000000000000000000
+-rw-rw-r-- 1 zozo zozo  62 6月   2 21:03 fsimage_0000000000000000000.md5
+-rw-rw-r-- 1 zozo zozo   2 6月   2 21:03 seen_txid
+-rw-rw-r-- 1 zozo zozo 202 6月   2 21:03 VERSION
+[zozo@vm017 hadoop]$ 
 ```
 
 - 2. 在 __vm017__ 上启动 NameNode
@@ -2603,9 +2430,9 @@ hadoop-2.7.2-data/tmp/dfs/name/current:
 [zozo@vm017 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start namenode
 starting namenode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-namenode-vm017.out
 [zozo@vm017 hadoop-2.7.2]$ jps -m -l
-30225 sun.tools.jps.Jps -m -l
-30148 org.apache.hadoop.hdfs.server.namenode.NameNode
-[zozo@vm017 hadoop-2.7.2]$
+8276 sun.tools.jps.Jps -m -l
+8200 org.apache.hadoop.hdfs.server.namenode.NameNode
+[zozo@vm017 hadoop-2.7.2]$ 
 ```
 
 - 3. 在 __vm017__ 上启动 DataNode, 成功后会在当前节点生成 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data` 目录
@@ -2613,68 +2440,68 @@ starting namenode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zoz
 [zozo@vm017 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start datanode
 starting datanode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-datanode-vm017.out
 [zozo@vm017 hadoop-2.7.2]$ jps -m -l
-30148 org.apache.hadoop.hdfs.server.namenode.NameNode
-30423 sun.tools.jps.Jps -m -l
-30335 org.apache.hadoop.hdfs.server.datanode.DataNode
+8418 sun.tools.jps.Jps -m -l
+8327 org.apache.hadoop.hdfs.server.datanode.DataNode
+8200 org.apache.hadoop.hdfs.server.namenode.NameNode
 [zozo@vm017 hadoop-2.7.2]$ cd ..
 [zozo@vm017 hadoop]$ ll -R hadoop-2.7.2-data
 hadoop-2.7.2-data:
 总用量 4
-drwxrwxr-x 3 zozo zozo 4096 5月  30 20:31 tmp
+drwxrwxr-x 3 zozo zozo 4096 6月   2 21:03 tmp
 
 hadoop-2.7.2-data/tmp:
 总用量 4
-drwxrwxr-x 4 zozo zozo 4096 5月  30 20:43 dfs
+drwxrwxr-x 4 zozo zozo 4096 6月   2 21:06 dfs
 
 hadoop-2.7.2-data/tmp/dfs:
 总用量 8
-drwx------ 3 zozo zozo 4096 5月  30 20:43 data
-drwxrwxr-x 3 zozo zozo 4096 5月  30 20:42 name
+drwx------ 3 zozo zozo 4096 6月   2 21:06 data
+drwxrwxr-x 3 zozo zozo 4096 6月   2 21:05 name
 
 hadoop-2.7.2-data/tmp/dfs/data:
 总用量 8
-drwxrwxr-x 3 zozo zozo 4096 5月  30 20:43 current
--rw-rw-r-- 1 zozo zozo   11 5月  30 20:43 in_use.lock
+drwxrwxr-x 3 zozo zozo 4096 6月   2 21:06 current
+-rw-rw-r-- 1 zozo zozo   10 6月   2 21:06 in_use.lock
 
 hadoop-2.7.2-data/tmp/dfs/data/current:
 总用量 8
-drwx------ 4 zozo zozo 4096 5月  30 20:43 BP-1307457662-172.16.0.17-1559219483117
--rw-rw-r-- 1 zozo zozo  229 5月  30 20:43 VERSION
+drwx------ 4 zozo zozo 4096 6月   2 21:06 BP-958959802-172.16.0.17-1559480611076
+-rw-rw-r-- 1 zozo zozo  229 6月   2 21:06 VERSION
 
-hadoop-2.7.2-data/tmp/dfs/data/current/BP-1307457662-172.16.0.17-1559219483117:
+hadoop-2.7.2-data/tmp/dfs/data/current/BP-958959802-172.16.0.17-1559480611076:
 总用量 12
-drwxrwxr-x 4 zozo zozo 4096 5月  30 20:43 current
--rw-rw-r-- 1 zozo zozo  166 5月  30 20:43 scanner.cursor
-drwxrwxr-x 2 zozo zozo 4096 5月  30 20:43 tmp
+drwxrwxr-x 4 zozo zozo 4096 6月   2 21:06 current
+-rw-rw-r-- 1 zozo zozo  166 6月   2 21:06 scanner.cursor
+drwxrwxr-x 2 zozo zozo 4096 6月   2 21:06 tmp
 
-hadoop-2.7.2-data/tmp/dfs/data/current/BP-1307457662-172.16.0.17-1559219483117/current:
+hadoop-2.7.2-data/tmp/dfs/data/current/BP-958959802-172.16.0.17-1559480611076/current:
 总用量 12
-drwxrwxr-x 2 zozo zozo 4096 5月  30 20:43 finalized
-drwxrwxr-x 2 zozo zozo 4096 5月  30 20:43 rbw
--rw-rw-r-- 1 zozo zozo  131 5月  30 20:43 VERSION
+drwxrwxr-x 2 zozo zozo 4096 6月   2 21:06 finalized
+drwxrwxr-x 2 zozo zozo 4096 6月   2 21:06 rbw
+-rw-rw-r-- 1 zozo zozo  129 6月   2 21:06 VERSION
 
-hadoop-2.7.2-data/tmp/dfs/data/current/BP-1307457662-172.16.0.17-1559219483117/current/finalized:
+hadoop-2.7.2-data/tmp/dfs/data/current/BP-958959802-172.16.0.17-1559480611076/current/finalized:
 总用量 0
 
-hadoop-2.7.2-data/tmp/dfs/data/current/BP-1307457662-172.16.0.17-1559219483117/current/rbw:
+hadoop-2.7.2-data/tmp/dfs/data/current/BP-958959802-172.16.0.17-1559480611076/current/rbw:
 总用量 0
 
-hadoop-2.7.2-data/tmp/dfs/data/current/BP-1307457662-172.16.0.17-1559219483117/tmp:
+hadoop-2.7.2-data/tmp/dfs/data/current/BP-958959802-172.16.0.17-1559480611076/tmp:
 总用量 0
 
 hadoop-2.7.2-data/tmp/dfs/name:
 总用量 8
-drwxrwxr-x 2 zozo zozo 4096 5月  30 20:42 current
--rw-rw-r-- 1 zozo zozo   11 5月  30 20:42 in_use.lock
+drwxrwxr-x 2 zozo zozo 4096 6月   2 21:05 current
+-rw-rw-r-- 1 zozo zozo   10 6月   2 21:05 in_use.lock
 
 hadoop-2.7.2-data/tmp/dfs/name/current:
-总用量 1044
--rw-rw-r-- 1 zozo zozo 1048576 5月  30 20:42 edits_inprogress_0000000000000000001
--rw-rw-r-- 1 zozo zozo     351 5月  30 20:31 fsimage_0000000000000000000
--rw-rw-r-- 1 zozo zozo      62 5月  30 20:31 fsimage_0000000000000000000.md5
--rw-rw-r-- 1 zozo zozo       2 5月  30 20:42 seen_txid
--rw-rw-r-- 1 zozo zozo     204 5月  30 20:31 VERSION
-[zozo@vm017 hadoop]$
+总用量 1040
+-rw-rw-r-- 1 zozo zozo 1048576 6月   2 21:05 edits_inprogress_0000000000000000001
+-rw-rw-r-- 1 zozo zozo     351 6月   2 21:03 fsimage_0000000000000000000
+-rw-rw-r-- 1 zozo zozo      62 6月   2 21:03 fsimage_0000000000000000000.md5
+-rw-rw-r-- 1 zozo zozo       2 6月   2 21:05 seen_txid
+-rw-rw-r-- 1 zozo zozo     202 6月   2 21:03 VERSION
+[zozo@vm017 hadoop]$ 
 ```
 
 ### 3.4.2 vm06: 启动 DataNode
@@ -2684,30 +2511,58 @@ hadoop-2.7.2-data/tmp/dfs/name/current:
 [zozo@vm06 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start datanode
 starting datanode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-datanode-vm06.out
 [zozo@vm06 hadoop-2.7.2]$ jps -m -l
-29220 sun.tools.jps.Jps -m -l
-29179 org.apache.hadoop.hdfs.server.datanode.DataNode
+7475 sun.tools.jps.Jps -m -l
+7397 org.apache.hadoop.hdfs.server.datanode.DataNode
 [zozo@vm06 hadoop-2.7.2]$ cd ..
 [zozo@vm06 hadoop]$ ll
-总用量 207296
-drwxr-xr-x 10 zozo zozo      4096 5月  30 20:46 hadoop-2.7.2
-drwxrwxr-x  3 zozo zozo      4096 5月  30 20:47 hadoop-2.7.2-data
--rw-r--r--  1 zozo zozo 212046774 5月  19 16:30 hadoop-2.7.2.tar.gz
+总用量 207088
+drwxr-xr-x 10 zozo zozo      4096 6月   2 21:07 hadoop-2.7.2
+drwxrwxr-x  3 zozo zozo      4096 6月   2 21:07 hadoop-2.7.2-data
+-rw-r--r--  1 zozo zozo 212046774 6月   2 00:58 hadoop-2.7.2.tar.gz
 [zozo@vm06 hadoop]$ ll -R hadoop-2.7.2-data
 hadoop-2.7.2-data:
 总用量 4
-drwxrwxr-x 3 zozo zozo 4096 5月  30 20:47 tmp
+drwxrwxr-x 3 zozo zozo 4096 6月   2 21:07 tmp
 
 hadoop-2.7.2-data/tmp:
 总用量 4
-drwxrwxr-x 3 zozo zozo 4096 5月  30 20:47 dfs
+drwxrwxr-x 3 zozo zozo 4096 6月   2 21:07 dfs
 
 hadoop-2.7.2-data/tmp/dfs:
 总用量 4
-drwx------ 2 zozo zozo 4096 5月  30 20:47 data
+drwx------ 3 zozo zozo 4096 6月   2 21:07 data
 
 hadoop-2.7.2-data/tmp/dfs/data:
+总用量 8
+drwxrwxr-x 3 zozo zozo 4096 6月   2 21:07 current
+-rw-rw-r-- 1 zozo zozo    9 6月   2 21:07 in_use.lock
+
+hadoop-2.7.2-data/tmp/dfs/data/current:
+总用量 8
+drwx------ 4 zozo zozo 4096 6月   2 21:07 BP-958959802-172.16.0.17-1559480611076
+-rw-rw-r-- 1 zozo zozo  229 6月   2 21:07 VERSION
+
+hadoop-2.7.2-data/tmp/dfs/data/current/BP-958959802-172.16.0.17-1559480611076:
+总用量 12
+drwxrwxr-x 4 zozo zozo 4096 6月   2 21:07 current
+-rw-rw-r-- 1 zozo zozo  166 6月   2 21:07 scanner.cursor
+drwxrwxr-x 2 zozo zozo 4096 6月   2 21:07 tmp
+
+hadoop-2.7.2-data/tmp/dfs/data/current/BP-958959802-172.16.0.17-1559480611076/current:
+总用量 12
+drwxrwxr-x 2 zozo zozo 4096 6月   2 21:07 finalized
+drwxrwxr-x 2 zozo zozo 4096 6月   2 21:07 rbw
+-rw-rw-r-- 1 zozo zozo  129 6月   2 21:07 VERSION
+
+hadoop-2.7.2-data/tmp/dfs/data/current/BP-958959802-172.16.0.17-1559480611076/current/finalized:
 总用量 0
-[zozo@vm06 hadoop]$
+
+hadoop-2.7.2-data/tmp/dfs/data/current/BP-958959802-172.16.0.17-1559480611076/current/rbw:
+总用量 0
+
+hadoop-2.7.2-data/tmp/dfs/data/current/BP-958959802-172.16.0.17-1559480611076/tmp:
+总用量 0
+[zozo@vm06 hadoop]$ 
 ```
 
 ### 3.4.3 vm03: 启动 DataNode
@@ -2717,30 +2572,58 @@ hadoop-2.7.2-data/tmp/dfs/data:
 [zozo@vm03 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start datanode
 starting datanode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-datanode-vm03.out
 [zozo@vm03 hadoop-2.7.2]$ jps -m -l
-29476 org.apache.hadoop.hdfs.server.datanode.DataNode
-29557 sun.tools.jps.Jps -m -l
+16387 org.apache.hadoop.hdfs.server.datanode.DataNode
+16486 sun.tools.jps.Jps -m -l
 [zozo@vm03 hadoop-2.7.2]$ cd ..
 [zozo@vm03 hadoop]$ ll
-总用量 207296
-drwxr-xr-x 10 zozo zozo      4096 5月  30 20:48 hadoop-2.7.2
-drwxrwxr-x  3 zozo zozo      4096 5月  30 20:48 hadoop-2.7.2-data
--rw-r--r--  1 zozo zozo 212046774 5月  19 16:50 hadoop-2.7.2.tar.gz
+总用量 207092
+drwxr-xr-x 10 zozo zozo      4096 6月   2 21:07 hadoop-2.7.2
+drwxrwxr-x  3 zozo zozo      4096 6月   2 21:07 hadoop-2.7.2-data
+-rw-r--r--  1 zozo zozo 212046774 6月   2 00:57 hadoop-2.7.2.tar.gz
 [zozo@vm03 hadoop]$ ll -R hadoop-2.7.2-data
 hadoop-2.7.2-data:
 总用量 4
-drwxrwxr-x 3 zozo zozo 4096 5月  30 20:48 tmp
+drwxrwxr-x 3 zozo zozo 4096 6月   2 21:07 tmp
 
 hadoop-2.7.2-data/tmp:
 总用量 4
-drwxrwxr-x 3 zozo zozo 4096 5月  30 20:48 dfs
+drwxrwxr-x 3 zozo zozo 4096 6月   2 21:07 dfs
 
 hadoop-2.7.2-data/tmp/dfs:
 总用量 4
-drwx------ 2 zozo zozo 4096 5月  30 20:48 data
+drwx------ 3 zozo zozo 4096 6月   2 21:07 data
 
 hadoop-2.7.2-data/tmp/dfs/data:
+总用量 8
+drwxrwxr-x 3 zozo zozo 4096 6月   2 21:07 current
+-rw-rw-r-- 1 zozo zozo   10 6月   2 21:07 in_use.lock
+
+hadoop-2.7.2-data/tmp/dfs/data/current:
+总用量 8
+drwx------ 4 zozo zozo 4096 6月   2 21:07 BP-958959802-172.16.0.17-1559480611076
+-rw-rw-r-- 1 zozo zozo  229 6月   2 21:07 VERSION
+
+hadoop-2.7.2-data/tmp/dfs/data/current/BP-958959802-172.16.0.17-1559480611076:
+总用量 12
+drwxrwxr-x 4 zozo zozo 4096 6月   2 21:07 current
+-rw-rw-r-- 1 zozo zozo  166 6月   2 21:07 scanner.cursor
+drwxrwxr-x 2 zozo zozo 4096 6月   2 21:07 tmp
+
+hadoop-2.7.2-data/tmp/dfs/data/current/BP-958959802-172.16.0.17-1559480611076/current:
+总用量 12
+drwxrwxr-x 2 zozo zozo 4096 6月   2 21:07 finalized
+drwxrwxr-x 2 zozo zozo 4096 6月   2 21:07 rbw
+-rw-rw-r-- 1 zozo zozo  129 6月   2 21:07 VERSION
+
+hadoop-2.7.2-data/tmp/dfs/data/current/BP-958959802-172.16.0.17-1559480611076/current/finalized:
 总用量 0
-[zozo@vm03 hadoop]$
+
+hadoop-2.7.2-data/tmp/dfs/data/current/BP-958959802-172.16.0.17-1559480611076/current/rbw:
+总用量 0
+
+hadoop-2.7.2-data/tmp/dfs/data/current/BP-958959802-172.16.0.17-1559480611076/tmp:
+总用量 0
+[zozo@vm03 hadoop]$ 
 ```
 
 ### 3.4.4 浏览器查看 HDFS
@@ -2749,324 +2632,7 @@ hadoop-2.7.2-data/tmp/dfs/data:
 
 ## 3.5 配置 SSH 免密登录
 
-- 因为 __vm017__ 为 NameNode, 需要配置 SSH 免密登录所有节点. 这样在调用 `start-all.sh` 脚本时, 无需输入密码.
-- 因为 __vm03__ 为 NodeManager, 需要配置 SSH 免密登录所有节点.
-
-注: 需要配置免密登录所有节点 (包括本机).
-
-- link
-  - [SSH免密登录原理及实现](https://blog.csdn.net/qq_26907251/article/details/78804367)  (参考: 图)
-  - [ssh免密码登录配置方法](https://blog.csdn.net/universe_hao/article/details/52296811)  (参考: 操作)
-  - [SSH免密登录原理及配置](https://my.oschina.net/binxin/blog/651565)  (参考: 权限)
-
-![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/SSH%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E5%8E%9F%E7%90%86.png?raw=true)
-
-`~/.ssh` 目录下文件说明:
-
-| 文件 | 说明 |
-| :--- | :--- |
-| `~/.ssh/know_hosts` | 记录 SSH 访问过的其他服务器 |
-| `~/.ssh/id_rsa` | 本机生成的私钥 |
-| `~/.ssh/id_rsa.pub` | 本机生成的公钥 (可免密登录其他服务器) |
-| `~/.ssh/authorized_keys` | 存放已授权其他服务器 (可免密登录本机 (包括本机)) 的公钥 |
-
-以下以 __vm017__ 免密登录到所有机器的具体步骤, __vm03__ 类似操作:
-
-### 3.5.1 vm017 生成密钥
-
-如果没有 `~/.ssh`, 可以先通过 ssh 登录其他机器, 就会产生 `~/.ssh/known_hosts` 文件, 如下:
-```
-[zozo@vm017 .ssh]$ pwd
-/home/zozo/.ssh
-[zozo@vm017 .ssh]$ cat known_hosts
-172.16.0.3 ecdsa-sha2-nistp256 AAAAE2VjZHNhLxxxxxxxxxxxxxxxxxxxOxBeGA7kqpUJGNbIz0EC0Mqwi0FJNc+V1aQkmx8c+olPBBUhVFSGHxyyyyyyyyyyyyyyyyyyyyys2No=
-172.16.0.6 ecdsa-sha2-nistp256 AAAAE2VjZHNxxxxxxxxxxxxxxxxxxxOxBeGA7kqpUJGNbIz0EC0Mqwi0FJNc+V1YXMY+Z3zzzzzzzzzzzzzzejRVJ/gQ3OU67ybhgwwwwwwwwwwwwN8crgYxw=
-[zozo@vm017 .ssh]$
-```
-
-在 __vm017__ `~/.ssh` 目录下执行以下命令, 通过 RSA 算法 (非对称加密算法) 进行加密, 提示输入 3 次回车后, 该目录下将会产生 `id_rsa` (私钥), `id_rsa.pub` (公钥) 文件:
-```
-[zozo@vm017 .ssh]$ pwd
-/home/zozo/.ssh
-[zozo@vm017 .ssh]$ ll
-总用量 4
--rw-r--r-- 1 zozo zozo 344 5月  30 20:17 known_hosts
-[zozo@vm017 .ssh]$ ssh-keygen -t rsa
-Generating public/private rsa key pair.
-Enter file in which to save the key (/home/zozo/.ssh/id_rsa):
-Enter passphrase (empty for no passphrase):
-Enter same passphrase again:
-Your identification has been saved in /home/zozo/.ssh/id_rsa.
-Your public key has been saved in /home/zozo/.ssh/id_rsa.pub.
-The key fingerprint is:
-SHA256:iscm/wJxOeN04zld8YgSOhQc3TdfTqLwMLW5DC7hIVs zozo@vm017
-The key's randomart image is:
-+---[RSA 2048]----+
-|     .o+ . ..    |
-|      o o = +o. o|
-|     ..oE..BoB = |
-|    . O=++.o=.o .|
-|     =.*S=..o    |
-|    .o..+..      |
-|    o.=  .       |
-|     =.          |
-|      .o.        |
-+----[SHA256]-----+
-[zozo@vm017 .ssh]$ ll
-总用量 12
--rw------- 1 zozo zozo 1675 6月   1 15:16 id_rsa
--rw-r--r-- 1 zozo zozo  392 6月   1 15:16 id_rsa.pub
--rw-r--r-- 1 zozo zozo  344 5月  30 20:17 known_hosts
-[zozo@vm017 .ssh]$
-```
-
-### 3.5.2 vm017 发送 authorized_keys
-
-将 __vm017__ 的公钥发送给 __vm06__, __vm03__, __vm017__ 完成后 __vm06__, __vm03__, __vm017__ 会生成 `~/.ssh/authorized_keys` 文件, 且该文件内容和 __vm017__ 的 `~/.ssh/id_rsa.pub` 相同.
-
-- 以下为 __vm017__ 的操作:
-```
-[zozo@vm017 .ssh]$ pwd
-/home/zozo/.ssh
-[zozo@vm017 .ssh]$ ll
-总用量 12
--rw------- 1 zozo zozo 1675 6月   1 15:16 id_rsa
--rw-r--r-- 1 zozo zozo  392 6月   1 15:16 id_rsa.pub
--rw-r--r-- 1 zozo zozo  344 5月  30 20:17 known_hosts
-[zozo@vm017 .ssh]$ cat id_rsa.pub
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
-[zozo@vm017 .ssh]$ ssh-copy-id zozo@172.16.0.6
-/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/zozo/.ssh/id_rsa.pub"
-/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
-/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
-zozo@172.16.0.6's password:
-
-Number of key(s) added: 1
-
-Now try logging into the machine, with:   "ssh 'zozo@172.16.0.6'"
-and check to make sure that only the key(s) you wanted were added.
-
-[zozo@vm017 .ssh]$ ssh-copy-id zozo@172.16.0.3
-/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/zozo/.ssh/id_rsa.pub"
-/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
-/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
-zozo@172.16.0.3's password:
-
-Number of key(s) added: 1
-
-Now try logging into the machine, with:   "ssh 'zozo@172.16.0.3'"
-and check to make sure that only the key(s) you wanted were added.
-
-[zozo@vm017 .ssh]$ ssh-copy-id zozo@172.16.0.17
-/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/zozo/.ssh/id_rsa.pub"
-The authenticity of host '172.16.0.17 (172.16.0.17)' can't be established.
-ECDSA key fingerprint is SHA256:+ThGOg/FjnUGE1evxEs2R4173M48Nmq9RMJbHNALqFI.
-ECDSA key fingerprint is MD5:16:a6:bb:11:fd:c5:a7:5b:7b:c9:35:04:4a:2e:12:5b.
-Are you sure you want to continue connecting (yes/no)? yes
-/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
-/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
-zozo@172.16.0.17's password:
-
-Number of key(s) added: 1
-
-Now try logging into the machine, with:   "ssh 'zozo@172.16.0.17'"
-and check to make sure that only the key(s) you wanted were added.
-
-[zozo@vm017 .ssh]$ ll
-总用量 16
--rw------- 1 zozo zozo  392 6月   1 17:30 authorized_keys
--rw------- 1 zozo zozo 1675 6月   1 15:16 id_rsa
--rw-r--r-- 1 zozo zozo  392 6月   1 15:16 id_rsa.pub
--rw-r--r-- 1 zozo zozo  517 6月   1 17:30 known_hosts
-[zozo@vm017 .ssh]$
-```
-
-- 以下为 __vm06__ 的 `~/.ssh/authorized_keys` 文件:
-```
-[zozo@vm06 .ssh]$ pwd
-/home/zozo/.ssh
-[zozo@vm06 .ssh]$ ll
-总用量 8
--rw------- 1 zozo zozo 392 6月   1 16:48 authorized_keys
--rw-r--r-- 1 zozo zozo 345 6月   1 15:11 known_hosts
-[zozo@vm06 .ssh]$ cat authorized_keys
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
-[zozo@vm06 .ssh]$
-```
-
-- 以下为 __vm03__ 的 `~/.ssh/authorized_keys` 文件:
-```
-[zozo@vm03 .ssh]$ pwd
-/home/zozo/.ssh
-[zozo@vm03 .ssh]$ ll
-总用量 8
--rw------- 1 zozo zozo 392 6月   1 16:51 authorized_keys
--rw-r--r-- 1 zozo zozo 345 6月   1 15:12 known_hosts
-[zozo@vm03 .ssh]$ cat authorized_keys
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
-[zozo@vm03 .ssh]$
-```
-
-- 以下为 __vm017__ 的 `~/.ssh/authorized_keys` 文件:
-```
-[zozo@vm017 .ssh]$ pwd
-/home/zozo/.ssh
-[zozo@vm017 .ssh]$ ll
-总用量 16
--rw------- 1 zozo zozo  392 6月   1 17:30 authorized_keys
--rw------- 1 zozo zozo 1675 6月   1 15:16 id_rsa
--rw-r--r-- 1 zozo zozo  392 6月   1 15:16 id_rsa.pub
--rw-r--r-- 1 zozo zozo  517 6月   1 17:30 known_hosts
-[zozo@vm017 .ssh]$ cat authorized_keys
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
-[zozo@vm017 .ssh]$
-```
-
-### 3.5.3 确认 vm06, vm03, vm017 的文件权限
-
-需要确保 __vm06__, __vm03__, __vm017__ 的 `~/.ssh` 文件夹权限为 `700`, `~/.ssh/authorized_keys` 文件权限为 `600`, 如下:
-```
-[zozo@vm06 ~]$ pwd
-/home/zozo
-[zozo@vm06 ~]$ ls -al
-总用量 88
-drwx------  6 zozo zozo  4096 6月   1 15:10 .
-drwxr-xr-x. 5 root root  4096 11月 30 2018 ..
-drwxrwxr-x  6 zozo zozo  4096 5月  19 16:19 app
--rw-------  1 zozo zozo 37895 6月   1 17:00 .bash_history
--rw-r--r--  1 zozo zozo    18 8月   3 2017 .bash_logout
--rw-r--r--  1 zozo zozo   602 5月  29 20:06 .bash_profile
--rw-r--r--  1 zozo zozo   231 8月   3 2017 .bashrc
-drwxrwxr-x  3 zozo zozo  4096 11月 30 2018 .cache
-drwxrwxr-x  3 zozo zozo  4096 11月 30 2018 .config
-drwx------  2 zozo zozo  4096 6月   1 16:48 .ssh
--rw-------  1 zozo zozo 10105 5月  29 21:07 .viminfo
-[zozo@vm06 ~]$ cd .ssh
-[zozo@vm06 .ssh]$ ll
-总用量 8
--rw------- 1 zozo zozo 392 6月   1 16:48 authorized_keys
--rw-r--r-- 1 zozo zozo 345 6月   1 15:11 known_hosts
-[zozo@vm06 .ssh]$
-```
-
-如果如果权限不对需要进行设置, 如下所示:
-```
-[zozo@vm06 ~]$ pwd
-/home/zozo
-[zozo@vm06 ~]$ chmod 700 .ssh
-[zozo@vm06 ~]$ ls -al
-总用量 88
-drwx------  6 zozo zozo  4096 6月   1 15:10 .
-drwxr-xr-x. 5 root root  4096 11月 30 2018 ..
-drwxrwxr-x  6 zozo zozo  4096 5月  19 16:19 app
--rw-------  1 zozo zozo 38049 6月   1 17:01 .bash_history
--rw-r--r--  1 zozo zozo    18 8月   3 2017 .bash_logout
--rw-r--r--  1 zozo zozo   602 5月  29 20:06 .bash_profile
--rw-r--r--  1 zozo zozo   231 8月   3 2017 .bashrc
-drwxrwxr-x  3 zozo zozo  4096 11月 30 2018 .cache
-drwxrwxr-x  3 zozo zozo  4096 11月 30 2018 .config
-drwx------  2 zozo zozo  4096 6月   1 16:48 .ssh
--rw-------  1 zozo zozo 10105 5月  29 21:07 .viminfo
-[zozo@vm06 ~]$ cd .ssh
-[zozo@vm06 .ssh]$ chmod 600 authorized_keys
-[zozo@vm06 .ssh]$ ll
-总用量 8
--rw------- 1 zozo zozo 392 6月   1 16:48 authorized_keys
--rw-r--r-- 1 zozo zozo 345 6月   1 15:11 known_hosts
-[zozo@vm06 .ssh]$
-```
-
-### 3.5.4 vm017 测试免密登录
-
-在 __vm017__ 上测试免密登录 __vm06__, __vm03__, __vm017__:
-```
-[zozo@vm017 .ssh]$ ssh zozo@172.16.0.6
-Last login: Sat Jun  1 15:12:09 2019 from 172.16.0.3
-[zozo@vm06 ~]$ exit
-登出
-Connection to 172.16.0.6 closed.
-[zozo@vm017 .ssh]$ ssh zozo@172.16.0.3
-Last login: Sat Jun  1 15:11:05 2019 from 172.16.0.6
-[zozo@vm03 ~]$ exit
-登出
-Connection to 172.16.0.3 closed.
-[zozo@vm017 .ssh]$ ssh zozo@172.16.0.17
-Last login: Sat Jun  1 16:42:32 2019 from 14.29.126.59
-[zozo@vm017 ~]$ exit
-登出
-Connection to 172.16.0.17 closed.
-[zozo@vm017 .ssh]$
-```
-
-### 3.5.5 vm03 同样配置免密登录所有节点
-
-在 __vm03__ 执行类似的操作, 同样配置免密登录所有节点, 完成后如下:
-
-- 以下为 __vm017__ 的 `~/.ssh` 文件夹内容:
-```
-[zozo@vm017 .ssh]$ pwd
-/home/zozo/.ssh
-[zozo@vm017 .ssh]$ ll
-总用量 16
--rw------- 1 zozo zozo  783 6月   1 17:55 authorized_keys
--rw------- 1 zozo zozo 1675 6月   1 15:16 id_rsa
--rw-r--r-- 1 zozo zozo  392 6月   1 15:16 id_rsa.pub
--rw-r--r-- 1 zozo zozo  517 6月   1 17:30 known_hosts
-[zozo@vm017 .ssh]$ cat authorized_keys
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFK2ZAzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz3vjfwAN5SMLS6zNDA/VFVHbB3BwNCw0P2HwnReaBzqxpxg0TChQWors04yj2+XYQXc632goKf+BPj8EvBPPNkq4Ea/lv+JaI/G4ZtuvvvvvvFhGuHYVzjPC6w9TSxhR+gQJhlGbFCwqqqqqqqqqqqqqqqqqqqqqqqqqqqqCtq9G2YKbe7alFZuS7JzjvlYkMc/HxKSahNy+q1qhI+51AXUG0T7l+edt//jh0TDlWVfUrhuTX/yi91v0haixxxxx0MzSaUNqARtqrerefveqerffvfhsfhrtybvhyfbvgfyxm8JynLJn zozo@vm03
-[zozo@vm017 .ssh]$
-```
-
-- 以下为 __vm016__ 的 `~/.ssh` 文件夹内容:
-```
-[zozo@vm06 .ssh]$ pwd
-/home/zozo/.ssh
-[zozo@vm06 .ssh]$ ll
-总用量 8
--rw------- 1 zozo zozo 783 6月   1 17:55 authorized_keys
--rw-r--r-- 1 zozo zozo 345 6月   1 15:11 known_hosts
-[zozo@vm06 .ssh]$ cat authorized_keys
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFK2ZAzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz3vjfwAN5SMLS6zNDA/VFVHbB3BwNCw0P2HwnReaBzqxpxg0TChQWors04yj2+XYQXc632goKf+BPj8EvBPPNkq4Ea/lv+JaI/G4ZtuvvvvvvFhGuHYVzjPC6w9TSxhR+gQJhlGbFCwqqqqqqqqqqqqqqqqqqqqqqqqqqqqCtq9G2YKbe7alFZuS7JzjvlYkMc/HxKSahNy+q1qhI+51AXUG0T7l+edt//jh0TDlWVfUrhuTX/yi91v0haixxxxx0MzSaUNqARtqrerefveqerffvfhsfhrtybvhyfbvgfyxm8JynLJn zozo@vm03
-[zozo@vm06 .ssh]$
-```
-
-- 以下为 __vm03__ 的 `~/.ssh` 文件夹内容:
-```
-[zozo@vm03 .ssh]$ pwd
-/home/zozo/.ssh
-[zozo@vm03 .ssh]$ ll
-总用量 16
--rw------- 1 zozo zozo  783 6月   1 17:56 authorized_keys
--rw------- 1 zozo zozo 1679 6月   1 17:54 id_rsa
--rw-r--r-- 1 zozo zozo  391 6月   1 17:54 id_rsa.pub
--rw-r--r-- 1 zozo zozo  517 6月   1 17:56 known_hosts
-[zozo@vm03 .ssh]$ cat authorized_keys
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABTTTTTTTTxxVVjseYFy/ZNpgYFFooD5Tf8obtsVmvzbbbdccdffff0hCdaNc2P1m8ynYmeHhU8e4ZtNc2YW2ZCcn433Z6241M0/sN6HecsEBjK/3tn5jNvyWJoKFNyUofURULEhtE/0aB8F/aHArneRW5m36FPHD/huo0Cf2dfdffdfffGBQHwxjelr+3BcRY8ZPvzGljhhsLlxvC1gd/xyGorUs3814WiRNEoaYh0asiYF2RQrtUDS5xvzyvsS45glsL2yLySSr3ponD8WSBAtzS2HegJKYPEShi9zdferefdxckDY+RGJ2tDAW24/MW4JObKX1qdq7EeOVF zozo@vm017
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFK2ZAzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz3vjfwAN5SMLS6zNDA/VFVHbB3BwNCw0P2HwnReaBzqxpxg0TChQWors04yj2+XYQXc632goKf+BPj8EvBPPNkq4Ea/lv+JaI/G4ZtuvvvvvvFhGuHYVzjPC6w9TSxhR+gQJhlGbFCwqqqqqqqqqqqqqqqqqqqqqqqqqqqqCtq9G2YKbe7alFZuS7JzjvlYkMc/HxKSahNy+q1qhI+51AXUG0T7l+edt//jh0TDlWVfUrhuTX/yi91v0haixxxxx0MzSaUNqARtqrerefveqerffvfhsfhrtybvhyfbvgfyxm8JynLJn zozo@vm03
-[zozo@vm03 .ssh]$
-```
-
-- 以下为在 __vm013__ 上测试免密登录 __vm017__, __vm06__, __vm03__:
-```
-[zozo@vm03 .ssh]$ ssh zozo@172.16.0.17
-Last login: Sat Jun  1 17:33:35 2019 from 172.16.0.17
-[zozo@vm017 ~]$ exit
-登出
-Connection to 172.16.0.17 closed.
-[zozo@vm03 .ssh]$ ssh zozo@172.16.0.6
-Last login: Sat Jun  1 17:09:32 2019 from 172.16.0.17
-[zozo@vm06 ~]$ exit
-登出
-Connection to 172.16.0.6 closed.
-[zozo@vm03 .ssh]$ ssh zozo@172.16.0.3
-Last login: Sat Jun  1 17:09:45 2019 from 172.16.0.17
-[zozo@vm03 ~]$ exit
-登出
-Connection to 172.16.0.3 closed.
-[zozo@vm03 .ssh]$
-```
+请参考: [Hadoop-video1-Hadoop运行环境搭建 - 配置 SSH 免密登录 (仅完全分布式需要配置)](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA.md#%E4%BA%8C-%E9%85%8D%E7%BD%AE-ssh-%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95-%E4%BB%85%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E9%9C%80%E8%A6%81%E9%85%8D%E7%BD%AE)
 
 
 
