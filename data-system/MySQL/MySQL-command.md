@@ -59,6 +59,6 @@ mysql>show databases;
 
 # 更改字段类型
 ```sql
-ALTER TABLE tbl MODIFY COLUMN col int(11);
+ALTER TABLE tbl MODIFY COLUMN col LONGTEXT;
 ```
 
