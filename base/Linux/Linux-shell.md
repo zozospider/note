@@ -182,5 +182,51 @@ if [ "$1" == "$a" ]; then # ok
 fi
 ```
 
+## 参数变量
+
+- [shell中脚本参数传递的两种方式](https://blog.csdn.net/sinat_36521655/article/details/79296181)
+- [Shell 脚本传参方法总结](https://www.jianshu.com/p/d3cd36c97abc)
+- [Shell脚本怎么通过 参数名 参数值 传参](https://segmentfault.com/q/1010000000126260)
+- [linux shell脚本通过参数名传递参数值](https://www.bbsmax.com/A/Gkz1Xm7gdR/)
+
+以下为通过 getopts 方式获取 demo:
+```bash
+while getopts ":a:b:c:" opt
+do
+  case $opt in
+    a)
+      echo "参数 a 的值 $OPTARG"
+      param_a=$OPTARG
+      ;;
+    b)
+      echo "参数 b 的值 $OPTARG"
+      param_b=$OPTARG
+      ;;
+    c)
+      echo "参数 c 的值 $OPTARG"
+      param_c=$OPTARG
+      ;;
+    ?)
+      echo "未知参数"
+      # exit 1
+      ;;
+  esac
+done
+
+if [ ! $param_a ]; then
+echo "-a can not be empty!"
+exit 1;
+fi
+
+if [ ! $param_b ]; then
+echo "use default param_b: DEFAULT_B"
+fi
+
+echo "param_a: $param_a"
+echo "param_b: $param_b"
+echo "param_c: $param_c"
+```
+
+
 ---
 
