@@ -1418,7 +1418,7 @@ drwxr-xr-x   - zozo supergroup          0 2019-05-26 18:29 /user/zozo
 drwxr-xr-x   - zozo supergroup          0 2019-05-26 18:29 /user/zozo/input-wordcount
 ```
 
-- 本地文件上传到 HDFS
+- 本地文件上传到 HDFS.
 ```
 [zozo@vm017 hadoop-2.7.2]$ ll input-wordcount/
 总用量 4
@@ -1429,6 +1429,11 @@ drwxr-xr-x   - zozo supergroup          0 2019-05-26 18:29 /user
 drwxr-xr-x   - zozo supergroup          0 2019-05-26 18:29 /user/zozo
 drwxr-xr-x   - zozo supergroup          0 2019-05-26 18:30 /user/zozo/input-wordcount
 -rw-r--r--   1 zozo supergroup         50 2019-05-26 18:30 /user/zozo/input-wordcount/wordcount.input
+```
+
+Tips: 如果文件已存在, 会提示 File exists, 要强制覆盖, 需要加参数 `-f`
+```
+bin/hdfs dfs -put -f input-wordcount/wordcount.input /user/zozo/input-wordcount
 ```
 
 - HDFS 查看文件信息
