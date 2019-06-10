@@ -94,6 +94,8 @@ The complete list is QQ
 
 ## 变量比较
 ```bash
+#!/bin/bash
+# 如果传入的参数个数小于 2, 则退出
 if [ $# -lt 2 ]; then
 echo "Need two or more parameters!"
 exit 1;
