@@ -1,11 +1,23 @@
 
-# Sell 中 source 命令
+- [source](#source)
+- [sleep](#sleep)
+- [变量与判断](#变量与判断)
+    - [if 语法](#if-语法)
+    - [变量类型](#变量类型)
+    - [变量比较](#变量比较)
+        - [整数比较](#整数比较)
+        - [字符串比较](#字符串比较)
+    - [参数变量](#参数变量)
+
+---
+
+# source
 
 Shell 中调用 `source file` 命令，需要注意 file 文件的编码，可通过 `enca file` 查看，此外 file 中的环境变量命名不能有 `.` 符号出现。
 
 ---
 
-# Sell sleep
+# sleep
 
 ```bash
 sleep 1    # 睡眠 1 秒
@@ -16,7 +28,7 @@ sleep 1h   # 睡眠 1 小时
 
 ---
 
-# Shell 变量与判断
+# 变量与判断
 
 ## if 语法
 
