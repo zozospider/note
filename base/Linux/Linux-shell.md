@@ -227,6 +227,11 @@ echo "param_b: $param_b"
 echo "param_c: $param_c"
 ```
 
+执行脚本:
+```
+sh t.sh -a aaa -b bbb -c ccc
+```
+
 
 ---
 
