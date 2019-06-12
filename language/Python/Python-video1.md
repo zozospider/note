@@ -25,4 +25,9 @@
 - video
   - [全面系统Python3入门+进阶课程](https://coding.imooc.com/class/136.html)
 
+- link
+  - site
+    - [官网](https://www.python.org/)
+    - [文档](https://docs.python.org/3.6/)
+
 ---
