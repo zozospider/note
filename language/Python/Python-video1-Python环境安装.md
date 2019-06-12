@@ -67,7 +67,6 @@ Mac OS X 可通过 `IDLE` -> `Preferences` -> `Size` 调整字体大小: 22
 Hello, World
 >>> print('Hello, World');
 Hello, World
->>> 
 ```
 
 ---
