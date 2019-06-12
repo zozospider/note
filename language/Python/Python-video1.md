@@ -4,7 +4,7 @@
 - page
   - [Python入门导学](https://github.com/zozospider/note/blob/master/language/Python/Python-video1-Python入门导学.md)
   - [Python环境安装](https://github.com/zozospider/note/blob/master/language/Python/Python-video1-Python环境安装.md)
-  - [理解什么是写代码与Python的基本类型]()
+  - [理解什么是写代码与Python的基本类型](https://github.com/zozospider/note/blob/master/language/Python/Python-video1-理解什么是写代码与Python的基本类型.md)
   - [Python中表示“组”的概念与定义]()
   - [变量与运算符]()
   - [分支、循环、条件与枚举]()
