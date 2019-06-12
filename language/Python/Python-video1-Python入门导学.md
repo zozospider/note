@@ -1,4 +1,17 @@
 
+- [Document & Code](#document--code)
+- [一. 导学](#一-导学)
+- [二. Python 的特性](#二-python-的特性)
+- [三. 我为什么喜欢 Python](#三-我为什么喜欢-python)
+- [四. Python 的缺点](#四-python-的缺点)
+- [五. 一个经典误区](#五-一个经典误区)
+- [六. Python 能做些什么](#六-python-能做些什么)
+- [七. 课程内容与特点](#七-课程内容与特点)
+- [八. Python 的前景](#八-python-的前景)
+- [九. 课程维护与提问](#九-课程维护与提问)
+
+---
+
 # Document & Code
 
 - [../Python-video1](https://github.com/zozospider/note/blob/master/language/Python/Python-video1.md)
@@ -83,8 +96,6 @@ Pythonic 风格: 很 Python
 ---
 
 # 八. Python 的前景
-
-
 
 ---
 
