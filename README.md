@@ -43,6 +43,10 @@
   - __Regular-Expression__
     - [Regular-Expression](https://github.com/zozospider/note/blob/master/data/Regular-Expression/Regular-Expression.md)
 
+- language
+  - __Python__
+    - [Python-video1](https://github.com/zozospider/note/blob/master/language/Python/Python-video1.md)
+
 - Java
   - __JDK__
     - [JDK-source-code](https://github.com/zozospider/note/blob/master/Java/JDK/JDK-source-code.md)
