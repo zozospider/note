@@ -76,10 +76,21 @@ bogon:note-distributed-zookeeper-video zoz$
 # IDEA 提交项目到 GitHub
 
 1. CVS - import into Version Control - Share Project on GitHub
-2. CVS - import into Version Control - Create Git Repository
-3. 右键 - Git - add
-4. 右键 - Git - Commit Directory
-5. 右键 - Git - Repository - Push
+2. CVS - import into Version Control - Create Git Repository (如果已经创建会有提示, 就不用了)
+3. 右键 - Git - add (第一次尝试可能没反应, 就不用管了)
+4. 右键 - Git - Commit Directory (第一次尝试可能没反应, 就不用管了)
+5. 右键 - Git - Repository - Push (第一次尝试可能没反应, 就不用管了)
+6. 正常流程: 修改内容 - 本地 Git commit - 项目右键 - Git - Repository - push
+
+如果有必要, 可在 GitHub 官网上添加 README.md
+```markdown
+# note-data-structures-video1
+
+- [note: zozoSpider/note/Mathematics/data-structures/data-structures-video1](https://github.com/zozospider/note/blob/master/Mathematics/data-structures/data-structures-video1.md)
+
+---
+
+```
 
 # Tomcat 配置 (设置自动更新资源, 默认首页打开 URL)
 
