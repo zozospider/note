@@ -24,10 +24,10 @@
 - link
   - video
     - [玩转数据结构 从入门到进阶](https://coding.imooc.com/class/207.html)
-    - [Play-with-Data-Structures](https://github.com/liuyubobobo/Play-with-Data-Structures)
-    - [Python 实现 (推荐)](https://github.com/nicemayi/play-with-data-structures)
-    - [C++ 实现](https://github.com/houpengfei88/Play-with-Data-Structures)
-    - [JS 实现](https://github.com/biaodigit/Play-with-Data-Structures)
+    - [GitHub: Play-with-Data-Structures](https://github.com/liuyubobobo/Play-with-Data-Structures)
+    - [GitHub: Python 实现 (推荐)](https://github.com/nicemayi/play-with-data-structures)
+    - [GitHub: C++ 实现](https://github.com/houpengfei88/Play-with-Data-Structures)
+    - [GitHub: JS 实现](https://github.com/biaodigit/Play-with-Data-Structures)
   - site
     - [leetcode](https://leetcode.com/)
 
