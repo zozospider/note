@@ -5,6 +5,8 @@
     - [Calculus-book](https://github.com/zozospider/note/blob/master/Mathematics/Calculus/Calculus-book.md)
   - __Advanced-mathematics__
     - [Advanced-mathematics-video](https://github.com/zozospider/note/blob/master/Mathematics/Advanced-mathematics/Advanced-mathematics-video.md)
+  - __data-structures__
+    - [data-structures-video1](https://github.com/zozospider/note/blob/master/Mathematics/data-structures/data-structures-video1.md)
 
 - base
   - __English__
@@ -89,7 +91,7 @@
 - Advanced mathematics
 - Linear algebra
 - data structures
-- algorithm
+- algorithms
 
 ## base
 - English
