@@ -19,7 +19,7 @@
   - [结尾语]()
 
 - code
-  - [zozospider/note-distributed-zookeeper-book](https://github.com/zozospider/note-distributed-zookeeper-book)
+  - [zozospider/note-data-structures-video1](https://github.com/zozospider/note-data-structures-video1)
 
 - link
   - video
