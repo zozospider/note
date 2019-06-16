@@ -30,5 +30,6 @@
     - [GitHub: JS 实现](https://github.com/biaodigit/Play-with-Data-Structures)
   - site
     - [leetcode](https://leetcode.com/)
+    - [leetcode 中文](https://leetcode-cn.com/)
 
 ---
