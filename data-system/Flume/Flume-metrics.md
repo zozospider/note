@@ -29,7 +29,7 @@
     "EventPutAttemptCount": "4912519",     // 正在放进 channel 的 event 数量
     "EventPutSuccessCount": "4912519",     // 成功放入 channel 的 event 数量
     "EventTakeAttemptCount": "4912661",    // 正在从 channel 中取 event 的数量
-    "EventTakeSuccessCount": "4912589"    // 从 channel 中成功取出 event 的数量
+    "EventTakeSuccessCount": "4912589"     // 从 channel 中成功取出 event 的数量
   },
   "SINK.k1": {
     "StopTime": "0",                       // sink 组件停止时间
