@@ -73,6 +73,10 @@ rm '.idea/uiDesigner.xml'
 bogon:note-distributed-zookeeper-video zoz$ 
 ```
 
+# IDEA 提交忽略文件
+
+- [intellij idea 忽略文件不提交](https://blog.csdn.net/wangjun5159/article/details/74932433)
+
 # IDEA 提交项目到 GitHub
 
 1. CVS - import into Version Control - Share Project on GitHub
