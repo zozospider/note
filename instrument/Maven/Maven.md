@@ -34,7 +34,7 @@ PATH
 
 ## 生成 jar 包排除文件
 
-```
+```xml
 <build>
     <plugin>
         ...
@@ -44,18 +44,18 @@ PATH
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
             <archive>
-                <!-- 配置主程序入口，及classpath -->
+                <!-- 配置主程序入口, 及 classpath -->
                 <manifest>
                     <addClasspath>true</addClasspath>
                     <classpathPrefix>lib/</classpathPrefix>
                     <mainClass>com.zhoulz.homework.chaptor02.config.Config</mainClass>
                 </manifest>
                 <manifestEntries>
-                    <!-- 配置jar包资源文件目录 -->
+                    <!-- 配置 jar 包资源文件目录 -->
                     <Class-Path>config/</Class-Path>
                 </manifestEntries>
             </archive>
-            <!-- 将jar包里的所有资源文件排除掉 -->
+            <!-- 将 jar 包里的所有资源文件排除掉 -->
             <excludes>
                 <exclude>**/*.properties</exclude>
             </excludes>
@@ -92,7 +92,7 @@ mvn dependency:copy-dependencies -DoutputDirectory=lib -DincludeScope=compile
           <plugin>  
               <artifactId>maven-assembly-plugin</artifactId>  
               <configuration>  
-                  <!--这部分可有可无,加上的话则直接生成可运行jar包-->
+                  <!-- 这部分可有可无, 加上的话则直接生成可运行 jar 包 -->
                   <!--<archive>-->
                       <!--<manifest>-->
                           <!--<mainClass>${exec.mainClass}</mainClass>-->
@@ -112,9 +112,9 @@ mvn assembly:assembly
 
 ## 上传本地 jar 包到私服
 
-[Maven：利用mvn deploy命令将jar包上传到nexus服务器](https://my.oschina.net/u/566545/blog/371514)  (已测试有效)
-[上传jar包到nexus私服](https://my.oschina.net/lujianing/blog/297128)  (可参考)
-[mvn命令上传本地jar包到远程maven私服Mac](http://leoray.leanote.com/post/mac_upload_local_jar_to_private_maven)
+- [Maven：利用mvn deploy命令将jar包上传到nexus服务器](https://my.oschina.net/u/566545/blog/371514)  (已测试有效)
+- [上传jar包到nexus私服](https://my.oschina.net/lujianing/blog/297128)  (可参考)
+- [mvn命令上传本地jar包到远程maven私服Mac](http://leoray.leanote.com/post/mac_upload_local_jar_to_private_maven)
 
 以下为具体步骤:
 
