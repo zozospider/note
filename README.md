@@ -56,6 +56,9 @@
     - [JDK-source-code](https://github.com/zozospider/note/blob/master/Java/JDK/JDK-source-code.md)
   - __JVM__
     - [JVM-memory-model](https://github.com/zozospider/note/blob/master/Java/JVM/JVM-memory-model.md)
+  - __other__
+    - [Java-command](https://github.com/zozospider/note/blob/master/Java/other/Java-command.md)
+    - [Java-excel](https://github.com/zozospider/note/blob/master/Java/other/Java-excel.md)
 
 - network
   - __DNS__
