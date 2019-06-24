@@ -239,9 +239,35 @@ curator --config /home/user/app/curator/curator.yml /home/user/app/curator/actio
 
 ## 清空正在写的文件内容
 
-执行以下命令：
+执行以下命令:
 ```
 > file
+```
+
+## 删除 7 天前的文件
+
+crontab 配置如下:
+```bash
+# remove data
+0 */1 * * * /home/zozo/data/remove.sh
+```
+
+- 方式 1 (推荐): `remove.sh` 脚本如下:
+```bash
+#!/bin/sh
+
+# remove data before 7 days
+find /home/zozo/data/d1 -mtime +7 -name "backup-d1-*.log" -exec rm {} \;
+find /home/zozo/data/d2 -mtime +7 -name "backup-d2-*.log" -exec rm {} \;
+```
+
+- 方式 2: `remove.sh` 脚本如下:
+```bash
+#!/bin/sh
+
+# remove data before 7 days
+/bin/find /home/zozo/data/d1 -ctime +7 -delete;
+/bin/find /home/zozo/data/d1 -ctime +7 -delete;
 ```
 
 # 查找过滤
