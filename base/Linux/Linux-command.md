@@ -1,4 +1,34 @@
 
+- [Document & Code](#document--code)
+- [端口](#端口)
+    - [查看端口是否被占用](#查看端口是否被占用)
+- [用户名 & 密码](#用户名--密码)
+    - [查看所有用户](#查看所有用户)
+    - [添加用户](#添加用户)
+    - [root 用户修改其他用户密码](#root-用户修改其他用户密码)
+    - [用户修改自身密码](#用户修改自身密码)
+- [上传 & 下载](#上传--下载)
+    - [本地上传文件到远程](#本地上传文件到远程)
+    - [本地上传文件夹到远程](#本地上传文件夹到远程)
+    - [远程下载文件到本地](#远程下载文件到本地)
+    - [远程下载文件夹到本地](#远程下载文件夹到本地)
+- [解压 & 压缩](#解压--压缩)
+    - [tar 命令](#tar-命令)
+    - [常用](#常用)
+    - [lzop](#lzop)
+- [文件编码](#文件编码)
+- [crontab](#crontab)
+    - [注意事项](#注意事项)
+    - [案例](#案例)
+    - [追加到文件](#追加到文件)
+- [删除](#删除)
+    - [清空正在写的文件内容](#清空正在写的文件内容)
+    - [删除 7 天前的文件](#删除-7-天前的文件)
+- [查找过滤](#查找过滤)
+- [打开文件数](#打开文件数)
+
+---
+
 # Document & Code
 
 - [命令行的艺术](https://github.com/jlevy/the-art-of-command-line/blob/master/README-zh.md)
@@ -12,6 +42,8 @@
 ```
 netstat -nlpt | grep 8080
 ```
+
+---
 
 # 用户名 & 密码
 
@@ -47,6 +79,8 @@ passwd zozo
 passwd
 ```
 
+---
+
 # 上传 & 下载
 
 ## 本地上传文件到远程
@@ -78,6 +112,8 @@ scp remote_user@remote_ip:/remote_path/remote_file /local_path
 ```
 scp -r remote_user@remote_ip:/remote_path/remote_dir /local_path/local_dir
 ```
+
+---
 
 # 解压 & 压缩 
 
@@ -142,6 +178,7 @@ lzop 工具最适合在注重压缩速度的场合, 压缩文件时会新建 .lz
 - `cat test | lzop > t.lzo`: 压缩标准输入并定向到标准输出
 - `lzop -dv test.lzo`: 解压 test.lzo 得到 test 文件, 输出详细信息, 保留 test.lzo 不变
 
+---
 
 # 文件编码
 
@@ -149,6 +186,8 @@ lzop 工具最适合在注重压缩速度的场合, 压缩文件时会新建 .lz
 ```
 enca file
 ```
+
+---
 
 # crontab
 
@@ -175,65 +214,94 @@ curator --config /home/user/app/curator/curator.yml /home/user/app/curator/actio
 
 ## 案例
 
-每 1 分钟执行一次 myCommand:
+- 每 1 分钟执行一次 myCommand:
 ```
 * * * * * myCommand
 ```
 
-每小时的第 3 和第 15 分钟执行:
+- 每小时的第 3 和第 15 分钟执行:
 ```
 3,15 * * * * myCommand
 ```
 
-在上午 8 点到 11 点的第 3 和第 15 分钟执行:
+- 在上午 8 点到 11 点的第 3 和第 15 分钟执行:
 ```
 3,15 8-11 * * * myCommand
 ```
 
-每隔两天的上午8点到11点的第3和第15分钟执行:
+- 每隔两天的上午 8 点到 11 点的第 3 和第 15 分钟执行:
 ```
 3,15 8-11 */2  *  * myCommand
 ```
 
-每周一上午8点到11点的第3和第15分钟执行:
+- 每周一上午 8 点到 11 点的第 3 和第 15 分钟执行:
 ```
 3,15 8-11 * * 1 myCommand
 ```
 
-每晚的 21:30 重启 smb:
+- 每晚的 21:30 重启 smb:
 ```
 30 21 * * * /etc/init.d/smb restart
 ```
 
-每月 1、10、22 日的 4:45 重启 smb:
+- 每月 1, 10, 22 日的 4:45 重启 smb:
 ```
 45 4 1,10,22 * * /etc/init.d/smb restart
 ```
 
-每周六、周日的 1:10 重启 smb
+- 每周六, 周日的 1:10 重启 smb
 ```
 10 1 * * 6,0 /etc/init.d/smb restart
 ```
 
-每天 18:00 至 23:00 之间每隔 30 分钟重启 smb:
+- 每天 18:00 至 23:00 之间每隔 30 分钟重启 smb:
 ```
 0,30 18-23 * * * /etc/init.d/smb restart
 ```
 
-每星期六的晚上 11:00 pm 重启 smb:
+- 每星期六的晚上 11:00 pm 重启 smb:
 ```
 0 23 * * 6 /etc/init.d/smb restart
 ```
 
-每一小时重启 smb
+- 每一小时重启 smb
 ```
 * */1 * * * /etc/init.d/smb restart
 ```
 
-晚上 11 点到早上 7 点之间，每隔一小时重启 smb:
+- 晚上 11 点到早上 7 点之间, 每隔一小时重启 smb:
 ```
 0 23-7 * * * /etc/init.d/smb restart
 ```
+
+## 追加到文件
+
+- 每天 12 点执行 test.php, 执行的输出会追加到 test.log 文件 (2>&1 表示把标准错误输出重定向到与标准输出一致, 即 test.log ):
+```
+0 12 * * * php /Users/fdipzone/test.php >> /Users/fdipzone/test.log 2>&1
+```
+
+- 使用小时命名:
+```
+* * * * * php /Users/fdipzone/test.php >> "/Users/fdipzone/$(date +"\%Y-\%m-\%d_\%H").log" 2>&1
+```
+
+- 每天 12 点执行, 使用当天日期来命名重定向文件:
+```
+0 12 * * * php /Users/fdipzone/test.php >> "/Users/fdipzone/$(date +"\%Y-\%m-\%d").log" 2>&1
+```
+
+- 使用月份命名:
+```
+0 12 * * * php /Users/fdipzone/test.php >> "/Users/fdipzone/$(date +"\%Y-\%m").log" 2>&1
+```
+
+- 使用周命名:
+```
+0 12 * * * php /Users/fdipzone/test.php >> "/Users/fdipzone/$(date +"\%Y-W\%W").log" 2>&1
+```
+
+---
 
 # 删除
 
@@ -270,12 +338,16 @@ find /home/zozo/data/d2 -mtime +7 -name "backup-d2-*.log" -exec rm {} \;
 /bin/find /home/zozo/data/d1 -ctime +7 -delete;
 ```
 
+---
+
 # 查找过滤
 
 排除字符:
 ```
 cat file | grep -v EXCLUDE
 ```
+
+---
 
 # 打开文件数
 
@@ -300,3 +372,4 @@ sysctl -a
 sysctl -a | grep fs
 ```
 
+---
