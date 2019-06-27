@@ -32,17 +32,17 @@
     "EventTakeSuccessCount": "4912589"     // 从 channel 中成功取出 event 的数量
   },
   "SINK.k1": {
+    "Type": "SINK",
     "StopTime": "0",                       // sink 组件停止时间
     "KafkaEventSendTimer": "403088",       // 从 channel 批量取 event, 并成功发送到 kafka 的耗时, 单位: 毫微秒
     "EventDrainSuccessCount": "4912589",   // sink 成功发送出的 event 数量
     "RollbackCount": "0",                  // 失败回滚的 event 数量
-    "Type": "SINK",
-    "ConnectionCreatedCount": "0",         // 连接被创建的数量
     "BatchCompleteCount": "0",             // 成功完成输出的批量事件个数
     "BatchEmptyCount": "62",               // 批量取空的数量
     "EventDrainAttemptCount": "0",         // 试图从 channel 消耗的事件数量
     "StartTime": "1496839492829",          // sink 组件开始时间
     "BatchUnderflowCount": "8",            // 正处于批量处理的 batch 数
+    "ConnectionCreatedCount": "0",         // 连接被创建的数量
     "ConnectionFailedCount": "0",          // 连接失败数
     "ConnectionClosedCount": "0"           // 连接关闭数
   }
