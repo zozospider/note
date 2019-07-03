@@ -1,18 +1,21 @@
 
 # 创建数据库
-```
-mysql> create database game_manager default character set utf8 collate utf8_general_ci;
+```sql
+-- UTF8
+mysql> CREATE DATABASE game_manager DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+-- GBK
+mysql> CREATE DATABASE game_manager DEFAULT CHARACTER SET gbk COLLATE gbk_chinese_ci;
 ```
 
 # 查看状态
 
 ## 查看编码
-```
+```sql
 mysql> show variables like '%char%';
 ```
 
 ## 查看 MySQL 版本
-```
+```sql
 mysql> select version();
 mysql> status;
 ```
