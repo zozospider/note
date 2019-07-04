@@ -281,5 +281,16 @@ https://mariadb.org/get-involved/
 [root@vm03 yum.repos.d]# 
 [root@vm03 yum.repos.d]# packet_write_wait: Connection to 111.230.233.137 port 22: Broken pipe
 spiderxmac:~ zoz$ 
+spiderxmac:~ zoz$ pwd
+/Users/zoz
+spiderxmac:~ zoz$ exit
+logout
+Saving session...
+...copying shared history...
+...saving history...truncating history files...
+...completed.
+Deleting expired sessions...45 completed.
+
+[进程已完成]
 
 ```
