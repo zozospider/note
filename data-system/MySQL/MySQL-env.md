@@ -1,10 +1,12 @@
 
-https://www.linuxidc.com/Linux/2018-03/151403.htm
+- https://www.linuxidc.com/Linux/2018-03/151403.htm
+- https://www.jianshu.com/p/58ab8109f355
+- https://www.jianshu.com/p/16682746137b
 
-- step1. 添加 MariaDB yum 仓库
+# step1. 添加 MariaDB yum 仓库
 
 新增 `/etc/yum.repos.d/MariaDB.repo` 文件
-```
+```bash
 cd /etc/yum.repos.d
 touch MariaDB.repo
 vi MariaDB.repo
@@ -19,10 +21,10 @@ gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 ```
 
-- step2. 安装 MariaDB
+# step2. 安装 MariaDB
 
 执行安装:
-```
+```bash
 yum install MariaDB-server MariaDB-client -y
 ```
 
@@ -322,3 +324,46 @@ Deleting expired sessions...45 completed.
 
 ```
 
+# step3. 设置 MariaDB 服务器自动启动
+
+```bash
+# 马上启动MariaDB
+systemctl start mariadb
+
+# 设置开机自动启动
+systemctl enable mariadb
+```
+
+# step4. 初次设置
+
+如果是全新安装的 MariaDB, 则还需要进行初始化设置:
+```bash
+/usr/bin/mysql_secure_installation
+```
+
+然后按照以下步骤就行设置:
+```bash
+# 输入 root 账号密码 (没有请直接回车), 是否设置 root 用户密码, 输入 Y 并回车或直接回车
+Enter current password for root (enter for none):
+# 为 root 设置密码? 按 Y
+Set root password? [Y/n]
+# 设置 root 用户的密码
+New password:
+# 再输入一次你设置的密码
+Re-enter new password:
+# 删除匿名用户, 按 Y
+Remove anonymous users? [Y/n]
+# 禁止 root 远程访问, 需要远程管理, 请按 n
+Disallow root login remotely? [Y/n]
+# 删除 test 数据库及其访问权限, 按 Y
+Remove test database and access to it? [Y/n]
+# 重新加载访问权限, 按 Y
+Reload privilege tables now? [Y/n]
+```
+
+配置完成后, 执行 mysql -uroot -ppassword 测试登录. 其中 root 为要登录的用户名, password 为刚才设置的root 用户的密码.
+
+操作记录如下:
+```
+
+```
