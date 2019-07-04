@@ -1,4 +1,6 @@
 
+https://www.linuxidc.com/Linux/2018-03/151403.htm
+
 安装记录:
 ```
 Last login: Thu Jun 20 11:45:40 on console
