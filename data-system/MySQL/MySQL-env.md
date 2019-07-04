@@ -1,7 +1,32 @@
 
 https://www.linuxidc.com/Linux/2018-03/151403.htm
 
-安装记录:
+- step1. 添加 MariaDB yum 仓库
+
+新增 `/etc/yum.repos.d/MariaDB.repo` 文件
+```
+cd /etc/yum.repos.d
+touch MariaDB.repo
+vi MariaDB.repo
+```
+
+文件内容如下:
+```
+[mariadb]
+name=MariaDB
+baseurl=http://yum.mariadb.org/10.2/centos7-amd64
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+```
+
+- step2. 安装 MariaDB
+
+执行安装:
+```
+yum install MariaDB-server MariaDB-client -y
+```
+
+安装记录如下:
 ```
 Last login: Thu Jun 20 11:45:40 on console
 spiderxmac:~ zoz$ ssh root@111.230.233.137
@@ -296,3 +321,4 @@ Deleting expired sessions...45 completed.
 [进程已完成]
 
 ```
+
