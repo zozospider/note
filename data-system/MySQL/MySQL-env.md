@@ -2,6 +2,7 @@
 - https://www.linuxidc.com/Linux/2018-03/151403.htm
 - https://www.jianshu.com/p/58ab8109f355
 - https://www.jianshu.com/p/16682746137b
+- https://www.ywops.com/archives/centos76-mariadb10311-66.html
 
 # step1. 添加 MariaDB yum 仓库
 
@@ -336,14 +337,14 @@ systemctl enable mariadb
 
 # step4. 初次设置
 
-如果是全新安装的 MariaDB, 则还需要进行初始化设置:
+- 如果是全新安装的 MariaDB, 则还需要进行初始化设置:
 ```bash
 /usr/bin/mysql_secure_installation
 ```
 
-然后按照以下步骤就行设置:
+- 然后按照以下步骤就行设置:
 ```bash
-# 输入 root 账号密码 (没有请直接回车), 是否设置 root 用户密码, 输入 Y 并回车或直接回车
+# 输入 root 账号密码 (没有请直接回车), 是否设置 root 用户密码, 直接回车
 Enter current password for root (enter for none):
 # 为 root 设置密码? 按 Y
 Set root password? [Y/n]
@@ -361,9 +362,205 @@ Remove test database and access to it? [Y/n]
 Reload privilege tables now? [Y/n]
 ```
 
-配置完成后, 执行 mysql -uroot -ppassword 测试登录. 其中 root 为要登录的用户名, password 为刚才设置的root 用户的密码.
+- 配置完成后, 执行 `mysql -uroot -ppassword` 测试登录. 其中 root 为要登录的用户名, password 为刚才设置的 root 用户的密码.
 
 操作记录如下:
 ```
+[root@vm03 ~]# systemctl start mariadb
+[root@vm03 ~]# ps -ef|grep mysql
+mysql    19232     1  0 15:40 ?        00:00:00 /usr/sbin/mysqld
+root     19341 19135  0 15:41 pts/0    00:00:00 grep --color=auto mysql
+[root@vm03 ~]# /usr/bin/mysql_secure_installation
 
+NOTE: RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MariaDB
+      SERVERS IN PRODUCTION USE!  PLEASE READ EACH STEP CAREFULLY!
+
+In order to log into MariaDB to secure it, we'll need the current
+password for the root user.  If you've just installed MariaDB, and
+you haven't set the root password yet, the password will be blank,
+so you should just press enter here.
+
+Enter current password for root (enter for none):
+OK, successfully used password, moving on...
+
+Setting the root password ensures that nobody can log into the MariaDB
+root user without the proper authorisation.
+
+Set root password? [Y/n] Y
+New password:
+Re-enter new password:
+Password updated successfully!
+Reloading privilege tables..
+ ... Success!
+
+
+By default, a MariaDB installation has an anonymous user, allowing anyone
+to log into MariaDB without having to have a user account created for
+them.  This is intended only for testing, and to make the installation
+go a bit smoother.  You should remove them before moving into a
+production environment.
+
+Remove anonymous users? [Y/n] Y
+ ... Success!
+
+Normally, root should only be allowed to connect from 'localhost'.  This
+ensures that someone cannot guess at the root password from the network.
+
+Disallow root login remotely? [Y/n] n
+ ... skipping.
+
+By default, MariaDB comes with a database named 'test' that anyone can
+access.  This is also intended only for testing, and should be removed
+before moving into a production environment.
+
+Remove test database and access to it? [Y/n] Y
+ - Dropping test database...
+ ... Success!
+ - Removing privileges on test database...
+ ... Success!
+
+Reloading the privilege tables will ensure that all changes made so far
+will take effect immediately.
+
+Reload privilege tables now? [Y/n] Y
+ ... Success!
+
+Cleaning up...
+
+All done!  If you've completed all of the above steps, your MariaDB
+installation should now be secure.
+
+Thanks for using MariaDB!
+[root@vm03 ~]# 
+[root@vm03 ~]# mysql -uroot -ppassword
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 16
+Server version: 10.2.25-MariaDB MariaDB Server
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]>
+MariaDB [(none)]> exit
+Bye
+[root@vm03 ~]#
 ```
+
+# step5. 修改配置
+
+- 登录, 使用以下命令查看当前使用的字符集, 应该有好几个不是 utf8 格式:
+```
+MariaDB [(none)]> SHOW VARIABLES LIKE 'character%';
++--------------------------+----------------------------+
+| Variable_name            | Value                      |
++--------------------------+----------------------------+
+| character_set_client     | utf8                       |
+| character_set_connection | utf8                       |
+| character_set_database   | latin1                     |
+| character_set_filesystem | binary                     |
+| character_set_results    | utf8                       |
+| character_set_server     | latin1                     |
+| character_set_system     | utf8                       |
+| character_sets_dir       | /usr/share/mysql/charsets/ |
++--------------------------+----------------------------+
+8 rows in set (0.00 sec)
+
+MariaDB [(none)]> SHOW VARIABLES LIKE "%collation%";
++----------------------+-------------------+
+| Variable_name        | Value             |
++----------------------+-------------------+
+| collation_connection | utf8_general_ci   |
+| collation_database   | latin1_swedish_ci |
+| collation_server     | latin1_swedish_ci |
++----------------------+-------------------+
+3 rows in set (0.00 sec)
+
+MariaDB [(none)]>
+```
+
+- 配置 MariaDB 的字符集
+
+查看 `/etc/my.cnf` (或者 includedir 下的配置, 配置在 `/etc/my.cnf` 或者 `/etc/my.cnf.d` 目录下的文件中都可以, 重要的是 [mysqld], [mysql], [client] 这些)
+```
+[root@vm03 ~]# cat /etc/my.cnf
+#
+# This group is read both both by the client and the server
+# use it for options that affect everything
+#
+[client-server]
+
+#
+# include all files from the config directory
+#
+!includedir /etc/my.cnf.d
+
+[root@vm03 ~]# ll /etc/my.cnf.d
+总用量 12
+-rw-r--r-- 1 root root  763 6月  15 02:29 enable_encryption.preset
+-rw-r--r-- 1 root root  232 6月  15 02:29 mysql-clients.cnf
+-rw-r--r-- 1 root root 1080 6月  15 02:29 server.cnf
+[root@vm03 ~]#
+```
+
+- 找到存有 [mysqld] 的配置文件 (如果没有可以新建), 在 [mysqld] 中添加:
+```properties
+
+[mysqld]
+
+# 字符集
+character-set-server=utf8
+collation-server=utf8_unicode_ci
+
+# 初始化连接都设置为 utf8 字符集
+# init_connect='SET collation_connection = utf8_unicode_ci'
+# init_connect='SET NAMES utf8'
+# 忽略客户端字符集设置, 不论客户端是何种字符集, 都按照 init_connect 中的设置进行使用
+# 当为 true 时，设置 [client] 和 [mysql] 的 default-character-set, 都不会影响到 mariadb 字符集, 只有通过 set names 来更改才会影响.
+# 当为 false 时 (默认), 设置 [client] 和 [mysql] 的 default-character-set, 会影响到 mariadb 字符集, 通过 set names 也一样会影响.
+# skip-character-set-client-handshake
+
+# 设置为不区分大小写, Linux 下默认会区分大小写
+lower_case_table_name=1
+
+# 将数据库服务器绑定到 Loopback 地址
+# bind-address=127.0.0.1
+
+# 修改默认端口
+# port=3600
+
+# 启用错误日志
+# log-error=/usr/local/mysql/log/error.log
+# general-log-file=/usr/local/mysql/log/mysql.log
+```
+
+- 找到存有 [mysql] 的配置文件 (如果没有可以新建), 在 [mysql] 中添加:
+```properties
+
+[mysql]
+
+# 字符集
+default-character-set=utf8
+```
+
+- 找到存有 [client] 的配置文件 (如果没有可以新建), 在 [client] 中添加:
+```properties
+
+[client]
+
+# 字符集
+default-character-set=utf8
+```
+
+- 重启 MariaDB 生效:
+```
+systemctl restart mariadb
+```
+
+- 查看:
+```sql
+SHOW VARIABLES LIKE 'character%';
+SHOW VARIABLES LIKE "%collation%";
+```
+
+---
