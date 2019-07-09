@@ -29,21 +29,28 @@ mysql> status;
 mysqldump -uterrace -p123456 -h192.168.0.1 -P3306 game_manager > game_manager_20190218_all.sql
 ```
 
+设置编码
+```
+mysqldump -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 game_manager > game_manager_20190218_all.sql
+```
+
 不需要 gid
 ```
-mysqldump -uterrace -p123456 -h192.168.0.1 -P3306 --set-gtid-purged=off game_manager > game_manager_20190218_all.sql
+mysqldump -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 --set-gtid-purged=off game_manager > game_manager_20190218_all.sql
 ```
 
 ## 只导出表结构，不导出数据
 ```
 mysqldump -d -uterrace -p123456 -h192.168.0.1 -P3306 game_manager > game_manager_20190218_table.sql
-mysqldump -d -uterrace -p123456 -h192.168.0.1 -P3306 --set-gtid-purged=off game_manager > game_manager_20190218_table.sql
+mysqldump -d -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 game_manager > game_manager_20190218_table.sql
+mysqldump -d -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 --set-gtid-purged=off game_manager > game_manager_20190218_table.sql
 ```
 
 ## 导出数据，不导出表结构
 ```
 mysqldump -t -uterrace -p123456 -h192.168.0.1 -P3306 game_manager web_menu web_user web_role > game_manager_20190218_data.sql
-mysqldump -t -uterrace -p123456 -h192.168.0.1 -P3306 --set-gtid-purged=off game_manager web_menu web_user web_role > game_manager_20190218_data.sql
+mysqldump -t -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 game_manager web_menu web_user web_role > game_manager_20190218_data.sql
+mysqldump -t -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 --set-gtid-purged=off game_manager web_menu web_user web_role > game_manager_20190218_data.sql
 ```
 
 ## 导入表结构 / 数据
