@@ -32,7 +32,7 @@
     // --- Event Put
     "EventPutAttemptCount": "4912519",     // 正在放进 channel 的 event 数量
     "EventPutSuccessCount": "4912519",     // 成功放入 channel 的 event 数量
-    // -- Event Take
+    // --- Event Take
     "EventTakeAttemptCount": "4912661",    // 正在从 channel 中取 event 的数量
     "EventTakeSuccessCount": "4912589"     // 从 channel 中成功取出 event 的数量
   },
