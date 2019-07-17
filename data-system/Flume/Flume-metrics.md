@@ -19,7 +19,7 @@
     // --- Accepted
     "AppendAcceptedCount": "0",            // source 端刚刚追加放入 channel 的 event 数量
     "AppendBatchAcceptedCount": "0",       // source 端追加到 channel 的数量
-    "EventAcceptedCount": "4912519",       // source 端累计成功放入 channel 的 event 数量
+    "EventAcceptedCount": "4912519"        // source 端累计成功放入 channel 的 event 数量
   },
   "CHANNEL.c1": {
     "Type": "CHANNEL",
