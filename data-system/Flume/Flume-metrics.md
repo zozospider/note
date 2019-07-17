@@ -5,7 +5,7 @@
 ```
 
 查看监控数据, 通过 `curl http://127.0.0.1:41414/metrics` 得到以下数据:
-```json
+```JSON
 {
   "SOURCE.s1": {
     "Type": "SOURCE",
