@@ -838,3 +838,122 @@ MariaDB [(none)]>
 ```
 
 ---
+
+# 用户权限
+
+- 创建用户并赋予所有操作权限:
+  - `username`: 将要创建的用户名
+  - `host`: 指定该用户在哪个主机上可以登陆, 如果是本地用户可用 localhost, 如果想让该用户可以从任意远程主机登陆, 可以使用通配符 %
+  - `password`: 该用户的登陆密码, 密码可以为空, 如果为空则该用户可以不需要密码登陆服务器
+```sql
+CREATE USER 'username'@'host' IDENTIFIED BY 'password';
+```
+
+- 查看用户登录权限:
+```sql
+select User, host from mysql.user;
+```
+
+- 操作记录如下:
+```
+[root@vm03 ~]# mysql -uroot -p
+Enter password:
+MariaDB [(none)]> select User, host from mysql.user;
++------+-----------+
+| User | host      |
++------+-----------+
+| root | 127.0.0.1 |
+| root | ::1       |
+| root | localhost |
+| root | vm03      |
++------+-----------+
+4 rows in set (0.00 sec)
+
+MariaDB [(none)]> CREATE USER 'zozo'@'%' IDENTIFIED BY '***password***';
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]> select User, host from mysql.user;
++------+-----------+
+| User | host      |
++------+-----------+
+| zozo | %         |
+| root | 127.0.0.1 |
+| root | ::1       |
+| root | localhost |
+| root | vm03      |
++------+-----------+
+5 rows in set (0.00 sec)
+
+MariaDB [(none)]> exit
+Bye
+[root@vm03 ~]# mysql -uzozo -p
+Enter password:
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
++--------------------+
+1 row in set (0.00 sec)
+
+MariaDB [(none)]>
+```
+
+_此时可以远程登录, 但是没有操作权限_
+
+- 给用户赋予操作权限 (root 用户登录):
+  - `privileges`: 用户的操作权限, 如 `SELECT`, `INSERT`, `UPDATE` 等 (权限列表见文末). 如果要授予所的权限则使用 `ALL PRIVILEGES`
+  - `databasename`: 数据库名
+  - `tablename`: 表名, 如果要授予该用户对所有数据库和表的相应操作权限则可用表示, 如 `.*`
+```sql
+GRANT privileges ON databasename.tablename TO 'username'@'host';
+
+-- 赋予部分权限, 其中的shopping.* 表示对以 shopping 所有文件操作
+grant select, delete, update, insert on simpleshop.* to superboy@'localhost' identified by 'superboy';
+-- 赋予所有权限
+grant all privileges on simpleshop.* to superboy@localhost identified by 'iamsuperboy';
+GRANT ALL PRIVILEGES ON *.* TO 'zozo'@'%';
+flush privileges;
+```
+
+以下为操作记录:
+```
+MariaDB [(none)]> GRANT ALL PRIVILEGES ON *.* TO 'zozo'@'%';
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]> flush privileges;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]> exit;
+Bye
+[root@vm03 ~]# mysql -uzozo -p
+Enter password:
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
++--------------------+
+3 rows in set (0.00 sec)
+
+MariaDB [(none)]>
+```
+
+_此时可以远程登录, 且有所有操作权限_
+
+---
+
+# 权限说明
+
+| 权限 | 描述 |
+| :--- | :--- |
+| ALTER | Allows use of `ALTER TABLE` |
+| ALTER ROUTINE | Alters or drops stored routines |
+
+
+
+
+
+---
