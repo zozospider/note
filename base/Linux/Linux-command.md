@@ -349,6 +349,35 @@ cat file | grep -v EXCLUDE
 
 ---
 
+# 统计行数
+
+统计文件行数:
+```
+wc -l file
+```
+
+# 重复, 去重
+
+- 查找文件中重复的行, 打印到控制台:
+```bash
+sort ./test.log | uniq -d
+```
+
+- 删除文件中重复的行, 输出到 `xxx.new` 文件中:
+```bash
+#!/bin/sh
+
+file='test.txt'
+# 方法 1
+sort -n $file | uniq > $file\.new
+# 方法 2
+# sort -n $file | awk '{if($0!=line)print; line=$0}'
+# 方法 3
+# sort -n $file | sed '$!N; /^\(.*\)\n\1$/!P; D'
+```
+
+---
+
 # 打开文件数
 
 - 通过以下命令可以查看用户级别支持的最大打开文件数
