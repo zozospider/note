@@ -360,12 +360,27 @@ wc -l file
 
 # 重复, 去重
 
-- 查找文件中重复的行, 打印到控制台:
+- 去除重复行, 打印到控制台:
 ```bash
-sort ./test.log | uniq -d
+sort file | uniq
 ```
 
-- 删除文件中重复的行, 输出到 `xxx.new` 文件中:
+- 查找非重复行, 打印到控制台:
+```bash
+sort file | uniq -u
+```
+
+- 查找重复行, 打印到控制台:
+```bash
+sort file | uniq -d
+```
+
+- 统计每一行出现的次数, 打印到控制台:
+```
+sort file | uniq -c
+```
+
+- 去重后, 输出到 `xxx.new` 文件中:
 ```bash
 #!/bin/sh
 
