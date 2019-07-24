@@ -356,6 +356,8 @@ cat file | grep -v EXCLUDE
 wc -l file
 ```
 
+---
+
 # 重复, 去重
 
 - 查找文件中重复的行, 打印到控制台:
@@ -399,6 +401,15 @@ cat /proc/sys/fs/file-max
 ```
 sysctl -a
 sysctl -a | grep fs
+```
+
+---
+
+# awk
+
+- 查找某个文件某个字段是否等于某个值, 打印整行内容:
+```bash
+awk -F '|' '$10 == "value" {print $0}' file
 ```
 
 ---
