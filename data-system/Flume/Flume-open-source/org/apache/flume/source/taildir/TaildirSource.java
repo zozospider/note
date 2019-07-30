@@ -64,24 +64,32 @@ public class TaildirSource extends AbstractSource implements
 
   private Map<String, String> filePaths;
   private Table<String, String, String> headerTable;
+  // 往 Channel 中发送 Event 的批量大小
   private int batchSize;
   private String positionFilePath;
+  // 每次程序启动, 对文件进行读取时, 是否从文件尾部开始读取数据, 或者从文件最开始读取
   private boolean skipToEnd;
   private boolean byteOffsetHeader;
 
   private SourceCounter sourceCounter;
   private ReliableTaildirEventReader reader;
+  // 用于监控日志文件的线程池
   private ScheduledExecutorService idleFileChecker;
+  // 用于记录日志文件读取的偏移量的线程池
   private ScheduledExecutorService positionWriter;
+
   private int retryInterval = 1000;
   private int maxRetryInterval = 5000;
+  // 日志文件在 idleTimeout 间隔时间没有被修改, 文件将被关闭
   private int idleTimeout;
   private int checkIdleInterval = 5000;
   private int writePosInitDelay = 5000;
+  // TaildirSource 读取每个监控文件都在位置文件中记录监控文件的已经读取的偏移量, writePosInterval 则是定义了更新位置文件的间隔
   private int writePosInterval;
   private boolean cachePatternMatching;
 
   private List<Long> existingInodes = new CopyOnWriteArrayList<Long>();
+  // 空闲 inodes 列表
   private List<Long> idleInodes = new CopyOnWriteArrayList<Long>();
   private Long backoffSleepIncrement;
   private Long maxBackOffSleepInterval;
@@ -260,6 +268,10 @@ public class TaildirSource extends AbstractSource implements
     return sourceCounter;
   }
 
+  /**
+   * 上级 PollableSourceRunner 会启动线程, 并通过 PollingRunner 的 run() 方法不断调用该 process() 方法进行轮询拉取, 然后判断返回状态是否成功.
+   * 如果成功, 会继续下一轮循环调用; 如果失败, 等待超时时间后会进行重试.
+   */
   @Override
   public Status process() {
     Status status = Status.BACKOFF;
@@ -345,14 +357,19 @@ public class TaildirSource extends AbstractSource implements
 
   /**
    * Runnable class that checks whether there are files which should be closed.
+   * 遍历 reader 所有监控的文件, 检查文件最后修改时间 + idleTimeout 是否小于当前时间, 如果小于则说明日志文件在 idleTimeout 时间内没有被修改, 该文件将会被关闭
    */
   private class idleFileCheckerRunnable implements Runnable {
     @Override
     public void run() {
       try {
+        // 当前时间
         long now = System.currentTimeMillis();
+        // 遍历 reader 所有监控的文件
         for (TailFile tf : reader.getTailFiles().values()) {
+          // 如果文件最后修改时间 + idleTimeout 小于当前时间
           if (tf.getLastUpdated() + idleTimeout < now && tf.getRaf() != null) {
+            // 加入到空闲 inodes 列表
             idleInodes.add(tf.getInode());
           }
         }
@@ -366,6 +383,10 @@ public class TaildirSource extends AbstractSource implements
   /**
    * Runnable class that writes a position file which has the last read position
    * of each file.
+   * 记录日志文件的偏移量, 以 json 格式: [{"inode", inode, "pos", tf.getPos(), "file", tf.getPath()}, {}, ...]
+   * inode: Linux 系统的特有属性, 在其他应用系统如 Windows 使用时需要修改 ReliableTaildirEventReader.getInode()
+   * pos: 日志读取的偏移量
+   * file: 日志文件的路径
    */
   private class PositionWriterRunnable implements Runnable {
     @Override
@@ -375,10 +396,13 @@ public class TaildirSource extends AbstractSource implements
   }
 
   private void writePosition() {
+    // 新建文件: /user/zozo/.flume/taildir_position.json 用于保存偏移量
     File file = new File(positionFilePath);
+    // 文件写入流
     FileWriter writer = null;
     try {
       writer = new FileWriter(file);
+      // 如果已经存在的 inodes 列表不为空, 则获取文件 json 内容, 并写入文件流中
       if (!existingInodes.isEmpty()) {
         String json = toPosInfoJson();
         writer.write(json);
@@ -399,6 +423,7 @@ public class TaildirSource extends AbstractSource implements
   private String toPosInfoJson() {
     @SuppressWarnings("rawtypes")
     List<Map> posInfos = Lists.newArrayList();
+    // 遍历已经存在的 inodes 列表, 将每个 inode 在 reader 的 tailFiles 列表属性中对应的 TailFile 对象信息存入 json 字符串中
     for (Long inode : existingInodes) {
       TailFile tf = reader.getTailFiles().get(inode);
       posInfos.add(ImmutableMap.of("inode", inode, "pos", tf.getPos(), "file", tf.getPath()));
