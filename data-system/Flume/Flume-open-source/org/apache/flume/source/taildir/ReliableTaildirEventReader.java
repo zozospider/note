@@ -249,6 +249,7 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
     updateTime = System.currentTimeMillis();
     List<Long> updatedInodes = Lists.newArrayList();
 
+    // 遍历 Taildir 匹配对象列表
     for (TaildirMatcher taildir : taildirCache) {
       Map<String, String> headers = headerTable.row(taildir.getFileGroup());
 
