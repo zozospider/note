@@ -120,15 +120,16 @@ public class TailFile {
   }
 
   /**
-   * 更新 pos 偏移量, 返回是否更新成功
+   * 更新 pos 偏移量, 返回是否有效更新成功
    */
   public boolean updatePos(String path, long inode, long pos) throws IOException {
     // 如果当前 TailFile 对象的 inode, path 和参数 inode, path 都相等, 则认为是同一个文件. 否则不做处理.
     if (this.inode == inode && this.path.equals(path)) {
       // 更新当前 TailFile 对象的 pos 偏移量
       setPos(pos);
-      // 
+      // TODO
       updateFilePos(pos);
+      // Updated position, file: /var/log/test1/example.log, inode: 32637698, pos: 1260
       logger.info("Updated position, file: " + path + ", inode: " + inode + ", pos: " + pos);
       return true;
     }
@@ -139,7 +140,7 @@ public class TailFile {
     raf.seek(pos);
     // 更新行读取位置为 pos
     lineReadPos = pos;
-    // 
+    // TODO
     bufferPos = NEED_READING;
     oldBuffer = new byte[0];
   }

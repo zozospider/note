@@ -155,11 +155,13 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
         }
         // 通过 inode 从 TailFile 集合中拿到当前 TailFile
         TailFile tf = tailFiles.get(inode);
-        // 如果集合中存在, 且集合中的 TailFile 的 inode, path 属性和当前临时变量相等, 则认为是同一个文件, 即更新内存中的 TailFile 的 pos 属性.
+        // 如果集合中存在, 且集合中的 TailFile 的 inode, path 属性和当前临时变量相等, 则认为是同一个文件, 即更新内存中的 TailFile 的 pos 偏移量.
         // 即恢复 taildir_position.json 中 inode 对应的 pos 到内存中的 TailFile 集合中, 否则为新文件, 在本逻辑中不做处理.
         if (tf != null && tf.updatePos(path, inode, pos)) {
+          // 更新 TailFile 集合中的 TailFile
           tailFiles.put(inode, tf);
         } else {
+          // taildir_position.json 文件对应的 inode 在 TailFile 集合不存在, 表示丢失了该文件.
           logger.info("Missing file: " + path + ", inode: " + inode + ", pos: " + pos);
         }
       }
@@ -170,6 +172,7 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
     } catch (IOException e) {
       logger.error("Failed loading positionFile: " + filePath, e);
     } finally {
+      // 关闭流
       try {
         if (fr != null) fr.close();
         if (jr != null) jr.close();
