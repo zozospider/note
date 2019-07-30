@@ -89,10 +89,15 @@ public class TaildirSource extends AbstractSource implements
   private String fileHeaderKey;
   private Long maxBatchCount;
 
+  /**
+   * Source 启动时调用
+   */
   @Override
   public synchronized void start() {
+    // r1 TaildirSource source starting with directory: {f1=/var/log/test1/example.log, f2=/var/log/test2/.*log.*}
     logger.info("{} TaildirSource source starting with directory: {}", getName(), filePaths);
     try {
+      // 通过建造者模式构建 reader 对象, 参数为 configure(x) 方法初始化的变量
       reader = new ReliableTaildirEventReader.Builder()
           .filePaths(filePaths)
           .headerTable(headerTable)
@@ -106,18 +111,24 @@ public class TaildirSource extends AbstractSource implements
     } catch (IOException e) {
       throw new FlumeException("Error instantiating ReliableTaildirEventReader", e);
     }
+    // 创建线程池 idleFileChecker, 用于监控日志文件
     idleFileChecker = Executors.newSingleThreadScheduledExecutor(
         new ThreadFactoryBuilder().setNameFormat("idleFileChecker").build());
+    // 启动运行 idleFileCheckerRunnable
     idleFileChecker.scheduleWithFixedDelay(new idleFileCheckerRunnable(),
         idleTimeout, checkIdleInterval, TimeUnit.MILLISECONDS);
 
+    // 创建线程池 positionWriter, 用于记录日志文件读取的偏移量
     positionWriter = Executors.newSingleThreadScheduledExecutor(
         new ThreadFactoryBuilder().setNameFormat("positionWriter").build());
+    // 启动运行 PositionWriterRunnable
     positionWriter.scheduleWithFixedDelay(new PositionWriterRunnable(),
         writePosInitDelay, writePosInterval, TimeUnit.MILLISECONDS);
 
+    // 调用父类 AbstractSource 的启动逻辑
     super.start();
     logger.debug("TaildirSource started");
+    // 启动 sourceCounter
     sourceCounter.start();
   }
 
@@ -151,48 +162,70 @@ public class TaildirSource extends AbstractSource implements
         positionFilePath, skipToEnd, byteOffsetHeader, idleTimeout, writePosInterval);
   }
 
+  /**
+   * 获取配置, 初始化参数
+   */
   @Override
   public synchronized void configure(Context context) {
+    // a1.sources.r1.filegroups = f1 f2
     String fileGroups = context.getString(FILE_GROUPS);
+    // 为空则抛异常
     Preconditions.checkState(fileGroups != null, "Missing param: " + FILE_GROUPS);
 
+    // {f1 = /var/log/test1/example.log, f2 = /var/log/test2/.*log.*}
     filePaths = selectByKeys(context.getSubProperties(FILE_GROUPS_PREFIX),
                              fileGroups.split("\\s+"));
+    // 为空则抛异常
     Preconditions.checkState(!filePaths.isEmpty(),
         "Mapping for tailing files is empty or invalid: '" + FILE_GROUPS_PREFIX + "'");
 
+    // /user/zozo
     String homePath = System.getProperty("user.home").replace('\\', '/');
+    // positionFile 路径默认为 /user/zozo/.flume/taildir_position.json
     positionFilePath = context.getString(POSITION_FILE, homePath + DEFAULT_POSITION_FILE);
+    // 创建 positionFile 父文件夹
     Path positionFile = Paths.get(positionFilePath);
     try {
       Files.createDirectories(positionFile.getParent());
     } catch (IOException e) {
       throw new FlumeException("Error creating positionFile parent directories", e);
     }
+    // {f1.headerKey1 = value1, f2.headerKey1 = value2, f2.headerKey2 = value2-2}
     headerTable = getTable(context, HEADERS_PREFIX);
+    // batchSize 默认 100
     batchSize = context.getInteger(BATCH_SIZE, DEFAULT_BATCH_SIZE);
+    // skipToEnd 默认 false
     skipToEnd = context.getBoolean(SKIP_TO_END, DEFAULT_SKIP_TO_END);
+    // byteOffsetHeader 默认 false
     byteOffsetHeader = context.getBoolean(BYTE_OFFSET_HEADER, DEFAULT_BYTE_OFFSET_HEADER);
+    // idleTimeout 默认 120000
     idleTimeout = context.getInteger(IDLE_TIMEOUT, DEFAULT_IDLE_TIMEOUT);
+    // writePosInterval 默认 3000
     writePosInterval = context.getInteger(WRITE_POS_INTERVAL, DEFAULT_WRITE_POS_INTERVAL);
+    // cachePatternMatching 默认 true
     cachePatternMatching = context.getBoolean(CACHE_PATTERN_MATCHING,
         DEFAULT_CACHE_PATTERN_MATCHING);
-
+    // backoffSleepIncrement 默认 1000
     backoffSleepIncrement = context.getLong(PollableSourceConstants.BACKOFF_SLEEP_INCREMENT,
         PollableSourceConstants.DEFAULT_BACKOFF_SLEEP_INCREMENT);
+    // maxBackoffSleep 默认 5000
     maxBackOffSleepInterval = context.getLong(PollableSourceConstants.MAX_BACKOFF_SLEEP,
         PollableSourceConstants.DEFAULT_MAX_BACKOFF_SLEEP);
+    // fileHeader 默认 false
     fileHeader = context.getBoolean(FILENAME_HEADER,
             DEFAULT_FILE_HEADER);
+    // fileHeaderKey 默认 file
     fileHeaderKey = context.getString(FILENAME_HEADER_KEY,
             DEFAULT_FILENAME_HEADER_KEY);
+    // maxBatchCount 默认 Long.MAX_VALUE
     maxBatchCount = context.getLong(MAX_BATCH_COUNT, DEFAULT_MAX_BATCH_COUNT);
+    // maxBatchCount 如果小于 0 则使用默认值
     if (maxBatchCount <= 0) {
       maxBatchCount = DEFAULT_MAX_BATCH_COUNT;
       logger.warn("Invalid maxBatchCount specified, initializing source "
           + "default maxBatchCount of {}", maxBatchCount);
     }
-
+    // 创建 SourceCounter(r1)
     if (sourceCounter == null) {
       sourceCounter = new SourceCounter(getName());
     }
