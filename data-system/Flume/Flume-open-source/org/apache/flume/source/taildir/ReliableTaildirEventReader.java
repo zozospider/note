@@ -58,6 +58,7 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
   private final Table<String, String, String> headerTable;
 
   private TailFile currentFile = null;
+  // key 为 inode 的 TailFile 集合
   private Map<Long, TailFile> tailFiles = Maps.newHashMap();
   private long updateTime;
   private boolean addByteOffset;
@@ -102,6 +103,7 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
     this.fileNameHeader = fileNameHeader;
     updateTailFiles(skipToEnd);
 
+    // 从 /user/zozo/.flume/taildir_position.json 文件加载数据, 重新恢复各个文件的偏移量到内存中.
     logger.info("Updating position from position file: " + positionFilePath);
     loadPositionFile(positionFilePath);
   }
@@ -109,6 +111,7 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
   /**
    * Load a position file which has the last read position of each file.
    * If the position file exists, update tailFiles mapping.
+   * 从 /user/zozo/.flume/taildir_position.json 文件加载数据, 重新恢复各个文件的偏移量到内存中.
    */
   public void loadPositionFile(String filePath) {
     Long inode, pos;
@@ -116,14 +119,19 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
     FileReader fr = null;
     JsonReader jr = null;
     try {
+      // 文件读取工具
       fr = new FileReader(filePath);
+      // json 读取工具
       jr = new JsonReader(fr);
+      // 开始读取 json
       jr.beginArray();
       while (jr.hasNext()) {
         inode = null;
         pos = null;
         path = null;
+        // 开始读取 json 中的 1 个对象
         jr.beginObject();
+        // 解析本对象中的 3 个属性值, 分别赋值到临时变量 inode, pos, file
         while (jr.hasNext()) {
           switch (jr.nextName()) {
             case "inode":
@@ -137,19 +145,25 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
               break;
           }
         }
+        // 结束读取 json 中的 1 个对象
         jr.endObject();
 
+        // inode, pos, file 这 3 个属性值都不能为空
         for (Object v : Arrays.asList(inode, pos, path)) {
           Preconditions.checkNotNull(v, "Detected missing value in position file. "
               + "inode: " + inode + ", pos: " + pos + ", path: " + path);
         }
+        // 通过 inode 从 TailFile 集合中拿到当前 TailFile
         TailFile tf = tailFiles.get(inode);
+        // 如果集合中存在, 且集合中的 TailFile 的 inode, path 属性和当前临时变量相等, 则认为是同一个文件, 即更新内存中的 TailFile 的 pos 属性.
+        // 即恢复 taildir_position.json 中 inode 对应的 pos 到内存中的 TailFile 集合中, 否则为新文件, 在本逻辑中不做处理.
         if (tf != null && tf.updatePos(path, inode, pos)) {
           tailFiles.put(inode, tf);
         } else {
           logger.info("Missing file: " + path + ", inode: " + inode + ", pos: " + pos);
         }
       }
+      // 结束读取 json
       jr.endArray();
     } catch (FileNotFoundException e) {
       logger.info("File not found: " + filePath + ", not updating position");
