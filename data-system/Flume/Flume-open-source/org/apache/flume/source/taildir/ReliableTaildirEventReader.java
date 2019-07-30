@@ -92,7 +92,9 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
       // taildirCache.add(new TaildirMatcher(f1, /var/log/test1/example.log, true));
       taildirCache.add(new TaildirMatcher(e.getKey(), e.getValue(), cachePatternMatching));
     }
+    // taildirCache: [{filegroup='f1', filePattern='/var/log/test1/example.log', cached=true}, {filegroup='f2', filePattern='/var/log/test2/.*log.*', cached=true}]
     logger.info("taildirCache: " + taildirCache.toString());
+    // headerTable: {f1.headerKey1 = value1, f2.headerKey1 = value2, f2.headerKey2 = value2-2}
     logger.info("headerTable: " + headerTable.toString());
 
     this.taildirCache = taildirCache;
@@ -101,6 +103,7 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
     this.cachePatternMatching = cachePatternMatching;
     this.annotateFileName = annotateFileName;
     this.fileNameHeader = fileNameHeader;
+    // 更新 key 为 inode 的 TailFile 集合
     updateTailFiles(skipToEnd);
 
     // 从 /user/zozo/.flume/taildir_position.json 文件加载数据, 重新恢复各个文件的偏移量到内存中.
@@ -263,11 +266,16 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
    * to the existing file.
    */
   public List<Long> updateTailFiles(boolean skipToEnd) throws IOException {
+    // 本次更新时间
     updateTime = System.currentTimeMillis();
+    // 更新的 inode 集合
     List<Long> updatedInodes = Lists.newArrayList();
 
-    // 遍历 Taildir 匹配对象列表
+    // taildirCache: [{filegroup='f1', filePattern='/var/log/test1/example.log', cached=true}, {filegroup='f2', filePattern='/var/log/test2/.*log.*', cached=true}]
+    // headerTable: {f1.headerKey1 = value1, f2.headerKey1 = value2, f2.headerKey2 = value2-2}
+    // 遍历 taildirCache (Taildir 匹配对象列表)
     for (TaildirMatcher taildir : taildirCache) {
+      // headers: [{headerKey1=value1}]
       Map<String, String> headers = headerTable.row(taildir.getFileGroup());
 
       for (File f : taildir.getMatchingFiles()) {
