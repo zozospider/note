@@ -44,12 +44,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+/**
+ * 可靠的 Taildir Event 读取器
+ */
 @InterfaceAudience.Private
 @InterfaceStability.Evolving
 public class ReliableTaildirEventReader implements ReliableEventReader {
   private static final Logger logger = LoggerFactory.getLogger(ReliableTaildirEventReader.class);
 
+  // Taildir 匹配对象列表 {new TaildirMatcher(f1, /var/log/test1/example.log, true), new TaildirMatcher(f2, /var/log/test2/.*log.*, true)}
   private final List<TaildirMatcher> taildirCache;
+  // {f1.headerKey1 = value1, f2.headerKey1 = value2, f2.headerKey2 = value2-2}
   private final Table<String, String, String> headerTable;
 
   private TailFile currentFile = null;
@@ -69,6 +74,7 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
       boolean skipToEnd, boolean addByteOffset, boolean cachePatternMatching,
       boolean annotateFileName, String fileNameHeader) throws IOException {
     // Sanity checks
+    // filePaths 和 positionFilePath 不能为空
     Preconditions.checkNotNull(filePaths);
     Preconditions.checkNotNull(positionFilePath);
 
@@ -77,8 +83,12 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
           new Object[] { ReliableTaildirEventReader.class.getSimpleName(), filePaths });
     }
 
+    // 新建 Taildir 匹配对象列表
     List<TaildirMatcher> taildirCache = Lists.newArrayList();
+    // filePaths: {f1 = /var/log/test1/example.log, f2 = /var/log/test2/.*log.*}
+    // 通过 filePaths 内容构建多个 Taildir 匹配对象, 并加入 Taildir 匹配对象列表
     for (Entry<String, String> e : filePaths.entrySet()) {
+      // taildirCache.add(new TaildirMatcher(f1, /var/log/test1/example.log, true));
       taildirCache.add(new TaildirMatcher(e.getKey(), e.getValue(), cachePatternMatching));
     }
     logger.info("taildirCache: " + taildirCache.toString());

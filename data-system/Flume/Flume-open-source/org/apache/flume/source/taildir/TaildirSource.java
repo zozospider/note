@@ -62,6 +62,7 @@ public class TaildirSource extends AbstractSource implements
 
   private static final Logger logger = LoggerFactory.getLogger(TaildirSource.class);
 
+  // 监控的文件路径列表
   private Map<String, String> filePaths;
   private Table<String, String, String> headerTable;
   // 往 Channel 中发送 Event 的批量大小
@@ -88,6 +89,7 @@ public class TaildirSource extends AbstractSource implements
   private int writePosInterval;
   private boolean cachePatternMatching;
 
+  // 已经存在的 inodes 列表
   private List<Long> existingInodes = new CopyOnWriteArrayList<Long>();
   // 空闲 inodes 列表
   private List<Long> idleInodes = new CopyOnWriteArrayList<Long>();
@@ -180,7 +182,7 @@ public class TaildirSource extends AbstractSource implements
     // 为空则抛异常
     Preconditions.checkState(fileGroups != null, "Missing param: " + FILE_GROUPS);
 
-    // {f1 = /var/log/test1/example.log, f2 = /var/log/test2/.*log.*}
+    // 文件路径列表: {f1 = /var/log/test1/example.log, f2 = /var/log/test2/.*log.*}
     filePaths = selectByKeys(context.getSubProperties(FILE_GROUPS_PREFIX),
                              fileGroups.split("\\s+"));
     // 为空则抛异常
@@ -274,12 +276,18 @@ public class TaildirSource extends AbstractSource implements
    */
   @Override
   public Status process() {
+    // 默认失败
     Status status = Status.BACKOFF;
     try {
+      // 清空已经存在的 inodes 列表
       existingInodes.clear();
+      // 从 reader.updateTailFiles() 获取所有需要监控的文件 inode 列表, 赋值给已经存在的 inodes 列表
       existingInodes.addAll(reader.updateTailFiles());
+      // 遍历已经存在的 inodes 列表
       for (long inode : existingInodes) {
+        // 获取 TailFile 对象
         TailFile tf = reader.getTailFiles().get(inode);
+        // 如果当前 TailFile 对象需要 tail, 则调用 tailFileProcess(x) 方法
         if (tf.needTail()) {
           boolean hasMoreLines = tailFileProcess(tf, true);
           if (hasMoreLines) {
