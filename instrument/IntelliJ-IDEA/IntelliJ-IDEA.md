@@ -1,10 +1,7 @@
 
 # Documentation
 
-* [mac激活](https://www.jianshu.com/p/3c87487e7121)
-* [IntelliJ-IDEA 提交代码到 Github](https://github.com/FatliTalk/blog/issues/11)
-* [IntelliJ-IDEA 提交代码到 Github-2](https://blog.csdn.net/rongxiang111/article/details/78120126)
-* [git上传本地Intellij idea 项目到github](https://blog.csdn.net/u010237107/article/details/50910879)
+- [mac激活](https://www.jianshu.com/p/3c87487e7121)
 
 ---
 
@@ -78,6 +75,10 @@ bogon:note-distributed-zookeeper-video zoz$
 - [intellij idea 忽略文件不提交](https://blog.csdn.net/wangjun5159/article/details/74932433)
 
 # IDEA 提交项目到 GitHub
+
+- [IntelliJ-IDEA 提交代码到 Github](https://github.com/FatliTalk/blog/issues/11)
+- [IntelliJ-IDEA 提交代码到 Github-2](https://blog.csdn.net/rongxiang111/article/details/78120126)
+- [git上传本地Intellij idea 项目到github](https://blog.csdn.net/u010237107/article/details/50910879)
 
 1. CVS - import into Version Control - Share Project on GitHub
 2. CVS - import into Version Control - Create Git Repository (如果已经创建会有提示, 就不用了)
