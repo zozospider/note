@@ -114,11 +114,15 @@ public class TaildirMatcher {
    */
   TaildirMatcher(String fileGroup, String filePattern, boolean cachePatternMatching) {
     // store whatever came from configuration
+    // f2
     this.fileGroup = fileGroup;
+    // /var/log/test2/.*log.*
     this.filePattern = filePattern;
+    // true
     this.cachePatternMatching = cachePatternMatching;
 
     // calculate final members
+    // 初始化父文件夹, 正则表达式过滤器
     File f = new File(filePattern);
     this.parentDir = f.getParentFile();
     String regex = f.getName();
@@ -173,6 +177,7 @@ public class TaildirMatcher {
    * change from the passed second so
    * any further invocations can be served from cache associated with that second
    * (given mtime is not updated again).
+   * 获取当前 FileGroup 对应的 Taildir 匹配器匹配的文件集合
    *
    * @return List of files matching the pattern sorted by last modification time. No recursion.
    * No directories. If nothing matches then returns an empty list. If I/O issue occurred then
@@ -181,8 +186,10 @@ public class TaildirMatcher {
    * @see #getMatchingFilesNoCache()
    */
   List<File> getMatchingFiles() {
+    // 当前时间
     long now = TimeUnit.SECONDS.toMillis(
         TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
+    // 当前父文件夹修改时间
     long currentParentDirMTime = parentDir.lastModified();
     List<File> result;
 
@@ -191,14 +198,21 @@ public class TaildirMatcher {
     // - directory was clearly updated after the last check OR
     // - last mtime change wasn't already checked for sure
     //   (system clock hasn't passed that second yet)
+    // 计算匹配的文件, 如果:
+    // - 我们不想使用缓存 (每次重新计算)
+    // - 目录在最后一次检查后有更新
+    // - 最后一次 mtime 更改尚未确定 (系统时钟尚未通过那个秒)
     if (!cachePatternMatching ||
         lastSeenParentDirMTime < currentParentDirMTime ||
         !(currentParentDirMTime < lastCheckedTime)) {
+      // 获取匹配的文件集合, 按照修改时间重新排序, 并赋值给 lastMatchedFiles
       lastMatchedFiles = sortByLastModifiedTime(getMatchingFilesNoCache());
+      // 更新 lastSeenParentDirMTime
       lastSeenParentDirMTime = currentParentDirMTime;
+      // 更新 lastCheckedTime
       lastCheckedTime = now;
     }
-
+    // 返回匹配的文件集合
     return lastMatchedFiles;
   }
 
@@ -210,6 +224,7 @@ public class TaildirMatcher {
    * Files returned by this call are weakly consistent (see {@link DirectoryStream}).
    * It does not freeze the directory while iterating, so it may (or may not) reflect updates
    * to the directory that occur during the call. In which case next call will return those files.
+   * 获取匹配的文件集合
    *
    * @return List of files matching the pattern unsorted. No recursion. No directories.
    * If nothing matches then returns an empty list. If I/O issue occurred then returns the list
@@ -220,7 +235,9 @@ public class TaildirMatcher {
    */
   private List<File> getMatchingFilesNoCache() {
     List<File> result = Lists.newArrayList();
+    // 通过正则表达式过滤目录下的文件: Files.newDirectoryStream(/var/log/test2, .*log.*);
     try (DirectoryStream<Path> stream = Files.newDirectoryStream(parentDir.toPath(), fileFilter)) {
+      // 将符合调节的文件添加到匹配结果
       for (Path entry : stream) {
         result.add(entry.toFile());
       }
@@ -235,6 +252,7 @@ public class TaildirMatcher {
    * Utility function to sort matched files based on last modification time.
    * Sorting itself use only a snapshot of last modification times captured before the sorting
    * to keep the number of stat system calls to the required minimum.
+   * 将文件集合按照修改时间重新排序
    *
    * @param files list of files in any order
    * @return sorted list

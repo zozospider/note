@@ -52,7 +52,7 @@ import java.util.Map.Entry;
 public class ReliableTaildirEventReader implements ReliableEventReader {
   private static final Logger logger = LoggerFactory.getLogger(ReliableTaildirEventReader.class);
 
-  // Taildir 匹配对象列表 {new TaildirMatcher(f1, /var/log/test1/example.log, true), new TaildirMatcher(f2, /var/log/test2/.*log.*, true)}
+  // FileGroup 对应的 Taildir 匹配器列表 {new TaildirMatcher(f1, /var/log/test1/example.log, true), new TaildirMatcher(f2, /var/log/test2/.*log.*, true)}
   private final List<TaildirMatcher> taildirCache;
   // {f1.headerKey1 = value1, f2.headerKey1 = value2, f2.headerKey2 = value2-2}
   private final Table<String, String, String> headerTable;
@@ -273,11 +273,12 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
 
     // taildirCache: [{filegroup='f1', filePattern='/var/log/test1/example.log', cached=true}, {filegroup='f2', filePattern='/var/log/test2/.*log.*', cached=true}]
     // headerTable: {f1.headerKey1 = value1, f2.headerKey1 = value2, f2.headerKey2 = value2-2}
-    // 遍历 taildirCache (Taildir 匹配对象列表)
+    // 遍历 taildirCache (FileGroup 对应的 Taildir 匹配器列表)
     for (TaildirMatcher taildir : taildirCache) {
       // headers: [{headerKey1=value1}]
       Map<String, String> headers = headerTable.row(taildir.getFileGroup());
 
+      // 获取当前 FileGroup 对应的 Taildir 匹配器匹配的文件集合, 然后遍历
       for (File f : taildir.getMatchingFiles()) {
         long inode;
         try {
