@@ -178,6 +178,9 @@ public class TailFile {
     return event;
   }
 
+  /**
+   * 按 BUFFER_SIZE (默认 8KB) 作为缓冲读取日志文件数据
+   */
   private void readFile() throws IOException {
     if ((raf.length() - raf.getFilePointer()) < BUFFER_SIZE) {
       buffer = new byte[(int) (raf.length() - raf.getFilePointer())];

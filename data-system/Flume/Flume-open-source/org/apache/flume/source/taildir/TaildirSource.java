@@ -279,15 +279,15 @@ public class TaildirSource extends AbstractSource implements
     // 默认失败
     Status status = Status.BACKOFF;
     try {
-      // 清空已经存在的 inodes 列表
+      // 清空 existingInodes
       existingInodes.clear();
-      // 从 reader.updateTailFiles() 获取所有需要监控的文件 inode 列表, 赋值给已经存在的 inodes 列表
+      // 从 reader.updateTailFiles() 获取所有 Taildir 匹配器匹配的文件列表对应的 inode 列表, 赋值给 existingInodes
       existingInodes.addAll(reader.updateTailFiles());
-      // 遍历已经存在的 inodes 列表
+      // 遍历 existingInodes
       for (long inode : existingInodes) {
         // 获取 TailFile 对象
         TailFile tf = reader.getTailFiles().get(inode);
-        // 如果当前 TailFile 对象需要 tail, 则调用 tailFileProcess(x) 方法
+        // 如果当前 TailFile 对象需要 tail, 则调用 tailFileProcess(x) 方法, 将当前文件中需要读取的行转换为 event 并发送到 channel
         if (tf.needTail()) {
           boolean hasMoreLines = tailFileProcess(tf, true);
           if (hasMoreLines) {
@@ -314,36 +314,55 @@ public class TaildirSource extends AbstractSource implements
     return maxBackOffSleepInterval;
   }
 
+  /**
+   * 当前文件中需要读取的行转换为 event 并发送到 channel, 返回是否还有行未读取
+   */
   private boolean tailFileProcess(TailFile tf, boolean backoffWithoutNL)
       throws IOException, InterruptedException {
+    // 循环次数
     long batchCount = 0;
     while (true) {
       reader.setCurrentFile(tf);
+      // 将日志文件每行转换为 Flume 的消息对象 event 列表, 并循环将每个 event 添加 header 信息 (每次读 batchSize 行, 即 batchSize 个 event)
       List<Event> events = reader.readEvents(batchSize, backoffWithoutNL);
+      // 如果本次获取到的 event 列表为空, 则认为当前 TailFile 全部读完, 返回 (当前 TailFile 的所有行都已经读取)
       if (events.isEmpty()) {
         return false;
       }
+      // 如果本次获取到的 event 列表不为空, 继续下面的逻辑处理 events
+
+      // 记录 EventReceivedCount 指标
       sourceCounter.addToEventReceivedCount(events.size());
+      // 记录 AppendBatchReceivedCount 指标
       sourceCounter.incrementAppendBatchReceivedCount();
       try {
+        // 调用 channelProcessor, 将 events 批量发送到 channel 进行处理
         getChannelProcessor().processEventBatch(events);
+        // 发送到 channel 成功后, 提交最近读取的行偏移量 pos
         reader.commit();
       } catch (ChannelException ex) {
+        // 发送到 channel 异常, retryInterval 时间后重试 (如果连续失败, retryInterval 时间会一直增加, 从 1000 开始增加到 5000, 之后不再变化.)
         logger.warn("The channel is full or unexpected failure. " +
             "The source will try again after " + retryInterval + " ms");
+        // 记录 ChannelWriteFail 指标
         sourceCounter.incrementChannelWriteFail();
         TimeUnit.MILLISECONDS.sleep(retryInterval);
         retryInterval = retryInterval << 1;
         retryInterval = Math.min(retryInterval, maxRetryInterval);
         continue;
       }
+      // 如果没有连续失败, retryInterval 时间重置为 10000
       retryInterval = 1000;
+      // 记录 EventAcceptedCount 指标
       sourceCounter.addToEventAcceptedCount(events.size());
+      // 记录 AppendBatchAcceptedCount 指标
       sourceCounter.incrementAppendBatchAcceptedCount();
+      // 如果本次获取到的 event 列表, 小于本次批量大小, 则认为当前 TailFile 已经全部读完, 返回 (当前 TailFile 的所有行都已经读取)
       if (events.size() < batchSize) {
         logger.debug("The events taken from " + tf.getPath() + " is less than " + batchSize);
         return false;
       }
+      // 如果循环次数大于了最大次数, 说明该文件超大, (循环了 maxBatchCount 次, 每次批量大小为 batchSize, 即已经读了 maxBatchCount * batchSize 行还未读完), 返回 (当前 TailFile 还有行未读取)
       if (++batchCount >= maxBatchCount) {
         logger.debug("The batches read from the same file is larger than " + maxBatchCount );
         return true;
@@ -410,7 +429,7 @@ public class TaildirSource extends AbstractSource implements
     FileWriter writer = null;
     try {
       writer = new FileWriter(file);
-      // 如果已经存在的 inodes 列表不为空, 则获取文件 json 内容, 并写入文件流中
+      // 如果 existingInodes 不为空, 则获取文件 json 内容, 并写入文件流中
       if (!existingInodes.isEmpty()) {
         String json = toPosInfoJson();
         writer.write(json);
@@ -431,7 +450,7 @@ public class TaildirSource extends AbstractSource implements
   private String toPosInfoJson() {
     @SuppressWarnings("rawtypes")
     List<Map> posInfos = Lists.newArrayList();
-    // 遍历已经存在的 inodes 列表, 将每个 inode 在 reader 的 tailFiles 列表属性中对应的 TailFile 对象信息存入 json 字符串中
+    // 遍历 existingInodes, 将每个 inode 在 reader 的 tailFiles 列表属性中对应的 TailFile 对象信息存入 json 字符串中
     for (Long inode : existingInodes) {
       TailFile tf = reader.getTailFiles().get(inode);
       posInfos.add(ImmutableMap.of("inode", inode, "pos", tf.getPos(), "file", tf.getPath()));

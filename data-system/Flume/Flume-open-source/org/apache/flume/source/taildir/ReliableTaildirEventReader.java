@@ -213,6 +213,9 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
     return readEvents(numEvents, true);
   }
 
+  /**
+   * 将日志文件每行转换为 Flume 的消息对象 event 列表, 并循环将每个 event 添加 header 信息
+   */
   public List<Event> readEvents(int numEvents, boolean backoffWithoutNL)
       throws IOException {
     if (!committed) {
@@ -278,37 +281,52 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
       // headers: [{headerKey1=value1}]
       Map<String, String> headers = headerTable.row(taildir.getFileGroup());
 
-      // 获取当前 FileGroup 对应的 Taildir 匹配器匹配的文件集合, 然后遍历
+      // 获取当前 FileGroup 对应的 Taildir 匹配器匹配的文件列表, 然后遍历
       for (File f : taildir.getMatchingFiles()) {
         long inode;
         try {
+          // 获取当前匹配器中文件的 inode
           inode = getInode(f);
         } catch (NoSuchFileException e) {
           logger.info("File has been deleted in the meantime: " + e.getMessage());
           continue;
         }
+        // 从内存中的 key 为 inode 的 TailFile 集合中取出 TailFile, 判断是否存在
         TailFile tf = tailFiles.get(inode);
+        // 如果不存在, 或者全路径不相等, 则认为是新文件.
         if (tf == null || !tf.getPath().equals(f.getAbsolutePath())) {
+          // 从 0 开始读
           long startPos = skipToEnd ? f.length() : 0;
+          // 新建一个 TailFile 对象 (使用匹配器匹配的文件对象, 从 0 开始), 并将该对象指向内存集合中 key 为 inode 的 TailFile
           tf = openFile(f, headers, inode, startPos);
+
+        // 如果存在, 且全路径相等, 则认为是旧文件.
         } else {
+          // 如果内存中的 TailFile 上次更新时间小于匹配器中文件的修改时间, 或者内存中的 TailFile 的偏移量不等于匹配器中文件的长度, 则需要 tail
+          // 如果内存中的 TailFile 上次更新时间大于等于匹配器中文件的修改时间, 且内存中的 TailFile 的偏移量等于匹配器中文件的长度, 则不需要 Tail
           boolean updated = tf.getLastUpdated() < f.lastModified() || tf.getPos() != f.length();
           if (updated) {
+            // 如果内存中的 TailFile 对应的 RandomAccessFile 属性为空, 则新建一个 TailFile 对象 (使用匹配器匹配的文件对象, 从 TailFile 的 pos 偏移量开始)
             if (tf.getRaf() == null) {
               tf = openFile(f, headers, inode, tf.getPos());
             }
+            // 如果匹配器中文件的长度小于内存中的 TailFile 的 pos 偏移量, 则从 0 开始重新读.
             if (f.length() < tf.getPos()) {
               logger.info("Pos " + tf.getPos() + " is larger than file size! "
                   + "Restarting from pos 0, file: " + tf.getPath() + ", inode: " + inode);
               tf.updatePos(tf.getPath(), inode, 0);
             }
           }
+          // 更新内存中的 TailFile 是否需要 tail
           tf.setNeedTail(updated);
         }
+        // 将修改后的 TailFile 重新放入内存中的 key 为 inode 的 TailFile 集合中
         tailFiles.put(inode, tf);
+        // 将所有 Taildir 匹配器匹配的文件列表对应的 inode 加入到 updatedInodes 列表
         updatedInodes.add(inode);
       }
     }
+    // 返回所有 Taildir 匹配器匹配的文件集合对应的 updatedInodes 列表
     return updatedInodes;
   }
 
@@ -317,11 +335,17 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
   }
 
 
+  /**
+   * 获取文件的 inode, 仅适用于 Linux
+   */
   private long getInode(File file) throws IOException {
     long inode = (long) Files.getAttribute(file.toPath(), "unix:ino");
     return inode;
   }
 
+  /**
+   * 新建一个 TailFile 对象
+   */
   private TailFile openFile(File file, Map<String, String> headers, long inode, long pos) {
     try {
       logger.info("Opening file: " + file + ", inode: " + inode + ", pos: " + pos);
