@@ -57,6 +57,7 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
   // {f1.headerKey1 = value1, f2.headerKey1 = value2, f2.headerKey2 = value2-2}
   private final Table<String, String, String> headerTable;
 
+  // 当前处理的 TailFile
   private TailFile currentFile = null;
   // key 为 inode 的 TailFile 集合
   private Map<Long, TailFile> tailFiles = Maps.newHashMap();

@@ -67,6 +67,7 @@ public class TaildirSource extends AbstractSource implements
   private Table<String, String, String> headerTable;
   // 往 Channel 中发送 Event 的批量大小
   private int batchSize;
+  // 记录所有监控文件 pos 偏移量的文件路径
   private String positionFilePath;
   // 每次程序启动, 对文件进行读取时, 是否从文件尾部开始读取数据, 或者从文件最开始读取
   private boolean skipToEnd;
