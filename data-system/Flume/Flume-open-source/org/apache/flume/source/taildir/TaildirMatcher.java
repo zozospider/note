@@ -58,6 +58,7 @@ import java.util.concurrent.TimeUnit;
  * for both {@code System.currentTimeMillis()} and {@code File.lastModified()}. Also
  * that system clock is used for file system timestamps. If it is not the case then configure it
  * as uncached. Class is solely for package only usage. Member functions are not thread safe.
+ * 当前 FileGroup 对应的 Taildir 匹配器
  *
  * @see TaildirSource
  * @see ReliableTaildirEventReader

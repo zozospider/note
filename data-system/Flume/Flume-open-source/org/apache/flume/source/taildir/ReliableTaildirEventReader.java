@@ -267,6 +267,7 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
   /**
    * Update tailFiles mapping if a new file is created or appends are detected
    * to the existing file.
+   * 获取所有 Taildir 匹配器匹配的文件列表对应的 inode 列表
    */
   public List<Long> updateTailFiles(boolean skipToEnd) throws IOException {
     // 本次更新时间
