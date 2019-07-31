@@ -20,4 +20,5 @@
   - [修改Flume taildir source源码,使其支持递归读取指定目录下的文件变化](https://github.com/yx1319250478/Flume-taildir-source)
   - [flume1.7.0－taildirSource 支持多文件监控和断点续传](https://unordered.org/timelines/59cd596c3c001000)
   - [中国民生银行大数据团队的Flume实践](https://juejin.im/post/5a22b1c76fb9a045167d00f0)
+  - [中国民生银行大数据团队的Flume实践（Github 地址）](https://github.com/tinawenqiao/flume/tree/trunk-cmbc)
   - [flume监控inode变化的文件（自定义source不影响原来的TAILDIR）](https://www.jianshu.com/p/7f74dbd45fd2)
