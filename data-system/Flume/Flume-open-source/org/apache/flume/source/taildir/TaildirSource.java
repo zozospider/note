@@ -89,7 +89,7 @@ public class TaildirSource extends AbstractSource implements
   private int writePosInterval;
   private boolean cachePatternMatching;
 
-  // 已经存在的 inodes 列表
+  // 用于存放每次 process 获取所有 Taildir 匹配器匹配的文件列表对应的 inode 列表
   private List<Long> existingInodes = new CopyOnWriteArrayList<Long>();
   // 空闲 inodes 列表
   private List<Long> idleInodes = new CopyOnWriteArrayList<Long>();
@@ -97,6 +97,7 @@ public class TaildirSource extends AbstractSource implements
   private Long maxBackOffSleepInterval;
   private boolean fileHeader;
   private String fileHeaderKey;
+  // 单个文件处理的最大次数, 即文件行数不能超过 maxBatchCount * batchSize
   private Long maxBatchCount;
 
   /**
