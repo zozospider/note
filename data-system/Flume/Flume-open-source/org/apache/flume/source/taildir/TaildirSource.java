@@ -341,7 +341,7 @@ public class TaildirSource extends AbstractSource implements
         // 发送到 channel 成功后, 提交最近读取的行偏移量 pos
         reader.commit();
       } catch (ChannelException ex) {
-        // 发送到 channel 异常, retryInterval 时间后重试 (如果连续失败, retryInterval 时间会一直增加, 从 1000 开始增加到 5000, 之后不再变化.)
+        // 发送到 channel 异常, retryInterval 时间后重试 (如果连续异常, retryInterval 时间会一直增加, 从 1000 开始增加到 5000, 之后不再变化.)
         logger.warn("The channel is full or unexpected failure. " +
             "The source will try again after " + retryInterval + " ms");
         // 记录 ChannelWriteFail 指标
@@ -351,7 +351,7 @@ public class TaildirSource extends AbstractSource implements
         retryInterval = Math.min(retryInterval, maxRetryInterval);
         continue;
       }
-      // 如果没有连续失败, retryInterval 时间重置为 10000
+      // 如果没有连续异常, retryInterval 时间重置为 10000
       retryInterval = 1000;
       // 记录 EventAcceptedCount 指标
       sourceCounter.addToEventAcceptedCount(events.size());
