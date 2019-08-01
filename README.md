@@ -105,6 +105,24 @@
 - Linux
 - concept
 
+## data-system
+- MySQL
+- Redis
+- Elasticsearch
+- MongoDB
+- Hadoop
+- HBase
+- Hive
+- Spark
+- Kylin
+- Kafka
+- Flume
+- Logstash
+- Storm
+- Flink
+- Pulsar
+- 图数据库
+
 ## data
 - XML & JSON & Protobuf & Avro & Thrift
 - Regular Expression
@@ -150,32 +168,6 @@
 - ZooKeeper
 - Ambari
 
-## store
-- MySQL
-- Redis
-- Elasticsearch
-- MongoDB
-- Hadoop HDFS
-- HBase
-
-# data-system
-- 图数据库
-
-## stream
-- Kafka
-- Flume
-- Logstash
-- Storm
-- Spark Streaming
-- Flink
-- Pulsar
-
-## analysis
-- Hadoop
-- Hive
-- Spark
-- Kylin
-
 ## bigdata monitoring security test view
 - Apache Beam
 - Ambari
@@ -193,7 +185,8 @@
 
 ## AI
 
-
-
+---
 
 只要一直努力, 终有一日会得到回报, 只要坚持下来, 梦想便会成真. 这是幻想, 多数情况下, 正义不会取得胜利; 多数情况下, 梦想不会成真. 在现实世界中, 这些是常有的事. 可是, 这又怎么样? 起点就在那里, 技术开发有 99% 的可能失败, 只要尝试新东西, 就一定会摔跟头. 很恼火, 所以便连吃饭和睡觉的时间都不放过, 反复去做. 来吧, 超越昨天为止的自己吧. 怎么可能认输.
+
+---
