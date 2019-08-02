@@ -43,9 +43,6 @@ import java.util.regex.Pattern;
 
 /**
  *
- * @author: 作者：jack-cooper
- * @explain: 释义：excel导出泛型工具类
- * @version: 日期：2016-05-31 09:59:26
  * 本工具类支持Excel导出，需要设定表头和表头对应的字段
  * 通过设定每个sheet的数据行数，可以多sheet导出
  * 支持设定时间格式
