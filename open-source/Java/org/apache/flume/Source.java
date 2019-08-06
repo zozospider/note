@@ -31,6 +31,8 @@ import org.apache.flume.lifecycle.LifecycleAware;
  * configured {@linkplain Channel channels}.
  * </p>
  *
+ * source 生成 events, 然后调用配置的 ChannelProcessor 的方法, 将这些 events 持久化到配置的 Channel.
+ *
  * <p>
  * Sources are associated with unique {@linkplain NamedComponent names} that can
  * be used for separating configuration and working namespaces.
