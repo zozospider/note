@@ -32,7 +32,6 @@
     - [Flume-env](https://github.com/zozospider/note/blob/master/data-system/Flume/Flume-env.md)
     - [Flume-metrics](https://github.com/zozospider/note/blob/master/data-system/Flume/Flume-metrics.md)
     - [Flume-Log4J-Appender](https://github.com/zozospider/note/blob/master/data-system/Flume/Flume-Log4J-Appender.md)
-    - [Flume-open-source](https://github.com/zozospider/note/blob/master/data-system/Flume/Flume-open-source.md)
   - __Hadoop__
     - [Hadoop-video1](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1.md)
 
