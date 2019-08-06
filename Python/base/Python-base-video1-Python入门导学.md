@@ -14,7 +14,7 @@
 
 # Document & Code
 
-- [../Python-video1](https://github.com/zozospider/note/blob/master/language/Python/Python-video1.md)
+- [../Python-video1](https://github.com/zozospider/note/blob/master/Python/base/Python-base-video1.md)
 
 ---
 
