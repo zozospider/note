@@ -103,8 +103,8 @@
 
 ## base
 - English
-- Design Patterns
-- Linux
+- Design Patterns  `90+`
+- Linux  `70+`
 - concept
 
 ## data-system
