@@ -30,9 +30,15 @@ import org.apache.flume.lifecycle.LifecycleAware;
  * the sink type.
  * </p>
  * <p>
+ * Sink 连接到 Channel 并消费它的内容, 发送到一个配置了类型的目的地.
+ * </p>
+ * <p>
  * Sinks can be grouped together for various behaviors using <tt>SinkGroup</tt>
  * and <tt>SinkProcessor</tt>. They are polled periodically by a
  * <tt>SinkRunner</tt> via the processor</p>
+ * <p>
+ * Sink 可以被 SinkGroup 和 SinkProcessor 组合在一起以实现各种行为. 他们由 processor 通过 SinkRunner 定期轮询.
+ * </p>
  *<p>
  * Sinks are associated with unique names that can be used for separating
  * configuration and working namespaces.
