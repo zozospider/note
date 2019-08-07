@@ -30,7 +30,9 @@ import org.apache.flume.lifecycle.LifecycleAware;
  * configured {@link ChannelProcessor} to persist those events into the
  * configured {@linkplain Channel channels}.
  * </p>
+ * <p>
  * source 生成 events, 然后调用配置的 ChannelProcessor 的方法, 将这些 events 持久化到配置的 Channel.
+ * </p>
  *
  * <p>
  * Sources are associated with unique {@linkplain NamedComponent names} that can
@@ -40,7 +42,9 @@ import org.apache.flume.lifecycle.LifecycleAware;
  * <p>
  * No guarantees are given regarding thread safe access.
  * </p>
+ * <p>
  * 不保证线程安全访问.
+ * </p>
  *
  * @see org.apache.flume.Channel
  * @see org.apache.flume.Sink

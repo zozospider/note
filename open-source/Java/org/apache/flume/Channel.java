@@ -27,7 +27,9 @@ import org.apache.flume.lifecycle.LifecycleAware;
  * acts as producer while the sink acts as a consumer of events. The channel
  * itself is the buffer between the two.
  * </p>
+ * <p>
  * Channel 连接 Source 和 Sink. Source 为生产者, Sink 为 events 的消费者, Channel 是两者的缓冲区.
+ * </p>
  * <p>
  * A channel exposes a {@link Transaction} interface that can be used by
  * its clients to ensure atomic {@linkplain #put(Event) put} and
@@ -49,7 +51,9 @@ import org.apache.flume.lifecycle.LifecycleAware;
  * guarantees are given as to when and by how many sources/sinks they may
  * be simultaneously accessed by.
  * </p>
+ * <p>
  * Channel 必须是线程安全的, 保护内部所有不变量, 因为不能保证何时会有多少 Source / Sinks 会同时访问.
+ * </p>
  *
  * @see org.apache.flume.Source
  * @see org.apache.flume.Sink
