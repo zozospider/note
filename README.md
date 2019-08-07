@@ -98,8 +98,8 @@
 - Calculus
 - Advanced mathematics
 - Linear algebra
-- data structures
-- algorithms
+- data structures  _90+_
+- algorithms  _90+_
 
 ## base
 - English
@@ -193,6 +193,6 @@
 
 ---
 
-90+, 70+, 50+
+_90+_, 70+, 50+
 
 ---
