@@ -82,13 +82,13 @@
 
 - other
   - __English__
-    - [English](https://github.com/zozospider/note/blob/master/base/English/English.md)
-    - [English-video](https://github.com/zozospider/note/blob/master/base/English/English-video.md)
+    - [English](https://github.com/zozospider/note/blob/master/other/English/English.md)
+    - [English-video](https://github.com/zozospider/note/blob/master/other/English/English-video.md)
   - __concept__
-    - [concept](https://github.com/zozospider/note/blob/master/base/concept/concept.md)
-    - [concept-question](https://github.com/zozospider/note/blob/master/base/concept/concept-question.md)
+    - [concept](https://github.com/zozospider/note/blob/master/other/concept/concept.md)
+    - [concept-question](https://github.com/zozospider/note/blob/master/other/concept/concept-question.md)
   - __DNS__
-    - [DNS](https://github.com/zozospider/note/blob/master/network/DNS/DNS.md)
+    - [DNS](https://github.com/zozospider/note/blob/master/other/DNS/DNS.md)
 
 ---
 
