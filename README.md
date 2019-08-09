@@ -95,70 +95,54 @@
 # skill
 
 ## Mathematics
-- Calculus
-- Advanced mathematics
-- Linear algebra
+- Calculus  `50+`
+- Advanced mathematics  `50+`
+- Linear algebra  `50+`
 - data structures  `90+`
 - algorithms  `90+`
 
 ## base
-- English
 - Design Patterns  `90+`
-- Linux  `70+`
-- concept
+- Linux  `50+`
 
 ## data-system
-- MySQL
+- ZooKeeper  `90+`
+- Hadoop  `90+`
+- 图数据库  `90+`
+- MySQL  `50+`
+- Spark  `50+`
+- Kafka  `50+`
+- Flume  `50+`
+- Hive  `50+`
+- HBase  `50+`
+- Flink  `50+`
+- Elasticsearch  `50+`
 - Redis
-- Elasticsearch
 - MongoDB
-- Hadoop
-- HBase
-- Hive
-- Spark
-- Kylin
-- Kafka
-- Flume
 - Logstash
 - Storm
-- Flink
 - Pulsar
-- 图数据库
+- Kylin
 
 ## data
 - XML & JSON & Protobuf & Avro & Thrift
 - Regular Expression
-
-## language
-- C
-- Go
-- Python
-- Scala
-- Kotlin
-- ECMA Script 6
-- Node.js
-- TypeScript
 
 ## Java
 - Java
 - Java Annotations
 - Java Reflection
 - JDK
-- JVM
+- JVM  `90+`
 - JMX
 - JConsole
-
-## network
-- TCP & UDP
-- HTTP & HTTPS & HTTP/2
-- WebSocket
-- DNS
-- Java network programming
-- Netty
-
-## Concurrent
 - Java concurrency programming
 - Disruptor
+- Java network programming  `90+`
+- Netty  `90+`
+
+## Python
+- Python
 
 ## Microservice
 - Spring
@@ -166,11 +150,30 @@
 - Spring Cloud
 - Spring Cloud Data Flow
 
-## distributed
-- ZooKeeper
-- Ambari
+## language
+- C
+- Go
+- Scala
+- Kotlin
+- ECMA Script 6
+- Node.js
+- TypeScript
 
-## bigdata monitoring security test view
+## instrument
+- Maven
+- Git
+- IntelliJ IDEA
+- Mac
+
+## other
+- English
+- DNS
+- concept
+- Node.js
+- TCP & UDP
+- HTTP & HTTPS & HTTP/2
+- WebSocket
+- DNS
 - Apache Beam
 - Ambari
 - Zabbix
@@ -178,12 +181,6 @@
 - Shiro
 - Kibana
 - Echarts
-
-## instrument
-- Maven
-- Git
-- IntelliJ IDEA
-- Mac
 
 ## AI
 
