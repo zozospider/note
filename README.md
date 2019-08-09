@@ -9,18 +9,12 @@
     - [data-structures-video1](https://github.com/zozospider/note/blob/master/Mathematics/data-structures/data-structures-video1.md)
 
 - base
-  - __English__
-    - [English](https://github.com/zozospider/note/blob/master/base/English/English.md)
-    - [English-video](https://github.com/zozospider/note/blob/master/base/English/English-video.md)
   - __Design-Patterns__
     - [Design-Patterns](https://github.com/zozospider/note/blob/master/base/Design-Patterns/Design-Patterns.md)
   - __Linux__
     - [Linux-command](https://github.com/zozospider/note/blob/master/base/Linux/Linux-command.md)
     - [Linux-env](https://github.com/zozospider/note/blob/master/base/Linux/Linux-env.md)
     - [Linux-shell](https://github.com/zozospider/note/blob/master/base/Linux/Linux-shell.md)
-  - __concept__
-    - [concept](https://github.com/zozospider/note/blob/master/base/concept/concept.md)
-    - [concept-question](https://github.com/zozospider/note/blob/master/base/concept/concept-question.md)
 
 - data-system
   - [data-system-book1-cn](https://github.com/zozospider/note/blob/master/data-system/data-system-book1-cn.md)
@@ -63,10 +57,6 @@
   - __base__
     - [Python-base-video1](https://github.com/zozospider/note/blob/master/Python/base/Python-base-video1.md)
 
-- network
-  - __DNS__
-    - [DNS](https://github.com/zozospider/note/blob/master/network/DNS/DNS.md)
-
 - Microservice
   - __Spring-Boot__
     - [Spring-Boot-2.x](https://github.com/zozospider/note/blob/master/Microservice/Spring-Boot/Spring-Boot-2.x.md)
@@ -89,6 +79,16 @@
     - [Office](https://github.com/zozospider/note/blob/master/instrument/Windows/Office.md)
   - __Geogebra__
     - [Geogebra](https://github.com/zozospider/note/blob/master/instrument/Geogebra/Geogebra.md)
+
+- other
+  - __English__
+    - [English](https://github.com/zozospider/note/blob/master/base/English/English.md)
+    - [English-video](https://github.com/zozospider/note/blob/master/base/English/English-video.md)
+  - __concept__
+    - [concept](https://github.com/zozospider/note/blob/master/base/concept/concept.md)
+    - [concept-question](https://github.com/zozospider/note/blob/master/base/concept/concept-question.md)
+  - __DNS__
+    - [DNS](https://github.com/zozospider/note/blob/master/network/DNS/DNS.md)
 
 ---
 
