@@ -26,3 +26,6 @@
     * MonitoredCounterGroup `C`, SourceCounter `C`, ChannelCounter `C`, SinkCounter `C`
   * __Application__
     * Application `C`
+  * __Client__
+    * RpcClient `I`, NettyAvroRpcClient `C`, LoadBalancingRpcClient `C`, FailoverRpcClient `C`
+
