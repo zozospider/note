@@ -29,3 +29,26 @@
   * __Client__
     * RpcClient `I`, NettyAvroRpcClient `C`, LoadBalancingRpcClient `C`, FailoverRpcClient `C`
 
+
+- 基本介绍
+- 三大组件, 其他
+  - 源码 __LifecycleAware__, __Configurable__
+- 拓扑结构
+- 核心原理
+- Channel
+  - 源码 __Channel__
+  - 自定义 Channel
+- Source
+  - 详细原理
+  - 源码 __Source__, __SourceRunner__, __Interceptor__, __ChannelSelector__, __ChannelProcessor__
+  - 自定义 Source, Interceptor
+- Sink
+  - 详细原理
+  - 源码 __Sink__, __SinkRunner__, __SinkProcessor__
+  - 自定义 Sink
+- 启动
+  - 介绍
+  - 源码 __Application__
+- 常见问题处理, 规划
+  - 常见问题处理, 监控源码 __Counter__
+  - 规划
