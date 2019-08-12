@@ -28,6 +28,9 @@ import org.apache.flume.annotations.InterfaceStability;
  * Any class marked as Configurable may have a context including its
  * sub-configuration passed to it, requesting it configure itself.
  * </p>
+ * <p>
+ * 任何标记为 Configurable 的类都可能具有上下文, 包括传递给它的子配置, 请求它自己配置.
+ * </P>
  */
 @InterfaceAudience.Public
 @InterfaceStability.Stable
@@ -37,11 +40,20 @@ public interface Configurable {
    * Request the implementing class to (re)configure itself.
    * </p>
    * <p>
+   * 请求实现类重新配置自己.
+   * </p>
+   * <p>
    * When configuration parameters are changed, they must be
    * reflected by the component asap.
    * </p>
    * <p>
+   * 当配置参数更改时, 组件必须尽快反映这些更改的参数.
+   * </p>
+   * <p>
    * There are no thread safety guarantees on when configure might be called.
+   * </p>
+   * <p>
+   * 没有线程安全保证何时调用该方法.
    * </p>
    * @param context
    */
