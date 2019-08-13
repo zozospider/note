@@ -25,7 +25,9 @@ ALTER TABLE tbl_1 MODIFY COLUMN col_1 LONGTEXT;
 ```bash
 # database
 mysqldump -uterrace -p123456 -h192.168.0.1 -P3306 db_1 > db_1_20190218_all.sql
+# (设置编码)
 mysqldump -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 db_1 > db_1_20190218_all.sql
+# (不需要 gid)
 mysqldump -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 --set-gtid-purged=off db_1 > db_1_20190218_all.sql
 
 # database table
