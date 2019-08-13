@@ -11,7 +11,7 @@ mysql> CREATE DATABASE db_1 DEFAULT CHARACTER SET gbk COLLATE gbk_chinese_ci;
 
 ## 更改字段类型
 ```sql
-ALTER TABLE tbl MODIFY COLUMN col LONGTEXT;
+ALTER TABLE tbl_1 MODIFY COLUMN col_1 LONGTEXT;
 ```
 
 ---
