@@ -13,8 +13,9 @@
   * __Source__, __SourceRunner__
     * Source `I`, EventDrivenSource `I`, PollableSource `I`, NetcatSource `C`, AvroSource `C`, TaildirSource `C`
     * SourceRunner `C`, EventDrivenSourceRunner `C`, PollableSourceRunner `C`
-  * __Channel__, __Interceptor__, __ChannelSelector__, __ChannelProcessor__
+  * __Channel__, __Transaction__, __Interceptor__, __ChannelSelector__, __ChannelProcessor__
     * Channel `I`, MemoryChannel `C`, FileChannel `C`
+    * Transaction `I`, MemoryTransaction `C`, FileBackedTransaction `C`
     * Interceptor `I`, StaticInterceptor `C`, RegexFilteringInterceptor `C`, RegexExtractorInterceptor `C`
     * ChannelSelector `I`, MultiplexingChannelSelector `C`, ReplicatingChannelSelector `C`
     * ChannelProcessor `C` _processEvent(e)_
@@ -36,7 +37,7 @@
 - 拓扑结构
 - 核心原理
 - Channel
-  - 源码 __Channel__
+  - 源码 __Channel__, __Transaction__
   - 自定义 Channel
 - Source
   - 详细原理
