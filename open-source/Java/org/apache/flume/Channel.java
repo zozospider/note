@@ -52,7 +52,7 @@ import org.apache.flume.lifecycle.LifecycleAware;
  * be simultaneously accessed by.
  * </p>
  * <p>
- * Channel 必须是线程安全的, 保护内部所有不变量, 因为不能保证何时会有多少 Source / Sinks 会同时访问.
+ * Channels 必须是线程安全的, 保护内部所有不变量, 因为不能保证何时会有多少 Sources / Sinks 会同时访问.
  * </p>
  *
  * @see org.apache.flume.Source
@@ -65,11 +65,15 @@ public interface Channel extends LifecycleAware, NamedComponent {
 
   /**
    * <p>Puts the given event into the channel.</p>
+   * <p>将给定 event 放入 channel.</p>
    * <p><strong>Note</strong>: This method must be invoked within an active
    * {@link Transaction} boundary. Failure to do so can lead to unpredictable
    * results.</p>
+   * <p><strong>注意</strong>: 必须在活动的 {@link Transaction} 边界内调用该方法. 否则会导致不可预知的结果.</p>
    * @param event the event to transport.
+   * @param event 要传输的 event.
    * @throws ChannelException in case this operation fails.
+   * @throws ChannelException 如果此操作失败.
    * @see org.apache.flume.Transaction#begin()
    */
   public void put(Event event) throws ChannelException;
@@ -78,18 +82,25 @@ public interface Channel extends LifecycleAware, NamedComponent {
    * <p>Returns the next event from the channel if available. If the channel
    * does not have any events available, this method must return {@code null}.
    * </p>
+   * <p>
+   * 从 Channel 返回下一个 event (如果可用). 如果 Channel 没有任何可用的 events, 该方法必须返回 {@code null}.
+   * </p>
    * <p><strong>Note</strong>: This method must be invoked within an active
    * {@link Transaction} boundary. Failure to do so can lead to unpredictable
    * results.</p>
+   * <p><strong>注意</strong>: 必须在活动的 {@link Transaction} 边界内调用该方法. 否则会导致不可预知的结果.</p>
    * @return the next available event or {@code null} if no events are
    * available.
+   * @return 下一个可用 event 或 {@code null} (如果没有可用的 event).
    * @throws ChannelException in case this operation fails.
+   * @throws ChannelException 如果此操作失败.
    * @see org.apache.flume.Transaction#begin()
    */
   public Event take() throws ChannelException;
 
   /**
    * @return the transaction instance associated with this channel.
+   * @return 与此 Channel 关联的 Transaction 实例.
    */
   public Transaction getTransaction();
 }
