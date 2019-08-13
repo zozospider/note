@@ -20,7 +20,8 @@ ALTER TABLE tbl_1 MODIFY COLUMN col_1 LONGTEXT;
 
 ## 导出表结构和数据
 
-5.6 版本以上会加上 gid (用此命令生成的 SQL 导入到新库需要高权限)
+注: 5.6 版本以上会加上 gid (用此命令生成的 SQL 导入到新库需要高权限)
+
 ```bash
 # database
 mysqldump -uterrace -p123456 -h192.168.0.1 -P3306 db_1 > db_1_20190218_all.sql
