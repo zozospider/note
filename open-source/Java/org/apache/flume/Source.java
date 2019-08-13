@@ -55,6 +55,7 @@ public interface Source extends LifecycleAware, NamedComponent {
 
   /**
    * Specifies which channel processor will handle this source's events.
+   * 指定哪个 ChannelProcessor 来处理 Source 的 events.
    *
    * @param channelProcessor
    */
@@ -62,6 +63,7 @@ public interface Source extends LifecycleAware, NamedComponent {
 
   /**
    * Returns the channel processor that will handle this source's events.
+   * 返回将处理此 Source 的 events 的 ChannelProcessor
    */
   public ChannelProcessor getChannelProcessor();
 
