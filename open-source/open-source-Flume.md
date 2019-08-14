@@ -28,8 +28,14 @@
   - org
     - apache
       - flume
+        - channel
+          - [AbstractChannel.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/channel/AbstractChannel.java)
+          - [BasicChannelSemantics.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/channel/BasicChannelSemantics.java)
+          - [BasicTransactionSemantics.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/channel/BasicTransactionSemantics.java)
+          - [MemoryChannel.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/channel/MemoryChannel.java)
         - conf
           - [Configurable.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/Configurable.java)
+          - [TransactionCapacitySupported.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/TransactionCapacitySupported.java)
         - lifecycle
           - [LifecycleAware.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/lifecycle/LifecycleAware.java)
         - source
