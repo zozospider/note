@@ -24,49 +24,49 @@ ALTER TABLE tbl_1 MODIFY COLUMN col_1 LONGTEXT;
 
 ```bash
 # database
-mysqldump -uterrace -p123456 -h192.168.0.1 -P3306 db_1 > db_1_20190218_all.sql
+mysqldump -uzozo -p123456 -h127.0.0.1 -P3306 db_1 > db_1_20190218_all.sql
 # (设置编码)
-mysqldump -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 db_1 > db_1_20190218_all.sql
+mysqldump -uzozo -p123456 -h127.0.0.1 -P3306 --default-character-set=utf8 db_1 > db_1_20190218_all.sql
 # (不需要 gid)
-mysqldump -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 --set-gtid-purged=off db_1 > db_1_20190218_all.sql
+mysqldump -uzozo -p123456 -h127.0.0.1 -P3306 --default-character-set=utf8 --set-gtid-purged=off db_1 > db_1_20190218_all.sql
 
 # database table
-mysqldump -uterrace -p123456 -h192.168.0.1 -P3306 db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_all.sql
-mysqldump -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_all.sql
-mysqldump -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 --set-gtid-purged=off db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_all.sql
+mysqldump -uzozo -p123456 -h127.0.0.1 -P3306 db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_all.sql
+mysqldump -uzozo -p123456 -h127.0.0.1 -P3306 --default-character-set=utf8 db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_all.sql
+mysqldump -uzozo -p123456 -h127.0.0.1 -P3306 --default-character-set=utf8 --set-gtid-purged=off db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_all.sql
 ```
 
 ## 只导出表结构，不导出数据
 ```bash
 # database
-mysqldump -d -uterrace -p123456 -h192.168.0.1 -P3306 db_1 > db_1_20190218_structure.sql
-mysqldump -d -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 db_1 > db_1_20190218_structure.sql
-mysqldump -d -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 --set-gtid-purged=off db_1 > db_1_20190218_structure.sql
+mysqldump -d -uzozo -p123456 -h127.0.0.1 -P3306 db_1 > db_1_20190218_structure.sql
+mysqldump -d -uzozo -p123456 -h127.0.0.1 -P3306 --default-character-set=utf8 db_1 > db_1_20190218_structure.sql
+mysqldump -d -uzozo -p123456 -h127.0.0.1 -P3306 --default-character-set=utf8 --set-gtid-purged=off db_1 > db_1_20190218_structure.sql
 
 # database table
-mysqldump -d -uterrace -p123456 -h192.168.0.1 -P3306 db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_structure.sql
-mysqldump -d -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_structure.sql
-mysqldump -d -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 --set-gtid-purged=off db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_structure.sql
+mysqldump -d -uzozo -p123456 -h127.0.0.1 -P3306 db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_structure.sql
+mysqldump -d -uzozo -p123456 -h127.0.0.1 -P3306 --default-character-set=utf8 db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_structure.sql
+mysqldump -d -uzozo -p123456 -h127.0.0.1 -P3306 --default-character-set=utf8 --set-gtid-purged=off db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_structure.sql
 ```
 
 ## 只导出数据，不导出表结构
 ```bash
 # database
-mysqldump -d -uterrace -p123456 -h192.168.0.1 -P3306 db_1 > db_1_20190218_data.sql
-mysqldump -d -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 db_1 > db_1_20190218_data.sql
-mysqldump -d -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 --set-gtid-purged=off db_1 > db_1_20190218_data.sql
+mysqldump -d -uzozo -p123456 -h127.0.0.1 -P3306 db_1 > db_1_20190218_data.sql
+mysqldump -d -uzozo -p123456 -h127.0.0.1 -P3306 --default-character-set=utf8 db_1 > db_1_20190218_data.sql
+mysqldump -d -uzozo -p123456 -h127.0.0.1 -P3306 --default-character-set=utf8 --set-gtid-purged=off db_1 > db_1_20190218_data.sql
 
 # database table
-mysqldump -t -uterrace -p123456 -h192.168.0.1 -P3306 db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_data.sql
-mysqldump -t -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_data.sql
-mysqldump -t -uterrace -p123456 -h192.168.0.1 -P3306 --default-character-set=utf8 --set-gtid-purged=off db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_data.sql
+mysqldump -t -uzozo -p123456 -h127.0.0.1 -P3306 db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_data.sql
+mysqldump -t -uzozo -p123456 -h127.0.0.1 -P3306 --default-character-set=utf8 db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_data.sql
+mysqldump -t -uzozo -p123456 -h127.0.0.1 -P3306 --default-character-set=utf8 --set-gtid-purged=off db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_data.sql
 ```
 
 ## 导入表结构 / 数据
 ```
-mysql -uterrace -p123456 -h192.168.0.1 -P3306 db_1 < db_1_20190218_all.sql
-mysql -uterrace -p123456 -h192.168.0.1 -P3306 db_1 < db_1_20190218_structure.sql
-mysql -uterrace -p123456 -h192.168.0.1 -P3306 db_1 < db_1_20190218_data.sql
+mysql -uzozo -p123456 -h127.0.0.1 -P3306 db_1 < db_1_20190218_all.sql
+mysql -uzozo -p123456 -h127.0.0.1 -P3306 db_1 < db_1_20190218_structure.sql
+mysql -uzozo -p123456 -h127.0.0.1 -P3306 db_1 < db_1_20190218_data.sql
 ```
 
 ---
