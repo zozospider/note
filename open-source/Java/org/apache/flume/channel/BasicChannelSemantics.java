@@ -69,6 +69,10 @@ public abstract class BasicChannelSemantics extends AbstractChannel {
    * retrieved by <code>getTransaction</code> for the duration of that
    * transaction.
    * </p>
+   * <p>
+   * 调用该方法以创建新的 {@link Transaction} 对象, 这些对象必须继承 {@link BasicTransactionSemantics}.
+   * 每一个对象仅用于一个 Transaction, 但存储在 ThreadLocal 中, 并在该 Transaction 期间通过 <code>getTransaction</code> 检索.
+   * </p>
    */
   protected abstract BasicTransactionSemantics createTransaction();
 
@@ -77,6 +81,9 @@ public abstract class BasicChannelSemantics extends AbstractChannel {
    * Ensures that a transaction exists for this thread and then
    * delegates the <code>put</code> to the thread's {@link
    * BasicTransactionSemantics} instance.
+   * </p>
+   * <p>
+   * 确保此线程存在 Trasaction, 然后将 <code>put</code> 委托给此线程的 {@link BasicTransactionSemantics} 实例.
    * </p>
    */
   @Override
@@ -92,6 +99,9 @@ public abstract class BasicChannelSemantics extends AbstractChannel {
    * Ensures that a transaction exists for this thread and then
    * delegates the <code>take</code> to the thread's {@link
    * BasicTransactionSemantics} instance.
+   * </p>
+   * <p>
+   * 确保此线程存在 Trasaction, 然后将 <code>take</code> 委托给此线程的 {@link BasicTransactionSemantics} 实例.
    * </p>
    */
   @Override
@@ -109,6 +119,10 @@ public abstract class BasicChannelSemantics extends AbstractChannel {
    * one via <code>createTransaction</code> if not.
    * @return the current <code>Transaction</code> object for the
    *     calling thread
+   * </p>
+   * <p>
+   * 如果尚未初始化 Channel, 则检查该线程是否存在打开的 Transaction, 如果没有, 则通过 <code>createTransaction</code> 创建一个新的  Transaction.
+   * @return 调用线程的当前的 <code>Transaction</code> 对象.
    * </p>
    */
   @Override
