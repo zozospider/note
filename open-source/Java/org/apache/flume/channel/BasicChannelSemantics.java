@@ -45,6 +45,7 @@ public abstract class BasicChannelSemantics extends AbstractChannel {
   private ThreadLocal<BasicTransactionSemantics> currentTransaction
       = new ThreadLocal<BasicTransactionSemantics>();
 
+  // 初始化控制变量, 调用 getTransaction() 时会进行判断.
   private boolean initialized = false;
 
   /**
@@ -53,6 +54,9 @@ public abstract class BasicChannelSemantics extends AbstractChannel {
    * this {@link Channel} instance.  Use this method to delay the
    * initializization resources until just before the first
    * transaction begins.
+   * </p>
+   * <p>
+   * 在 {@link Channel} 实例上同步时, 首先调用 getTransaction() 请求. 使用此方法将初始化资源延迟到第一个 Transaction 开始之前.
    * </p>
    */
   protected void initialize() {}
