@@ -36,9 +36,12 @@ public abstract class AbstractChannel
 
   private String name;
 
-  // 
+  // 生命周期状态 enum
   private LifecycleState lifecycleState;
 
+  /**
+   * Channel 初始化时, 状态为: IDLE.
+   */
   public AbstractChannel() {
     lifecycleState = LifecycleState.IDLE;
   }
@@ -48,26 +51,44 @@ public abstract class AbstractChannel
     this.name = name;
   }
 
+  /**
+   * 实现 LifecycleAware 接口的 start() 方法.
+   * Channel start 时, 状态为: START.
+   */
   @Override
   public synchronized void start() {
     lifecycleState = LifecycleState.START;
   }
 
+  /**
+   * 实现 LifecycleAware 接口的 start() 方法.
+   * Channel stop 时, 状态为: STOP.
+   */
   @Override
   public synchronized void stop() {
     lifecycleState = LifecycleState.STOP;
   }
 
+  /**
+   * 实现 LifecycleAware 接口的 getLifecycleState() 方法.
+   * 返回 Channel 的当前状态.
+   */
   @Override
   public synchronized LifecycleState getLifecycleState() {
     return lifecycleState;
   }
 
+  /**
+   * 实现 NamedComponent 接口的 getName() 方法.
+   */
   @Override
   public synchronized String getName() {
     return name;
   }
 
+  /**
+   * 实现 Configurable 接口的 configure(c) 方法.
+   */
   @Override
   public void configure(Context context) {}
 
