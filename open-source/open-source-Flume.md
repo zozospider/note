@@ -65,3 +65,6 @@
   - [flume使用（五）：taildirSource重复获取数据和不释放资源解决办法](https://blog.csdn.net/maoyuanming0806/article/details/79391657)
   - [flume监控inode变化的文件（自定义source不影响原来的TAILDIR）](https://www.jianshu.com/p/7f74dbd45fd2)
   - [java多线程[5]：信号量(Semaphore)](https://blog.csdn.net/daguanjia11/article/details/78828009)
+  - [Java多线程--生产者消费者模型（Semaphore实现）](https://blog.csdn.net/qq_24489717/article/details/70147789)
+  - [Java生产者和消费者模型的5种实现方式](https://www.jianshu.com/p/66e8b5ab27f6)
+
