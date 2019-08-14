@@ -38,6 +38,7 @@
           - [TransactionCapacitySupported.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/TransactionCapacitySupported.java)
         - lifecycle
           - [LifecycleAware.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/lifecycle/LifecycleAware.java)
+          - [LifecycleState.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/lifecycle/LifecycleState.java)
         - source
           - taildir
             - [TaildirSource.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/source/taildir/TaildirSource.java)
