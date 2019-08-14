@@ -64,3 +64,4 @@
   - [中国民生银行大数据团队的Flume实践（Github 地址）](https://github.com/tinawenqiao/flume/tree/trunk-cmbc)
   - [flume使用（五）：taildirSource重复获取数据和不释放资源解决办法](https://blog.csdn.net/maoyuanming0806/article/details/79391657)
   - [flume监控inode变化的文件（自定义source不影响原来的TAILDIR）](https://www.jianshu.com/p/7f74dbd45fd2)
+  - [java多线程[5]：信号量(Semaphore)](https://blog.csdn.net/daguanjia11/article/details/78828009)
