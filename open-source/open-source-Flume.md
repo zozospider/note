@@ -18,6 +18,7 @@
         - [Channel.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/Channel.java)
         - [Sink.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/Sink.java)
         - [Source.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/Source.java)
+        - [Transaction.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/Transaction.java)
 
 - code
   - [zozospider/open-source](https://github.com/zozospider/open-source)
