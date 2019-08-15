@@ -1,16 +1,16 @@
 
-# Document & Code
+# link
 
-- Java
+- __Java__
   - java
     - lang
       - [Thread.java](https://github.com/zozospider/note/blob/master/open-source/Java/java/lang/Thread.java)
       - [ThreadLocal.java](https://github.com/zozospider/note/blob/master/open-source/Java/java/lang/ThreadLocal.java)
 
-- code
+- __code__
   - [zozospider/open-source](https://github.com/zozospider/open-source)
 
-- link
+- __out__
   - Semaphore
     - [JAVA多线程--信号量(Semaphore)](https://my.oschina.net/cloudcoder/blog/362974)
     - [java多线程[5]：信号量(Semaphore)](https://blog.csdn.net/daguanjia11/article/details/78828009)
@@ -20,3 +20,5 @@
     - [ThreadLocal-单例模式下高并发线程安全](https://blog.csdn.net/yejingtao703/article/details/78806902)
     - [Java多线程：神秘的线程变量 ThreadLocal 你了解吗？](https://blog.csdn.net/carson_ho/article/details/82344011)
     - [Java线程(篇外篇)：线程本地变量ThreadLocal](https://www.kancloud.cn/digest/java-thread/107468)
+
+---
