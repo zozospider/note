@@ -1,7 +1,5 @@
 
-# Document & Code
-
-* 核心源码
+# 核心源码
   * __LifecycleAware__, __Configurable__
     * LifecycleAware `I`, Configurable `I`
   * __Channel__, __Transaction__
@@ -50,13 +48,17 @@
         - [Source.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/Source.java)
         - [Transaction.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/Transaction.java)
 
-- link-code
+---
+
+# link
+
+- code
   - [zozospider/open-source](https://github.com/zozospider/open-source)
 
-- link-doc
+- doc
   - [note: zozoSpider/note/open-source/open-source-Java](https://github.com/zozospider/note/blob/master/open-source/open-source-Java.md)
 
-- link-out
+- out
   - [日志系统实践](http://www.yoonper.com/index.php)
   - [flume架构与核心组件源代码分析](https://blog.csdn.net/HarderXin/article/details/74191460)
   - TaildirSource
@@ -69,3 +71,5 @@
     - [中国民生银行大数据团队的Flume实践（Github 地址）](https://github.com/tinawenqiao/flume/tree/trunk-cmbc)
     - [flume使用（五）：taildirSource重复获取数据和不释放资源解决办法](https://blog.csdn.net/maoyuanming0806/article/details/79391657)
     - [flume监控inode变化的文件（自定义source不影响原来的TAILDIR）](https://www.jianshu.com/p/7f74dbd45fd2)
+
+---
