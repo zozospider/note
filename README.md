@@ -30,6 +30,7 @@
     - [Hadoop-video1](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1.md)
 
 - open-source
+  - [open-source-Java](https://github.com/zozospider/note/blob/master/open-source/open-source-Java.md)
   - [open-source-Flume](https://github.com/zozospider/note/blob/master/open-source/open-source-Flume.md)
 
 - distributed
