@@ -1,5 +1,6 @@
 
 # 核心源码
+
   * __LifecycleAware__, __Configurable__
     * LifecycleAware `I`, Configurable `I`
   * __Channel__, __Transaction__
@@ -22,7 +23,11 @@
   * __Client__
     * RpcClient `I`, NettyAvroRpcClient `C`, LoadBalancingRpcClient `C`, FailoverRpcClient `C`
 
-- Java
+---
+
+# link
+
+- __Java__
   - org
     - apache
       - flume
@@ -47,10 +52,6 @@
         - [Sink.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/Sink.java)
         - [Source.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/Source.java)
         - [Transaction.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/Transaction.java)
-
----
-
-# link
 
 - __code__
   - [zozospider/open-source](https://github.com/zozospider/open-source)
