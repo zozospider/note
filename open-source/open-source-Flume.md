@@ -52,13 +52,13 @@
 
 # link
 
-- code
+- __code__
   - [zozospider/open-source](https://github.com/zozospider/open-source)
 
-- doc
+- __doc__
   - [note: zozoSpider/note/open-source/open-source-Java](https://github.com/zozospider/note/blob/master/open-source/open-source-Java.md)
 
-- out
+- __out__
   - [日志系统实践](http://www.yoonper.com/index.php)
   - [flume架构与核心组件源代码分析](https://blog.csdn.net/HarderXin/article/details/74191460)
   - TaildirSource
