@@ -55,7 +55,9 @@
 
 - link
   - [日志系统实践](http://www.yoonper.com/index.php)
+  
   - [flume架构与核心组件源代码分析](https://blog.csdn.net/HarderXin/article/details/74191460)
+  
   - [【Flume】TailDirSource源碼理解](https://www.twblogs.net/a/5b957a7c2b717750bda476b6)
   - [【Flume】TailDirSource源码理解](https://blog.51cto.com/10120275/2050827)
   - [修改Flume源码使taildir source支持递归（可配置）](https://segmentfault.com/a/1190000019551664)
@@ -65,9 +67,12 @@
   - [中国民生银行大数据团队的Flume实践（Github 地址）](https://github.com/tinawenqiao/flume/tree/trunk-cmbc)
   - [flume使用（五）：taildirSource重复获取数据和不释放资源解决办法](https://blog.csdn.net/maoyuanming0806/article/details/79391657)
   - [flume监控inode变化的文件（自定义source不影响原来的TAILDIR）](https://www.jianshu.com/p/7f74dbd45fd2)
+  
   - [JAVA多线程--信号量(Semaphore)](https://my.oschina.net/cloudcoder/blog/362974)
   - [java多线程[5]：信号量(Semaphore)](https://blog.csdn.net/daguanjia11/article/details/78828009)
   - [Java多线程--生产者消费者模型（Semaphore实现）](https://blog.csdn.net/qq_24489717/article/details/70147789)
   - [Java生产者和消费者模型的5种实现方式](https://www.jianshu.com/p/66e8b5ab27f6)
+
   - [ThreadLocal-单例模式下高并发线程安全](https://blog.csdn.net/yejingtao703/article/details/78806902)
   - [Java多线程：神秘的线程变量 ThreadLocal 你了解吗？](https://blog.csdn.net/carson_ho/article/details/82344011)
+  - [Java线程(篇外篇)：线程本地变量ThreadLocal](https://www.kancloud.cn/digest/java-thread/107468)
