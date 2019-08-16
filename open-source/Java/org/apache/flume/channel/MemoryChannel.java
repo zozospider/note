@@ -310,6 +310,9 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
         byteCapacity = Integer.MAX_VALUE;
       }
     } catch (NumberFormatException e) {
+      // 异常情况下, 使用默认的 defaultByteCapacity 进行计算, 而非配置文件中的 byteCapacity.
+      // 假设当前运行内存为: 1908932608 B = 1864192.0 K = 1820.5 M, 取值如下:
+      // byteCapacity = ((1908932608 * 0.80) * (1 - 20 * 0.01)) / 100 = 12217168 B = 11930.8 K = 11.7 M
       byteCapacity = (int) ((defaultByteCapacity * (1 - byteCapacityBufferPercentage * .01)) /
           byteCapacitySlotSize);
     }
