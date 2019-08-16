@@ -42,10 +42,12 @@ import com.google.common.base.Preconditions;
 @InterfaceStability.Stable
 public abstract class BasicChannelSemantics extends AbstractChannel {
 
+  // 通过 ThreadLocal 控制每个线程的当前 value (即 transaction)
+  // ps: 具有统一管理, 线程内共享一些数据, 避免通过参数来传递, 降低耦合性等优点. 详情见 ThreadLocal 类的使用.
   private ThreadLocal<BasicTransactionSemantics> currentTransaction
       = new ThreadLocal<BasicTransactionSemantics>();
 
-  // 初始化控制变量, 调用 getTransaction() 时会进行判断.
+  // 用于初始化的控制变量, 调用 getTransaction() 时用到.
   private boolean initialized = false;
 
   /**
@@ -88,9 +90,11 @@ public abstract class BasicChannelSemantics extends AbstractChannel {
    */
   @Override
   public void put(Event event) throws ChannelException {
+    // 通过 ThreadLocal 获取当前线程的 value (即 transaction). 且确保 value 不能为空.
     BasicTransactionSemantics transaction = currentTransaction.get();
     Preconditions.checkState(transaction != null,
         "No transaction exists for this thread");
+    // 调用 transaction 的 <code>put</code> 实现方法.
     transaction.put(event);
   }
 
@@ -106,9 +110,11 @@ public abstract class BasicChannelSemantics extends AbstractChannel {
    */
   @Override
   public Event take() throws ChannelException {
+    // 通过 ThreadLocal 获取当前线程的 value (即 transaction). 且确保 value 不能为空.
     BasicTransactionSemantics transaction = currentTransaction.get();
     Preconditions.checkState(transaction != null,
         "No transaction exists for this thread");
+    // 调用 transaction 的 <code>take</code> 实现方法.
     return transaction.take();
   }
 
@@ -138,7 +144,7 @@ public abstract class BasicChannelSemantics extends AbstractChannel {
       }
     }
 
-    // 通过 ThreadLocal 获取当前线程的 value, 即 transaction.
+    // 通过 ThreadLocal 获取当前线程的 value (即 transaction).
     // 然后判断当前线程的 value (transaction) 是否存在, 如果不存在或 transaction 已经关闭, 则创建一个新的 {@link Transaction} 对象, 并通过 ThreadLocal 设置到当前线程的 value.
     BasicTransactionSemantics transaction = currentTransaction.get();
     if (transaction == null || transaction.getState().equals(
