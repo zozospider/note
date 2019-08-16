@@ -44,8 +44,14 @@ import java.util.concurrent.TimeUnit;
  * required.
  * </p>
  * <p>
+ * 当写磁盘的速度不行或不需要数据持久化时, 建议使用 MemoryChannel.
+ * </p>
+ * <p>
  * Additionally, MemoryChannel should be used when a channel is required for
  * unit testing purposes.
+ * </p>
+ * <p>
+ * 此外, 当单元测试需要 Channel 时, 应使用 MemoryChannel.
  * </p>
  */
 @InterfaceAudience.Public
