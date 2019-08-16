@@ -163,11 +163,16 @@ public class ThreadLocal<T> {
      * thread-local variable.  If the variable has no value for the
      * current thread, it is first initialized to the value returned
      * by an invocation of the {@link #initialValue} method.
+     * 返回此线程的当前 线程-本地 变量副本中的值.
+     * 如果变量没有当前线程的值, 则首先将其初始化为调用 {@link #initialValue} 方法返回的值.
      *
      * @return the current thread's value of this thread-local
+     * @return 此 线程-本地 的当前线程变量的值.
      */
     public T get() {
+        // 当前调用线程
         Thread t = Thread.currentThread();
+        // 获取与 ThreadLocal 关联的 map.
         ThreadLocalMap map = getMap(t);
         if (map != null) {
             ThreadLocalMap.Entry e = map.getEntry(this);
@@ -202,16 +207,23 @@ public class ThreadLocal<T> {
      * to the specified value.  Most subclasses will have no need to
      * override this method, relying solely on the {@link #initialValue}
      * method to set the values of thread-locals.
+     * 将当前线程的此 线程-本地 变量的副本设置为指定的值.
+     * 大多数子类都不需要重写此方法, 仅依靠 {@link #initialValue} 方法来设置 线程-本地 的值.
      *
      * @param value the value to be stored in the current thread's copy of
      *        this thread-local.
+     * @param value 要存储在此线程本地的当前线程副本中的值.
      */
     public void set(T value) {
+        // 当前调用线程
         Thread t = Thread.currentThread();
+        // 获取与 ThreadLocal 关联的 map.
         ThreadLocalMap map = getMap(t);
         if (map != null)
+            // [key: 当前 ThreadLocal 对象, value: 存放的值]
             map.set(this, value);
         else
+            // 创建与 ThreadLocal 关联的 map.
             createMap(t, value);
     }
 
@@ -235,8 +247,10 @@ public class ThreadLocal<T> {
     /**
      * Get the map associated with a ThreadLocal. Overridden in
      * InheritableThreadLocal.
+     * 获取与 ThreadLocal 关联的 map. 在 InheritableThreadLocal 中重写.
      *
      * @param  t the current thread
+     @ @param  t 当前线程
      * @return the map
      */
     ThreadLocalMap getMap(Thread t) {
@@ -246,9 +260,12 @@ public class ThreadLocal<T> {
     /**
      * Create the map associated with a ThreadLocal. Overridden in
      * InheritableThreadLocal.
+     * 创建与 ThreadLocal 关联的 map. 在 InheritableThreadLocal 中重写.
      *
      * @param t the current thread
+     * @param t 当前线程
      * @param firstValue value for the initial entry of the map
+     * @param firstValue map 的初始 entry 的值
      */
     void createMap(Thread t, T firstValue) {
         t.threadLocals = new ThreadLocalMap(this, firstValue);
