@@ -121,13 +121,14 @@ public abstract class BasicChannelSemantics extends AbstractChannel {
    *     calling thread
    * </p>
    * <p>
-   * 如果尚未初始化 Channel, 则检查该线程是否存在打开的 Transaction, 如果没有, 则通过 <code>createTransaction</code> 创建一个新的  Transaction.
+   * 如果尚未初始化 Channel, 则检查该线程是否存在打开的 Transaction, 如果没有, 则通过 <code>createTransaction</code> 创建一个新的 Transaction.
    * @return 调用线程的当前的 <code>Transaction</code> 对象.
    * </p>
    */
   @Override
   public Transaction getTransaction() {
 
+    // 初始化
     if (!initialized) {
       synchronized (this) {
         if (!initialized) {
@@ -137,6 +138,8 @@ public abstract class BasicChannelSemantics extends AbstractChannel {
       }
     }
 
+    // 通过 ThreadLocal 获取当前线程的 value, 即 transaction.
+    // 然后判断当前线程的 value (transaction) 是否存在, 如果不存在或 transaction 已经关闭, 则创建一个新的 {@link Transaction} 对象, 并通过 ThreadLocal 设置到当前线程的 value.
     BasicTransactionSemantics transaction = currentTransaction.get();
     if (transaction == null || transaction.getState().equals(
             BasicTransactionSemantics.State.CLOSED)) {
