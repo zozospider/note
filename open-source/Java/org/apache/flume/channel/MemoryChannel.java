@@ -59,12 +59,17 @@ import java.util.concurrent.TimeUnit;
 @Recyclable
 public class MemoryChannel extends BasicChannelSemantics implements TransactionCapacitySupported {
   private static Logger LOGGER = LoggerFactory.getLogger(MemoryChannel.class);
+  // capacity 默认值
   private static final Integer defaultCapacity = 100;
+  // TransCapacity 默认值
   private static final Integer defaultTransCapacity = 100;
   private static final double byteCapacitySlotSize = 100;
+  // ByteCapacity 默认值
   private static final Long defaultByteCapacity = (long)(Runtime.getRuntime().maxMemory() * .80);
+  // ByteCapacityBufferPercentage 默认值
   private static final Integer defaultByteCapacityBufferPercentage = 20;
 
+  // KeepAlive 默认值
   private static final Integer defaultKeepAlive = 3;
 
   private class MemoryTransaction extends BasicTransactionSemantics {
@@ -207,10 +212,27 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
   private Semaphore queueStored;
 
   // maximum items in a transaction queue
+  // 一个 Transaction 队列中的最大 item 数量
+  // The maximum number of events the channel will take from a source or give to a sink per transaction
+  // 每个事务中, Channel 从 Source 获取或提供给 Sink 的最大 events 数.
   private volatile Integer transCapacity;
+  // Timeout in seconds for adding or removing an event
+  // 添加或删除一个 event 的超时时间 (以秒为单位)
   private volatile int keepAlive;
+  // Maximum total bytes of memory allowed as a sum of all events in this channel.
+  // The implementation only counts the Event body, which is the reason for providing the byteCapacityBufferPercentage configuration parameter as well.
+  // Defaults to a computed value equal to 80% of the maximum memory available to the JVM (i.e. 80% of the -Xmx value passed on the command line).
+  // Note that if you have multiple memory channels on a single JVM, and they happen to hold the same physical events (i.e. if you are using a replicating channel selector from a single source) then those event sizes may be double-counted for channel byteCapacity purposes.
+  // Setting this value to 0 will cause this value to fall back to a hard internal limit of about 200 GB.
+  // 允许的最大内存总字节数, 作为此 Channel 中所有 events 的总和.
+  // 该实现仅计算 Event body, 这也是提供 byteCapacityBufferPercentage 配置参数的原因.
+  // 默认为等于 JVM 可用最大内存的 80% 的计算值 (即命令行传递的 -Xmx 值的 80％).
+  // 请注意, 如果在单个 JVM 上有多个 memory channels, 并且它们碰巧保持相同的物理 events (即, 如果您使用来自单个 Source 的 replicating channel selector), 那么这些 events 大小可能会因为 channel byteCapacity 配置目的而被重复计算.
+  // 将此值设置为 0 将导致此值回退到大约 200 GB 的内部硬限制.
   private volatile int byteCapacity;
   private volatile int lastByteCapacity;
+  // Defines the percent of buffer between byteCapacity and the estimated total size of all events in the channel, to account for data in headers. See above.
+  // 定义 byteCapacity 与 Channel 中所有 events 的估计总大小之间的缓冲区百分比, 以计算 headers 中的数据. 见上文.
   private volatile int byteCapacityBufferPercentage;
   private Semaphore bytesRemaining;
   private ChannelCounter channelCounter;
@@ -237,6 +259,8 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
   public void configure(Context context) {
     Integer capacity = null;
     try {
+      // The maximum number of events stored in the channel
+      // Channel 中存储的最大 events 数
       capacity = context.getInteger("capacity", defaultCapacity);
     } catch (NumberFormatException e) {
       capacity = defaultCapacity;
@@ -262,6 +286,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       LOGGER.warn("Invalid transation capacity specified, initializing channel"
           + " to default capacity of {}", defaultTransCapacity);
     }
+    // transCapacity 不能大于 capacity.
     Preconditions.checkState(transCapacity <= capacity,
         "Transaction Capacity of Memory Channel cannot be higher than " +
             "the capacity.");
@@ -274,8 +299,13 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
     }
 
     try {
+      // byteCapacity = (byteCapacity * (1 - byteCapacityBufferPercentage * .01)) / byteCapacitySlotSize
+      // 假设当前运行内存为: 1908932608 B = 1864192.0 K = 1820.5 M, 取值如下:
+      // byteCapacity = ((1908932608 * 0.80) * (1 - 20 * 0.01)) / 100 = 12217168 B = 11930.8 K = 11.7 M
       byteCapacity = (int) ((context.getLong("byteCapacity", defaultByteCapacity).longValue() *
           (1 - byteCapacityBufferPercentage * .01)) / byteCapacitySlotSize);
+      // 如果计算结果不合法, 取值如下:
+      // byteCapacity = Integer.MAX_VALUE = 2147483647 B = 2097152.0 K = 2048.0 M = 2.0 G
       if (byteCapacity < 1) {
         byteCapacity = Integer.MAX_VALUE;
       }
