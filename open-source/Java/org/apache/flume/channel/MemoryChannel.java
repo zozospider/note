@@ -221,11 +221,17 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
 
   /**
    * Read parameters from context
+   * 从上下文中读取参数
    * <li>capacity = type long that defines the total number of events allowed at one time in the queue.
+   * <li>capacity = 类型: long, 用于定义队列中一次允许的 events 总数.
    * <li>transactionCapacity = type long that defines the total number of events allowed in one transaction.
+   * <li>transactionCapacity = 类型: long, 用于定义一个 transaction 中允许的 events 总数.
    * <li>byteCapacity = type long that defines the max number of bytes used for events in the queue.
+   * <li>byteCapacity = 类型: long, 用于定义队列中 events 的最大字节数.
    * <li>byteCapacityBufferPercentage = type int that defines the percent of buffer between byteCapacity and the estimated event size.
+   * <li>byteCapacityBufferPercentage = 类型: int, 用于定义 byteCapacity 与估计 event 大小之间的缓冲区百分比.
    * <li>keep-alive = type int that defines the number of second to wait for a queue permit
+   * <li>keep-alive = 类型: int, 定义等待队列许可的秒数
    */
   @Override
   public void configure(Context context) {
