@@ -36,7 +36,7 @@ import java.util.function.Supplier;
  * copy of the variable.  {@code ThreadLocal} instances are typically private
  * static fields in classes that wish to associate state with a thread (e.g.,
  * a user ID or Transaction ID).
- * 该类提供 线程-本地 变量.
+ * 该类提供 thread-local (线程-局部) 变量.
  * 这些变量与正常对应变量的不同之处在于, 访问一个变量的每个线程 (通过其 {@code get} 或 {@code set} 方法) 都有其自己的独立初始化的变量副本.
  * {@code ThreadLocal} instances 通常是: 希望将状态与某个线程 (例如, 用户 ID 或 事务 ID) 相关联的 classes 中的 private static fields.
  *
@@ -55,7 +55,7 @@ import java.util.function.Supplier;
  *     private static final AtomicInteger nextId = new AtomicInteger(0);
  *
  *     // Thread local variable containing each thread's ID
- *     // 包含每个线程 ID 的线程本地变量
+ *     // 包含每个线程 ID 的 thread-local (线程-局部) 变量
  *     private static final ThreadLocal&lt;Integer&gt; threadId =
  *         new ThreadLocal&lt;Integer&gt;() {
  *             &#64;Override protected Integer initialValue() {
@@ -75,8 +75,8 @@ import java.util.function.Supplier;
  * instance is accessible; after a thread goes away, all of its copies of
  * thread-local instances are subject to garbage collection (unless other
  * references to these copies exist).
- * <p>只要线程处于活动状态并且 {@code ThreadLocal} 实例可访问, 每个线程都会保存对其 线程-本地 变量副本的隐式引用;
- * 在一个线程消失之后, 它的所有 线程-本地 实例副本都要进行垃圾回收 (除非存在对这些副本的其他引用).
+ * <p>只要线程处于活动状态并且 {@code ThreadLocal} 实例可访问, 每个线程都会保存对其 thread-local (线程-局部) 变量副本的隐式引用;
+ * 在一个线程消失之后, 它的所有 thread-local (线程-局部) 实例副本都要进行垃圾回收 (除非存在对这些副本的其他引用).
  *
  * @author  Josh Bloch and Doug Lea
  * @since   1.2
@@ -163,18 +163,19 @@ public class ThreadLocal<T> {
      * thread-local variable.  If the variable has no value for the
      * current thread, it is first initialized to the value returned
      * by an invocation of the {@link #initialValue} method.
-     * 返回此线程的当前 线程-本地 变量副本中的值.
-     * 如果变量没有当前线程的值, 则首先将其初始化为调用 {@link #initialValue} 方法返回的值.
+     * 返回此线程的当前 thread-local (线程-局部) 变量副本中的 value.
+     * 如果变量没有当前线程的值, 则首先将其初始化为调用 {@link #initialValue} 方法返回的 value.
      *
      * @return the current thread's value of this thread-local
-     * @return 此 线程-本地 的当前线程变量的值.
+     * @return 此 thread-local (线程-局部) 的当前线程变量的 value.
      */
     public T get() {
         // 当前调用线程
         Thread t = Thread.currentThread();
-        // 获取与 ThreadLocal 关联的 map.
+        // 获取与 ThreadLocal 关联的 map
         ThreadLocalMap map = getMap(t);
         if (map != null) {
+            // 获取 map 的 value (key 为当前 ThreadLocal 对象)
             ThreadLocalMap.Entry e = map.getEntry(this);
             if (e != null) {
                 @SuppressWarnings("unchecked")
@@ -207,23 +208,23 @@ public class ThreadLocal<T> {
      * to the specified value.  Most subclasses will have no need to
      * override this method, relying solely on the {@link #initialValue}
      * method to set the values of thread-locals.
-     * 将当前线程的此 线程-本地 变量的副本设置为指定的值.
-     * 大多数子类都不需要重写此方法, 仅依靠 {@link #initialValue} 方法来设置 线程-本地 的值.
+     * 将当前线程的此 thread-local (线程-局部) 变量的副本设置为指定的 value.
+     * 大多数子类都不需要重写此方法, 仅依靠 {@link #initialValue} 方法来设置 thread-local (线程-局部) 的 value.
      *
      * @param value the value to be stored in the current thread's copy of
      *        this thread-local.
-     * @param value 要存储在此线程本地的当前线程副本中的值.
+     * @param value 要存储在此 thread-local (线程-局部) 的当前线程副本中的 value.
      */
     public void set(T value) {
         // 当前调用线程
         Thread t = Thread.currentThread();
-        // 获取与 ThreadLocal 关联的 map.
+        // 获取与 ThreadLocal 关联的 map
         ThreadLocalMap map = getMap(t);
         if (map != null)
             // [key: 当前 ThreadLocal 对象, value: 存放的值]
             map.set(this, value);
         else
-            // 创建与 ThreadLocal 关联的 map.
+            // 创建与 ThreadLocal 关联的 map
             createMap(t, value);
     }
 
