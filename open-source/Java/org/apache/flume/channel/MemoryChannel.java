@@ -376,21 +376,22 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
   }
 
   private void resizeQueue(int capacity) throws InterruptedException {
-    // 旧的 capacity
+    // 旧 capacity
     int oldCapacity;
     // 调整大小期间, 通过 queueLock 锁定保护 queue
     synchronized (queueLock) {
-      // oldCapacity = queue 的初始化容量, 减去剩余容量.
+      // oldCapacity = queue 已用容量 + 剩余容量 = count + capacity - count = capacity (即 queue 的 capacity)
       oldCapacity = queue.size() + queue.remainingCapacity();
     }
 
+    // 如果旧 capacity = 新 capacity, 则不做任何调整
     if (oldCapacity == capacity) {
       return;
     } else if (oldCapacity > capacity) {
       if (!queueRemaining.tryAcquire(oldCapacity - capacity, keepAlive, TimeUnit.SECONDS)) {
         LOGGER.warn("Couldn't acquire permits to downsize the queue, resizing has been aborted");
       } else {
-        // // 调整大小期间, 通过 queueLock 锁定保护 queue
+        // 调整大小期间, 通过 queueLock 锁定保护 queue
         synchronized (queueLock) {
           LinkedBlockingDeque<Event> newQueue = new LinkedBlockingDeque<Event>(capacity);
           newQueue.addAll(queue);
