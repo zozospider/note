@@ -38,6 +38,11 @@ import com.google.common.base.Preconditions;
  * as they are balanced.
  * </p>
  * <p>
+ * 基本 {@link Transaction} 语义的实现, 旨在与 {@link BasicChannelSemantics} 协同工作, 以简化强健的 {@link Channel} 实现类的创建.
+ * 此类确保仅在此 Transaction 处于该方法的正确状态时调用此 Transaction 的每个实现方法, 并且仅由创建此 Transaction 的线程调用.
+ * 只要它们是平衡的, 就支持对 <code>begin()</code> 和 <code>close()</code> 的嵌套调用.
+ * </p>
+ * <p>
  * Subclasses need only implement <code>doPut</code>,
  * <code>doTake</code>, <code>doCommit</code>, and
  * <code>doRollback</code>, and the developer can rest assured that
@@ -45,6 +50,10 @@ import com.google.common.base.Preconditions;
  * have been properly met.  <code>doBegin</code> and
  * <code>doClose</code> may also be implemented if there is work to be
  * done at those points.
+ * </p>
+ * <p>
+ * 子类只需要实现 <code>doPut</code>, <code>doTake</code>, <code>doCommit</code>, <code>doRollback</code> 这些方法, 开发人员可以放心, 那些方法只有在正确满足 Transaction 状态前提条件后才会被调用.
+ * 如果 <code>doBegin</code> 和 <code>doClose</code> 有工作要做, 也可以实现.
  * </p>
  * <p>
  * All InterruptedException exceptions thrown from the implementations
