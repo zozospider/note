@@ -209,15 +209,17 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
   // we maintain the remaining permits = queue.remaining - takeList.size()
   // this allows local threads waiting for space in the queue to commit without denying access to the
   // shared lock to threads that would make more space on the queue
+  // ps: 控制 queue 中 events 剩余个数的信号量
   private Semaphore queueRemaining;
 
   // used to make "reservations" to grab data from the queue.
   // by using this we can block for a while to get data without locking all other threads out
   // like we would if we tried to use a blocking call on queue
+  // ps: 控制 queue 中 events 存储个数的信号量
   private Semaphore queueStored;
 
   // maximum items in a transaction queue
-  // 一个 Transaction 队列中的最大 item 数量
+  // 一个 Transaction 队列中的最大 item 个数
   // The maximum number of events the channel will take from a source or give to a sink per transaction
   // 每个事务中, Channel 从 Source 获取或提供给 Sink 的最大 events 数.
   private volatile Integer transCapacity;
@@ -239,6 +241,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
   // Defines the percent of buffer between byteCapacity and the estimated total size of all events in the channel, to account for data in headers. See above.
   // 定义 byteCapacity 与 Channel 中所有 events 的估计总大小之间的缓冲区百分比, 以计算 headers 中的数据. 见上文.
   private volatile int byteCapacityBufferPercentage;
+  // ps: 控制 queue 中 events 剩余字节数的信号量
   private Semaphore bytesRemaining;
   private ChannelCounter channelCounter;
 
@@ -250,15 +253,15 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
    * Read parameters from context
    * 从上下文中读取参数
    * <li>capacity = type long that defines the total number of events allowed at one time in the queue.
-   * <li>capacity = 类型: long, 用于定义队列中一次允许的 events 总数.
+   * <li>capacity = 类型: long, 用于定义 queue 中一次允许的 events 总数.
    * <li>transactionCapacity = type long that defines the total number of events allowed in one transaction.
    * <li>transactionCapacity = 类型: long, 用于定义一个 transaction 中允许的 events 总数.
    * <li>byteCapacity = type long that defines the max number of bytes used for events in the queue.
-   * <li>byteCapacity = 类型: long, 用于定义队列中 events 的最大字节数.
+   * <li>byteCapacity = 类型: long, 用于定义 queue 中 events 的最大字节数.
    * <li>byteCapacityBufferPercentage = type int that defines the percent of buffer between byteCapacity and the estimated event size.
    * <li>byteCapacityBufferPercentage = 类型: int, 用于定义 byteCapacity 与估计 event 大小之间的缓冲区百分比.
    * <li>keep-alive = type int that defines the number of second to wait for a queue permit
-   * <li>keep-alive = 类型: int, 定义等待队列许可的秒数
+   * <li>keep-alive = 类型: int, 定义等待 queue 许可的秒数
    */
   @Override
   public void configure(Context context) {
@@ -328,10 +331,11 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       keepAlive = defaultKeepAlive;
     }
 
+    // 根据 queue 是否为空 (即是否重新启动了 Flume 或重新加载配置文件) 和新旧 capacity 对比, 来调整 queue 和 queueRemaining (控制 queue 中 events 剩余个数的信号量)
     // 如果 queue 不为空
     if (queue != null) {
       try {
-        // 重新调整 queue 的容量
+        // 重新调整 queue 和 queueRemaining (控制 queue 中 events 剩余个数的信号量)
         resizeQueue(capacity);
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();
@@ -342,26 +346,41 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       synchronized (queueLock) {
         // 则新建一个容量为 capacity 大小的 queue
         queue = new LinkedBlockingDeque<Event>(capacity);
-        // 新建一个容量为 capacity 的 Semaphore 用于 queueRemaining (剩余空间 queue 控制的信号量)
+        // 新建一个容量为 capacity 的 Semaphore, 即 queueRemaining (控制 queue 中 events 剩余个数的信号量)
         queueRemaining = new Semaphore(capacity);
-        // 新建一个容量为 0 的 Semaphore 用于 queueStored (存储空间 queue 控制的信号量)
+        // 新建一个容量为 0 的 Semaphore, 即 queueStored (控制 queue 中 events 存储个数的信号量)
         queueStored = new Semaphore(0);
       }
     }
 
+    // 根据 bytesRemaining (控制 queue 中 events 剩余字节数的信号量) 是否为空 (即是否重新启动了 Flume 或重新加载配置文件) 和新旧 byteCapacity 对比, 来调整 byteCapacity 和 bytesRemaining (控制 queue 中 events 剩余字节数的信号量)
+    // ps: 具体逻辑与 resizeQueue 类似
     if (bytesRemaining == null) {
+      // 重新建一个容量为 byteCapacity 的 bytesRemaining (控制 queue 中 events 剩余字节数的信号量)
       bytesRemaining = new Semaphore(byteCapacity);
+      // 记录最近的 lastByteCapacity
       lastByteCapacity = byteCapacity;
     } else {
+      // 如果新 byteCapacity > 旧 byteCapacity
+      // 需要释放 bytesRemaining (控制 queue 中 events 剩余字节数的信号量) 的许可
       if (byteCapacity > lastByteCapacity) {
+        // 从 bytesRemaining (控制 queue 中 events 剩余字节数的信号量) 中释放 (byteCapacity - lastByteCapacity) 个许可
         bytesRemaining.release(byteCapacity - lastByteCapacity);
+        // 记录最近的 lastByteCapacity
         lastByteCapacity = byteCapacity;
+      // 如果新 byteCapacity < 旧 byteCapacity
       } else {
         try {
+          // 在 keepAlive 时间内尝试从 bytesRemaining (控制 queue 中 events 剩余字节数的信号量) 中获取 (lastByteCapacity - byteCapacity) 个许可
+          // 如果在 keepAlive 时间内获取成功, 返回 true, 否则返回 false (不会一直阻塞)
+          // 如果获取失败, 不做任何处理
           if (!bytesRemaining.tryAcquire(lastByteCapacity - byteCapacity, keepAlive,
                                          TimeUnit.SECONDS)) {
             LOGGER.warn("Couldn't acquire permits to downsize the byte capacity, resizing has been aborted");
+          // 如果获取成功, 则表示成功维护了新 byteCapacity 对应的 bytesRemaining 的正确性.
+          // bytesRemaining (控制 queue 中 events 剩余字节数的信号量) 获取成功后, 记录最近的 lastByteCapacity.
           } else {
+            // 记录最近的 lastByteCapacity
             lastByteCapacity = byteCapacity;
           }
         } catch (InterruptedException e) {
@@ -370,13 +389,14 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       }
     }
 
+    // 创建计数器 ChannelCounter(n)
     if (channelCounter == null) {
       channelCounter = new ChannelCounter(getName());
     }
   }
 
   /**
-   * 根据传入的新 capacity, 与旧 capacity 进行对比, 重新调整 queue 的容量, 并将 queueRemaining (剩余空间 queue 控制的信号量) 调整到新 queue 对应的容量.
+   * 根据传入的新 capacity, 与旧 capacity 进行对比, 重新调整 queue 的容量, 并将 queueRemaining (控制 queue 中 events 剩余个数的信号量) 调整到新 queue 对应的容量.
    */
   private void resizeQueue(int capacity) throws InterruptedException {
     // 旧 capacity
@@ -391,15 +411,15 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
     if (oldCapacity == capacity) {
       return;
     // 如果旧 capacity > 新 capacity
-    // 需要尝试获取 queueRemaining 的许可, 并将重建立一个新的 queue.
+    // 需要尝试获取 queueRemaining (控制 queue 中 events 剩余个数的信号量) 的许可, 并将重建立一个新的 queue.
     } else if (oldCapacity > capacity) {
-      // 在 keepAlive 时间内尝试从 queueRemaining (剩余空间 queue 控制的信号量) 中获取 (oldCapacity - capacity) 个许可
+      // 在 keepAlive 时间内尝试从 queueRemaining (控制 queue 中 events 剩余个数的信号量) 中获取 (oldCapacity - capacity) 个许可
       // 如果在 keepAlive 时间内获取成功, 返回 true, 否则返回 false (不会一直阻塞)
       // 如果获取失败, 不做任何处理
       if (!queueRemaining.tryAcquire(oldCapacity - capacity, keepAlive, TimeUnit.SECONDS)) {
         LOGGER.warn("Couldn't acquire permits to downsize the queue, resizing has been aborted");
-      // 如果获取成功, 则表示 queueRemaining 中已经获取了 (oldCapacity - capacity) 个许可, 成功维护了新 capacity 对应的 queueRemaining 的正确性.
-      // queueRemaining 获取成功后, 重新建立一个容量为 capacity 的 queue, 添加旧 queue 的数据并映射到原 queue 地址.
+      // 如果获取成功, 则表示成功维护了新 capacity 对应的 queueRemaining 的正确性.
+      // queueRemaining (控制 queue 中 events 剩余个数的信号量) 获取成功后, 重新建立一个容量为 capacity 的 queue, 添加旧 queue 的数据并映射到原 queue 地址.
       } else {
         // 调整大小期间, 通过 queueLock 锁定保护 queue
         synchronized (queueLock) {
@@ -410,7 +430,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
         }
       }
     // 如果旧 capacity < 新 capacity
-    // 需要重建立一个新的 queue, 并释放 queueRemaining 的许可.
+    // 需要重建立一个新的 queue, 并释放 queueRemaining (控制 queue 中 events 剩余个数的信号量) 的许可.
     } else {
       // 调整大小期间, 通过 queueLock 锁定保护 queue
       synchronized (queueLock) {
@@ -419,7 +439,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
         newQueue.addAll(queue);
         queue = newQueue;
       }
-      // 从 queueRemaining (剩余空间 queue 控制的信号量) 中释放 (capacity - oldCapacity) 个许可
+      // 从 queueRemaining (控制 queue 中 events 剩余个数的信号量) 中释放 (capacity - oldCapacity) 个许可
       queueRemaining.release(capacity - oldCapacity);
     }
   }
