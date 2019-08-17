@@ -391,7 +391,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
     // 需要尝试获取 queueRemaining 的许可, 并将重建立一个新的 queue.
     } else if (oldCapacity > capacity) {
       // 在 keepAlive 时间内尝试从 queueRemaining (剩余空间 queue 控制的信号量) 中获取 (oldCapacity - capacity) 个许可
-      // 如果在 keepAlive 时间内获取成功, 返回 true, 否则返回 false, 不会一直阻塞
+      // 如果在 keepAlive 时间内获取成功, 返回 true, 否则返回 false (不会一直阻塞)
       // 如果获取失败, 不做任何处理
       if (!queueRemaining.tryAcquire(oldCapacity - capacity, keepAlive, TimeUnit.SECONDS)) {
         LOGGER.warn("Couldn't acquire permits to downsize the queue, resizing has been aborted");
