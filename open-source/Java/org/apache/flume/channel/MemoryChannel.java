@@ -342,9 +342,9 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       synchronized (queueLock) {
         // 则新建一个容量为 capacity 大小的 queue
         queue = new LinkedBlockingDeque<Event>(capacity);
-        // 新建一个容量为 capacity 的 Semaphore 用于 queueRemaining (剩余空间 queue 控制)
+        // 新建一个容量为 capacity 的 Semaphore 用于 queueRemaining (剩余空间 queue 控制的信号量)
         queueRemaining = new Semaphore(capacity);
-        // 新建一个容量为 0 的 Semaphore 用于 queueStored (存储空间 queue 控制)
+        // 新建一个容量为 0 的 Semaphore 用于 queueStored (存储空间 queue 控制的信号量)
         queueStored = new Semaphore(0);
       }
     }
@@ -387,24 +387,36 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
     // 如果旧 capacity = 新 capacity, 则不做任何调整
     if (oldCapacity == capacity) {
       return;
+    // 如果旧 capacity > 新 capacity
+    // 需要尝试获取 queueRemaining 的许可, 并将重建立一个新的 queue.
     } else if (oldCapacity > capacity) {
+      // 在 keepAlive 时间内尝试从 queueRemaining (剩余空间 queue 控制的信号量) 中获取 (oldCapacity - capacity) 个许可
+      // 如果在 keepAlive 时间内获取成功, 返回 true, 否则返回 false, 不会一直阻塞
+      // 如果获取失败, 不做任何处理
       if (!queueRemaining.tryAcquire(oldCapacity - capacity, keepAlive, TimeUnit.SECONDS)) {
         LOGGER.warn("Couldn't acquire permits to downsize the queue, resizing has been aborted");
+      // 如果获取成功, 则表示 queueRemaining 中已经获取了 (oldCapacity - capacity) 个许可, 成功维护了新 capacity 对应的 queueRemaining 的正确性.
+      // queueRemaining 获取成功后, 重新建立一个容量为 capacity 的 queue, 添加旧 queue 的数据并映射到原 queue 地址.
       } else {
         // 调整大小期间, 通过 queueLock 锁定保护 queue
         synchronized (queueLock) {
+          // 重新建立一个容量为新 capacity 的 queue, 将旧 queue 中的数据添加到新 queue, 再映射到原地址.
           LinkedBlockingDeque<Event> newQueue = new LinkedBlockingDeque<Event>(capacity);
           newQueue.addAll(queue);
           queue = newQueue;
         }
       }
+    // 如果旧 capacity < 新 capacity
+    // 需要重建立一个新的 queue, 并释放 queueRemaining 的许可.
     } else {
       // 调整大小期间, 通过 queueLock 锁定保护 queue
       synchronized (queueLock) {
+        // 重新建立一个容量为新 capacity 的 queue, 将旧 queue 中的数据添加到新 queue, 再映射到原地址.
         LinkedBlockingDeque<Event> newQueue = new LinkedBlockingDeque<Event>(capacity);
         newQueue.addAll(queue);
         queue = newQueue;
       }
+      // 从 queueRemaining (剩余空间 queue 控制的信号量) 中释放 (capacity - oldCapacity) 个许可
       queueRemaining.release(capacity - oldCapacity);
     }
   }
