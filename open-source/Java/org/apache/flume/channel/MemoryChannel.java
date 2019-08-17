@@ -331,7 +331,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
     // 如果 queue 不为空
     if (queue != null) {
       try {
-        // 
+        // 重新调整 queue 的容量
         resizeQueue(capacity);
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();
@@ -375,6 +375,9 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
     }
   }
 
+  /**
+   * 根据传入的新 capacity, 与旧 capacity 进行对比, 重新调整 queue 的容量, 并将 queueRemaining (剩余空间 queue 控制的信号量) 调整到新 queue 对应的容量.
+   */
   private void resizeQueue(int capacity) throws InterruptedException {
     // 旧 capacity
     int oldCapacity;
