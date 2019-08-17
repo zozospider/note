@@ -11,6 +11,9 @@
   - [zozospider/open-source](https://github.com/zozospider/open-source)
 
 - __out__
+  - LinkedBlockingDeque
+    - [Java线程(篇外篇)：阻塞队列BlockingQueue](https://www.kancloud.cn/digest/java-thread/107467)
+    - [Java 并发 --- 阻塞队列之LinkedBlockingDeque源码分析](https://blog.csdn.net/u014634338/article/details/78580728)
   - Semaphore
     - [JAVA多线程--信号量(Semaphore)](https://my.oschina.net/cloudcoder/blog/362974)
     - [java多线程[5]：信号量(Semaphore)](https://blog.csdn.net/daguanjia11/article/details/78828009)
