@@ -112,6 +112,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
         return null;
       }
       Event event;
+      // 调整大小期间, 通过 queueLock 锁定保护 queue
       synchronized (queueLock) {
         event = queue.poll();
       }
@@ -143,6 +144,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       }
       int puts = putList.size();
       int takes = takeList.size();
+      // 调整大小期间, 通过 queueLock 锁定保护 queue
       synchronized (queueLock) {
         if (puts > 0) {
           while (!putList.isEmpty()) {
@@ -175,6 +177,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
     @Override
     protected void doRollback() {
       int takes = takeList.size();
+      // 调整大小期间, 通过 queueLock 锁定保护 queue
       synchronized (queueLock) {
         Preconditions.checkState(queue.remainingCapacity() >= takeList.size(),
             "Not enough space in memory channel " +
@@ -195,8 +198,10 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
 
   // lock to guard queue, mainly needed to keep it locked down during resizes
   // it should never be held through a blocking operation
+  // 锁定以保护 queue, 主要是需要在调整大小期间将其锁定, 它永远不应该通过阻塞操作来保持.
   private Object queueLock = new Object();
 
+  // MemoryChannel 通过此 queue (FIFO) 保存 events 在内存中.
   @GuardedBy(value = "queueLock")
   private LinkedBlockingDeque<Event> queue;
 
@@ -323,16 +328,23 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       keepAlive = defaultKeepAlive;
     }
 
+    // 如果 queue 不为空
     if (queue != null) {
       try {
+        // 
         resizeQueue(capacity);
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();
       }
     } else {
+      // 如果 queue 为空
+      // 调整大小期间, 通过 queueLock 锁定保护 queue
       synchronized (queueLock) {
+        // 则新建一个容量为 capacity 大小的 queue
         queue = new LinkedBlockingDeque<Event>(capacity);
+        // 新建一个容量为 capacity 的 Semaphore 用于 queueRemaining (剩余空间 queue 控制)
         queueRemaining = new Semaphore(capacity);
+        // 新建一个容量为 0 的 Semaphore 用于 queueStored (存储空间 queue 控制)
         queueStored = new Semaphore(0);
       }
     }
@@ -364,8 +376,11 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
   }
 
   private void resizeQueue(int capacity) throws InterruptedException {
+    // 旧的 capacity
     int oldCapacity;
+    // 调整大小期间, 通过 queueLock 锁定保护 queue
     synchronized (queueLock) {
+      // oldCapacity = queue 的初始化容量, 减去剩余容量.
       oldCapacity = queue.size() + queue.remainingCapacity();
     }
 
@@ -375,6 +390,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       if (!queueRemaining.tryAcquire(oldCapacity - capacity, keepAlive, TimeUnit.SECONDS)) {
         LOGGER.warn("Couldn't acquire permits to downsize the queue, resizing has been aborted");
       } else {
+        // // 调整大小期间, 通过 queueLock 锁定保护 queue
         synchronized (queueLock) {
           LinkedBlockingDeque<Event> newQueue = new LinkedBlockingDeque<Event>(capacity);
           newQueue.addAll(queue);
@@ -382,6 +398,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
         }
       }
     } else {
+      // 调整大小期间, 通过 queueLock 锁定保护 queue
       synchronized (queueLock) {
         LinkedBlockingDeque<Event> newQueue = new LinkedBlockingDeque<Event>(capacity);
         newQueue.addAll(queue);
