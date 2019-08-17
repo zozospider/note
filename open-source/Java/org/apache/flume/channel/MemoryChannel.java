@@ -239,7 +239,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
   private volatile int byteCapacity;
   private volatile int lastByteCapacity;
   // Defines the percent of buffer between byteCapacity and the estimated total size of all events in the channel, to account for data in headers. See above.
-  // 定义 byteCapacity 与 Channel 中所有 events 的估计总大小之间的缓冲区百分比, 以计算 headers 中的数据. 见上文.
+  // 定义 byteCapacity 与 Channel 中所有 events 的估计总大小之间的缓冲区百分比, 以计算 headers 中的数据. 见上文 byteCapacity 说明.
   private volatile int byteCapacityBufferPercentage;
   // ps: 控制 queue 中 events 剩余字节数的信号量
   private Semaphore bytesRemaining;
@@ -354,7 +354,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
     }
 
     // 根据 bytesRemaining (控制 queue 中 events 剩余字节数的信号量) 是否为空 (即是否重新启动了 Flume 或重新加载配置文件) 和新旧 byteCapacity 对比, 来调整 byteCapacity 和 bytesRemaining (控制 queue 中 events 剩余字节数的信号量)
-    // ps: 具体逻辑与 resizeQueue 类似
+    // ps: 具体逻辑与上文对 queueRemaining 的处理类似
     if (bytesRemaining == null) {
       // 重新建一个容量为 byteCapacity 的 bytesRemaining (控制 queue 中 events 剩余字节数的信号量)
       bytesRemaining = new Semaphore(byteCapacity);
