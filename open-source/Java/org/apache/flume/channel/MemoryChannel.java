@@ -202,6 +202,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
   private Object queueLock = new Object();
 
   // MemoryChannel 通过此 queue (FIFO) 保存 events 在内存中.
+  // ps: 详情见 LinkedBlockingDeque 类的使用.
   @GuardedBy(value = "queueLock")
   private LinkedBlockingDeque<Event> queue;
 
@@ -209,13 +210,20 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
   // we maintain the remaining permits = queue.remaining - takeList.size()
   // this allows local threads waiting for space in the queue to commit without denying access to the
   // shared lock to threads that would make more space on the queue
+  // 固定跟踪 queue 中剩余的空间量 (扣除所有未提交的 takeList)
+  // 我们维护了 剩余的许可 = queue.remaining - takeList.size()
+  // 这允许本地线程等待 queue 上的空间去提交, 而不需要访问对线程的共享锁定 (会在 queue 上占用更多空间)
   // ps: 控制 queue 中 events 剩余个数的信号量
+  // ps: 详情见 Semaphore 类的使用
   private Semaphore queueRemaining;
 
   // used to make "reservations" to grab data from the queue.
   // by using this we can block for a while to get data without locking all other threads out
   // like we would if we tried to use a blocking call on queue
+  // 用于进行 "保留" 以从队列中获取数据.
+  // 通过使用这个变量, 我们可以在获取数据的时候阻塞一段时间, 但是不需要锁定所有其他线程 (就像我们尝试在 queue 上使用阻塞调用时一样, ps: LinkedBlockingDeque 会阻塞所有线程调用)
   // ps: 控制 queue 中 events 存储个数的信号量
+  // ps: 详情见 Semaphore 类的使用
   private Semaphore queueStored;
 
   // maximum items in a transaction queue
@@ -242,6 +250,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
   // 定义 byteCapacity 与 Channel 中所有 events 的估计总大小之间的缓冲区百分比, 以计算 headers 中的数据. 见上文 byteCapacity 说明.
   private volatile int byteCapacityBufferPercentage;
   // ps: 控制 queue 中 events 剩余字节数的信号量
+  // ps: 详情见 Semaphore 类的使用
   private Semaphore bytesRemaining;
   private ChannelCounter channelCounter;
 
