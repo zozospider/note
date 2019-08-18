@@ -52,7 +52,7 @@ import com.google.common.base.Preconditions;
  * done at those points.
  * </p>
  * <p>
- * 子类只需要实现 <code>doPut</code>, <code>doTake</code>, <code>doCommit</code>, <code>doRollback</code> 这些方法, 开发人员可以放心, 那些方法只有在正确满足 Transaction 状态前提条件后才会被调用.
+ * 子类只需要实现 <code>doPut</code>, <code>doTake</code>, <code>doCommit</code> 和 <code>doRollback</code> 这些方法, 开发人员可以放心, 那些方法只有在正确满足 Transaction 状态前提条件后才会被调用.
  * 如果 <code>doBegin</code> 和 <code>doClose</code> 有工作要做, 也可以实现.
  * </p>
  * <p>
