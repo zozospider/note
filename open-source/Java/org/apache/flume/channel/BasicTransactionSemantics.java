@@ -86,7 +86,9 @@ public abstract class BasicTransactionSemantics implements Transaction {
   protected abstract void doRollback() throws InterruptedException;
   protected void doClose() {}
 
-  // 构造方法
+  /**
+   * 构造方法
+   */
   protected BasicTransactionSemantics() {
     // 设置当前状态为 State.NEW
     state = State.NEW;
@@ -158,6 +160,9 @@ public abstract class BasicTransactionSemantics implements Transaction {
     return state;
   }
 
+  /**
+   * 实现 Transaction 接口的 begin() 方法.
+   */
   @Override
   public void begin() {
     // 调用此方法的线程必须为初始化时的线程
@@ -179,6 +184,9 @@ public abstract class BasicTransactionSemantics implements Transaction {
     state = State.OPEN;
   }
 
+  /**
+   * 实现 Transaction 接口的 commit() 方法.
+   */
   @Override
   public void commit() {
     // 调用此方法的线程必须为初始化时的线程
@@ -200,6 +208,9 @@ public abstract class BasicTransactionSemantics implements Transaction {
     state = State.COMPLETED;
   }
 
+  /**
+   * 实现 Transaction 接口的 rollback() 方法.
+   */
   @Override
   public void rollback() {
     // 调用此方法的线程必须为初始化时的线程
@@ -220,6 +231,9 @@ public abstract class BasicTransactionSemantics implements Transaction {
     }
   }
 
+  /**
+   * 实现 Transaction 接口的 close() 方法.
+   */
   @Override
   public void close() {
     // 调用此方法的线程必须为初始化时的线程
