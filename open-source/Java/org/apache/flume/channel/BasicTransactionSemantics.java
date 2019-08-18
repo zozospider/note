@@ -73,9 +73,12 @@ import com.google.common.base.Preconditions;
  */
 public abstract class BasicTransactionSemantics implements Transaction {
 
+  // 当前 Transaction 的状态
   private State state;
+  // 当前 Transaction 初始化时的线程 ID, 用于判断后续调用方法的线程是否为初始化时的线程.
   private long initialThreadId;
 
+  // 子类实现具体的 <code>doBegin</code> (可选), <code>doPut</code>, <code>doTake</code>, <code>doCommit</code>, <code>doRollback</code>, <code>doClose</code> (可选) 方法.
   protected void doBegin() throws InterruptedException {}
   protected abstract void doPut(Event event) throws InterruptedException;
   protected abstract Event doTake() throws InterruptedException;
@@ -83,8 +86,11 @@ public abstract class BasicTransactionSemantics implements Transaction {
   protected abstract void doRollback() throws InterruptedException;
   protected void doClose() {}
 
+  // 构造方法
   protected BasicTransactionSemantics() {
+    // 设置当前状态为 State.NEW
     state = State.NEW;
+    // 记录当前 Transaction 初始化时的线程 ID
     initialThreadId = Thread.currentThread().getId();
   }
 
@@ -93,18 +99,25 @@ public abstract class BasicTransactionSemantics implements Transaction {
    * The method to which {@link BasicChannelSemantics} delegates calls
    * to <code>put</code>.
    * </p>
+   * <p>
+   * {@link BasicChannelSemantics} 委托调用 <code>put</code> 的方法.
+   * </p>
    */
   protected void put(Event event) {
+    // 调用此方法的线程必须为初始化时的线程
     Preconditions.checkState(Thread.currentThread().getId() == initialThreadId,
         "put() called from different thread than getTransaction()!");
+    // 当前状态必须为 State.OPEN
     Preconditions.checkState(state.equals(State.OPEN),
         "put() called when transaction is %s!", state);
     Preconditions.checkArgument(event != null,
         "put() called with null event!");
 
     try {
+      // 调用子类的具体实现
       doPut(event);
     } catch (InterruptedException e) {
+      // 设置当前线程为中断状态, 然后包装成 ChannelException 抛出
       Thread.currentThread().interrupt();
       throw new ChannelException(e.toString(), e);
     }
@@ -115,16 +128,23 @@ public abstract class BasicTransactionSemantics implements Transaction {
    * The method to which {@link BasicChannelSemantics} delegates calls
    * to <code>take</code>.
    * </p>
+   * <p>
+   * {@link BasicChannelSemantics} 委托调用 <code>take</code> 的方法.
+   * </p>
    */
   protected Event take() {
+    // 调用此方法的线程必须为初始化时的线程
     Preconditions.checkState(Thread.currentThread().getId() == initialThreadId,
         "take() called from different thread than getTransaction()!");
+    // 当前状态必须为 State.OPEN
     Preconditions.checkState(state.equals(State.OPEN),
         "take() called when transaction is %s!", state);
 
     try {
+      // 调用子类的具体实现
       return doTake();
     } catch (InterruptedException e) {
+      // 设置当前线程为中断状态
       Thread.currentThread().interrupt();
       return null;
     }
@@ -132,6 +152,7 @@ public abstract class BasicTransactionSemantics implements Transaction {
 
   /**
    * @return the current state of the transaction
+   * @return Transaction 的当前状态
    */
   protected State getState() {
     return state;
@@ -139,47 +160,61 @@ public abstract class BasicTransactionSemantics implements Transaction {
 
   @Override
   public void begin() {
+    // 调用此方法的线程必须为初始化时的线程
     Preconditions.checkState(Thread.currentThread().getId() == initialThreadId,
         "begin() called from different thread than getTransaction()!");
+    // 当前状态必须为 State.NEW
     Preconditions.checkState(state.equals(State.NEW),
         "begin() called when transaction is " + state + "!");
 
     try {
+      // 调用子类的具体实现
       doBegin();
     } catch (InterruptedException e) {
+      // 设置当前线程为中断状态, 然后包装成 ChannelException 抛出
       Thread.currentThread().interrupt();
       throw new ChannelException(e.toString(), e);
     }
+    // 设置当前状态为 State.OPEN
     state = State.OPEN;
   }
 
   @Override
   public void commit() {
+    // 调用此方法的线程必须为初始化时的线程
     Preconditions.checkState(Thread.currentThread().getId() == initialThreadId,
         "commit() called from different thread than getTransaction()!");
+    // 当前状态必须为 State.OPEN
     Preconditions.checkState(state.equals(State.OPEN),
         "commit() called when transaction is %s!", state);
 
     try {
+      // 调用子类的具体实现
       doCommit();
     } catch (InterruptedException e) {
+      // 设置当前线程为中断状态, 然后包装成 ChannelException 抛出
       Thread.currentThread().interrupt();
       throw new ChannelException(e.toString(), e);
     }
+    // 设置当前状态为 State.COMPLETED
     state = State.COMPLETED;
   }
 
   @Override
   public void rollback() {
+    // 调用此方法的线程必须为初始化时的线程
     Preconditions.checkState(Thread.currentThread().getId() == initialThreadId,
         "rollback() called from different thread than getTransaction()!");
+    // 当前状态必须为 State.OPEN
     Preconditions.checkState(state.equals(State.OPEN),
         "rollback() called when transaction is %s!", state);
 
     state = State.COMPLETED;
     try {
+      // 调用子类的具体实现
       doRollback();
     } catch (InterruptedException e) {
+      // 设置当前线程为中断状态, 然后包装成 ChannelException 抛出
       Thread.currentThread().interrupt();
       throw new ChannelException(e.toString(), e);
     }
@@ -187,14 +222,18 @@ public abstract class BasicTransactionSemantics implements Transaction {
 
   @Override
   public void close() {
+    // 调用此方法的线程必须为初始化时的线程
     Preconditions.checkState(Thread.currentThread().getId() == initialThreadId,
         "close() called from different thread than getTransaction()!");
+    // 当前状态必须为 State.NEW 或 State.COMPLETED
     Preconditions.checkState(
             state.equals(State.NEW) || state.equals(State.COMPLETED),
             "close() called when transaction is %s"
             + " - you must either commit or rollback first", state);
 
+    // 设置当前状态为 State.CLOSED
     state = State.CLOSED;
+    // 调用子类的具体实现
     doClose();
   }
 
@@ -211,18 +250,23 @@ public abstract class BasicTransactionSemantics implements Transaction {
   /**
    * <p>
    * The state of the {@link Transaction} to which it belongs.
+   * 所属的 {@link Transaction} 的状态.
    * </p>
    * <dl>
    * <dt>NEW</dt>
    * <dd>A newly created transaction that has not yet begun.</dd>
+   * <dd>尚未开始的新创建的 Transaction.</dd>
    * <dt>OPEN</dt>
    * <dd>A transaction that is open. It is permissible to commit or rollback.
    * </dd>
+   * <dd>已打开的 Transaction. 允许提交或回滚.</dd>
    * <dt>COMPLETED</dt>
    * <dd>This transaction has been committed or rolled back. It is illegal to
    * perform any further operations beyond closing it.</dd>
+   * <dd>此 Transaction 已提交或回滚. 在关闭之后执行任何进一步的操作是违法的.</dd>
    * <dt>CLOSED</dt>
    * <dd>A closed transaction. No further operations are permitted.</dd>
+   * <dd>已关闭的 Transaction. 不允许执行进一步操作.</dd>
    * </dl>
    */
   protected static enum State {
