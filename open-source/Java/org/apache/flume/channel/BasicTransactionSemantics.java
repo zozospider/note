@@ -173,7 +173,7 @@ public abstract class BasicTransactionSemantics implements Transaction {
         "begin() called when transaction is " + state + "!");
 
     try {
-      // 调用子类的具体实现
+      // 调用子类的具体实现 (若已实现)
       doBegin();
     } catch (InterruptedException e) {
       // 设置当前线程为中断状态, 然后包装成 ChannelException 抛出
@@ -247,7 +247,7 @@ public abstract class BasicTransactionSemantics implements Transaction {
 
     // 设置当前状态为 State.CLOSED
     state = State.CLOSED;
-    // 调用子类的具体实现
+    // 调用子类的具体实现 (若已实现)
     doClose();
   }
 
