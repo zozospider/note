@@ -66,6 +66,10 @@ import com.google.common.base.Preconditions;
  * InterruptedException, though it still first restores the
  * interrupted status of the thread.
  * </p>
+ * <p>
+ * 从 <code>doXXX</code> 方法的实现抛出的所有 InterruptedException 异常都会自动包装成为 ChannelExceptions, 但仅在恢复线程的中断状态之后, 以便任何后续的阻塞方法调用本身都会抛出 InterruptedException 而不是阻塞.
+ * 此规则的例外是 <code>doTake</code>, 它只返回 null 而不是包装和传播 InterruptedException, 尽管它仍然首先恢复线程的中断状态.
+ * </p>
  */
 public abstract class BasicTransactionSemantics implements Transaction {
 
