@@ -73,10 +73,13 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
   private static final Integer defaultKeepAlive = 3;
 
   private class MemoryTransaction extends BasicTransactionSemantics {
-    // 当 Channel 调用 take 方法时, 
+    // 当 Channel 调用 1 次或多次 take 方法时, 每次从 Channel 的 queue 中取出 1 个 event 加入到 takeList 作为缓存 (此时数据已从 Channel 取出), 并返回该 event 给调用者.
+    // 当 Channel 调用 1 次 commit 方法时 (表示 sink take 1 个或多个 events 逻辑无异常), 会将 takeList 清空 (下次重新缓存).
+    // 当 Channel 调用 1 次 rollback 方法时 (表示 sink take 1 个或多个 events 逻辑有异常), 将 takeList 中的 1 个或多个 events 放回到 Channel 的 queue (此时数据已放回到 Channel), 然后清空 takeList (下次重新缓存).
     private LinkedBlockingDeque<Event> takeList;
-    // 当 Channel 一次或多次调用 put 方法时, 将一个或多个 events 加入到 putList 作为临时存储 (此时不能说明数据已成功加入 Channel).
-    // 当 Channel 后续调用 commit 方法时, 才会将 putList 中的数据加入到 queue (此时说明数据已成功加入 Channel).
+    // 当 Channel 调用 1 次或多次 put 方法时, 每次将 1 个 event 加入到 putList 作为缓存 (此时数据未加入 Channel).
+    // 当 Channel 调用 1 次 commit 方法时 (表示 Channel put 1 个或多个 events 逻辑无异常), 会将 putList 中的 1 个或多个 events 加入到 Channel 的 queue (此时数据已加入 Channel), 然后清空 putList (下次重新缓存).
+    // 当 Channel 调用 1 次 rollback 方法时 (表示 Channel put 1 个或多个 events 逻辑有异常), 会将 putList 清空 (下次重新缓存).
     private LinkedBlockingDeque<Event> putList;
     private final ChannelCounter channelCounter;
     private int putByteCounter = 0;
@@ -94,6 +97,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       channelCounter.incrementEventPutAttemptCount();
       int eventByteSize = (int) Math.ceil(estimateEventSize(event) / byteCapacitySlotSize);
 
+      // 将 event 放入到 putList 的尾部 (非阻塞), 若成功返回 true, 若队列已满返回 false.
       if (!putList.offer(event)) {
         throw new ChannelException(
             "Put queue for MemoryTransaction of capacity " +
@@ -106,32 +110,41 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
     @Override
     protected Event doTake() throws InterruptedException {
       channelCounter.incrementEventTakeAttemptCount();
+      // 若 takeList 无剩余空间, 则无法缓存更多数据, 抛出异常
       if (takeList.remainingCapacity() == 0) {
         throw new ChannelException("Take list for MemoryTransaction, capacity " +
             takeList.size() + " full, consider committing more frequently, " +
             "increasing capacity, or increasing thread count");
       }
+      // 在 keepAlive 时间内尝试从 queueStored (控制 queue 中 events 存储个数的信号量) 中获取 1 个许可
+      // 如果在 keepAlive 时间内获取成功, 返回 true, 否则返回 false (不会一直阻塞)
+      // 如果获取失败, 返回 null, 表示没有成功 take 到一个 event.
       if (!queueStored.tryAcquire(keepAlive, TimeUnit.SECONDS)) {
         return null;
       }
       Event event;
       // 调整大小期间, 通过 queueLock 锁定保护 queue
       synchronized (queueLock) {
+        // 从 queue 中拿出一个 event (此时数据已从 Channel 取出), 没有则返回 null
         event = queue.poll();
       }
       Preconditions.checkNotNull(event, "Queue.poll returned NULL despite semaphore " +
           "signalling existence of entry");
+      // 加入到 takeList 作为缓存
       takeList.put(event);
 
       int eventByteSize = (int) Math.ceil(estimateEventSize(event) / byteCapacitySlotSize);
       takeByteCounter += eventByteSize;
 
+      // 返回该 event 给调用者
       return event;
     }
 
     @Override
     protected void doCommit() throws InterruptedException {
+      // 临时存储中的 takeList 缓存和 putList 缓存差额
       int remainingChange = takeList.size() - putList.size();
+      // takeList 缓存 < putList 缓存, 表示距离上次 Transaction 提交或回滚到现在, Sink 消费速度 < Source 生产速度 (即生产更快), ????????????????????
       if (remainingChange < 0) {
         if (!bytesRemaining.tryAcquire(putByteCounter, keepAlive, TimeUnit.SECONDS)) {
           throw new ChannelException("Cannot commit transaction. Byte capacity " +
