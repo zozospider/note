@@ -62,10 +62,10 @@
   * __Source__, __SourceRunner__
     * Source `I`, EventDrivenSource `I`, PollableSource `I`, NetcatSource `C`, AvroSource `C`, TaildirSource `C`
     * SourceRunner `C`, EventDrivenSourceRunner `C`, PollableSourceRunner `C`
-  * __Sink__, __SinkRunner__, __SinkProcessor__
+  * __Sink__, __SinkProcessor__, __SinkRunner__
     * Sink `I`, LoggerSink `C`, AvroSink `C`, RollingFileSInk `C`
-    * SinkRunner `C`
     * SinkProcessor `I` _process()_, DefaultSinkProcessor `C`, LoadBalancingSinkProcessor `C`, FailoverSinkProcessor `C`
+    * SinkRunner `C`
   * __Counter__
     * MonitoredCounterGroup `C`, SourceCounter `C`, ChannelCounter `C`, SinkCounter `C`
   * __Application__
