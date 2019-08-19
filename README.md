@@ -154,7 +154,7 @@
 ## language
 - C
 - Go
-- Scala
+- Scala  `90+`
 - Kotlin
 - ECMA Script 6
 - Node.js
