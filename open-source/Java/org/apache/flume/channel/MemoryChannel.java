@@ -97,7 +97,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       channelCounter.incrementEventPutAttemptCount();
       int eventByteSize = (int) Math.ceil(estimateEventSize(event) / byteCapacitySlotSize);
 
-      // 将 event 放入到 putList 的尾部 (非阻塞), 若成功返回 true, 若队列已满返回 false.
+      // 将 1 个 event 放入到 putList 的尾部 (非阻塞), 若成功返回 true, 若队列已满返回 false.
       if (!putList.offer(event)) {
         throw new ChannelException(
             "Put queue for MemoryTransaction of capacity " +
@@ -144,7 +144,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
     protected void doCommit() throws InterruptedException {
       // 临时存储中的 takeList 缓存和 putList 缓存差额
       int remainingChange = takeList.size() - putList.size();
-      // takeList 缓存 < putList 缓存, 表示距离上次 Transaction 提交或回滚到现在, Sink 消费速度 < Source 生产速度 (即生产更快), ????????????????????
+      // takeList < putList, 表示距离上次 Transaction 提交或回滚到现在, Sink 消费速度 < Source 生产速度 (即生产更快), ????????????????????
       if (remainingChange < 0) {
         if (!bytesRemaining.tryAcquire(putByteCounter, keepAlive, TimeUnit.SECONDS)) {
           throw new ChannelException("Cannot commit transaction. Byte capacity " +
@@ -162,13 +162,16 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       int takes = takeList.size();
       // 调整大小期间, 通过 queueLock 锁定保护 queue
       synchronized (queueLock) {
+        // 距离上次 Transaction 提交或回滚到现在, 存在 put 行为
         if (puts > 0) {
+          // 循环将 putList 中的每个元素取出, 放入到 queue 的尾部 (非阻塞), 如果有至少 1 个加入失败, 则抛出异常
           while (!putList.isEmpty()) {
             if (!queue.offer(putList.removeFirst())) {
               throw new RuntimeException("Queue add failed, this shouldn't be able to happen");
             }
           }
         }
+        // 将 putList 和 takeList 清空 (下次重新缓存)
         putList.clear();
         takeList.clear();
       }
@@ -177,12 +180,15 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       putByteCounter = 0;
 
       queueStored.release(puts);
+      // takeList > putList, 表示距离上次 Transaction 提交或回滚到现在, Sink 消费速度 > Source 生产速度 (即消费更快), ????????????????????
       if (remainingChange > 0) {
         queueRemaining.release(remainingChange);
       }
+      // 距离上次 Transaction 提交或回滚到现在, 存在 put 行为
       if (puts > 0) {
         channelCounter.addToEventPutSuccessCount(puts);
       }
+      // 距离上次 Transaction 提交或回滚到现在, 存在 take 行为
       if (takes > 0) {
         channelCounter.addToEventTakeSuccessCount(takes);
       }
@@ -198,9 +204,11 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
         Preconditions.checkState(queue.remainingCapacity() >= takeList.size(),
             "Not enough space in memory channel " +
             "queue to rollback takes. This should never happen, please report");
+        // 循环将 takeList 中的每个元素取出, 放入到 queue 的尾部, 当 queue 满时候, 会抛出 IllegalStateException("Queue full") 异常
         while (!takeList.isEmpty()) {
           queue.addFirst(takeList.removeLast());
         }
+        // 将 putList 清空 (下次重新缓存)
         putList.clear();
       }
       putByteCounter = 0;
