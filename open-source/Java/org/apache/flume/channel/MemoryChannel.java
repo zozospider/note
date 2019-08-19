@@ -73,7 +73,10 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
   private static final Integer defaultKeepAlive = 3;
 
   private class MemoryTransaction extends BasicTransactionSemantics {
+    // 当 Channel 调用 take 方法时, 
     private LinkedBlockingDeque<Event> takeList;
+    // 当 Channel 一次或多次调用 put 方法时, 将一个或多个 events 加入到 putList 作为临时存储 (此时不能说明数据已成功加入 Channel).
+    // 当 Channel 后续调用 commit 方法时, 才会将 putList 中的数据加入到 queue (此时说明数据已成功加入 Channel).
     private LinkedBlockingDeque<Event> putList;
     private final ChannelCounter channelCounter;
     private int putByteCounter = 0;
