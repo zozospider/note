@@ -204,7 +204,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       queueStored.release(puts);
       // takeList > putList, 表示距离上次 Transaction 提交或回滚到现在, 已从 Channel 的 queue 中拿出的 events 个数 > 放入 putList 的 events 的个数 (即将放入 Channel 的 queue 中), 即本次 commit 即将造成 Channel 的 queue 容量减少
       if (remainingChange > 0) {
-        // 从 queueRemaining (控制 queue 中剩余可用的 events 个数的信号量) 中获取 remainingChange 个许可
+        // 从 queueRemaining (控制 queue 中剩余可用的 events 个数的信号量) 中释放 remainingChange 个许可
         // queueRemaining (控制 queue 中剩余可用的 events 个数的信号量) 的容量会增加 remainingChange 个 (即 queue 中剩余可用的 events 个数增加).
         queueRemaining.release(remainingChange);
       }
@@ -427,6 +427,8 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       // 需要释放 bytesRemaining (控制 queue 中剩余可用的 events 字节数的信号量) 的许可
       if (byteCapacity > lastByteCapacity) {
         // 从 bytesRemaining (控制 queue 中剩余可用的 events 字节数的信号量) 中释放 (byteCapacity - lastByteCapacity) 个许可
+        // bytesRemaining (控制 queue 中剩余可用的 events 字节数的信号量) 的容量会增加 (byteCapacity - lastByteCapacity) 个 (即 queue 中剩余可用的 events 字节数增加).
+        // 表示成功维护了新 byteCapacity 对应的 bytesRemaining (控制 queue 中剩余可用的 events 字节数的信号量) 的正确性.
         bytesRemaining.release(byteCapacity - lastByteCapacity);
         // 记录最近的 lastByteCapacity
         lastByteCapacity = byteCapacity;
@@ -439,7 +441,8 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
           if (!bytesRemaining.tryAcquire(lastByteCapacity - byteCapacity, keepAlive,
                                          TimeUnit.SECONDS)) {
             LOGGER.warn("Couldn't acquire permits to downsize the byte capacity, resizing has been aborted");
-          // 如果获取成功, 则表示成功维护了新 byteCapacity 对应的 bytesRemaining 的正确性.
+          // 如果获取成功, bytesRemaining (控制 queue 中剩余可用的 events 字节数的信号量) 的容量会减少 (lastByteCapacity - byteCapacity) 个 (即 queue 中剩余可用的 events 字节数减少).
+          // 如果获取成功, 则表示成功维护了新 byteCapacity 对应的 bytesRemaining (控制 queue 中剩余可用的 events 字节数的信号量) 的正确性.
           // bytesRemaining (控制 queue 中剩余可用的 events 字节数的信号量) 获取成功后, 记录最近的 lastByteCapacity.
           } else {
             // 记录最近的 lastByteCapacity
@@ -480,6 +483,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       // 如果获取失败, 不做任何处理
       if (!queueRemaining.tryAcquire(oldCapacity - capacity, keepAlive, TimeUnit.SECONDS)) {
         LOGGER.warn("Couldn't acquire permits to downsize the queue, resizing has been aborted");
+      // 如果获取成功, queueRemaining (控制 queue 中剩余可用的 events 个数的信号量) 的容量会减少 (oldCapacity - capacity) 个 (即 queue 中剩余可用的 events 个数减少).
       // 如果获取成功, 则表示成功维护了新 capacity 对应的 queueRemaining (控制 queue 中剩余可用的 events 个数的信号量) 的正确性.
       // queueRemaining (控制 queue 中剩余可用的 events 个数的信号量) 获取成功后, 重新建立一个容量为 capacity 的 queue, 添加旧 queue 的数据并映射到原 queue 地址.
       } else {
@@ -502,6 +506,8 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
         queue = newQueue;
       }
       // 从 queueRemaining (控制 queue 中剩余可用的 events 个数的信号量) 中释放 (capacity - oldCapacity) 个许可
+      // queueRemaining (控制 queue 中剩余可用的 events 个数的信号量) 的容量会增加 (capacity - oldCapacity) 个 (即 queue 中剩余可用的 events 个数增加).
+      // 表示成功维护了新 capacity 对应的 queueRemaining (控制 queue 中剩余可用的 events 个数的信号量) 的正确性.
       queueRemaining.release(capacity - oldCapacity);
     }
   }
