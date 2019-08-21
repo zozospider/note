@@ -82,7 +82,9 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
     // 当 Channel 调用 1 次 rollback 方法时 (表示 Channel put 1 个或多个 events 逻辑有异常), 会将 putList 清空 (下次重新缓存).
     private LinkedBlockingDeque<Event> putList;
     private final ChannelCounter channelCounter;
+    // 距离上次 Transaction 提交或回滚到现在, 累计放入 Channel 的 events 的字节数
     private int putByteCounter = 0;
+    // 距离上次 Transaction 提交或回滚到现在, 累计从 Channel 中拿走的 events 的字节数
     private int takeByteCounter = 0;
 
     public MemoryTransaction(int transCapacity, ChannelCounter counter) {
@@ -95,6 +97,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
     @Override
     protected void doPut(Event event) throws InterruptedException {
       channelCounter.incrementEventPutAttemptCount();
+      // 计算当前 event 字节数
       int eventByteSize = (int) Math.ceil(estimateEventSize(event) / byteCapacitySlotSize);
 
       // 将 1 个 event 放入到 putList 的尾部 (非阻塞), 若成功返回 true, 若队列已满返回 false.
@@ -104,6 +107,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
             putList.size() + " full, consider committing more frequently, " +
             "increasing capacity or increasing thread count");
       }
+      // putByteCounter 累加
       putByteCounter += eventByteSize;
     }
 
@@ -118,7 +122,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       }
       // 在 keepAlive 时间内尝试从 queueStored (控制 queue 中 events 存储个数的信号量) 中获取 1 个许可
       // 如果在 keepAlive 时间内获取成功, 返回 true, 否则返回 false (不会一直阻塞)
-      // 如果获取失败, 返回 null, 表示没有成功 take 到一个 event.
+      // queueStored 在 commit 的时候, 会 release putList.size() 个许可, 如果获取失败, 表示 queueStored 返回 null, 表示没有成功 take 到一个 event.
       if (!queueStored.tryAcquire(keepAlive, TimeUnit.SECONDS)) {
         return null;
       }
@@ -133,7 +137,9 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       // 加入到 takeList 作为缓存
       takeList.put(event);
 
+      // 计算当前 event 字节数
       int eventByteSize = (int) Math.ceil(estimateEventSize(event) / byteCapacitySlotSize);
+      // takeByteCounter 累加
       takeByteCounter += eventByteSize;
 
       // 返回该 event 给调用者
@@ -246,6 +252,8 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
   // like we would if we tried to use a blocking call on queue
   // 用于进行 "保留" 以从队列中获取数据.
   // 通过使用这个变量, 我们可以在获取数据的时候阻塞一段时间, 但是不需要锁定所有其他线程 (就像我们尝试在 queue 上使用阻塞调用时一样, ps: LinkedBlockingDeque 会阻塞所有线程调用)
+  // queueStored 在 Channel 调用 1 次 commit 方法时, 会释放 putList.size() 个许可 (表示有 putList.size() 的容量)
+  // queueStored 在 Channel 调用 1 次 take 方法时, 会请求获取 1 个许可 (表示已有容量减少 1 个, 如果获取失败, 表示没有容量, 即距离上次 Transaction 提交或回滚到现在, Channel 没有 put 任何数据并 commit)
   // ps: 控制 queue 中 events 存储个数的信号量
   // ps: 详情见 Semaphore 类的使用
   private Semaphore queueStored;
