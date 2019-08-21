@@ -14,6 +14,7 @@ mysql> CREATE DATABASE db_1 DEFAULT CHARACTER SET gbk COLLATE gbk_chinese_ci;
 ALTER TABLE tbl_1 MODIFY COLUMN col_1 LONGTEXT;
 ```
 
+
 ---
 
 # 导入导出
@@ -89,6 +90,11 @@ mysql> status;
 mysql>pager more;
 mysql>show tables;
 mysql>show databases;
+```
+
+## 查找表
+```sql
+select table_schema, table_name from information_schema.tables where table_schema='db_1' and table_name like 'tbl_%';
 ```
 
 ---
