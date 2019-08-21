@@ -122,7 +122,8 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       }
       // 在 keepAlive 时间内尝试从 queueStored (控制 queue 中 events 存储个数的信号量) 中获取 1 个许可
       // 如果在 keepAlive 时间内获取成功, 返回 true, 否则返回 false (不会一直阻塞)
-      // queueStored 在 commit 的时候, 会 release putList.size() 个许可, 如果获取失败, 表示 queueStored 返回 null, 表示没有成功 take 到一个 event.
+      // 如果获取成功, queueStored 容量减少 1 个 (即有释放过容量), 即距离上次 Transaction 提交或回滚到现在, Channel 有 put 至少 1 个数据并 commit (在 commit 中调用 queueStored.release() 方法).
+      // 如果获取失败, 代表 queueStored 没有容量可用 (即之前没有释放任何容量), 即距离上次 Transaction 提交或回滚到现在, Channel 没有 put 任何数据并 commit (在 commit 中调用 queueStored.release() 方法).
       if (!queueStored.tryAcquire(keepAlive, TimeUnit.SECONDS)) {
         return null;
       }
@@ -150,8 +151,11 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
     protected void doCommit() throws InterruptedException {
       // 临时存储中的 takeList 缓存和 putList 缓存差额
       int remainingChange = takeList.size() - putList.size();
-      // takeList < putList, 表示距离上次 Transaction 提交或回滚到现在, Sink 消费速度 < Source 生产速度 (即生产更快), ????????????????????
+      // takeList < putList, 表示距离上次 Transaction 提交或回滚到现在, 已从 Channel 的 queue 中拿出的 events 个数 < 放入 putList 的 events 的个数 (即将放入 Channel 的 queue 中), 即本次 commit 即将造成 Channel 的 queue 增加
       if (remainingChange < 0) {
+        // 在 keepAlive 时间内尝试从 bytesRemaining (控制 queue 中 events 剩余字节数的信号量) 中获取 putByteCounter 个许可
+        // 如果在 keepAlive 时间内获取成功, 返回 true, 否则返回 false (不会一直阻塞)
+        // 如果获取失败, 不做任何处理
         if (!bytesRemaining.tryAcquire(putByteCounter, keepAlive, TimeUnit.SECONDS)) {
           throw new ChannelException("Cannot commit transaction. Byte capacity " +
               "allocated to store event body " + byteCapacity * byteCapacitySlotSize +
@@ -185,6 +189,8 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       takeByteCounter = 0;
       putByteCounter = 0;
 
+      // 从 queueStored (控制 queue 中 events 存储个数的信号量) 中释放 putList.size() 个许可 (一个线程调用 release() 之前并不要求一定要调用了 acquire).
+      // 获取成功后, queueStored 容量会增加 putList.size() 个 (表示 Channel 调用 take 方法时, 可以从 queueStored 中获取到许可).
       queueStored.release(puts);
       // takeList > putList, 表示距离上次 Transaction 提交或回滚到现在, Sink 消费速度 > Source 生产速度 (即消费更快), ????????????????????
       if (remainingChange > 0) {
