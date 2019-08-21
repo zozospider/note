@@ -52,9 +52,9 @@ mysqldump -d -uzozo -p123456 -h127.0.0.1 -P3306 --default-character-set=utf8 --s
 ## 只导出数据，不导出表结构
 ```bash
 # database
-mysqldump -d -uzozo -p123456 -h127.0.0.1 -P3306 db_1 > db_1_20190218_data.sql
-mysqldump -d -uzozo -p123456 -h127.0.0.1 -P3306 --default-character-set=utf8 db_1 > db_1_20190218_data.sql
-mysqldump -d -uzozo -p123456 -h127.0.0.1 -P3306 --default-character-set=utf8 --set-gtid-purged=off db_1 > db_1_20190218_data.sql
+mysqldump -t -uzozo -p123456 -h127.0.0.1 -P3306 db_1 > db_1_20190218_data.sql
+mysqldump -t -uzozo -p123456 -h127.0.0.1 -P3306 --default-character-set=utf8 db_1 > db_1_20190218_data.sql
+mysqldump -t -uzozo -p123456 -h127.0.0.1 -P3306 --default-character-set=utf8 --set-gtid-purged=off db_1 > db_1_20190218_data.sql
 
 # database table
 mysqldump -t -uzozo -p123456 -h127.0.0.1 -P3306 db_1 tbl_1 tbl_2 tbl_3 > db_1_tbl_123_20190218_data.sql
