@@ -63,7 +63,7 @@
   * __Channel__, __Transaction__, __Interceptor__, __ChannelSelector__, __ChannelProcessor__
     * Channel `I`, MemoryChannel `C`, FileChannel `C`
     * Transaction `I`, MemoryTransaction `C`, FileBackedTransaction `C`
-    * Interceptor `I`, StaticInterceptor `C`, RegexFilteringInterceptor `C`, RegexExtractorInterceptor `C`, TimestampInterceptor `C`
+    * Interceptor `I`, InterceptorChain `C`, StaticInterceptor `C`, RegexFilteringInterceptor `C`, RegexExtractorInterceptor `C`, TimestampInterceptor `C`
     * ChannelSelector `I`, MultiplexingChannelSelector `C`, ReplicatingChannelSelector `C`
     * ChannelProcessor `C` _processEvent(e)_
   * __Source__, __SourceRunner__
