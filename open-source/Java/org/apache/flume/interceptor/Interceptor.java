@@ -29,33 +29,43 @@ import org.apache.flume.conf.Configurable;
 public interface Interceptor {
   /**
    * Any initialization / startup needed by the Interceptor.
+   * Interceptor 需要的任何 initialization / startup 动作.
    */
   public void initialize();
 
   /**
    * Interception of a single {@link Event}.
+   * 拦截单个 {@link Event}.
    * @param event Event to be intercepted
+   * @param event 被拦截的 Event
    * @return Original or modified event, or {@code null} if the Event
    * is to be dropped (i.e. filtered out).
+   * @return 原有的或被修改的 event, 或 {@code null} (如果 Event 要被删除) (即过滤掉).
    */
   public Event intercept(Event event);
 
   /**
    * Interception of a batch of {@linkplain Event events}.
+   * 拦截一批量的 {@linkplain Event events}.
    * @param events Input list of events
+   * @param events events 的输入列表
    * @return Output list of events. The size of output list MUST NOT BE GREATER
    * than the size of the input list (i.e. transformation and removal ONLY).
    * Also, this method MUST NOT return {@code null}. If all events are dropped,
    * then an empty List is returned.
+   * @return events 的输出列表. 输出列表的大小不得大于输入列表的大小 (即仅转换和删除).
+   * 此外, 此方法不得返回 {@code null}. 如果所有 events 被删除, 则返回空 List.
    */
   public List<Event> intercept(List<Event> events);
 
   /**
    * Perform any closing / shutdown needed by the Interceptor.
+   * 执行 Interceptor 需要的任何 closing / shutdown 动作.
    */
   public void close();
 
   /** Builder implementations MUST have a no-arg constructor */
+  /** Builder 的实现类必须有一个 no-arg 构造方法 */
   public interface Builder extends Configurable {
     public Interceptor build();
   }
