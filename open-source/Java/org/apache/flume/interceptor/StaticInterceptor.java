@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Interceptor class that appends a static, pre-configured header to all events.
- * Interceptor 类, 为所有 events 添加静态的预配置 header.
+ * Interceptor 类: 为所有 events 添加静态的预配置 header.
  *
  * Properties:<p>
  *
@@ -87,12 +87,13 @@ public class StaticInterceptor implements Interceptor {
 
   /**
    * Modifies events in-place.
+   * 就地修改 events.
    */
   @Override
   public Event intercept(Event event) {
     Map<String, String> headers = event.getHeaders();
 
-    // preserveExisting 为 true (保留 key 的现有值) 且 headers 中包含 key, 则不做任何处理.
+    // 如果 preserveExisting 为 true (保留 key 的现有值) 且 headers 中包含设置的 key, 则不做任何处理.
     if (preserveExisting && headers.containsKey(key)) {
       return event;
     }
@@ -125,7 +126,11 @@ public class StaticInterceptor implements Interceptor {
    */
   public static class Builder implements Interceptor.Builder {
 
+    // preserveExisting: If configured header already exists, should it be preserved - true or false
+    // preserveExisting: 如果已配置的 header 已存在, 是否应该保留 - true / false
     private boolean preserveExisting;
+    // key: Name of header that should be created
+    // key: 应创建的 header 的名称
     private String key;
     private String value;
 

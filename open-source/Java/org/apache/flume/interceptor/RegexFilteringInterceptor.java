@@ -36,6 +36,7 @@ import com.google.common.collect.Lists;
 /**
  * Interceptor that filters events selectively based on a configured regular
  * expression matching against the event body.
+ * Interceptor: 根据与 event body 匹配的已配置正则表达式有选择地过滤 events.
  *
  * This supports either include- or exclude-based filtering. A given
  * interceptor can only perform one of these functions, but multiple
@@ -45,18 +46,27 @@ import com.google.common.collect.Lists;
  * and all events not matching will be ignored. If exclude-based filtering is
  * configured, than all events matching will be ignored, and all other events
  * will pass through.
+ * 这支持 包含 / 基于排除 的过滤. 给定的拦截器只能执行这些功能中的一个, 但是多个拦截器可以链接在一起以创建更复杂的 包含 / 排除 模式.
+ * 如果配置了 基于包含 的过滤, 则将传递与提供的正则表达式匹配的所有 events, 并且将忽略所有不匹配的 events.
+ * 如果配置了 基于排除 的过滤, 则将忽略所有匹配的 events, 并且所有其他 events 都将通过.
  *
  * Note that all regular expression matching occurs through Java's built in
  * java.util.regex package.
+ * 请注意, 所有正则表达式匹配都是通过 Java 内置 java.util.regex 包进行的.
  *
  * Properties:<p>
  *
  *   regex: Regular expression for matching excluded events.
  *          (default is ".*")<p>
+ *   regex: 匹配排除 events 的正则表达式.
+ *          (默认为 ".*")<p>
  *
  *   excludeEvents: If true, a regex match determines events to exclude,
  *                  otherwise a regex determines events to include
  *                  (default is false)<p>
+ *   excludeEvents: 如果为 true, 则正则表达式匹配确定要排除的 events,
+ *                  否则正则表达式确定要包括的 events
+ *                  (默认为 false)<p>
  *
  * Sample config:<p>
  *
@@ -79,6 +89,7 @@ public class RegexFilteringInterceptor implements Interceptor {
 
   /**
    * Only {@link RegexFilteringInterceptor.Builder} can build me
+   * 只有 {@link HostInterceptor.Builder} 能构建我
    */
   private RegexFilteringInterceptor(Pattern regex, boolean excludeEvents) {
     this.regex = regex;
