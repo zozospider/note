@@ -140,6 +140,7 @@ public class RegexFilteringInterceptor implements Interceptor {
 
   /**
    * Builder which builds new instance of the RegexFilteringInterceptor.
+   * 生成 RegexFilteringInterceptor 新实例的 Builder.
    */
   public static class Builder implements Interceptor.Builder {
 

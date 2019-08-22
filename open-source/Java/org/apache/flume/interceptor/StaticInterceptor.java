@@ -28,19 +28,27 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Interceptor class that appends a static, pre-configured header to all events.
+ * Interceptor 类, 为所有 events 添加静态的预配置 header.
  *
  * Properties:<p>
  *
  *   key: Key to use in static header insertion.
  *        (default is "key")<p>
+ *   key: 用于静态 header 插入的 Key.
+ *        (默认为 "key")<p>
  *
  *   value: Value to use in static header insertion.
  *        (default is "value")<p>
+ *   value: 用于静态 header 插入的 Value.
+ *        (默认为 "value")<p>
  *
  *   preserveExisting: Whether to preserve an existing value for 'key'
  *                     (default is true)<p>
+ *   preserveExisting: 是否保留 'key' 的现有值
+ *                     (默认为 true)<p>
  *
  * Sample config:<p>
+ * 示例配置<p>
  *
  * <code>
  *   agent.sources.r1.channels = c1<p>
@@ -63,6 +71,7 @@ public class StaticInterceptor implements Interceptor {
 
   /**
    * Only {@link HostInterceptor.Builder} can build me
+   * 只有 {@link HostInterceptor.Builder} 能构建我
    */
   private StaticInterceptor(boolean preserveExisting, String key,
       String value) {
@@ -83,6 +92,7 @@ public class StaticInterceptor implements Interceptor {
   public Event intercept(Event event) {
     Map<String, String> headers = event.getHeaders();
 
+    // preserveExisting 为 true (保留 key 的现有值) 且 headers 中包含 key, 则不做任何处理.
     if (preserveExisting && headers.containsKey(key)) {
       return event;
     }
@@ -111,6 +121,7 @@ public class StaticInterceptor implements Interceptor {
 
   /**
    * Builder which builds new instance of the StaticInterceptor.
+   * 生成 StaticInterceptor 新实例的 Builder.
    */
   public static class Builder implements Interceptor.Builder {
 

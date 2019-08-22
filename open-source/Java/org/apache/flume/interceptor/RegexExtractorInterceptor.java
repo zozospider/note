@@ -163,6 +163,9 @@ public class RegexExtractorInterceptor implements Interceptor {
     return intercepted;
   }
 
+  /**
+   * 生成 RegexExtractorInterceptor 新实例的 Builder.
+   */
   public static class Builder implements Interceptor.Builder {
 
     private Pattern regex;

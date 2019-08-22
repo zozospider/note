@@ -86,6 +86,7 @@ public class TimestampInterceptor implements Interceptor {
 
   /**
    * Builder which builds new instances of the TimestampInterceptor.
+   * 生成 TimestampInterceptor 新实例的 Builder.
    */
   public static class Builder implements Interceptor.Builder {
 
