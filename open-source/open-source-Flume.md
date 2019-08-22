@@ -13,6 +13,13 @@
         - conf
           - [Configurable.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/Configurable.java)
           - [TransactionCapacitySupported.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/TransactionCapacitySupported.java)
+        - interceptor
+          - [Interceptor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/interceptor/Interceptor.java)
+          - [InterceptorChain.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/interceptor/InterceptorChain.java)
+          - [RegexExtractorInterceptor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/interceptor/RegexExtractorInterceptor.java)
+          - [RegexFilteringInterceptor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/interceptor/RegexFilteringInterceptor.java)
+          - [StaticInterceptor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/interceptor/StaticInterceptor.java)
+          - [TimestampInterceptor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/interceptor/TimestampInterceptor.java)
         - lifecycle
           - [LifecycleAware.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/lifecycle/LifecycleAware.java)
           - [LifecycleState.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/lifecycle/LifecycleState.java)
@@ -56,7 +63,7 @@
   * __Channel__, __Transaction__, __Interceptor__, __ChannelSelector__, __ChannelProcessor__
     * Channel `I`, MemoryChannel `C`, FileChannel `C`
     * Transaction `I`, MemoryTransaction `C`, FileBackedTransaction `C`
-    * Interceptor `I`, StaticInterceptor `C`, RegexFilteringInterceptor `C`, RegexExtractorInterceptor `C`
+    * Interceptor `I`, StaticInterceptor `C`, RegexFilteringInterceptor `C`, RegexExtractorInterceptor `C`, TimestampInterceptor `C`
     * ChannelSelector `I`, MultiplexingChannelSelector `C`, ReplicatingChannelSelector `C`
     * ChannelProcessor `C` _processEvent(e)_
   * __Source__, __SourceRunner__
