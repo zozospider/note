@@ -164,6 +164,8 @@ public class RegexFilteringInterceptor implements Interceptor {
   public static class Builder implements Interceptor.Builder {
 
     private Pattern regex;
+    // excludeEvents: If true, regex determines events to exclude, otherwise regex determines events to include.
+    // excludeEvents: 如果为 true, 则 regex 确定要排除的 events, 否则 regex 确定要包括的 events.
     private boolean excludeEvents;
 
     @Override

@@ -36,15 +36,23 @@ import com.google.common.collect.Lists;
 /**
  * Interceptor that extracts matches using a specified regular expression and
  * appends the matches to the event headers using the specified serializers</p>
+ * Interceptor: 使用指定的正则表达式提取匹配项, 并使用指定的序列化程序将匹配项附加到 event headers</p>
  * Note that all regular expression matching occurs through Java's built in
  * java.util.regex package</p>. Properties:
  * <p>
+ * 请注意, 所有正则表达式匹配都是通过 Java 内置 java.util.regex 包进行的</p>. Properties:
+ * <p>
  * regex: The regex to use
+ * <p>
+ * regex: 要使用的正则表达式
  * <p>
  * serializers: Specifies the group the serializer will be applied to, and the
  * name of the header that will be added. If no serializer is specified for a
  * group the default {@link RegexExtractorInterceptorPassThroughSerializer} will
  * be used
+ * <p>
+ * serializers: 指定将应用序列化程序的组以及将添加的 header 的名称.
+ * 如果没有为组指定序列化程序, 将使用默认的 {@link RegexExtractorInterceptorPassThroughSerializer}
  * <p>
  * Sample config:
  * <p>
@@ -78,6 +86,7 @@ import com.google.common.collect.Lists;
  * agent.sources.r1.interceptors.i1.serializers.s3.name = three
  * </p>
  * results in an event with the the following
+ * 具有以下内容的 event 结果
  *
  * body: 1:2:3.4foobar5 headers: one=>1, two=>2, three=3
  *
@@ -93,6 +102,7 @@ import com.google.common.collect.Lists;
  * <p>
  *
  * results in an event with the the following
+ * 具有以下内容的 event 结果
  *
  * body: 1:2:3.4foobar5 headers: one=>1, two=>2
  * </pre>
