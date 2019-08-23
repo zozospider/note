@@ -140,8 +140,8 @@ public class RegexExtractorInterceptor implements Interceptor {
         new String(event.getBody(), Charsets.UTF_8));
     // 获取 event 的 headers 属性
     Map<String, String> headers = event.getHeaders();
-    // 通过正则表达式匹配 event, 将匹配到的字段进行遍历
-    // 然后将配置的 NameAndSerializer (包含 name 和 Serializer type (RegexExtractorInterceptorSerializer 接口实现)) 对应的 name 作为该 event header 的 key, 匹配到的字段内容作为该 event header 的 value, 设置该 event 的 header.
+    // 通过正则表达式匹配 event, 将匹配到的多个匹配字段进行遍历
+    // 然后将当前匹配索引对应配置的 NameAndSerializer (包含 name 和 Serializer 实现) 对应的 name 作为该 event header 的 key, 匹配到的字段内容作为该 event header 的 value, 设置到该 event 的 header
     if (matcher.find()) {
       for (int group = 0, count = matcher.groupCount(); group < count; group++) {
         int groupIndex = group + 1;
@@ -157,8 +157,8 @@ public class RegexExtractorInterceptor implements Interceptor {
           logger.debug("Serializing {} using {}", serializer.headerName,
               serializer.serializer);
         }
-        // serializer 的 headerName 作为该 event header 的 key
-        // 匹配到的字段内容作为该 event header 的 value (默认的 Serializer 的 serialize() 方法只是返回传入的 value, 即匹配到的字段内容)
+        // Serializer 的 headerName 作为该 event header 的 key
+        // 匹配到的字段内容作为该 event header 的 value (默认实现类的 serialize(v) 方法只是返回传入的 value 参数, 即匹配到的字段内容)
         headers.put(serializer.headerName,
             serializer.serializer.serialize(matcher.group(groupIndex)));
       }
@@ -184,7 +184,7 @@ public class RegexExtractorInterceptor implements Interceptor {
   public static class Builder implements Interceptor.Builder {
 
     private Pattern regex;
-    // NameAndSerializer (包含 name 和 Serializer type (RegexExtractorInterceptorSerializer 接口实现)) 列表
+    // NameAndSerializer (包含 name 和 Serializer 实现) 列表
     private List<NameAndSerializer> serializerList;
     private final RegexExtractorInterceptorSerializer defaultSerializer =
         new RegexExtractorInterceptorPassThroughSerializer();
@@ -226,7 +226,7 @@ public class RegexExtractorInterceptor implements Interceptor {
         // 默认使用 RegexExtractorInterceptorPassThroughSerializer 作为 RegexExtractorInterceptorSerializer 接口实现
         if ("DEFAULT".equals(type)) {
           serializerList.add(new NameAndSerializer(name, defaultSerializer));
-        // 如果使用自定义 Serializer, 则通过反射创建该实现类的实例
+        // 否则使用配置的自定义 Serializer, 通过反射创建自定义 Serializer 的实例
         } else {
           serializerList.add(new NameAndSerializer(name, getCustomSerializer(
               type, serializerContext)));
@@ -234,17 +234,22 @@ public class RegexExtractorInterceptor implements Interceptor {
       }
     }
 
+    /**
+     * 通过反射创建自定义 Serializer 的实例
+     */
     private RegexExtractorInterceptorSerializer getCustomSerializer(
         String clazzName, Context context) {
       try {
         RegexExtractorInterceptorSerializer serializer = (RegexExtractorInterceptorSerializer) Class
             .forName(clazzName).newInstance();
+        // 调用该自定义 Serializer 的 configure(e) 方法
         serializer.configure(context);
         return serializer;
       } catch (Exception e) {
         logger.error("Could not instantiate event serializer.", e);
         Throwables.propagate(e);
       }
+      // 异常情况下返回默认实现
       return defaultSerializer;
     }
 
@@ -259,7 +264,10 @@ public class RegexExtractorInterceptor implements Interceptor {
   }
 
   static class NameAndSerializer {
+    // headerName: 对应 event header 的 key
     private final String headerName;
+    // serializer: 具体的 Serializer 实现, 用于序列化 event
+    // 默认实现类的 serialize(v) 方法只是返回传入的 value 参数
     private final RegexExtractorInterceptorSerializer serializer;
 
     public NameAndSerializer(String headerName,
