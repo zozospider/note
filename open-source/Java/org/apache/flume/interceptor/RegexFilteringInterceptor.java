@@ -106,20 +106,28 @@ public class RegexFilteringInterceptor implements Interceptor {
   /**
    * Returns the event if it passes the regular expression filter and null
    * otherwise.
+   * 如果 event 通过了正则表达式过滤器, 则返回该 event, 否则返回 null.
    */
   public Event intercept(Event event) {
     // We've already ensured here that at most one of includeRegex and
     // excludeRegex are defined.
+    // 我们已经在这里确保定义了 includeRegex 和 excludeRegex 中的至多一个.
 
+    // excludeEvents 为 false (正则表达式匹配不排除 event)
     if (!excludeEvents) {
+      // 如果匹配, 则返回该 event
       if (regex.matcher(new String(event.getBody())).find()) {
         return event;
+      // 如果不匹配, 则返回 null
       } else {
         return null;
       }
+    // excludeEvents 为 true (正则表达式匹配排除 event)
     } else {
+      // 如果匹配, 则返回 null
       if (regex.matcher(new String(event.getBody())).find()) {
         return null;
+      // 如果不匹配, 则返回该 event 
       } else {
         return event;
       }
