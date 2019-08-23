@@ -22,6 +22,7 @@ import org.apache.flume.conf.ComponentConfiguration;
 
 /**
  * Serializer that simply returns the passed in value
+ * 只是返回传入值的 Serializer
  */
 public class RegexExtractorInterceptorPassThroughSerializer implements
     RegexExtractorInterceptorSerializer {

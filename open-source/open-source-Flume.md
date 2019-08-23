@@ -12,6 +12,7 @@
           - [MemoryChannel.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/channel/MemoryChannel.java)
         - conf
           - [Configurable.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/Configurable.java)
+          - [ConfigurableComponent.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/ConfigurableComponent.java)
           - [TransactionCapacitySupported.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/TransactionCapacitySupported.java)
         - interceptor
           - [Interceptor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/interceptor/Interceptor.java)

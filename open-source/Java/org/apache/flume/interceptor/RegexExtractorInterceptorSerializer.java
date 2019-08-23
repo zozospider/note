@@ -23,6 +23,7 @@ import org.apache.flume.conf.ConfigurableComponent;
 /**
  * Serializer for serializing groups matched by the
  * {@link RegexExtractorInterceptor}
+ * 用于序列化组的 Serializer, 由 {@link RegexExtractorInterceptor} 匹配
  */
 public interface RegexExtractorInterceptorSerializer extends Configurable,
     ConfigurableComponent {
@@ -30,7 +31,10 @@ public interface RegexExtractorInterceptorSerializer extends Configurable,
   /**
    * @param value
    *          The value extracted by the {@link RegexExtractorInterceptor}
+   * @param value
+   *          {@link RegexExtractorInterceptor} 提取的值
    * @return The serialized version of the specified value
+   * @return 指定值的 Serializer 版本
    */
   String serialize(String value);
 

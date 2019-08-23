@@ -138,7 +138,10 @@ public class RegexExtractorInterceptor implements Interceptor {
   public Event intercept(Event event) {
     Matcher matcher = regex.matcher(
         new String(event.getBody(), Charsets.UTF_8));
+    // 获取 event 的 headers 属性
     Map<String, String> headers = event.getHeaders();
+    // 通过正则表达式匹配 event, 将匹配到的字段进行遍历
+    // 然后将配置的 NameAndSerializer (包含 name 和 Serializer type (RegexExtractorInterceptorSerializer 接口实现)) 对应的 name 作为该 event header 的 key, 匹配到的字段内容作为该 event header 的 value, 设置该 event 的 header.
     if (matcher.find()) {
       for (int group = 0, count = matcher.groupCount(); group < count; group++) {
         int groupIndex = group + 1;
@@ -154,6 +157,8 @@ public class RegexExtractorInterceptor implements Interceptor {
           logger.debug("Serializing {} using {}", serializer.headerName,
               serializer.serializer);
         }
+        // serializer 的 headerName 作为该 event header 的 key
+        // 匹配到的字段内容作为该 event header 的 value (默认的 Serializer 的 serialize() 方法只是返回传入的 value, 即匹配到的字段内容)
         headers.put(serializer.headerName,
             serializer.serializer.serialize(matcher.group(groupIndex)));
       }
@@ -179,6 +184,7 @@ public class RegexExtractorInterceptor implements Interceptor {
   public static class Builder implements Interceptor.Builder {
 
     private Pattern regex;
+    // NameAndSerializer (包含 name 和 Serializer type (RegexExtractorInterceptorSerializer 接口实现)) 列表
     private List<NameAndSerializer> serializerList;
     private final RegexExtractorInterceptorSerializer defaultSerializer =
         new RegexExtractorInterceptorPassThroughSerializer();
@@ -208,13 +214,19 @@ public class RegexExtractorInterceptor implements Interceptor {
       for (String serializerName : serializerNames) {
         Context serializerContext = new Context(
             serializerContexts.getSubProperties(serializerName + "."));
+        // Must be default (org.apache.flume.interceptor.RegexExtractorInterceptorPassThroughSerializer), 
+        // org.apache.flume.interceptor.RegexExtractorInterceptorMillisSerializer, or the FQCN of a custom class that implements org.apache.flume.interceptor.RegexExtractorInterceptorSerializer
+        // 必须是 default (org.apache.flume.interceptor.RegexExtractorInterceptorPassThroughSerializer), 
+        // org.apache.flume.interceptor.RegexExtractorInterceptorMillisSerializer, 或实现 org.apache.flume.interceptor.RegexExtractorInterceptorSerializer 的自定义类的 FQCN
         String type = serializerContext.getString("type", "DEFAULT");
         String name = serializerContext.getString("name");
         Preconditions.checkArgument(!StringUtils.isEmpty(name),
             "Supplied name cannot be empty.");
 
+        // 默认使用 RegexExtractorInterceptorPassThroughSerializer 作为 RegexExtractorInterceptorSerializer 接口实现
         if ("DEFAULT".equals(type)) {
           serializerList.add(new NameAndSerializer(name, defaultSerializer));
+        // 如果使用自定义 Serializer, 则通过反射创建该实现类的实例
         } else {
           serializerList.add(new NameAndSerializer(name, getCustomSerializer(
               type, serializerContext)));
