@@ -30,6 +30,9 @@ import org.apache.flume.FlumeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 多路复用 Channel Selector.
+ */
 public class MultiplexingChannelSelector extends AbstractChannelSelector {
 
   public static final String CONFIG_MULTIPLEX_HEADER_NAME = "header";
@@ -85,8 +88,10 @@ public class MultiplexingChannelSelector extends AbstractChannelSelector {
     this.headerName = context.getString(CONFIG_MULTIPLEX_HEADER_NAME,
         DEFAULT_MULTIPLEX_HEADER);
 
+    // 获取所有 名称, Channel 实例的映射 Map.
     Map<String, Channel> channelNameMap = getChannelNameMap();
 
+    // 获取所有 名称为 default, Channel 实例的映射 Map.
     defaultChannels = getChannelListFromNames(
         context.getString(CONFIG_DEFAULT_CHANNEL), channelNameMap);
 
@@ -102,6 +107,7 @@ public class MultiplexingChannelSelector extends AbstractChannelSelector {
 
       //This should not go to default channel(s)
       //because this seems to be a bad way to configure.
+      // 这不应该转到默认 channel(s), 因为这似乎是一种不好的配置方式.
       if (configuredChannels.size() == 0) {
         throw new FlumeException("No channel configured for when "
             + "header value is: " + headerValue);

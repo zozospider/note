@@ -46,11 +46,11 @@ public interface ChannelSelector extends NamedComponent, Configurable {
    * Returns a list of required channels. A failure in writing the event to
    * these channels must be communicated back to the source that received this
    * event.
-   * 返回所需 channels 的列表. 将 event 写入这些 channels 的失败必须传回给收到此 event 的 Source.
+   * 返回必须 channels 的列表. 将 event 写入这些 channels 的失败必须传回给收到此 event 的 Source.
    * @param event
    * @return the list of required channels that this selector has selected for
    * the given event.
-   * @return 此 Selector 为给定 event 选择的所需 channels 的列表.
+   * @return 此 Selector 为给定 event 选择的必须 channels 的列表.
    */
   public List<Channel> getRequiredChannels(Event event);
 
