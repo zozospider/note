@@ -27,7 +27,7 @@ import org.apache.flume.lifecycle.LifecycleAware;
 import org.apache.flume.lifecycle.LifecycleState;
 
 /**
- * Channel 接口抽象类, 实现最基本的功能, 具体的 Channel 一般会继承该抽象类.
+ * Channel 接口抽象类, 实现最基本的功能, 具体的 Channel 实现类一般会继承该抽象类.
  */
 @InterfaceAudience.Public
 @InterfaceStability.Stable
