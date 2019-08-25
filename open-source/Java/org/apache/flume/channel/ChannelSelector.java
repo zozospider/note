@@ -29,11 +29,16 @@ import org.apache.flume.conf.Configurable;
  * embody different policies that affect the choice of channels that a source
  * will push the incoming events to.
  * </p>
+ * <p>
+ * 允许根据其实现策略从给定集合中选择一个 channels 子集.
+ * 此接口的不同实现包含不同的策略, 这些策略会影响 Source 将推送传入 events 的 channels 选择.
+ * </p>
  */
 public interface ChannelSelector extends NamedComponent, Configurable {
 
   /**
    * @param channels all channels the selector could select from.
+   * @param channels Selector 可以选择的所有 channels.
    */
   public void setChannels(List<Channel> channels);
 
@@ -41,9 +46,11 @@ public interface ChannelSelector extends NamedComponent, Configurable {
    * Returns a list of required channels. A failure in writing the event to
    * these channels must be communicated back to the source that received this
    * event.
+   * 返回所需 channels 的列表. 将 event 写入这些 channels 的失败必须传回给收到此 event 的 Source.
    * @param event
    * @return the list of required channels that this selector has selected for
    * the given event.
+   * @return 此 Selector 为给定 event 选择的所需 channels 的列表.
    */
   public List<Channel> getRequiredChannels(Event event);
 
@@ -51,15 +58,18 @@ public interface ChannelSelector extends NamedComponent, Configurable {
   /**
    * Returns a list of optional channels. A failure in writing the event to
    * these channels must be ignored.
+   * 返回可选 channels 的列表. 必须忽略将 event 写入这些 channels 的失败.
    * @param event
    * @return the list of optional channels that this selector has selected for
    * the given event.
+   * 此 Selector 为给定 event 选择的可选 channels 的列表.
    */
   public List<Channel> getOptionalChannels(Event event);
 
   /**
    * @return the list of all channels that this selector is configured to work
    * with.
+   * @return 此 Selector 配置为使用的所有 channels 的列表.
    */
   public List<Channel> getAllChannels();
 
