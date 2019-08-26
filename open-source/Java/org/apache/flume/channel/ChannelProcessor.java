@@ -45,40 +45,58 @@ import org.slf4j.LoggerFactory;
  * {@link Channel}s. These operations will propagate a {@link ChannelException}
  * if any errors occur while attempting to write to {@code required} channels.
  * <p>
+ * Channel Processor 公开操作以将 {@link Event} 放入 {@link Channel}.
+ * 如果在尝试写入 {@code required} channels 时发生任何错误, 这些操作将传播 {@link ChannelException}.
+ * <p>
  * Each channel processor instance is configured with a {@link ChannelSelector}
  * instance that specifies which channels are
  * {@linkplain ChannelSelector#getRequiredChannels(Event) required} and which
  * channels are
  * {@linkplain ChannelSelector#getOptionalChannels(Event) optional}.
+ * 每个 Channel Processor 实例都配置有 {@link ChannelSelector} 实例,
+ * 该实例指定哪些 channels 是 {@linkplain ChannelSelector＃getRequiredChannels（Event）required} 以及哪些 channels 是 {@linkplain ChannelSelector＃getOptionalChannels（Event）optional}.
  */
 public class ChannelProcessor implements Configurable {
 
   private static final Logger LOG = LoggerFactory.getLogger(
       ChannelProcessor.class);
 
+  // 如 ReplicatingChannelSelector / MultiplexingChannelSelector
   private final ChannelSelector selector;
+  // 拦截器链, 包含配置的所有 interceptors 实例
   private final InterceptorChain interceptorChain;
 
+  /**
+   * 构造方法, selector 通过构造参数设置, interceptorChain 通过 configure(c) 和 initialize() 方法设置.
+   */
   public ChannelProcessor(ChannelSelector selector) {
     this.selector = selector;
     this.interceptorChain = new InterceptorChain();
   }
 
+  /**
+   * 调用 interceptorChain 的 initialize() 方法, 进而调用所有 interceptors 的 initialize() 方法.
+   */
   public void initialize() {
     interceptorChain.initialize();
   }
 
+  /**
+   * 调用 interceptorChain 的 close() 方法, 进而调用所有 interceptors 的 close() 方法.
+   */
   public void close() {
     interceptorChain.close();
   }
 
   /**
    * The Context of the associated Source is passed.
+   * 传递关联 Source 的上下文.
    *
    * @param context
    */
   @Override
   public void configure(Context context) {
+    // 配置 interceptors
     configureInterceptors(context);
   }
 
@@ -87,6 +105,7 @@ public class ChannelProcessor implements Configurable {
 
     List<Interceptor> interceptors = Lists.newLinkedList();
 
+    // 获取所有 interceptor 配置名称
     String interceptorListStr = context.getString("interceptors", "");
     if (interceptorListStr.isEmpty()) {
       return;
@@ -97,11 +116,15 @@ public class ChannelProcessor implements Configurable {
         new Context(context.getSubProperties("interceptors."));
 
     // run through and instantiate all the interceptors specified in the Context
+    // 运行并实例化 Context 中指定的所有拦截器
     InterceptorBuilderFactory factory = new InterceptorBuilderFactory();
+    // 遍历所有 interceptor 配置名称
     for (String interceptorName : interceptorNames) {
       Context interceptorContext = new Context(
           interceptorContexts.getSubProperties(interceptorName + "."));
+      // 获取 interceptor 类型
       String type = interceptorContext.getString("type");
+      // 类型不能为空
       if (type == null) {
         LOG.error("Type not specified for interceptor " + interceptorName);
         throw new FlumeException("Interceptor.Type not specified for " +
@@ -109,7 +132,9 @@ public class ChannelProcessor implements Configurable {
       }
       try {
         Interceptor.Builder builder = factory.newInstance(type);
+        // 调用 builder (当前 interceptor 的内部类) 的 configure(c) 方法
         builder.configure(interceptorContext);
+        // 添加到 interceptors
         interceptors.add(builder.build());
       } catch (ClassNotFoundException e) {
         LOG.error("Builder class not found. Exception follows.", e);
@@ -123,6 +148,7 @@ public class ChannelProcessor implements Configurable {
       }
     }
 
+    // 将所有 interceptors 实例设置到拦截器链
     interceptorChain.setInterceptors(interceptors);
   }
 
@@ -243,21 +269,30 @@ public class ChannelProcessor implements Configurable {
    * configured channel. If any {@code required} channel throws a
    * {@link ChannelException}, that exception will be propagated.
    * <p>
+   * 尝试将给定 event {@linkplain Channel#put(Event) put} put 到每个配置的 Channel.
+   * 如果任何 {@code required} channel 抛出 {@link ChannelException}, 则会传播该异常.
+   * <p>
    * <p>Note that if multiple channels are configured, some {@link Transaction}s
    * may have already been committed while others may be rolled back in the
    * case of an exception.
+   * 请注意, 如果配置了多个 channels, 则某些 {@link Transaction} 可能已经提交, 而其他 {@link Transaction} 可能会在异常的情况下回滚.
    *
    * @param event The event to put into the configured channels.
+   * @param event 要放入已配置 channels 的 event.
    * @throws ChannelException when a write to a required channel fails.
+   * @throws ChannelException 当写入所需 channel 失败时.
    */
   public void processEvent(Event event) {
 
+    // 对传入的 event, 遍历 interceptors 列表, 调用每个 interceptor 的 intercept(e) 方法, 对 event 进行多次拦截
     event = interceptorChain.intercept(event);
+    // 如果 event 为 null, 表示该 event 已被拦截, 不做处理
     if (event == null) {
       return;
     }
 
     // Process required channels
+    // 处理必须的 channels
     List<Channel> requiredChannels = selector.getRequiredChannels(event);
     for (Channel reqChannel : requiredChannels) {
       Transaction tx = reqChannel.getTransaction();
@@ -287,6 +322,7 @@ public class ChannelProcessor implements Configurable {
     }
 
     // Process optional channels
+    // 处理可选的 channels
     List<Channel> optionalChannels = selector.getOptionalChannels(event);
     for (Channel optChannel : optionalChannels) {
       Transaction tx = null;
