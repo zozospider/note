@@ -40,7 +40,7 @@ public abstract class AbstractChannel
   private LifecycleState lifecycleState;
 
   /**
-   * Channel 初始化时, 状态为: IDLE.
+   * 构造方法, 状态为: IDLE.
    */
   public AbstractChannel() {
     lifecycleState = LifecycleState.IDLE;

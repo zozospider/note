@@ -25,8 +25,10 @@ import org.apache.flume.source.PollableSourceRunner;
 
 /**
  * A source runner controls how a source is driven.
+ * Source Runner 控制 Source 的驱动方式.
  *
  * This is an abstract class used for instantiating derived classes.
+ * 这是一个抽象类, 用于实例化派生类.
  */
 public abstract class SourceRunner implements LifecycleAware {
 
@@ -35,15 +37,22 @@ public abstract class SourceRunner implements LifecycleAware {
   /**
    * Static factory method to instantiate a source runner implementation that
    * corresponds to the type of {@link Source} specified.
+   * 静态工厂方法, 用于实例化与指定的 {@link Source} 类型对应的 Source Runner 实现.
    *
    * @param source The source to run
+   * @param source 要运行的 Source
    * @return A runner that can run the specified source
+   * @return 可以运行指定 Source 的 Runner
    * @throws IllegalArgumentException if the specified source does not implement
    * a supported derived interface of {@link SourceRunner}.
+   * @throws IllegalArgumentException 如果指定的 Source 未实现 {@link SourceRunner} 支持的派生接口.
    */
   public static SourceRunner forSource(Source source) {
     SourceRunner runner = null;
 
+    // 如果 source 为 PollableSource, 则新建 PollableSourceRunner 实例并设置它的 source 变量.
+    // 如果 source 为 EventDrivenSource, 则新建 EventDrivenSourceRunner 实例并设置它的 source 变量.
+    // 如果 source 不属于以上两者, 则抛出异常
     if (source instanceof PollableSource) {
       runner = new PollableSourceRunner();
       ((PollableSourceRunner) runner).setSource((PollableSource) source);

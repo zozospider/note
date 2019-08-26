@@ -37,6 +37,9 @@ import org.slf4j.LoggerFactory;
  * {@link PollableSource}.
  * </p>
  * <p>
+ * {@link SourceRunner} 的实现, 可以驱动 {@link PollableSource}.
+ * </p>
+ * <p>
  * A {@link PollableSourceRunner} wraps a {@link PollableSource} in the required
  * run loop in order for it to operate. Internally, metrics and counters are
  * kept such that a source that returns a {@link PollableSource.Status} of
@@ -44,6 +47,12 @@ import org.slf4j.LoggerFactory;
  * backoff period of 500ms. A source that returns {@code READY} is immediately
  * invoked. Note that {@code BACKOFF} is merely a hint to the runner; it need
  * not be strictly adhered to.
+ * </p>
+ * <p>
+ * {@link PollableSourceRunner} 在所需的运行循环中包装 {@link PollableSource} 以使其运行.
+ * 在内部, 保留 metrics 和 counters, 使得返回 {@code BACKOFF} 的 {@link PollableSource.Status} 的 Source 导致运行循环完全执行该操作.
+ * 最大退避时间为 500 毫秒. 返回 {@code READY} 的 Source 会立即被调用.
+ * 请注意, {@code BACKOFF} 仅仅是对 Runner 的提示; 它不需要严格遵守.
  * </p>
  */
 public class PollableSourceRunner extends SourceRunner {
