@@ -161,27 +161,43 @@ public class ChannelProcessor implements Configurable {
    * configured channel. If any {@code required} channel throws a
    * {@link ChannelException}, that exception will be propagated.
    * <p>
+   * 尝试将给定 event {@linkplain Channel#put(Event) put} put 到每个配置的 Channel.
+   * 如果任何 {@code required} channel 抛出 {@link ChannelException}, 则会传播该异常.
+   * <p>
    * <p>Note that if multiple channels are configured, some {@link Transaction}s
    * may have already been committed while others may be rolled back in the
    * case of an exception.
+   * 请注意, 如果配置了多个 channels, 则某些 {@link Transaction} 可能已经提交, 而其他 {@link Transaction} 可能会在异常的情况下回滚.
    *
    * @param events A list of events to put into the configured channels.
+   * @param events 要放入已配置 channels 的 events 列表.
    * @throws ChannelException when a write to a required channel fails.
+   * @throws ChannelException 当写入所需 channel 失败时.
    */
   public void processEventBatch(List<Event> events) {
     Preconditions.checkNotNull(events, "Event list must not be null");
 
+    // 对传入的多个 events, 遍历 interceptors 列表, 调用每个 interceptor 的 intercept(es) 方法, 对多个 events 进行多次拦截
     events = interceptorChain.intercept(events);
 
+    // key: 必须的 Channel
+    // value: 当前必须的 Channel 需要处理的多个 events
     Map<Channel, List<Event>> reqChannelQueue =
         new LinkedHashMap<Channel, List<Event>>();
 
+    // key: 可选的 Channel
+    // value: 当前可选的 Channel 需要处理的多个 events
     Map<Channel, List<Event>> optChannelQueue =
         new LinkedHashMap<Channel, List<Event>>();
 
+    // 遍历传入参数的 events 列表
     for (Event event : events) {
+      // 通过 Selector 获取处理当前 event 必须的 channels
       List<Channel> reqChannels = selector.getRequiredChannels(event);
 
+      // 将多个 key 和多个 value 设置到 reqChannelQueue
+      // 多个 key: 当前 event 必须的 channels
+      // 多个 value: 当前 event
       for (Channel ch : reqChannels) {
         List<Event> eventQueue = reqChannelQueue.get(ch);
         if (eventQueue == null) {
@@ -191,8 +207,12 @@ public class ChannelProcessor implements Configurable {
         eventQueue.add(event);
       }
 
+      // 通过 Selector 获取处理当前 event 可选的 channels
       List<Channel> optChannels = selector.getOptionalChannels(event);
 
+      // 将多个 key 和多个 value 设置到 optChannelQueue
+      // 多个 key: 当前 event 可选的 channels
+      // 多个 value: 当前 event
       for (Channel ch : optChannels) {
         List<Event> eventQueue = optChannelQueue.get(ch);
         if (eventQueue == null) {
@@ -205,20 +225,29 @@ public class ChannelProcessor implements Configurable {
     }
 
     // Process required channels
+    // 处理必须的 channels
+    // 遍历必须的 channels 的 key (必须的 Channel)
     for (Channel reqChannel : reqChannelQueue.keySet()) {
+      // 获取当前 Channel 的 Transaction
       Transaction tx = reqChannel.getTransaction();
       Preconditions.checkNotNull(tx, "Transaction object must not be null");
+      // 在此 Transaction 的周期内:
+      // begin(), put(e)..., commit() / rollback(), close()
+      // 遍历处理当前必须的 Channel 需要处理的多个 events.
       try {
         tx.begin();
 
+        // 当前 Channel 的 value (当前必须的 Channel 需要处理的多个 events)
         List<Event> batch = reqChannelQueue.get(reqChannel);
 
+        // 对于每个 event, 都调用当前 Channel 的 put(e) 方法, 即调用对应 Transaction 的 put(e) 方法.
         for (Event event : batch) {
           reqChannel.put(event);
         }
 
         tx.commit();
       } catch (Throwable t) {
+        // 只要此 Transaction 周期内的某 1 个操作出现异常情况, 回滚, 并抛出异常
         tx.rollback();
         if (t instanceof Error) {
           LOG.error("Error while writing to required channel: " + reqChannel, t);
@@ -237,20 +266,29 @@ public class ChannelProcessor implements Configurable {
     }
 
     // Process optional channels
+    // 处理可选的 channels
+    // 遍历可选的 channels 的 key (可选的 Channel)
     for (Channel optChannel : optChannelQueue.keySet()) {
+      // 获取当前 Channel 的 Transaction
       Transaction tx = optChannel.getTransaction();
       Preconditions.checkNotNull(tx, "Transaction object must not be null");
+      // 在此 Transaction 的周期内:
+      // begin(), put(e)..., commit() / rollback(), close()
+      // 遍历处理当前可选的 Channel 需要处理的多个 events.
       try {
         tx.begin();
 
+        // 当前 Channel 的 value (当前可选的 Channel 需要处理的多个 events)
         List<Event> batch = optChannelQueue.get(optChannel);
 
+        // 对于每个 event, 都调用当前 Channel 的 put(e) 方法, 即调用对应 Transaction 的 put(e) 方法.
         for (Event event : batch) {
           optChannel.put(event);
         }
 
         tx.commit();
       } catch (Throwable t) {
+        // 只要此 Transaction 周期内的某 1 个操作出现异常情况, 回滚, 但不抛出异常 (Error 除外)
         tx.rollback();
         LOG.error("Unable to put batch on optional channel: " + optChannel, t);
         if (t instanceof Error) {
@@ -294,16 +332,23 @@ public class ChannelProcessor implements Configurable {
     // Process required channels
     // 处理必须的 channels
     List<Channel> requiredChannels = selector.getRequiredChannels(event);
+    // 遍历所有必须的 channels
     for (Channel reqChannel : requiredChannels) {
+      // 获取当前 Channel 的 Transaction
       Transaction tx = reqChannel.getTransaction();
       Preconditions.checkNotNull(tx, "Transaction object must not be null");
+      // 在此 Transaction 的周期内:
+      // begin(), put(e), commit() / rollback(), close()
+      // 处理当前必须的 Channel 需要处理的 event.
       try {
         tx.begin();
 
+        // 调用当前 Channel 的 put(e) 方法, 即调用对应 Transaction 的 put(e) 方法.
         reqChannel.put(event);
 
         tx.commit();
       } catch (Throwable t) {
+        // 异常情况下, 回滚, 并抛出异常
         tx.rollback();
         if (t instanceof Error) {
           LOG.error("Error while writing to required channel: " + reqChannel, t);
@@ -324,16 +369,23 @@ public class ChannelProcessor implements Configurable {
     // Process optional channels
     // 处理可选的 channels
     List<Channel> optionalChannels = selector.getOptionalChannels(event);
+    // 遍历所有可选的 channels
     for (Channel optChannel : optionalChannels) {
       Transaction tx = null;
+      // 在此 Transaction 的周期内:
+      // begin(), put(e), commit() / rollback(), close()
+      // 处理当前可选的 Channel 需要处理的 event.
       try {
+        // 获取当前 Channel 的 Transaction
         tx = optChannel.getTransaction();
         tx.begin();
 
+        // 调用当前 Channel 的 put(e) 方法, 即调用对应 Transaction 的 put(e) 方法.
         optChannel.put(event);
 
         tx.commit();
       } catch (Throwable t) {
+        // 异常情况下, 回滚, 但不抛出异常 (Error 除外)
         tx.rollback();
         LOG.error("Unable to put event on optional channel: " + optChannel, t);
         if (t instanceof Error) {
