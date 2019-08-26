@@ -23,6 +23,7 @@ package org.apache.flume;
  * A {@link Source} that does not need an external driver to poll for
  * {@linkplain Event events} to ingest; it provides its own event-driven
  * mechanism to invoke event processing.
+ * 1 个 {@link Source}: 它不需要外部驱动程序来轮询 {@linkplain Event events} 来摄取; 它提供了自己的事件驱动机制来调用事件处理.
  */
 public interface EventDrivenSource extends Source {
 
