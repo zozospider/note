@@ -45,6 +45,7 @@ import org.apache.flume.lifecycle.LifecycleAware;
 public interface SinkProcessor extends LifecycleAware, Configurable {
   /**
    * <p>Handle a request to poll the owned sinks.</p>
+   * <p>处理轮询所拥有的 sinks 的请求.</p>
    *
    * <p>The processor is expected to call {@linkplain Sink#process()} on
    *  whatever sink(s) appropriate, handling failures as appropriate and
