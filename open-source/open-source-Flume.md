@@ -40,6 +40,7 @@
           - [FailoverSinkProcessor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/FailoverSinkProcessor.java)
           - [LoadBalancingSinkProcessor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/LoadBalancingSinkProcessor.java)
           - [LoggerSink.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/LoggerSink.java)
+          - [SinkGroup.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/SinkGroup.java)
         - source
           - taildir
             - [TaildirSource.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/source/taildir/TaildirSource.java)
@@ -62,6 +63,7 @@
         - [PollableSource.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/PollableSource.java)
         - [Sink.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/Sink.java)
         - [SinkProcessor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/SinkProcessor.java)
+        - [SinkRunner.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/SinkRunner.java)
         - [Source.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/Source.java)
         - [SourceRunner.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/SourceRunner.java)
         - [Transaction.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/Transaction.java)

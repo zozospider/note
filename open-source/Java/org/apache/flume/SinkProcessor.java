@@ -29,9 +29,14 @@ import org.apache.flume.lifecycle.LifecycleAware;
  * sinks, always assigned to a SinkRunner
  * </p>
  * <p>
+ * 允许抽象多个 sinks 行为的设备接口, 始终分配给 SinkRunner
+ * </p>
+ * <p>
  * A sink processors {@link SinkProcessor#process()} method will only be
  * accessed by a single runner thread. However configuration methods
  * such as {@link Configurable#configure} may be concurrently accessed.
+ * Sink Processors {@link SinkProcessor#process()} 方法只能由单个转轮线程访问.
+ * 但是, 可以同时访问诸如 {@link Configurable#configure} 之类的配置方法.
  *
  * @see org.apache.flume.Sink
  * @see org.apache.flume.SinkRunner
