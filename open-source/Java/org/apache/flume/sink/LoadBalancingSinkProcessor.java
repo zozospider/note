@@ -38,6 +38,7 @@ import org.apache.flume.util.RoundRobinOrderSelector;
 
 /**
  * <p>Provides the ability to load-balance flow over multiple sinks.</p>
+ * <p>提供在多个 sinks 上进行负载均衡流量的功能.</p>
  *
  * <p>The <tt>LoadBalancingSinkProcessor</tt> maintains an indexed list of
  * active sinks on which the load must be distributed. This implementation
@@ -45,6 +46,9 @@ import org.apache.flume.util.RoundRobinOrderSelector;
  * <tt>RANDOM</tt> selection mechanism. The choice of selection mechanism
  * defaults to <tt>ROUND_ROBIN</tt> type, but can be overridden via
  * configuration.</p>
+ * <p><tt>LoadBalancingSinkProcessor</tt> 维护一个必须分配负载的 active sinks 的索引列表.
+ * 此实现支持使用 <tt>ROUND_ROBIN</tt> 或 <tt>RANDOM</tt> 选择机制分配负载.
+ * 选择机制的选择默认为 <tt>ROUND_ROBIN</tt> 类型, 但可以通过配置覆盖.</p>
  *
  * <p>When invoked, this selector picks the next sink using its configured
  * selection mechanism and invokes it. In case the selected sink fails with
@@ -53,6 +57,8 @@ import org.apache.flume.util.RoundRobinOrderSelector;
  * sink and instead continues to optimistically attempt every available sink.
  * If all sinks invocations result in failure, the selector propagates the
  * failure to the sink runner.</p>
+ * <p>调用时, 此 Selector 使用其配置的选择机制选择下一个 Sink 并调用它. 如果所选 Sink 因异常而失败, 则 Processor 通过其配置的选择机制选择下一个可用 Sink.
+ * 此实现不会将失败的 sink 列入黑名单, 而是继续乐观地尝试每个可用的 Sink. 如果所有 sinks 调用都导致失败, 则 Selector 将故障传播到 Sink Runner.</p>
  *
  * <p>
  * Sample configuration:
@@ -71,9 +77,14 @@ import org.apache.flume.util.RoundRobinOrderSelector;
  * selection algorithm by implementing the <tt>LoadBalancingSelector</tt>
  * interface. If no selector mechanism is specified, the round-robin selector
  * is used by default.
+ * processor.selector 的值可以是 <tt>round_robin</tt> (load-balancing 的 round-robin 方案), 也可以是 <tt>random</tt> (随机选择).
+ * 或者, 您可以通过实现 <tt>LoadBalancingSelector</tt> 接口来指定自己的 selector 算法实现. 如果未指定选择机制, 则默认使用 round-robin Selector.
  * </p>
  * <p>
  * This implementation is not thread safe at this time
+ * </p>
+ * <p>
+ * 此实现目前不是线程安全的
  * </p>
  *
  * @see FailoverSinkProcessor
@@ -178,10 +189,18 @@ public class LoadBalancingSinkProcessor extends AbstractSinkProcessor {
    * processor configuration and are used to select a sink on every invocation.
    * </p>
    * <p>
+   * 允许 LoadBalancingSinkProcessor 使用 load-balancing 策略 (round-robin, random distribution 等) 的接口.
+   * 此类的实现可以通过 Processor configuration 插入系统, 并用于在每次调用时选择 Sink.
+   * </p>
+   * <p>
    * An instance of the configured sink selector is create during the processor
    * configuration, its {@linkplain #setSinks(List)} method is invoked following
    * which it is configured via a subcontext. Once configured, the lifecycle of
    * this selector is tied to the lifecycle of the sink processor.
+   * </p>
+   * <p>
+   * 在 Processor configuration 期间创建配置的 Sink Selector 的实例, 调用其 {@linkplain #setSinks(List)} 方法, 然后通过子 subcontext (上下文) 配置该方法.
+   * 配置完成后, 此 Selector 的生命周期与 Sink Processor 的生命周期相关联.
    * </p>
    * <p>
    * At runtime, the processor invokes the {@link #createSinkIterator()}
@@ -190,6 +209,10 @@ public class LoadBalancingSinkProcessor extends AbstractSinkProcessor {
    * until one of the sinks succeeds in processing the event. If the iterator
    * is exhausted and none of the sinks succeed, the processor will raise
    * an <tt>EventDeliveryException</tt>.
+   * </p>
+   * <p>
+   * 在运行时, Processor 为每个 <tt>process</tt> 调用调用 {@link #createSinkIterator()} 方法, 以在可用的 sinks 上创建迭代顺序.
+   * 然后 Processor 循环遍历该迭代顺序, 直到其中一个 Sink 成功处理该 event。 如果迭代器耗尽且没有任何 sinks 成功, 则 Processor 将引发 <tt>EventDeliveryException</tt>.
    * </p>
    */
   public interface SinkSelector extends Configurable, LifecycleAware {
@@ -204,10 +227,12 @@ public class LoadBalancingSinkProcessor extends AbstractSinkProcessor {
   /**
    * <p>A sink selector that implements the round-robin sink selection policy.
    * This implementation is not MT safe.</p>
+   * <p>Sink Selector: 实现 round-robin sink 选择策略. 这种实现不是 MT 安全的.</p>
    *
    * <p>Unfortunately both implementations need to override the base implementation
    * in AbstractSinkSelector class, because any custom sink selectors
    * will break if this stuff is moved to that class.</p>
+   * <p>遗憾的是, 两个实现都需要覆盖 AbstractSinkSelector 类中的基本实现, 因为如果将这些内容移动到该类, 任何自定义 sink selectors 都将中断.</p>
    */
   private static class RoundRobinSinkSelector extends AbstractSinkSelector {
     private OrderSelector<Sink> selector;
@@ -244,6 +269,7 @@ public class LoadBalancingSinkProcessor extends AbstractSinkProcessor {
   /**
    * A sink selector that implements a random sink selection policy. This
    * implementation is not thread safe.
+   * Sink Selector: 用于实现 random Sink 选择策略. 此实现不是线程安全的.
    */
   private static class RandomOrderSinkSelector extends AbstractSinkSelector {
 

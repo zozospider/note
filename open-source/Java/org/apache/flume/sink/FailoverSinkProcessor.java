@@ -36,19 +36,24 @@ import org.slf4j.LoggerFactory;
 /**
  * FailoverSinkProcessor maintains a prioritized list of sinks,
  * guarranteeing that so long as one is available events will be processed.
+ * FailoverSinkProcessor 维护一个优先级的 sinks 列表, 保证只要有 1 个可用的 event 将被处理.
  *
  * The failover mechanism works by relegating failed sinks to a pool
  * where they are assigned a cooldown period, increasing with sequential
  * failures before they are retried. Once a sink successfully sends an
  * event it is restored to the live pool.
+ * 故障转移机制的工作原理是将 failed sinks 降级到池, 在池中为它们分配一个冷却时间段, 在重试之前随顺序故障而增加. Sink 成功发送 event 后, 它将恢复到实时池.
  *
  * FailoverSinkProcessor is in no way thread safe and expects to be run via
  * SinkRunner Additionally, setSinks must be called before configure, and
  * additional sinks cannot be added while running
+ * FailoverSinkProcessor 绝不是线程安全的, 并且期望通过 SinkRunner 运行. 此外, 必须在配置之前调用 setSinks, 并且在运行时不能添加其他 sinks
  *
  * To configure, set a sink groups processor to "failover" and set priorities
  * for individual sinks, all priorities must be unique. Furthermore, an
  * upper limit to failover time can be set(in miliseconds) using maxpenalty
+ * 要进行配置, 请将 Sink Groups Processor 设置为 "failover" 并为各个 sinks 设置优先级, 所有优先级必须唯一.
+ * 此外, 可以使用 maxpenalty 设置故障转移时间的上限 (以毫秒为单位)
  *
  * Ex)
  *
