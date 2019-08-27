@@ -53,21 +53,29 @@ public interface SinkProcessor extends LifecycleAware, Configurable {
    *  deliver any events according to the delivery policy defined by the
    *  sink processor implementation. See specific implementations of this
    *  interface for delivery behavior and policies.</p>
+   * <p>Processor 应该在适当的任何 sink(s) 上调用 {@linkplain Sink#process()},
+   * 在适当的情况下处理失败, 并且当根据由 Sink Processor 实现类定义的 delivery 策略未能 deliver 任何 events 时, 抛出 {@link EventDeliveryException}.
+   * 有关传递行为和策略, 请参阅此接口的特定实现.</p>
    *
    * @return Returns {@code READY} if events were successfully consumed,
    * or {@code BACKOFF} if no events were available in the channel to consume.
+   * @return 如果 events 成功消费, 则返回 {@code READY}; 如果 Channel 中没有可用的 events 消费, 则返回 {@code BACKOFF}.
    * @throws EventDeliveryException if the behavior guaranteed by the processor
    * couldn't be carried out.
+   * @throws EventDeliveryException 如果 Processor 保证的行为无法执行.
    */
   Status process() throws EventDeliveryException;
 
   /**
    * <p>Set all sinks to work with.</p>
+   * <p>设置所有 sinks.</p>
    *
    * <p>Sink specific parameters are passed to the processor via configure</p>
+   * <p>通过 configure 将 Sink 特定参数传递给 Processor</p>
    *
    * @param sinks A non-null, non-empty list of sinks to be chosen from by the
    * processor
+   * @param sinks 要由 processor 选择的 non-null, no-empty 的 sinks 列表
    */
   void setSinks(List<Sink> sinks);
 }
