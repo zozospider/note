@@ -35,6 +35,7 @@
           - [AbstractRpcSink.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/AbstractRpcSink.java)
           - [AbstractSink.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/AbstractSink.java)
           - [AbstractSinkProcessor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/AbstractSinkProcessor.java)
+          - [AbstractSinkSelector.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/AbstractSinkSelector.java)
           - [AvroSink.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/AvroSink.java)
           - [DefaultSinkProcessor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/DefaultSinkProcessor.java)
           - [FailoverSinkProcessor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/FailoverSinkProcessor.java)
