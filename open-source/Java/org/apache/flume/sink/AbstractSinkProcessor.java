@@ -27,6 +27,7 @@ import org.apache.flume.lifecycle.LifecycleState;
 
 /**
  * A convenience base class for sink processors.
+ * sink processors 的便利的基础类.
  */
 public abstract class AbstractSinkProcessor implements SinkProcessor {
 
