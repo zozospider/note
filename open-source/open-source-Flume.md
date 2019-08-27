@@ -31,6 +31,15 @@
         - lifecycle
           - [LifecycleAware.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/lifecycle/LifecycleAware.java)
           - [LifecycleState.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/lifecycle/LifecycleState.java)
+        - sink
+          - [AbstractRpcSink.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/AbstractRpcSink.java)
+          - [AbstractSink.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/AbstractSink.java)
+          - [AbstractSinkProcessor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/AbstractSinkProcessor.java)
+          - [AvroSink.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/AvroSink.java)
+          - [DefaultSinkProcessor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/DefaultSinkProcessor.java)
+          - [FailoverSinkProcessor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/FailoverSinkProcessor.java)
+          - [LoadBalancingSinkProcessor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/LoadBalancingSinkProcessor.java)
+          - [LoggerSink.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/LoggerSink.java)
         - source
           - taildir
             - [TaildirSource.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/source/taildir/TaildirSource.java)
@@ -43,11 +52,16 @@
           - [NetcatSource.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/source/NetcatSource.java)
           - [PollableSourceRunner.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/source/PollableSourceRunner.java)
           - [SslContextAwareAbstractSource.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/source/SslContextAwareAbstractSource.java)
+        - util
+          - [OrderSelector.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/util/OrderSelector.java)
+          - [RandomOrderSelector.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/util/RandomOrderSelector.java)
+          - [RoundRobinOrderSelector.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/util/RoundRobinOrderSelector.java)
         - [Channel.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/Channel.java)
         - [EventDrivenSource.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/EventDrivenSource.java)
         - [NamedComponent.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/NamedComponent.java)
         - [PollableSource.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/PollableSource.java)
         - [Sink.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/Sink.java)
+        - [SinkProcessor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/SinkProcessor.java)
         - [Source.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/Source.java)
         - [SourceRunner.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/SourceRunner.java)
         - [Transaction.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/Transaction.java)
