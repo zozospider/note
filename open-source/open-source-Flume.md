@@ -42,6 +42,7 @@
           - [LoadBalancingSinkProcessor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/LoadBalancingSinkProcessor.java)
           - [LoggerSink.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/LoggerSink.java)
           - [SinkGroup.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/SinkGroup.java)
+          - [SpecificOrderIterator.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/SpecificOrderIterator.java)
         - source
           - taildir
             - [TaildirSource.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/source/taildir/TaildirSource.java)
