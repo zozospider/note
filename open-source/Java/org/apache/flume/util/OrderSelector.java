@@ -47,11 +47,16 @@ public abstract class OrderSelector<T> {
   private static final int EXP_BACKOFF_COUNTER_LIMIT = 16;
   private static final long CONSIDER_SEQUENTIAL_RANGE = TimeUnit.HOURS.toMillis(1);
   private static final long MAX_TIMEOUT = 30000L;
+  // key: 要进行排序的对象 T
+  // value: 此对象对应的失败状态对象 FailureState
+  // 要进行排序的对象 T 与其状态对象的 Map
   private final Map<T, FailureState> stateMap =
           new LinkedHashMap<T, FailureState>();
   private long maxTimeout = MAX_TIMEOUT;
+  // 控制当前 OrderSelector 的 informFailure(t) 逻辑是否应该 backOff (不做任何处理)
   private final boolean shouldBackOff;
 
+  // 构造方法, 传入参数: 控制当前 OrderSelector 的 informFailure(t) 逻辑是否应该 backOff (不做任何处理)
   protected OrderSelector(boolean shouldBackOff) {
     this.shouldBackOff = shouldBackOff;
   }
@@ -64,7 +69,9 @@ public abstract class OrderSelector<T> {
   @SuppressWarnings("unchecked")
   public void setObjects(List<T> objects) {
     //Order is the same as the original order.
+    // 排序与排序订单相同。
 
+    // 遍历传入的对象 T 列表, 顺序将每个对象 T 和初始化的状态对象放入 stateMap (要进行排序的对象 T 与其状态对象的 Map)
     for (T sink : objects) {
       FailureState state = new FailureState();
       stateMap.put(sink, state);
@@ -79,6 +86,7 @@ public abstract class OrderSelector<T> {
    * @return - 要排序的对象列表.
    */
   public List<T> getObjects() {
+    // 返回所有 key (要进行排序的对象 T), 顺序与 setObjects 的传入参数一致.
     return new ArrayList<T>(stateMap.keySet());
   }
 
@@ -96,9 +104,27 @@ public abstract class OrderSelector<T> {
    */
   public void informFailure(T failedObject) {
     //If there is no backoff this method is a no-op.
+    // 如果没有 backoff, 这种方法就是无操作.
     if (!shouldBackOff) {
       return;
     }
+    /**
+     * 整体逻辑如下:
+     *
+     * a. 获取失败对象 T 对应的状态对象 FailureState, 计算上次失败时间和当前失败的时差.
+     *
+     * b1. 如果本次失败距离上次失败在累计失败期内 (即默认在 1 小时内), 那么会增加 sequentialFails (连续失败的次数).
+     * c1. 计算出的 restoreTime (恢复时间, 小于 now 表示可用) 会持续增加直到增量 Math.min(x, y) 达到最大值.
+     * restoreTime = now + Math.min(30000L, 1000 * (1 << 2)) = now + Math.min(30000L, 4000) = now + 4000
+     * restoreTime = now + Math.min(30000L, 1000 * (1 << 3)) = now + Math.min(30000L, 8000) = now + 8000
+     * restoreTime = now + Math.min(30000L, 1000 * (1 << 4)) = now + Math.min(30000L, 16000) = now + 16000
+     * restoreTime = now + Math.min(30000L, 1000 * (1 << 5)) = now + Math.min(30000L, 32000) = now + 30000
+     * restoreTime = now + Math.min(30000L, 1000 * (1 << 6)) = now + Math.min(30000L, 64000) = now + 30000
+     *
+     * b2. 如果本次失败距离上次失败不在累计失败期内 (即超过默认 1 小时), 那么 sequentialFails (连续失败的次数) 重置为 1.
+     * c2. 计算出的 restoreTime (恢复时间, 小于 now 表示可用) 会重置增量 Math.min(x, y) 为固定值.
+     * restoreTime = now + Math.min(30000L, , 1000 * (1 << 1)) = now + Math.min(30000L, 2000) = now + 2000
+     */
     FailureState state = stateMap.get(failedObject);
     long now = System.currentTimeMillis();
     long delta = now - state.lastFail;
@@ -165,8 +191,11 @@ public abstract class OrderSelector<T> {
   }
 
   private static class FailureState {
+    // 上次失败时间
     long lastFail = 0;
+    // 恢复时间, 小于 now 表示可用
     long restoreTime = 0;
+    // 连续失败的次数
     int sequentialFails = 0;
   }
 }
