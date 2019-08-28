@@ -103,6 +103,7 @@ public class LoadBalancingSinkProcessor extends AbstractSinkProcessor {
   private static final Logger LOGGER = LoggerFactory
       .getLogger(LoadBalancingSinkProcessor.class);
 
+  // 当前 SinkProcessor 使用的 SinkSelector, 如 RoundRobinSinkSelector / RandomOrderSinkSelector
   private SinkSelector selector;
 
   @Override
