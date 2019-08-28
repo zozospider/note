@@ -31,20 +31,34 @@ import java.util.List;
  */
 public class SpecificOrderIterator<T> implements Iterator<T> {
 
+  // 索引顺序 array
   private final int[] order;
+  // 所有元素列表
   private final List<T> items;
+  // 当前索引
   private int index = 0;
 
+  /**
+   * 构造方法
+   */
   public SpecificOrderIterator(int[] orderArray, List<T> itemList) {
     order = orderArray;
     items = itemList;
   }
 
+  /**
+   * 重写 Iterator 接口的 hasNext() 方法: 判断迭代器中是否还有下一个元素.
+   * 如果 index (当前索引) >= order.length (索引顺序 array 的长度), 则表示已经遍历完成迭代器的所有元素.
+   */
   @Override
   public boolean hasNext() {
     return index < order.length;
   }
 
+  /**
+   * 重写 Iterator 接口的 next() 方法: 从迭代器中取出一个元素 T.
+   * 从 items (所有元素列表) 中, 取出由 order (索引顺序 array) 维护的一个递增索引.
+   */
   @Override
   public T next() {
     return items.get(order[index++]);

@@ -34,13 +34,20 @@ public class RandomOrderSelector<T> extends OrderSelector<T> {
     super(shouldBackOff);
   }
 
+  /**
+   * 实现 OrderSelector 抽象类的 createIterator() 方法.
+   * SinkProcessor 的 process() 方法会调用此方法, 获取本次 process 处理的 SpecificOrderIterator 迭代器 (封装了确认顺序的 active objects 列表)
+   */
   @Override
   public synchronized Iterator<T> createIterator() {
+    // 获取目前 active objects (对象 T) 对应的索引列表
     List<Integer> indexList = getIndexList();
 
     int size = indexList.size();
+    // 定义索引排序列表
     int[] indexOrder = new int[size];
 
+    // 遍历索引列表, 并随机产生索引, 将排序列表插入, 直到索引列表所有索引被移除
     while (indexList.size() != 1) {
       int pick = random.nextInt(indexList.size());
       indexOrder[indexList.size() - 1] = indexList.remove(pick);
@@ -48,6 +55,7 @@ public class RandomOrderSelector<T> extends OrderSelector<T> {
 
     indexOrder[0] = indexList.get(0);
 
+    // 将本次 process() 确定的 indexOrder (定义索引排序列表) 和 getObjects() (要排序的 objects 列表) 封装成 SpecificOrderIterator 迭代器, 并返回.
     return new SpecificOrderIterator<T>(indexOrder, getObjects());
   }
 }

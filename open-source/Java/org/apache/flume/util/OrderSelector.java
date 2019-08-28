@@ -161,13 +161,13 @@ public abstract class OrderSelector<T> {
   /**
    *
    * @return - List of indices currently active objects
-   * @return - 当前活动对象的索引列表
+   * @return - 目前 active objects (对象 T) 对应的索引列表
    */
   protected List<Integer> getIndexList() {
     // 获取当前时间
     long now = System.currentTimeMillis();
 
-    // 记录 active objects (对象 T) 的索引列表
+    // 记录 active objects (对象 T) 对应的索引列表
     List<Integer> indexList = new ArrayList<Integer>();
 
     /**
