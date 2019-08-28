@@ -114,7 +114,7 @@ public abstract class OrderSelector<T> {
      * a. 获取失败对象 T 对应的状态对象 FailureState, 计算上次失败时间和当前失败的时差.
      *
      * b1. 如果本次失败距离上次失败在累计失败期内 (即默认在 1 小时内), 那么会增加 sequentialFails (连续失败的次数).
-     * c1. 计算出的 restoreTime (恢复时间, 小于 now 表示可用) 会持续增加直到增量 Math.min(x, y) 达到最大值.
+     * c1. 计算出的 restoreTime (恢复时间, 小于 now 表示可用) 会持续增加直到距离 now 的增量达到最大值.
      * restoreTime = now + Math.min(30000L, 1000 * (1 << 2)) = now + Math.min(30000L, 4000) = now + 4000
      * restoreTime = now + Math.min(30000L, 1000 * (1 << 3)) = now + Math.min(30000L, 8000) = now + 8000
      * restoreTime = now + Math.min(30000L, 1000 * (1 << 4)) = now + Math.min(30000L, 16000) = now + 16000
@@ -122,8 +122,8 @@ public abstract class OrderSelector<T> {
      * restoreTime = now + Math.min(30000L, 1000 * (1 << 6)) = now + Math.min(30000L, 64000) = now + 30000
      *
      * b2. 如果本次失败距离上次失败不在累计失败期内 (即超过默认 1 小时), 那么 sequentialFails (连续失败的次数) 重置为 1.
-     * c2. 计算出的 restoreTime (恢复时间, 小于 now 表示可用) 会重置增量 Math.min(x, y) 为固定值.
-     * restoreTime = now + Math.min(30000L, , 1000 * (1 << 1)) = now + Math.min(30000L, 2000) = now + 2000
+     * c2. 计算出的 restoreTime (恢复时间, 小于 now 表示可用) 会重置距离 now 的增量为固定值.
+     * restoreTime = now + Math.min(30000L, 1000 * (1 << 1)) = now + Math.min(30000L, 2000) = now + 2000
      */
     FailureState state = stateMap.get(failedObject);
     long now = System.currentTimeMillis();
@@ -164,10 +164,16 @@ public abstract class OrderSelector<T> {
    * @return - 当前活动对象的索引列表
    */
   protected List<Integer> getIndexList() {
+    // 获取当前时间
     long now = System.currentTimeMillis();
 
+    // 记录 active objects (对象 T) 的索引列表
     List<Integer> indexList = new ArrayList<Integer>();
 
+    /**
+     * 遍历 stateMap (要进行排序的对象 T 与其状态对象的 Map)
+     * 如果没有 backoff, 或当前对象 T 对应的 restoreTime (恢复时间, 小于 now 表示可用) < now (即表示当前对象 T 可用), 就将当前索引 i 加入到 active objects (对象 T) 的索引列表并返回
+     */
     int i = 0;
     for (T obj : stateMap.keySet()) {
       if (!isShouldBackOff() || stateMap.get(obj).restoreTime < now) {
