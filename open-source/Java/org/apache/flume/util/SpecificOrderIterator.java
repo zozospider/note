@@ -47,8 +47,8 @@ public class SpecificOrderIterator<T> implements Iterator<T> {
   }
 
   /**
-   * 重写 Iterator 接口的 hasNext() 方法: 判断迭代器中是否还有下一个元素.
-   * 如果 index (当前索引) >= order.length (索引顺序 array 的长度), 则表示已经遍历完成迭代器的所有元素.
+   * 重写 Iterator 接口的 hasNext() 方法: 判断该迭代器中是否还有下一个元素.
+   * 如果 index (当前索引) >= order.length (索引顺序 array 的长度), 则表示已经遍历完该迭代器的所有元素.
    */
   @Override
   public boolean hasNext() {

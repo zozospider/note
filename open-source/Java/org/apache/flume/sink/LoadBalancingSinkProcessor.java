@@ -117,6 +117,7 @@ public class LoadBalancingSinkProcessor extends AbstractSinkProcessor {
 
     Boolean shouldBackOff = context.getBoolean(CONFIG_BACKOFF, false);
 
+    // 根据配置的 selector 名称来决定创建 RoundRobinSinkSelector / RandomOrderSinkSelector / 自定义 SinkSelector
     selector = null;
 
     if (selectorTypeName.equalsIgnoreCase(SELECTOR_NAME_ROUND_ROBIN)) {
@@ -136,7 +137,9 @@ public class LoadBalancingSinkProcessor extends AbstractSinkProcessor {
       }
     }
 
+    // 设置当前 SinkSelector 的 sinks
     selector.setSinks(getSinks());
+    // 调用 SinkSelector 实现的 Configurable 的 configure(c) 方法
     selector.configure(
         new Context(context.getSubProperties(CONFIG_SELECTOR_PREFIX)));
 
@@ -173,27 +176,50 @@ public class LoadBalancingSinkProcessor extends AbstractSinkProcessor {
     selector.stop();
   }
 
+  /**
+   * 实现 SinkProcessor 接口的 process() 方法.
+   * 该方法由 SinkRunner 启动的 PollingRunner 线程不断循环调用.
+   */
   @Override
   public Status process() throws EventDeliveryException {
     Status status = null;
 
+    /**
+     * 调用 SinkSelector (RoundRobinSinkSelector / RandomOrderSinkSelector) 的 createSinkIterator() 方法.
+     * RoundRobinSinkSelector 的 createSinkIterator() 方法调用对应的 RoundRobinOrderSelector 工具类的 createIterator() 方法.
+     * RandomOrderSinkSelector 的 createSinkIterator() 方法调用对应的 RandomOrderSelector 工具类的 createIterator() 方法.
+     *
+     * 获取当前 Selector 对应的排序算法得出的 SpecificOrderIterator 迭代器 (封装了确认顺序的 active sinks 列表)
+     */
     Iterator<Sink> sinkIterator = selector.createSinkIterator();
+    /**
+     * 不断循环 SpecificOrderIterator 迭代器, 直到该迭代器的 hasNext() 方法为返回 false (则表示已经遍历完该迭代器的所有元素)
+     */
     while (sinkIterator.hasNext()) {
+      // 调用该迭代器的 next() 方法, 从迭代器中取出一个 Sink
       Sink sink = sinkIterator.next();
       try {
+        // 调用具体 Sink 实现的 process() 方法
         status = sink.process();
+        // 在没有异常的情况下, 继续下一轮循环
         break;
       } catch (Exception ex) {
+        /**
+         * 异常情况下, 调用当前 SinkSelector 的 informSinkFailed(s) 方法.
+         * 即调用对应的 OrderSelector 的 informFailure(s) 方法, 以便可以将当前 failedObject 的 backed off (退位).
+         */
         selector.informSinkFailed(sink);
         LOGGER.warn("Sink failed to consume event. "
             + "Attempting next sink if available.", ex);
       }
     }
 
+    // status 为 null, 说明所有配置的 sinks 都处理失败 (调用 sink.process() 方法异常).
     if (status == null) {
       throw new EventDeliveryException("All configured sinks have failed");
     }
 
+    // 返回最后一次循环的 sink.process() 的返回值
     return status;
   }
 

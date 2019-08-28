@@ -24,6 +24,8 @@ import java.util.List;
  * An implementation of OrderSelector which returns objects in round robin order.
  * Also supports backoff.
  * OrderSelector 的实现, 它以循环顺序返回对象. 还支持 backoff.
+ *
+ * ps: RoundRobin 排序方式的选择器工具类
  */
 
 public class RoundRobinOrderSelector<T> extends OrderSelector<T> {

@@ -39,6 +39,8 @@ import java.util.concurrent.TimeUnit;
  * minimally override <tt>informFailure</tt> and <tt>getIndexList</tt> methods.
  * 当实现不同的 backoff 算法时, 子类应该至少重写 <tt>informFailure</tt> 和 <tt>getIndexList</tt> 方法.
  *
+ * ps: 排序选择器工具类
+ *
  * @param <T> - The class on which ordering is to be done
  * @param <T> - 要进行排序的类 (要在哪个类上完成排序)
  */

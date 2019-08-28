@@ -25,6 +25,8 @@ import java.util.Random;
  * An implementation of OrderSelector which returns objects in random order.
  * Also supports backoff.
  * OrderSelector 的实现, 它以随机顺序返回对象. 还支持 backoff.
+ *
+ * ps: Random 排序方式的选择器工具类
  */
 public class RandomOrderSelector<T> extends OrderSelector<T> {
 
