@@ -367,7 +367,10 @@ sort file | uniq -d | wc -l
 
 - 查找重复行, 打印到控制台:
 ```bash
+# 打印每一条重复行
 sort file | uniq -d
+# 打印每一条重复行和重复的次数
+sort file | uniq -dc
 ```
 
 - 查找非重复行, 打印到控制台:
