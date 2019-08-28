@@ -31,12 +31,17 @@ import org.apache.flume.lifecycle.LifecycleState;
  */
 public abstract class AbstractSinkProcessor implements SinkProcessor {
 
+  // 生命周期状态 enum
   private LifecycleState state;
 
   // List of sinks as specified
   // 指定的 sinks 列表
   private List<Sink> sinkList;
 
+  /**
+   * 实现 LifecycleAware 接口的 start() 方法. 状态为: START.
+   * 遍历 sinkList, 调用所有 sink 的 start() 方法.
+   */
   @Override
   public void start() {
     for (Sink s : sinkList) {
@@ -46,6 +51,10 @@ public abstract class AbstractSinkProcessor implements SinkProcessor {
     state = LifecycleState.START;
   }
 
+  /**
+   * 实现 LifecycleAware 接口的 stop() 方法. 状态为: STOP.
+   * 遍历 sinkList, 调用所有 sink 的 stop() 方法.
+   */
   @Override
   public void stop() {
     for (Sink s : sinkList) {
@@ -54,11 +63,19 @@ public abstract class AbstractSinkProcessor implements SinkProcessor {
     state = LifecycleState.STOP;
   }
 
+  /**
+   * 实现 LifecycleAware 接口的 getLifecycleState() 方法.
+   * 返回 SinkProcessor 的当前状态.
+   */
   @Override
   public LifecycleState getLifecycleState() {
     return state;
   }
 
+  /**
+   * 实现 SinkProcessor 接口的 setSinks(ss) 方法.
+   * 将传入的 sinks 参数赋值到当前 SinkProcessor 的成员变量 sinkList.
+   */
   @Override
   public void setSinks(List<Sink> sinks) {
     List<Sink> list = new ArrayList<Sink>();
@@ -66,6 +83,9 @@ public abstract class AbstractSinkProcessor implements SinkProcessor {
     sinkList = Collections.unmodifiableList(list);
   }
 
+  /**
+   * 获取 sinkList
+   */
   protected List<Sink> getSinks() {
     return sinkList;
   }

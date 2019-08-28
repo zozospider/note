@@ -142,17 +142,33 @@ public class LoadBalancingSinkProcessor extends AbstractSinkProcessor {
     LOGGER.debug("Sink selector: " + selector + " initialized");
   }
 
+  /**
+   * 实现 LifecycleAware 接口的 start() 方法.
+   * 首先执行父类 AbstractSinkProcessor 的 start() 方法逻辑, 然后执行当前 SinkSelector 的 start() 方法逻辑.
+   */
   @Override
   public void start() {
+    // 调用父类 AbstractSinkProcessor 的 start() 方法.
+    // 遍历 sinkList, 调用所有 sink 的 start() 方法, 并设置当前 SinkProcessor 状态为: START.
     super.start();
 
+    // 调用当前 SinkSelector 实现的父类 AbstractSinkSelector 的 start() 方法.
+    // 设置当前 SinkSelector 状态为: START.
     selector.start();
   }
 
+  /**
+   * 实现 LifecycleAware 接口的 stop() 方法.
+   * 首先执行父类 AbstractSinkProcessor 的 stop() 方法逻辑, 然后执行当前 SinkSelector 的 stop() 方法逻辑.
+   */
   @Override
   public void stop() {
+    // 调用父类 AbstractSinkProcessor 的 stop() 方法.
+    // 遍历 sinkList, 调用所有 sink 的 stop() 方法, 并设置当前 SinkProcessor 状态为: START.
     super.stop();
 
+    // 调用当前 SinkSelector 实现的父类 AbstractSinkSelector 的 stop() 方法.
+    // 设置当前 SinkSelector 状态为: STOP.
     selector.stop();
   }
 
@@ -254,7 +270,6 @@ public class LoadBalancingSinkProcessor extends AbstractSinkProcessor {
      */
     @Override
     public void configure(Context context) {
-      // 设置
       super.configure(context);
       if (maxTimeOut != 0) {
         selector.setMaxTimeOut(maxTimeOut);
