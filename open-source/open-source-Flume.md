@@ -42,7 +42,6 @@
           - [LoadBalancingSinkProcessor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/LoadBalancingSinkProcessor.java)
           - [LoggerSink.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/LoggerSink.java)
           - [SinkGroup.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/SinkGroup.java)
-          - [SpecificOrderIterator.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/SpecificOrderIterator.java)
         - source
           - taildir
             - [TaildirSource.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/source/taildir/TaildirSource.java)
@@ -59,6 +58,7 @@
           - [OrderSelector.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/util/OrderSelector.java)
           - [RandomOrderSelector.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/util/RandomOrderSelector.java)
           - [RoundRobinOrderSelector.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/util/RoundRobinOrderSelector.java)
+          - [SpecificOrderIterator.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/util/SpecificOrderIterator.java)
         - [Channel.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/Channel.java)
         - [EventDrivenSource.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/EventDrivenSource.java)
         - [NamedComponent.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/NamedComponent.java)
