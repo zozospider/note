@@ -217,10 +217,13 @@ public class LoadBalancingSinkProcessor extends AbstractSinkProcessor {
    */
   public interface SinkSelector extends Configurable, LifecycleAware {
 
+    // 设置当前 Sink Selector 的 sinks 列表
     void setSinks(List<Sink> sinks);
 
+    // 获取 Sink 迭代器, 不同 Selector 会根据自身的选择策略返回当前所选择的 sinks 列表, sinks 列表 (包括顺序) 由 SpecificOrderIterator 对象封装
     Iterator<Sink> createSinkIterator();
 
+    // 对异常的 failedSink 进行处理, 以便可以将其 backed off (退位).
     void informSinkFailed(Sink failedSink);
   }
 
@@ -235,30 +238,51 @@ public class LoadBalancingSinkProcessor extends AbstractSinkProcessor {
    * <p>遗憾的是, 两个实现都需要覆盖 AbstractSinkSelector 类中的基本实现, 因为如果将这些内容移动到该类, 任何自定义 sink selectors 都将中断.</p>
    */
   private static class RoundRobinSinkSelector extends AbstractSinkSelector {
+    // 用于控制具体排序逻辑的 Selector 工具
     private OrderSelector<Sink> selector;
 
+    /**
+     * 构造方法, OrderSelector 初始化为 RoundRobinOrderSelector 对象实现
+     */
     RoundRobinSinkSelector(boolean backoff) {
       selector = new RoundRobinOrderSelector<Sink>(backoff);
     }
 
+    /**
+     * 重写 AbstractSinkSelector 的 configure(c) 方法
+     * 主要用于设置当前成员变量 OrderSelector 对应的 maxTimeOut 参数
+     */
     @Override
     public void configure(Context context) {
+      // 设置
       super.configure(context);
       if (maxTimeOut != 0) {
         selector.setMaxTimeOut(maxTimeOut);
       }
     }
 
+    /**
+     * 重写 OrderSelector 的 createSinkIterator() 方法
+     * 具体执行 RoundRobinOrderSelector 的 createIterator() 方法逻辑
+     */
     @Override
     public Iterator<Sink> createSinkIterator() {
       return selector.createIterator();
     }
 
+    /**
+     * 重写 SinkSelector 的 setSinks(ss) 方法
+     * 具体执行 OrderSelector 的 setObjects(ss) 方法逻辑
+     */
     @Override
     public void setSinks(List<Sink> sinks) {
       selector.setObjects(sinks);
     }
 
+    /**
+     * 重写 OrderSelector 的 informSinkFailed(f) 方法
+     * 具体执行 RoundRobinOrderSelector 的 informSinkFailed(f) 方法逻辑
+     */
     @Override
     public void informSinkFailed(Sink failedSink) {
       selector.informFailure(failedSink);
@@ -273,12 +297,20 @@ public class LoadBalancingSinkProcessor extends AbstractSinkProcessor {
    */
   private static class RandomOrderSinkSelector extends AbstractSinkSelector {
 
+    // 用于控制具体排序逻辑的 Selector 工具
     private OrderSelector<Sink> selector;
 
+    /**
+     * 构造方法, OrderSelector 初始化为 RandomOrderSelector 对象实现
+     */
     RandomOrderSinkSelector(boolean backoff) {
       selector = new RandomOrderSelector<Sink>(backoff);
     }
 
+    /**
+     * 重写 AbstractSinkSelector 的 configure(c) 方法
+     * 主要用于设置当前成员变量 OrderSelector 对应的 maxTimeOut 参数
+     */
     @Override
     public void configure(Context context) {
       super.configure(context);
@@ -287,16 +319,28 @@ public class LoadBalancingSinkProcessor extends AbstractSinkProcessor {
       }
     }
 
+    /**
+     * 重写 SinkSelector 的 setSinks(ss) 方法
+     * 具体执行 OrderSelector 的 setObjects(ss) 方法逻辑
+     */
     @Override
     public void setSinks(List<Sink> sinks) {
       selector.setObjects(sinks);
     }
 
+    /**
+     * 重写 OrderSelector 的 createSinkIterator() 方法
+     * 具体执行 RandomOrderSelector 的 createIterator() 方法逻辑
+     */
     @Override
     public Iterator<Sink> createSinkIterator() {
       return selector.createIterator();
     }
 
+    /**
+     * 重写 OrderSelector 的 informSinkFailed(f) 方法
+     * 具体执行 RandomOrderSelector 的 informSinkFailed(f) 方法逻辑
+     */
     @Override
     public void informSinkFailed(Sink failedSink) {
       selector.informFailure(failedSink);

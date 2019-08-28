@@ -28,14 +28,20 @@ import java.util.List;
 
 public class RoundRobinOrderSelector<T> extends OrderSelector<T> {
 
+  // 记录下次从 activeIndices 中获取的起始位置
   private int nextHead = 0;
 
   public RoundRobinOrderSelector(boolean shouldBackOff) {
     super(shouldBackOff);
   }
 
+  /**
+   * 实现 OrderSelector 抽象类的 createIterator() 方法.
+   * SinkProcessor 的 process() 方法会调用此方法, 获取本次 process 处理的 SpecificOrderIterator 迭代器 (封装了确认顺序的 active objects 列表)
+   */
   @Override
   public Iterator<T> createIterator() {
+    // 获取目前 active objects (对象 T) 对应的索引列表
     List<Integer> activeIndices = getIndexList();
     int size = activeIndices.size();
     // possible that the size has shrunk so gotta adjust nextHead for that
@@ -43,6 +49,7 @@ public class RoundRobinOrderSelector<T> extends OrderSelector<T> {
     if (nextHead >= size) {
       nextHead = 0;
     }
+    // begin: 从 activeIndices 中获取的起始位置递增
     int begin = nextHead++;
     if (nextHead == activeIndices.size()) {
       nextHead = 0;
@@ -50,10 +57,12 @@ public class RoundRobinOrderSelector<T> extends OrderSelector<T> {
 
     int[] indexOrder = new int[size];
 
+    // 遍历 activeIndices, 从 begin 开始, 将索引列表中的元素顺序放入 indexOrder 中
     for (int i = 0; i < size; i++) {
       indexOrder[i] = activeIndices.get((begin + i) % size);
     }
 
+    // 将本次 process() 确定的 indexOrder (定义索引排序列表) 和 getObjects() (要排序的 objects 列表) 封装成 SpecificOrderIterator 迭代器, 并返回.
     return new SpecificOrderIterator<T>(indexOrder, getObjects());
   }
 }
