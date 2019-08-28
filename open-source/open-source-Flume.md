@@ -100,7 +100,7 @@
     * Channel `I`, MemoryChannel `C`, FileChannel `C`
     * Transaction `I`, MemoryTransaction `C`, FileBackedTransaction `C`
     * Interceptor `I`, InterceptorChain `C`, StaticInterceptor `C`, RegexFilteringInterceptor `C`, RegexExtractorInterceptor `C`, TimestampInterceptor `C`
-    * ChannelSelector `I`, MultiplexingChannelSelector `C`, ReplicatingChannelSelector `C`
+    * ChannelSelector `I`, ReplicatingChannelSelector `C`, MultiplexingChannelSelector `C`
     * ChannelProcessor `C`
   * __Source__, __SourceRunner__
     * Source `I`, EventDrivenSource `I`, PollableSource `I`, NetcatSource `C`, AvroSource `C`, TaildirSource `C`
@@ -108,7 +108,7 @@
   * __Sink__, __SinkSelector__, __SinkProcessor__, __SinkRunner__
     * Sink `I`, LoggerSink `C`, AvroSink `C`, RollingFileSInk `C`
     * SinkSelector `I`, RoundRobinSinkSelector `C`, RandomOrderSinkSelector `C`
-    * SinkProcessor `I`, DefaultSinkProcessor `C`, LoadBalancingSinkProcessor `C`, FailoverSinkProcessor `C`
+    * SinkProcessor `I`, DefaultSinkProcessor `C`, FailoverSinkProcessor `C`, LoadBalancingSinkProcessor `C`
     * SinkRunner `C`
   * __Counter__
     * MonitoredCounterGroup `C`, SourceCounter `C`, ChannelCounter `C`, SinkCounter `C`
