@@ -23,6 +23,7 @@ import java.util.List;
 /**
  * An implementation of OrderSelector which returns objects in round robin order.
  * Also supports backoff.
+ * OrderSelector 的实现, 它以循环顺序返回对象. 还支持 backoff.
  */
 
 public class RoundRobinOrderSelector<T> extends OrderSelector<T> {
@@ -38,6 +39,7 @@ public class RoundRobinOrderSelector<T> extends OrderSelector<T> {
     List<Integer> activeIndices = getIndexList();
     int size = activeIndices.size();
     // possible that the size has shrunk so gotta adjust nextHead for that
+    // 可能是 size 变小所以必须调整 nextHead
     if (nextHead >= size) {
       nextHead = 0;
     }

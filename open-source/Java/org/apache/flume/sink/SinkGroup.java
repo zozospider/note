@@ -31,6 +31,7 @@ import org.apache.flume.conf.sink.SinkGroupConfiguration;
 
 /**
  * <p>Configuration concept for handling multiple sinks working together.</p>
+ * <p>处理多个 sinks 一起工作的 Configuration 概念.</p>
  * @see org.apache.flume.conf.properties.PropertiesFileConfigurationProvider
  */
 public class SinkGroup implements Configurable, ConfigurableComponent {

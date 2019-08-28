@@ -26,6 +26,8 @@ import java.util.List;
  * the specified order array. The entries of the order array indicate the
  * index within the ordered list of items that needs to be picked over the
  * course of iteration.
+ * 一个实用类, 它通过指定的顺序 array 迭代给定的有序 items list.
+ * order array 的条目表示需要在迭代过程中选择的有序 items list 中的索引.
  */
 public class SpecificOrderIterator<T> implements Iterator<T> {
 

@@ -31,6 +31,7 @@ public abstract class AbstractSinkSelector implements SinkSelector {
   private LifecycleState state;
 
   // List of sinks as specified
+  // 指定的 sinks 列表
   private List<Sink> sinkList;
 
   protected long maxTimeOut = 0;

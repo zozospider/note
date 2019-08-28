@@ -162,6 +162,7 @@ public class FailoverSinkProcessor extends AbstractSinkProcessor {
   @Override
   public Status process() throws EventDeliveryException {
     // Retry any failed sinks that have gone through their "cooldown" period
+    // 重试已经过 "cooldown" 期的任何失败的 sinks
     Long now = System.currentTimeMillis();
     while (!failedSinks.isEmpty() && failedSinks.peek().getRefresh() < now) {
       FailedSink cur = failedSinks.poll();
@@ -175,6 +176,7 @@ public class FailoverSinkProcessor extends AbstractSinkProcessor {
                   cur.getSink().getName());
         } else {
           // if it's a backoff it needn't be penalized.
+          // 如果它是 backoff, 它不需要受到惩罚.  ???
           failedSinks.add(cur);
         }
         return s;
@@ -215,6 +217,7 @@ public class FailoverSinkProcessor extends AbstractSinkProcessor {
   @Override
   public void setSinks(List<Sink> sinks) {
     // needed to implement the start/stop functionality
+    // 需要实现 start / stop 功能
     super.setSinks(sinks);
 
     this.sinks = new HashMap<String, Sink>();
