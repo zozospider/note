@@ -216,13 +216,13 @@ public class FailoverSinkProcessor extends AbstractSinkProcessor {
     // Retry any failed sinks that have gone through their "cooldown" period
     // 重试已经过 "cooldown" 期的任何失败的 sinks
     /**
-     * 在调用 activeSink 逻辑之前, 首先尝试 failedSinks
-     * a. 如果 failedSinks 不为空 (说明之前有 sinks 处理失败, 并加入到 failedSinks 中), 则循环遍历 failedSinks
-     * b. 每次循环按照优先级查看 (不取出) 其中的 FailedSink, 如果当前 FailedSink 的 refresh (恢复时间 (小于 now 表示可用)) < now, 即表示已经过了 back off 期, 可以重新尝试 process()
-     * c. 取出并重新尝试 process()
+     * 在调用 activeSink 逻辑之前, 首先尝试 failedSinks.
+     * a. 如果 failedSinks 不为空 (说明之前有 sinks 处理失败, 并加入到 failedSinks 中), 则循环遍历 failedSinks.
+     * b. 每次循环按照优先级查看 (不取出) 其中的 FailedSink, 如果当前 FailedSink 的 refresh (恢复时间 (小于 now 表示可用)) < now, 即表示已经过了 back off 期, 可以重新尝试 process().
+     * c. 从 failedSinks 中取出当前 FailedSink, 并重新尝试 process().
      * d1. 如果当前 FailedSink 的 process() 方法返回 READY (说明当前 FailedSink 已经恢复, 可以处理 events 了), 那么将其加入到 liveSinks 中. 并从 liveSinks 中刷新最大优先级的 activeSink.
      * d2. 如果当前 FailedSink 的 process() 方法返回 BACKOFF, 则重新放回到 failedSinks 中.
-     * d3. 如果当前 FailedSink 的 process() 方法发生异常, 则调用 incFails() 方法执行失败通知逻辑.
+     * d3. 如果当前 FailedSink 的 process() 方法发生异常, 则调用 incFails() 方法执行失败通知逻辑, 并重新放回到 failedSinks 中.
      */
     Long now = System.currentTimeMillis();
     // a, b
