@@ -303,6 +303,48 @@ curator --config /home/user/app/curator/curator.yml /home/user/app/curator/actio
 
 ---
 
+# 进程
+
+## 查看进程
+
+- 查看进程详细信息
+```bash
+ps -ef | grep flume
+ps aux | grep flume
+```
+
+- 查看进程启动时间和运行时间
+```bash
+ps -p PID -o lstart,etime
+```
+
+## 进程自动拉起
+
+- 1. 新建 `/home/zozo/app/flume/check` 文件夹
+- 2. 新建 `/home/zozo/app/flume/check_flume.sh` 文件, 内容如下:
+```bash
+#!/bin/sh
+cd $(dirname $0)
+
+# 查找进程 | 查找 flume 关键词 | 查找 41414 关键词 | 排除 grep 关键词 | 排除 check_flume 关键词 | 统计结果条数
+n=$(ps aux | grep "flume" | grep "41414" | grep -v "grep" | grep -v "check_flume" | wc -l)
+# 如果结果等于 0, 表示该进程不存在, 然后启动该进程
+if [ "$n" -eq "0" ]; then
+  t=$(date)
+  echo "$t: flume 41414 restart" >> check/check.log
+  cd apache-flume-1.9.0-bin
+  nohup bin/flume-ng agent -n a1 -c conf -f conf/flume-conf.properties -Dflume.monitoring.type=http -Dflume.monitoring.port=41414 &
+fi
+```
+
+- 3. 新建 crontab 定时任务
+```bash
+# flume check
+*/1 * * * * /bin/bash /home/zozo/app/flume/check_flume.sh >> /home/zozo/app/flume/check/$(date +"\%Y-\%m-\%d").log 2>&1
+```
+
+---
+
 # 删除
 
 ## 清空正在写的文件内容
