@@ -70,19 +70,36 @@ public class FailoverSinkProcessor extends AbstractSinkProcessor {
   private static final int FAILURE_PENALTY = 1000;
   private static final int DEFAULT_MAX_PENALTY = 30000;
 
+  /**
+   * 在 activeSink 执行 process() 方法异常时, 调用 moveActiveToDeadAndGetNext() 方法将其转换为此对象. 并将此对象加入到 failedSinks (PriorityQueue) 中.
+   * 此 FailedSink 实现了 Comparable<T> 接口, 其重写的 compareTo(T) 方法用于 failedSinks (PriorityQueue) 判断优先级.
+   */
   private class FailedSink implements Comparable<FailedSink> {
+    // 恢复时间 (小于 now 表示可用), 同时用于 failedSinks (PriorityQueue) 判断优先级 (小的优先级高)
     private Long refresh;
+    // 用户配置的优先级, 作为 liveSinks (SortedMap) 的 key.
     private Integer priority;
+    // 当前 Sink 对象
     private Sink sink;
+    // 连续失败的次数
     private Integer sequentialFailures;
 
+    /**
+     * 构造方法, 传入的 seqFailures = 1
+     */
     public FailedSink(Integer priority, Sink sink, int seqFailures) {
       this.sink = sink;
       this.priority = priority;
+      // sequentialFailures = 1
       this.sequentialFailures = seqFailures;
+      // 调整 refresh = now + 2000
       adjustRefresh();
     }
 
+    /**
+     * 重写 Comparable<T> 接口的 compareTo(T) 方法.
+     * failedSinks (PriorityQueue) 通过此方法判断优先级.
+     */
     @Override
     public int compareTo(FailedSink arg0) {
       return refresh.compareTo(arg0.refresh);
@@ -100,13 +117,27 @@ public class FailoverSinkProcessor extends AbstractSinkProcessor {
       return priority;
     }
 
+    /**
+     * 失败通知逻辑
+     */
     public void incFails() {
+      // 增加 sequentialFailures (连续失败的次数)
       sequentialFailures++;
+      // 调整 refresh
       adjustRefresh();
       logger.debug("Sink {} failed again, new refresh is at {}, current time {}",
                    new Object[] { sink.getName(), refresh, System.currentTimeMillis() });
     }
 
+    /**
+     * 计算出的 refresh (恢复时间, 小于 now 表示可用) 会持续增加直到距离 now 的增量达到最大值.
+     * refresh = now + Math.min(30000, (1 << 1) * 1000) = now + Math.min(30000, 2000) = now + 2000
+     * refresh = now + Math.min(30000, (1 << 2) * 1000) = now + Math.min(30000, 4000) = now + 4000
+     * refresh = now + Math.min(30000, (1 << 3) * 1000) = now + Math.min(30000, 8000) = now + 8000
+     * refresh = now + Math.min(30000, (1 << 4) * 1000) = now + Math.min(30000, 16000) = now + 16000
+     * refresh = now + Math.min(30000, (1 << 5) * 1000) = now + Math.min(30000, 32000) = now + 30000
+     * refresh = now + Math.min(30000, (1 << 6) * 1000) = now + Math.min(30000, 64000) = now + 30000
+     */
     private void adjustRefresh() {
       refresh = System.currentTimeMillis()
           + Math.min(maxPenalty, (1 << sequentialFailures) * FAILURE_PENALTY);
@@ -117,6 +148,7 @@ public class FailoverSinkProcessor extends AbstractSinkProcessor {
 
   private static final String PRIORITY_PREFIX = "priority.";
   private static final String MAX_PENALTY_PREFIX = "maxpenalty";
+  // 当前 SinkProcessor 处理的所有 sinks, 通过 setSinks(ss) 方法设置.
   private Map<String, Sink> sinks;
   // 当前活跃的 Sink, 取 liveSinks 中优先级最高的 Sink (调用 liveSinks.get(liveSinks.lastKey()) 获得).
   private Sink activeSink;
@@ -149,22 +181,33 @@ public class FailoverSinkProcessor extends AbstractSinkProcessor {
         maxPenalty = DEFAULT_MAX_PENALTY;
       }
     }
+    /**
+     * 将 sinks 的所有元素按照配置的 priority 加入到 liveSinks 中.
+     * 然后将 liveSinks 中优先级最高的 Sink 赋值给 activeSink.
+     */
     for (Entry<String, Sink> entry : sinks.entrySet()) {
+      // priStr = "priority." + "k1" = "priority.k1"
       String priStr = PRIORITY_PREFIX + entry.getKey();
       Integer priority;
       try {
+        // 获取当前 Sink 的 priority 配置
         priority =  Integer.parseInt(context.getString(priStr));
       } catch (Exception e) {
+        // 异常情况下, 为循环递减负数
         priority = --nextPrio;
       }
+      // 加入到 liveSinks (按照 priority 排序的 SortedMap)
       if (!liveSinks.containsKey(priority)) {
         liveSinks.put(priority, sinks.get(entry.getKey()));
       } else {
+        // 说明 liveSinks 已包含, 这种情况只在未重新启动 Flume, 但调用了此 configure(c) 方法时有可能发生 (即新加载配置文件而不重启)
+        // 但是也不应该发生, 因为本方法上面的逻辑已经重新赋值 liveSinks = new TreeMap<Integer, Sink>();  ???
         logger.warn("Sink {} not added to FailverSinkProcessor as priority" +
             "duplicates that of sink {}", entry.getKey(),
             liveSinks.get(priority));
       }
     }
+    // activeSink 取 liveSinks 中优先级最高的 Sink
     activeSink = liveSinks.get(liveSinks.lastKey());
   }
 
@@ -172,23 +215,38 @@ public class FailoverSinkProcessor extends AbstractSinkProcessor {
   public Status process() throws EventDeliveryException {
     // Retry any failed sinks that have gone through their "cooldown" period
     // 重试已经过 "cooldown" 期的任何失败的 sinks
+    /**
+     * 在调用 activeSink 逻辑之前, 首先尝试 failedSinks
+     * a. 如果 failedSinks 不为空 (说明之前有 sinks 处理失败, 并加入到 failedSinks 中), 则循环遍历 failedSinks
+     * b. 每次循环按照优先级查看 (不取出) 其中的 FailedSink, 如果当前 FailedSink 的 refresh (恢复时间 (小于 now 表示可用)) < now, 即表示已经过了 back off 期, 可以重新尝试 process()
+     * c. 取出并重新尝试 process()
+     * d1. 如果当前 FailedSink 的 process() 方法返回 READY (说明当前 FailedSink 已经恢复, 可以处理 events 了), 那么将其加入到 liveSinks 中. 并从 liveSinks 中刷新最大优先级的 activeSink.
+     * d2. 如果当前 FailedSink 的 process() 方法返回 BACKOFF, 则重新放回到 failedSinks 中.
+     * d3. 如果当前 FailedSink 的 process() 方法发生异常, 则调用 incFails() 方法执行失败通知逻辑.
+     */
     Long now = System.currentTimeMillis();
+    // a, b
     while (!failedSinks.isEmpty() && failedSinks.peek().getRefresh() < now) {
+      // c
       FailedSink cur = failedSinks.poll();
       Status s;
       try {
         s = cur.getSink().process();
+        // d1
         if (s  == Status.READY) {
           liveSinks.put(cur.getPriority(), cur.getSink());
+          // 刷新 activeSink
           activeSink = liveSinks.get(liveSinks.lastKey());
           logger.debug("Sink {} was recovered from the fail list",
                   cur.getSink().getName());
+        // d2
         } else {
           // if it's a backoff it needn't be penalized.
-          // 如果它是 backoff, 它不需要受到惩罚.  ???
+          // 如果它是 BACKOFF, 它不需要受到惩罚 (即不需要执行异常逻辑 d3).
           failedSinks.add(cur);
         }
         return s;
+      // d3
       } catch (Exception e) {
         cur.incFails();
         failedSinks.add(cur);
@@ -213,6 +271,7 @@ public class FailoverSinkProcessor extends AbstractSinkProcessor {
 
   private Sink moveActiveToDeadAndGetNext() {
     Integer key = liveSinks.lastKey();
+    // 添加到 failedSinks, 添加后内部已按照 FailedSink 的 compareTo(T) 方法逻辑排序各元素 (即按照 key (priority) 优先级排列)
     failedSinks.add(new FailedSink(key, activeSink, 1));
     liveSinks.remove(key);
     if (liveSinks.isEmpty()) return null;
