@@ -118,14 +118,23 @@ public class FailoverSinkProcessor extends AbstractSinkProcessor {
   private static final String PRIORITY_PREFIX = "priority.";
   private static final String MAX_PENALTY_PREFIX = "maxpenalty";
   private Map<String, Sink> sinks;
+  // 当前活跃的 Sink, 取 liveSinks 中优先级最高的 Sink (调用 liveSinks.get(liveSinks.lastKey()) 获得).
   private Sink activeSink;
+  // 记录 liveSinks 的 SortedMap, 默认包含所有配置的 sinks.
+  // 在 activeSink 执行 process() 方法失败时, 从此 Map 中移除.
+  // 在 failedSinks 循环尝试 process() 方法成功时, 重新加入此 Map.
   private SortedMap<Integer, Sink> liveSinks;
+  // 记录 failedSinks 的 Queue, 在 activeSink 执行 process() 方法失败时, 加入到此列表中.
+  // 该 Queue 的具体实现为 PriorityQueue<FailedSink> 优先级队列 (通过调用 FailedSink 的 compareTo(f) 方法确定优先级).
   private Queue<FailedSink> failedSinks;
+  // The maximum backoff period for the failed Sink (in millis)
+  // failed Sink 的最大 backed off 时间 (以毫秒为单位)
   private int maxPenalty;
 
   @Override
   public void configure(Context context) {
     liveSinks = new TreeMap<Integer, Sink>();
+    // 记录 failedSinks 的 Queue, 初始化为 PriorityQueue<FailedSink> 优先级队列 (通过调用 FailedSink 的 compareTo(f) 方法确定优先级).
     failedSinks = new PriorityQueue<FailedSink>();
     Integer nextPrio = 0;
     String maxPenaltyStr = context.getString(MAX_PENALTY_PREFIX);
