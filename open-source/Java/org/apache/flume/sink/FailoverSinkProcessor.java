@@ -242,7 +242,7 @@ public class FailoverSinkProcessor extends AbstractSinkProcessor {
         // d2
         } else {
           // if it's a backoff it needn't be penalized.
-          // 如果它是 BACKOFF, 它不需要受到惩罚 (即不需要执行异常逻辑 d3).
+          // 如果它是 BACKOFF, 它不需要受到惩罚 (即不需要执行 incFails() 失败通知逻辑).
           failedSinks.add(cur);
         }
         return s;
