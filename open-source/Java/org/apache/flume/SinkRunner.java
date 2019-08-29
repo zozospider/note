@@ -32,9 +32,16 @@ import org.slf4j.LoggerFactory;
  * {@linkplain Sink#process() process} events if any are available in the
  * {@link Channel}.
  * </p>
+ * <p>
+ * {@linkplain Sink sinks} 的驱动程序, 用于轮询它们.
+ * 如果 {@link Channel} 中有可用的 events, 尝试 {@linkplain Sink#process() process} events.
+ * </p>
  *
  * <p>
  * Note that, unlike {@linkplain Source sources}, all sinks are polled.
+ * </p>
+ * <p>
+ * 请注意, 与 {@linkplain Source sources} 不同, 所有 sinks 都会被轮询.
  * </p>
  *
  * @see org.apache.flume.Sink
@@ -129,6 +136,7 @@ public class SinkRunner implements LifecycleAware {
    * {@link Runnable} that {@linkplain SinkProcessor#process() polls} a
    * {@link SinkProcessor} and manages event delivery notification,
    * {@link Sink.Status BACKOFF} delay handling, etc.
+   * {@link Runnable}: {@linkplain SinkProcessor#process() polls} 1 个 {@link SinkProcessor} 并管理 event 传递通知, {@link Sink.Status BACKOFF} 延迟处理等.
    */
   public static class PollingRunner implements Runnable {
 
