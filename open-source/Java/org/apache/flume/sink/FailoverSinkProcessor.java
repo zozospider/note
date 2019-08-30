@@ -220,8 +220,8 @@ public class FailoverSinkProcessor extends AbstractSinkProcessor {
      * a. 如果 failedSinks 不为空 (说明之前有 sinks 处理失败, 并加入到 failedSinks 中), 则循环遍历 failedSinks.
      * b. 每次循环按照优先级查看 (不取出) 其中的 FailedSink, 如果当前 FailedSink 的 refresh (恢复时间 (小于 now 表示可用)) < now, 即表示已经过了 back off 期, 可以重新尝试 process().
      * c. 从 failedSinks 中取出当前 FailedSink, 并重新尝试 process().
-     * d1. 如果当前 FailedSink 的 process() 方法返回 READY (说明当前 FailedSink 已经恢复, 可以处理 events 了), 那么将其加入到 liveSinks 中. 并从 liveSinks 中刷新最大优先级的 activeSink.
-     * d2. 如果当前 FailedSink 的 process() 方法返回 BACKOFF, 则重新放回到 failedSinks 中.
+     * d1. 如果当前 FailedSink 的 process() 方法返回 READY (说明当前 FailedSink 已经恢复, 可以成功处理 events 了), 那么将其加入到 liveSinks 中. 并从 liveSinks 中刷新最大优先级的 activeSink.
+     * d2. 如果当前 FailedSink 的 process() 方法返回 BACKOFF (说明当前 FailedSink 已经恢复, 但是处理 events 失败了), 还不成为 liveSinks 中的一员, 重新放回到 failedSinks 中.
      * d3. 如果当前 FailedSink 的 process() 方法发生异常, 则调用 incFails() 方法执行失败通知逻辑, 并重新放回到 failedSinks 中.
      */
     Long now = System.currentTimeMillis();
@@ -235,7 +235,6 @@ public class FailoverSinkProcessor extends AbstractSinkProcessor {
         // d1
         if (s  == Status.READY) {
           liveSinks.put(cur.getPriority(), cur.getSink());
-          // 刷新 activeSink
           activeSink = liveSinks.get(liveSinks.lastKey());
           logger.debug("Sink {} was recovered from the fail list",
                   cur.getSink().getName());
@@ -253,27 +252,53 @@ public class FailoverSinkProcessor extends AbstractSinkProcessor {
       }
     }
 
+    /**
+     * a. 至此, 说明上面尝试多个 failedSinks 均未成功, 则尝试 activeSink 的 process().
+     *
+     * b1. 如果当前 activeSink 的 process() 方法返回 READY / BACKOFF (说明当前 activeSink 可按照预期逻辑持续处理 events, 且未发生故障), 那么直接返回处理结果.
+     * c1. 第一次循环已直接 return 结果, 结束本方法逻辑.
+     * 
+     * b2. 如果当前 activeSink 的 process() 方法发生异常, 则调用 moveActiveToDeadAndGetNext() 方法, 将当前 activeSink 添加到 failedSinks 中, 并从 liveSinks 中移除, 然后返回 liveSinks 中优先级最高的 Sink.
+     * c21. 异常情况下, activeSink 被重新赋值, 如果此对象被赋值为 null (liveSinks 中没有可用的 Sink), 则结束循环, 抛出异常.
+     * c22. 如果此对象不为 null, 则继续循环 (直到满足 c1 / c21 条件结束循环).
+     */
     Status ret = null;
+    // a c22
     while (activeSink != null) {
       try {
+        // b1
         ret = activeSink.process();
+        // c1
         return ret;
       } catch (Exception e) {
         logger.warn("Sink {} failed and has been sent to failover list",
                 activeSink.getName(), e);
+        // b2
         activeSink = moveActiveToDeadAndGetNext();
       }
     }
 
+    // c21
     throw new EventDeliveryException("All sinks failed to process, " +
         "nothing left to failover to");
   }
 
+  /**
+   * activeSink 的 process() 方法发生异常时调用.
+   * 将当前 activeSink 添加到 failedSinks 中, 并从 liveSinks 中移除, 然后返回 liveSinks 中优先级最高的 Sink.
+   */
   private Sink moveActiveToDeadAndGetNext() {
+    // 此时 liveSinks.lastKey() 即为当前 activeSink 的 priority
     Integer key = liveSinks.lastKey();
-    // 添加到 failedSinks, 添加后内部已按照 FailedSink 的 compareTo(T) 方法逻辑排序各元素 (即按照 key (priority) 优先级排列)
+    // 将当前 activeSink 添加到 failedSinks 中
+    // 添加后内部已按照 FailedSink 的 compareTo(T) 方法逻辑排序各元素 (即按照 key (priority) 优先级排列)
+    // priority: key
+    // sink: activeSink
+    // sequentialFailures: 1
     failedSinks.add(new FailedSink(key, activeSink, 1));
+    // 从 liveSinks 中移除
     liveSinks.remove(key);
+    // 返回 liveSinks 中优先级最高的 Sink, 如果没有可用的 Sink 则返回 null
     if (liveSinks.isEmpty()) return null;
     if (liveSinks.lastKey() != null) {
       return liveSinks.get(liveSinks.lastKey());
@@ -282,6 +307,10 @@ public class FailoverSinkProcessor extends AbstractSinkProcessor {
     }
   }
 
+  /**
+   * 重写 SinkProcessor 接口的 setSinks(ss) 接口.
+   * 将参数 sinks 的元素逐个 put 到本对象新建的 sinks 变量中, 而不直接引用传入参数.
+   */
   @Override
   public void setSinks(List<Sink> sinks) {
     // needed to implement the start/stop functionality
