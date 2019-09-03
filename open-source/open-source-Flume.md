@@ -31,6 +31,13 @@
         - lifecycle
           - [LifecycleAware.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/lifecycle/LifecycleAware.java)
           - [LifecycleState.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/lifecycle/LifecycleState.java)
+        - node
+          - [AbstractConfigurationProvider.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/node/AbstractConfigurationProvider.java)
+          - [Application.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/node/Application.java)
+          - [ConfigurationProvider.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/node/ConfigurationProvider.java)
+          - [FlumeConfiguration.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/node/FlumeConfiguration.java)
+          - [MaterializedConfiguration.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/node/MaterializedConfiguration.java)
+          - [PropertiesFileConfigurationProvider.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/node/PropertiesFileConfigurationProvider.java)
         - sink
           - [AbstractRpcSink.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/AbstractRpcSink.java)
           - [AbstractSink.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/AbstractSink.java)
