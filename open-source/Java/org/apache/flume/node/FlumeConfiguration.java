@@ -80,6 +80,11 @@ import static org.apache.flume.conf.FlumeConfigurationErrorType.PROPERTY_VALUE_N
  * been parsed and populated, a validation routine is run that identifies and
  * removes invalid components.
  * </p>
+ * <p>
+ * FlumeConfiguration 是 ConfigurationProvider 所需的分层配置命名空间的内存表示形式.
+ * 此类使用 map 或 properties 对象进行实例化, 该对象将被解析以在内存中构造层次结构.
+ * 解析并填充整个属性集后, 将运行验证例程, 以识别和删除无效组件.
+ * </p>
  *
  * @see org.apache.flume.node.ConfigurationProvider
  *
@@ -96,6 +101,7 @@ public class FlumeConfiguration {
   /**
    * Creates a populated Flume Configuration object.
    * @deprecated please use the other constructor
+   * @deprecated 请使用其他构造函数
    */
   @Deprecated
   public FlumeConfiguration(Properties properties) {
@@ -116,11 +122,13 @@ public class FlumeConfiguration {
 
   /**
    * Creates a populated Flume Configuration object.
+   * 创建一个填充的 Flume Configuration 对象.
    */
   public FlumeConfiguration(Map<String, String> properties) {
     agentConfigMap = new HashMap<>();
     errors = new LinkedList<>();
     // Construct the in-memory component hierarchy
+    // 构造内存中的组件层次结构
     for (Entry<String, String> entry : properties.entrySet()) {
       if (!addRawProperty(entry.getKey(), entry.getValue())) {
         LOGGER.warn("Configuration property ignored: {} = {}", entry.getKey(), entry.getValue());
@@ -128,8 +136,10 @@ public class FlumeConfiguration {
     }
     // Now iterate thru the agentContext and create agent configs and add them
     // to agentConfigMap
+    // 现在迭代 agentContext 并创建 agent 配置并将它们添加到 agentConfigMap
 
     // validate and remove improperly configured components
+    // 验证并删除未正确配置的 components
     validateConfiguration();
   }
 
@@ -168,16 +178,19 @@ public class FlumeConfiguration {
 
   private boolean addRawProperty(String rawName, String rawValue) {
     // Null names and values not supported
+    // Null 名称和值不受支持
     if (rawName == null || rawValue == null) {
       addError("", AGENT_NAME_MISSING, ERROR);
       return false;
     }
 
     // Remove leading and trailing spaces
+    // 删除前后空格
     String name = rawName.trim();
     String value = rawValue.trim();
 
     // Empty values are not supported
+    // 不支持空值
     if (value.isEmpty()) {
       addError(name, PROPERTY_VALUE_NULL, ERROR);
       return false;
@@ -186,6 +199,7 @@ public class FlumeConfiguration {
     int index = name.indexOf('.');
 
     // All configuration keys must have a prefix defined as agent name
+    // 所有配置键都必须具有定义为 agent 名称的前缀
     if (index == -1) {
       addError(name, AGENT_NAME_MISSING, ERROR);
       return false;
@@ -194,6 +208,7 @@ public class FlumeConfiguration {
     String agentName = name.substring(0, index);
 
     // Agent name must be specified for all properties
+    // 必须为所有属性指定 agent 名称
     if (agentName.isEmpty()) {
       addError(name, AGENT_NAME_MISSING, ERROR);
       return false;
@@ -202,6 +217,7 @@ public class FlumeConfiguration {
     String configKey = name.substring(index + 1);
 
     // Configuration key must be specified for every property
+    // 必须为每个属性指定 configuration key
     if (configKey.isEmpty()) {
       addError(name, PROPERTY_NAME_NULL, ERROR);
       return false;
@@ -216,6 +232,7 @@ public class FlumeConfiguration {
 
     // Each configuration key must begin with one of the three prefixes:
     // sources, sinks, or channels.
+    // 每个 configuration key 必须以三个前缀之一开头: sources, sinks, 或 channels.
     return aconf.addProperty(configKey, value);
   }
 
@@ -338,13 +355,21 @@ public class FlumeConfiguration {
      * validation.
      * </p>
      * <p>
+     * 检查 agent 配置的有效性. 此方法假定已填充所有必需的 configuration keys 并准备好进行验证.
+     * </p>
+     * <p>
      * During the validation process, the components with invalid configuration
      * will be dropped. If at the end of this process, the minimum necessary
      * components are not available, the configuration itself will be considered
      * invalid.
      * </p>
+     * <p>
+     * 在验证过程中, 将删除具有无效配置的 components.
+     * 如果在此过程结束时, 最小必需 components 不可用, 则配置本身将被视为无效.
+     * </p>
      *
      * @return true if the configuration is valid, false otherwise
+     * @return 如果配置有效, 则为 true, 否则为 false
      */
     private boolean isValid() {
       LOGGER.debug("Starting validation of configuration for agent: {}", agentName);
@@ -357,6 +382,7 @@ public class FlumeConfiguration {
       runFiltersThroughConfigs();
 
       // Make sure that at least one channel is specified
+      // 确保至少指定了 1 个 channel
       if (channels == null || channels.trim().isEmpty()) {
         LOGGER.warn(
             "Agent configuration for '{}' does not contain any channels. Marking it as invalid.",
@@ -384,6 +410,7 @@ public class FlumeConfiguration {
       sinkgroupSet = validateGroups(sinkSet);
 
       // If no sources or sinks are present, then this is invalid
+      // 如果没有 sources 或 sinks, 则无效
       if (sourceSet.isEmpty() && sinkSet.isEmpty()) {
         LOGGER.warn(
             "Agent configuration for '{}' has no sources or sinks. Will be marked invalid.",
@@ -529,6 +556,7 @@ public class FlumeConfiguration {
     /**
      * If it is a known component it will do the full validation required for
      * that component, else it will do the validation required for that class.
+     * 如果它是已知 component, 它将执行该 component 所需的完整验证, 否则它将执行该类所需的验证.
      */
     private Set<String> validateChannels(Set<String> channelSet) {
       Iterator<String> iter = channelSet.iterator();
@@ -552,18 +580,32 @@ public class FlumeConfiguration {
        *        put into the map, so the context is retained which can be
        *        picked up - this is meant for older classes which don't
        *        implement ConfigurableComponent.
+       * 以下代码的逻辑:
+       * 它是一个已知的 component 吗?
+       *  -是: 获取 ChannelType 并设置要配置的字符串名称, 并将 configSpecified 设置为 true.
+       *  -否: 查找给定 component 的 config 类型:
+       *      - 找到 Config:
+       *        将 config 设置为上述类型, 将 configSpecified 设置为 true
+       *      - 找不到 Config:
+       *        将 config 设置为 OTHER, configSpecified 为 false, 进行基本验证.
+       *        将上下文保留在 contextMap 中以便稍后处理.
+       *        将其设置为 other 会返回一个 vanilla 配置 (Source / Sink / Channel Configuration), 它会进行基本的语法验证.
+       *        此对象未放入 map 中, 因此保留了可以拾取的上下文 - 这适用于未实现 ConfigurableComponent 的旧类.
        */
       while (iter.hasNext()) {
         String channelName = iter.next();
         Context channelContext = channelContextMap.get(channelName);
         // Context exists in map.
+        // 上下文存在于 map 中.
         if (channelContext != null) {
           // Get the configuration object for the channel:
+          // 获取 channel 的 configuration 对象:
           ChannelType chType = getKnownChannel(channelContext.getString(
               BasicConfigurationConstants.CONFIG_TYPE));
           boolean configSpecified = false;
           String config = null;
           // Not a known channel - cannot do specific validation to this channel
+          // 不是已知 channel - 无法对此 channel 进行特定验证
           if (chType == null) {
             config = channelContext.getString(CONFIG_CONFIG);
             if (config == null || config.isEmpty()) {
@@ -597,6 +639,8 @@ public class FlumeConfiguration {
             // Could not configure channel - skip it.
             // No need to add to error list - already added before exception is
             // thrown
+            // 无法配置 channel - 跳过它.
+            // 无需添加到错误列表 - 在抛出异常之前已添加
             if (conf != null) errorList.addAll(conf.getErrors());
             iter.remove();
             LOGGER.warn(
@@ -635,11 +679,13 @@ public class FlumeConfiguration {
 
 
           // Get the configuration object for the channel:
+          // 获取通道的 configuration 对象:
           ConfigFilterType chType = getKnownConfigFilter(configFilterContext.getString(
               BasicConfigurationConstants.CONFIG_TYPE));
           boolean configSpecified = false;
           String config = null;
           // Not a known channel - cannot do specific validation to this channel
+          // 不是已知 channel - 无法对此 channel 进行特定验证
           if (chType == null) {
             config = configFilterContext.getString(CONFIG_CONFIG);
             if (config == null || config.isEmpty()) {
@@ -698,6 +744,7 @@ public class FlumeConfiguration {
 
     private Set<String> validateSources(Set<String> channelSet) {
       //Arrays.split() call will throw NPE if the sources string is empty
+      // 如果 sources 字符串为空, 则 Arrays.split() 调用将抛出 NPE
       if (sources == null || sources.isEmpty()) {
         LOGGER.warn("Agent configuration for '{}' has no sources.", agentName);
         addError(CONFIG_SOURCES, PROPERTY_VALUE_NULL, WARNING);
@@ -726,6 +773,17 @@ public class FlumeConfiguration {
        *        put into the map, so the context is retained which can be
        *        picked up - this is meant for older classes which don't
        *        implement ConfigurableComponent.
+       * 以下代码的逻辑:
+       * 它是一个已知的 component 吗?
+       *  -是: 获取 SourceType 并设置要配置的字符串名称, 并将 configSpecified 设置为 true.
+       *  -否: 查找给定 component 的 config 类型:
+       *      - 找到 Config:
+       *        将 config 设置为上述类型, 将 configSpecified 设置为 true
+       *      - 找不到 Config:
+       *        将 config 设置为 OTHER, configSpecified 为 false, 进行基本验证.
+       *        将上下文保留在 contextMap 中以便稍后处理.
+       *        将其设置为 other 会返回一个 vanilla 配置 (Source / Sink / Channel Configuration), 它会进行基本的语法验证.
+       *        此对象未放入 map 中, 因此保留了可以拾取的上下文 - 这适用于未实现 ConfigurableComponent 的旧类.
        */
       while (iter.hasNext()) {
         String sourceName = iter.next();
@@ -750,6 +808,7 @@ public class FlumeConfiguration {
           try {
             // Possible reason the configuration can fail here:
             // Old component is configured directly using Context
+            // 配置可能失败的可能原因: 使用 Context 直接配置旧 component
             srcConf =
                 (SourceConfiguration) ComponentConfigurationFactory.create(
                     sourceName, config, ComponentType.SOURCE);
@@ -832,6 +891,17 @@ public class FlumeConfiguration {
        *        put into the map, so the context is retained which can be
        *        picked up - this is meant for older classes which don't
        *        implement ConfigurableComponent.
+       * 以下代码的逻辑:
+       * 它是一个已知的 component 吗?
+       *  -是: 获取 SinkType 并设置要配置的字符串名称, 并将 configSpecified 设置为 true.
+       *  -否: 查找给定 component 的 config 类型:
+       *      - 找到 Config:
+       *        将 config 设置为上述类型, 将 configSpecified 设置为 true
+       *      - 找不到 Config:
+       *        将 config 设置为 OTHER, configSpecified 为 false, 进行基本验证.
+       *        将上下文保留在 contextMap 中以便稍后处理.
+       *        将其设置为 other 会返回一个 vanilla 配置 (Source / Sink / Channel Configuration), 它会进行基本的语法验证.
+       *        此对象未放入 map 中, 因此保留了可以拾取的上下文 - 这适用于未实现 ConfigurableComponent 的旧类.
        */
       while (iter.hasNext()) {
         String sinkName = iter.next();
@@ -888,6 +958,7 @@ public class FlumeConfiguration {
           }
         }
         // Filter out any sinks that have invalid channel
+        // 过滤掉任何具有无效 channel 的 sinks
 
       }
       sinkContextMap = newContextMap;
@@ -904,10 +975,14 @@ public class FlumeConfiguration {
     /**
      * Validates that each group has at least one sink, blocking other groups
      * from acquiring it
+     * 验证每个 group 至少有 1 个 sink, 阻止其他 groups 获取它
      *
      * @param sinkSet
      *          Set of valid sinks
+     * @param sinkSet
+     *          有效 sinks 的 Set 集
      * @return Set of valid sinkgroups
+     * @return 有效 sinkgroups 的 Set 集
      */
     private Set<String> validateGroups(Set<String> sinkSet) {
       Set<String> sinkgroupSet = stringToSet(sinkgroups, " ");
@@ -962,14 +1037,20 @@ public class FlumeConfiguration {
 
     /**
      * Check availability of sinks for group
+     * 检查 group 的 sinks 的可用性
      *
      * @param sinkSet
      *          [in]Existing valid sinks
+     * @param sinkSet
+     *          [in]现有的有效 sinks
      * @param usedSinks
      *          [in/out]Sinks already in use by other groups
+     * @param usedSinks
+     *          [in/out]已经被其他 groups 使用的 sinks
      * @param groupConf
      *          [in]sinkgroup configuration
      * @return List of sinks available and reserved for group
+     * @return 可用的和为 group 保留的 sinks 列表
      */
     private Set<String> validGroupSinks(Set<String> sinkSet,
                                         Map<String, String> usedSinks,
@@ -1088,6 +1169,7 @@ public class FlumeConfiguration {
 
     private boolean addProperty(String key, String value) {
       // Check for configFilters
+      // 检查 configFilters
       if (CONFIG_CONFIGFILTERS.equals(key)) {
         if (configFilters == null) {
           configFilters = value;
@@ -1099,6 +1181,7 @@ public class FlumeConfiguration {
         }
       }
       // Check for sources
+      // 检查 sources
       if (CONFIG_SOURCES.equals(key)) {
         if (sources == null) {
           sources = value;
@@ -1111,6 +1194,7 @@ public class FlumeConfiguration {
       }
 
       // Check for sinks
+      // 检查 sinks
       if (CONFIG_SINKS.equals(key)) {
         if (sinks == null) {
           sinks = value;
@@ -1124,6 +1208,7 @@ public class FlumeConfiguration {
       }
 
       // Check for channels
+      // 检查 channels
       if (CONFIG_CHANNELS.equals(key)) {
         if (channels == null) {
           channels = value;
@@ -1137,6 +1222,7 @@ public class FlumeConfiguration {
       }
 
       // Check for sinkgroups
+      // 检查 sinkgroups
       if (CONFIG_SINKGROUPS.equals(key)) {
         if (sinkgroups == null) {
           sinkgroups = value;
@@ -1218,11 +1304,14 @@ public class FlumeConfiguration {
 
     private ComponentNameAndConfigKey parseConfigKey(String key, String prefix) {
       // key must start with prefix
+      // key 必须以 prefix 开头
       if (!key.startsWith(prefix)) {
         return null;
       }
 
       // key must have a component name part after the prefix of the format:
+      // <prefix><component-name>.<config-key>
+      // key 必须在格式前缀后面有一个 component 名称部分:
       // <prefix><component-name>.<config-key>
       int index = key.indexOf('.', prefix.length() + 1);
 
@@ -1234,6 +1323,7 @@ public class FlumeConfiguration {
       String configKey = key.substring(prefix.length() + name.length() + 1);
 
       // name and config key must be non-empty
+      // name 和 config key 必须为非空
       if (name.isEmpty() || configKey.isEmpty()) {
         return null;
       }
