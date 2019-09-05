@@ -1,6 +1,6 @@
 
 启动 agent 时, 加上监控参数
-```
+```bash
 ./bin/flume-ng agent -n a1 -c conf -f conf/flume-test.properties -Dflume.root.logger=INFO,DAILY -Dflume.log.dir=/work/app/flume/logs -Dflume.log.file=flume-test.log -DappFlag=flume-test -Dflume.monitoring.type=http -Dflume.monitoring.port=41414 &
 ```
 
