@@ -157,10 +157,13 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
      * This supports the scenario where you enable channel "ch0" then remove it
      * and add it back. Without this, channels like memory channel would cause
      * the first instances data to show up in the seconds.
+     * 某些 channels 将在重新配置中重复使用. 为了处理这个问题, 我们存储当前 channels 的所有名称, 执行重新配置, 然后如果没有使用 channel, 我们删除对它的引用.
+     * 这支持启用 channel "ch0" 然后将其删除并添加回来的情况. 如果没有这个, 像 memory channel 这样的 channels 会导致第一个实例数据在几秒钟内显示出来.
      */
     ListMultimap<Class<? extends Channel>, String> channelsNotReused =
         ArrayListMultimap.create();
     // assume all channels will not be re-used
+    // 假设所有 channels 都不会被重复使用
     for (Map.Entry<Class<? extends Channel>, Map<String, Channel>> entry :
          channelCache.entrySet()) {
       Class<? extends Channel> channelKlass = entry.getKey();
@@ -172,6 +175,7 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
     Map<String, ComponentConfiguration> compMap = agentConf.getChannelConfigMap();
     /*
      * Components which have a ComponentConfiguration object
+     * 具有 ComponentConfiguration 对象的 Components
      */
     for (String chName : channelNames) {
       ComponentConfiguration comp = compMap.get(chName);
@@ -193,6 +197,7 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
     /*
      * Components which DO NOT have a ComponentConfiguration object
      * and use only Context
+     * 没有 ComponentConfiguration 对象且仅使用 Context 的组件
      */
     for (String chName : channelNames) {
       Context context = agentConf.getChannelContext().get(chName);
@@ -212,6 +217,7 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
     }
     /*
      * Any channel which was not re-used, will have it's reference removed
+     * 任何未重复使用的 channel 都会删除它的引用
      */
     for (Class<? extends Channel> channelKlass : channelsNotReused.keySet()) {
       Map<String, Channel> channelMap = channelCache.get(channelKlass);
@@ -236,6 +242,7 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
     Class<? extends Channel> channelClass = channelFactory.getClass(type);
     /*
      * Channel has requested a new instance on each re-configuration
+     * Channel 已在每次重新配置时请求新实例
      */
     if (channelClass.isAnnotationPresent(Disposable.class)) {
       Channel channel = channelFactory.create(name, type);
@@ -267,6 +274,7 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
         agentConf.getSourceConfigMap();
     /*
      * Components which have a ComponentConfiguration object
+     * 具有 ComponentConfiguration 对象的 Components
      */
     for (String sourceName : sourceNames) {
       ComponentConfiguration comp = compMap.get(sourceName);
@@ -313,6 +321,7 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
     /*
      * Components which DO NOT have a ComponentConfiguration object
      * and use only Context
+     * 没有 ComponentConfiguration 对象且仅使用 Context 的 Components
      */
     Map<String, Context> sourceContexts = agentConf.getSourceContext();
     for (String sourceName : sourceNames) {
@@ -414,6 +423,7 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
     Map<String, Sink> sinks = new HashMap<String, Sink>();
     /*
      * Components which have a ComponentConfiguration object
+     * 具有 ComponentConfiguration 对象的 Components
      */
     for (String sinkName : sinkNames) {
       ComponentConfiguration comp = compMap.get(sinkName);
@@ -442,6 +452,7 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
     /*
      * Components which DO NOT have a ComponentConfiguration object
      * and use only Context
+     * 没有 ComponentConfiguration 对象且仅使用 Context 的 Components
      */
     Map<String, Context> sinkContexts = agentConf.getSinkContext();
     for (String sinkName : sinkNames) {
@@ -517,6 +528,7 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
       }
     }
     // add any unassigned sinks to solo collectors
+    // 将任何未分配的 sinks 添加到 solo collectors
     for (Entry<String, Sink> entry : sinks.entrySet()) {
       if (!usedSinks.containsValue(entry.getKey())) {
         try {

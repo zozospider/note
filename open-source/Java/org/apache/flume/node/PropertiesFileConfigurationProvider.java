@@ -37,8 +37,13 @@ import org.slf4j.LoggerFactory;
  * <em>Agent Name</em> which helps isolate an individual agent&apos;s namespace.
  * </p>
  * <p>
+ * 使用配置文件指定配置的配置提供程序. 配置文件遵循 {@link java.util.Properties#load(java.io.Reader)} 中指定的 Java 配置文件语法规则.
+ * 配置文件中指定的每个配置值都以 <em>Agent Name</em> 为前缀, 这有助于隔离单个 agent 的命名空间.
+ * </p>
+ * <p>
  * Valid configuration files must observe the following rules for every agent
  * namespace.
+ * 有效配置文件必须遵守每个 agent 命名空间的以下规则.
  * <ul>
  * <li>For every &lt;agent name&gt; there must be three lists specified that
  * include <tt>&lt;agent name&gt;.sources</tt>,
