@@ -16,6 +16,7 @@
           - [MultiplexingChannelSelector.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/channel/MultiplexingChannelSelector.java)
           - [ReplicatingChannelSelector.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/channel/ReplicatingChannelSelector.java)
         - conf
+          - [ComponentConfiguration.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/ComponentConfiguration.java)
           - [Configurable.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/Configurable.java)
           - [ConfigurableComponent.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/ConfigurableComponent.java)
           - [TransactionCapacitySupported.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/TransactionCapacitySupported.java)
