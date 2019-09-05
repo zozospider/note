@@ -4,9 +4,9 @@
 ## 创建数据库
 ```sql
 -- UTF8
-mysql> CREATE DATABASE db_1 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE DATABASE db_1 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 -- GBK
-mysql> CREATE DATABASE db_1 DEFAULT CHARACTER SET gbk COLLATE gbk_chinese_ci;
+CREATE DATABASE db_1 DEFAULT CHARACTER SET gbk COLLATE gbk_chinese_ci;
 ```
 
 ## 更改字段类型
