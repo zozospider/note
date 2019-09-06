@@ -101,6 +101,7 @@ public class Application {
       return;
     } finally {
       // If interrupted while trying to lock, we don't own the lock, so must not attempt to unlock
+      // 如果在尝试锁定时中断, 我们不拥有锁, 因此不得尝试解锁
       if (lifecycleLock.isHeldByCurrentThread()) {
         lifecycleLock.unlock();
       }
