@@ -20,6 +20,11 @@
           - [Configurable.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/Configurable.java)
           - [ConfigurableComponent.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/ConfigurableComponent.java)
           - [TransactionCapacitySupported.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/TransactionCapacitySupported.java)
+        - instrumentation
+          - http
+            - [HTTPMetricsServer](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/instrumentation/http/HTTPMetricsServer.java)
+          - [MonitoringType](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/instrumentation/MonitoringType.java)
+          - [MonitorService](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/instrumentation/MonitorService.java)
         - interceptor
           - [Interceptor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/interceptor/Interceptor.java)
           - [InterceptorChain.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/interceptor/InterceptorChain.java)
@@ -118,8 +123,8 @@
     * SinkSelector `I`, RoundRobinSinkSelector `C`, RandomOrderSinkSelector `C`
     * SinkProcessor `I`, DefaultSinkProcessor `C`, FailoverSinkProcessor `C`, LoadBalancingSinkProcessor `C`
     * SinkRunner `C`
-  * __Counter__
-    * MonitoredCounterGroup `C`, SourceCounter `C`, ChannelCounter `C`, SinkCounter `C`
+  * __Monitor__
+    * MonitorService `I`, HTTPMetricsServer `C`, MonitoredCounterGroup `C`, SourceCounter `C`, ChannelCounter `C`, SinkCounter `C`
   * __Application__
     * Application `C`
   * __Client__
