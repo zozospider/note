@@ -556,6 +556,9 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
     }
   }
 
+  /**
+   * 将 Properties 对象转换为 Map 对象.
+   */
   protected Map<String, String> toMap(Properties properties) {
     Map<String, String> result = Maps.newHashMap();
     Enumeration<?> propertyNames = properties.propertyNames();

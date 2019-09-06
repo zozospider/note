@@ -185,10 +185,14 @@ public class PropertiesFileConfigurationProvider extends
     this.file = file;
   }
 
+  /**
+   * 通过配置文件 File 对象, 新建 Properties 对象, 然后转换为 Map, 并将该 Map 作为构造参数初始化 FlumeConfiguration.
+   */
   @Override
   public FlumeConfiguration getFlumeConfiguration() {
     BufferedReader reader = null;
     try {
+      // 通过配置文件 File 对象, 新建 Properties 对象
       reader = new BufferedReader(new FileReader(file));
       String resolverClassName = System.getProperty("propertiesImplementation",
           DEFAULT_PROPERTIES_IMPLEMENTATION);
@@ -196,6 +200,7 @@ public class PropertiesFileConfigurationProvider extends
           .asSubclass(Properties.class);
       Properties properties = propsclass.newInstance();
       properties.load(reader);
+      // 将 Properties 对象转换为 Map 对象, 并将该 Map 作为构造参数初始化 FlumeConfiguration
       return new FlumeConfiguration(toMap(properties));
     } catch (IOException ex) {
       LOGGER.error("Unable to load file:" + file

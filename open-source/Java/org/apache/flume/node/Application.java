@@ -258,6 +258,7 @@ public class Application {
     try {
       SSLUtil.initGlobalSSLParameters();
 
+      // 处理启动参数
       Options options = new Options();
 
       Option option = new Option("n", "name", true, "the name of this agent");
@@ -288,17 +289,22 @@ public class Application {
       option = new Option("h", "help", false, "display help text");
       options.addOption(option);
 
+      // 启动相关转为 CommandLine 对象
       CommandLineParser parser = new GnuParser();
       CommandLine commandLine = parser.parse(options, args);
 
+      // 打印帮助
       if (commandLine.hasOption('h')) {
         new HelpFormatter().printHelp("flume-ng agent", options, true);
         return;
       }
 
+      // 获取 agent 名称
       String agentName = commandLine.getOptionValue('n');
+      // 获取是否需要 reload
       boolean reload = !commandLine.hasOption("no-reload-conf");
 
+      // 是否使用 ZooKeeper 配置
       boolean isZkConfigured = false;
       if (commandLine.hasOption('z') || commandLine.hasOption("zkConnString")) {
         isZkConfigured = true;
@@ -327,7 +333,9 @@ public class Application {
           application = new Application();
           application.handleConfigurationEvent(zookeeperConfigurationProvider.getConfiguration());
         }
+      // 以下为不使用 ZooKeeper 配置逻辑
       } else {
+        // 配置文件 File 对象
         File configurationFile = new File(commandLine.getOptionValue('f'));
 
         /*
@@ -361,10 +369,13 @@ public class Application {
           components.add(configurationProvider);
           application = new Application(components);
           eventBus.register(application);
+        // 没有 reload
         } else {
+          // 新建 ConfigurationProvider 的具体实现对象 PropertiesFileConfigurationProvider, 传入参数: agent 名称, 配置文件 File 对象
           PropertiesFileConfigurationProvider configurationProvider =
               new PropertiesFileConfigurationProvider(agentName, configurationFile);
           application = new Application();
+          // 通过 ConfigurationProvider 接口的 getConfiguration() 方法获取 MaterializedConfiguration (即 Flume 配置文件的具体化)
           application.handleConfigurationEvent(configurationProvider.getConfiguration());
         }
       }
