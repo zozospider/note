@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
  * parameters: <p> <tt>port</tt> : The port on which the server should listen
  * to.<p> Returns metrics in the following format: <p>
  * Monitor 服务实现, 在可配置端口上运行 Web 服务器, 并以 JSON 格式返回组件的度量标准.
- * <p>可选参数: <p> <tt>port</tt> : 服务器应侦听的端口.<p>以下列格式返回指标: <p>
+ * <p>可选参数: <p> <tt>port</tt> : 服务器应侦听的端口.<p>以下列格式返回 metrics: <p>
  *
  * {<p> "componentName1":{"metric1" : "metricValue1","metric2":"metricValue2"}
  * <p> "componentName1":{"metric3" : "metricValue3","metric4":"metricValue4"}
@@ -112,8 +112,8 @@ public class HTTPMetricsServer implements MonitorService {
       //If we want to use any other url for something else, we should make sure
       //that for metrics only /metrics is used to prevent backward
       //compatibility issues.
-      // /metrics 是唯一可以提取指标的地方.
-      // 如果我们想要将任何其他 URL 用于其他内容, 则应确保仅对指标使用 /metrics 来防止向后兼容性问题.
+      // /metrics 是唯一可以提取 metrics 的地方.
+      // 如果我们想要将任何其他 URL 用于其他内容, 则应确保仅对 metrics 使用 /metrics 来防止向后兼容性问题.
       if (request.getMethod().equalsIgnoreCase("TRACE") ||
           request.getMethod().equalsIgnoreCase("OPTIONS")) {
         response.sendError(HttpServletResponse.SC_FORBIDDEN);
