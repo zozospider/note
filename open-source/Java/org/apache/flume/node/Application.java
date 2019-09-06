@@ -375,7 +375,7 @@ public class Application {
           PropertiesFileConfigurationProvider configurationProvider =
               new PropertiesFileConfigurationProvider(agentName, configurationFile);
           application = new Application();
-          // 通过 ConfigurationProvider 接口的 getConfiguration() 方法获取 MaterializedConfiguration (即 Flume 配置文件的具体化)
+          // 通过 ConfigurationProvider 接口的 getConfiguration() 接口获取 MaterializedConfiguration (即 Flume 配置文件的具体化)
           application.handleConfigurationEvent(configurationProvider.getConfiguration());
         }
       }
