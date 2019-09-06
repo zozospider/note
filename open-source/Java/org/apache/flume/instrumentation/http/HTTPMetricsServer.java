@@ -44,6 +44,8 @@ import org.slf4j.LoggerFactory;
  * port and returns the metrics for components in JSON format. <p> Optional
  * parameters: <p> <tt>port</tt> : The port on which the server should listen
  * to.<p> Returns metrics in the following format: <p>
+ * Monitor 服务实现, 在可配置端口上运行 Web 服务器, 并以 JSON 格式返回组件的度量标准.
+ * <p>可选参数: <p> <tt>port</tt> : 服务器应侦听的端口.<p>以下列格式返回指标: <p>
  *
  * {<p> "componentName1":{"metric1" : "metricValue1","metric2":"metricValue2"}
  * <p> "componentName1":{"metric3" : "metricValue3","metric4":"metricValue4"}
@@ -62,6 +64,7 @@ public class HTTPMetricsServer implements MonitorService {
     jettyServer = new Server();
     //We can use Contexts etc if we have many urls to handle. For one url,
     //specifying a handler directly is the most efficient.
+    // 如果我们有许多网址要处理, 我们可以使用上下文等. 对于一个 URL, 直接指定处理程序是最有效的.
     HttpConfiguration httpConfiguration = new HttpConfiguration();
     ServerConnector connector = new ServerConnector(jettyServer,
         new HttpConnectionFactory(httpConfiguration));
@@ -109,6 +112,8 @@ public class HTTPMetricsServer implements MonitorService {
       //If we want to use any other url for something else, we should make sure
       //that for metrics only /metrics is used to prevent backward
       //compatibility issues.
+      // /metrics 是唯一可以提取指标的地方.
+      // 如果我们想要将任何其他 URL 用于其他内容, 则应确保仅对指标使用 /metrics 来防止向后兼容性问题.
       if (request.getMethod().equalsIgnoreCase("TRACE") ||
           request.getMethod().equalsIgnoreCase("OPTIONS")) {
         response.sendError(HttpServletResponse.SC_FORBIDDEN);
@@ -137,6 +142,7 @@ public class HTTPMetricsServer implements MonitorService {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       response.flushBuffer();
       //Not handling the request returns a Not found error page.
+      // 不处理请求会返回 Not found 错误页面.
     }
 
   }

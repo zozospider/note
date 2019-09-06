@@ -21,6 +21,7 @@ package org.apache.flume.instrumentation;
 
 /**
  * Enum for Monitoring types.
+ * 用于监控类型的枚举.
  */
 public enum MonitoringType {
   OTHER(null),

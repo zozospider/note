@@ -25,6 +25,7 @@ import org.apache.flume.conf.Configurable;
  * service is to be started up when Flume starts, it should implement this
  * and the class name should be passed in during startup, with any additional
  * context it requires.
+ * 任何监控服务应实现的接口. 如果要在 Flume 启动时启动监视服务, 它应该实现这一点, 并且应该在启动期间传入类名, 并且需要任何其他上下文.
  */
 public interface MonitorService extends Configurable {
 
