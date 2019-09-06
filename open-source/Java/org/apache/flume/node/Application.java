@@ -177,6 +177,7 @@ public class Application {
 
     /*
      * Wait for all channels to start.
+     * 等待所有 channels 开始.
      */
     for (Channel ch : materializedConfiguration.getChannels().values()) {
       while (ch.getLifecycleState() != LifecycleState.START
@@ -226,10 +227,12 @@ public class Application {
         Class<? extends MonitorService> klass;
         try {
           //Is it a known type?
+          // 它是一种已知类型吗?
           klass = MonitoringType.valueOf(
               monitorType.toUpperCase(Locale.ENGLISH)).getMonitorClass();
         } catch (Exception e) {
           //Not a known type, use FQCN
+          // 不是已知类型, 使用 FQCN
           klass = (Class<? extends MonitorService>) Class.forName(monitorType);
         }
         this.monitorServer = klass.newInstance();
@@ -271,6 +274,7 @@ public class Application {
       options.addOption(option);
 
       // Options for Zookeeper
+      // Zookeeper 的选项
       option = new Option("z", "zkConnString", true,
           "specify the ZooKeeper connection to use (required if -f missing)");
       option.setRequired(false);
@@ -303,6 +307,7 @@ public class Application {
       Application application;
       if (isZkConfigured) {
         // get options
+        // 得到选项
         String zkConnectionStr = commandLine.getOptionValue('z');
         String baseZkPath = commandLine.getOptionValue('p');
 
@@ -328,9 +333,11 @@ public class Application {
         /*
          * The following is to ensure that by default the agent will fail on
          * startup if the file does not exist.
+         * 以下是为了确保默认情况下, 如果文件不存在, agent 将在启动时失败.
          */
         if (!configurationFile.exists()) {
           // If command line invocation, then need to fail fast
+          // 如果命令行调用, 则需要快速失败
           if (System.getProperty(Constants.SYSPROP_CALLED_FROM_SERVICE) ==
               null) {
             String path = configurationFile.getPath();
