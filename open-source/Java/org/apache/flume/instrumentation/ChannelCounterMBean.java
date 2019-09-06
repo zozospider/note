@@ -24,7 +24,7 @@ package org.apache.flume.instrumentation;
  * {@linkplain org.apache.flume.instrumentation.MonitoredCounterGroup}. This
  * interface might change between minor releases. Please see
  * {@linkplain org.apache.flume.instrumentation.ChannelCounter} class.
- * 此接口表示 channel 计数器 mbean. 
+ * 此接口表示 channel counter mbean. 
  * 任何实现此接口的类都必须是子类 {@linkplain org.apache.flume.instrumentation.MonitoredCounterGroup}.
  * 此接口可能会在次要版本之间更改. 请参阅 {@linkplain org.apache.flume.instrumentation.ChannelCounter} 类.
  */
