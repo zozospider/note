@@ -51,6 +51,7 @@
           - [FlumeConfiguration.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/node/FlumeConfiguration.java)
           - [MaterializedConfiguration.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/node/MaterializedConfiguration.java)
           - [PropertiesFileConfigurationProvider.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/node/PropertiesFileConfigurationProvider.java)
+          - [SimpleMaterializedConfiguration.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/node/SimpleMaterializedConfiguration.java)
         - sink
           - [AbstractRpcSink.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/AbstractRpcSink.java)
           - [AbstractSink.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/sink/AbstractSink.java)
