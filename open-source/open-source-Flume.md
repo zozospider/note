@@ -16,6 +16,15 @@
           - [MultiplexingChannelSelector.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/channel/MultiplexingChannelSelector.java)
           - [ReplicatingChannelSelector.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/channel/ReplicatingChannelSelector.java)
         - conf
+          - channel
+            - [ChannelConfiguration.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/channel/ChannelConfiguration.java)
+            - [ChannelSelectorConfiguration.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/channel/ChannelSelectorConfiguration.java)
+          - sink
+            - [SinkConfiguration.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/sink/SinkConfiguration.java)
+            - [SinkGroupConfiguration.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/sink/SinkGroupConfiguration.java)
+            - [SinkProcessorConfiguration.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/sink/SinkProcessorConfiguration.java)
+          - source
+            - [SourceConfiguration.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/source/SourceConfiguration.java)
           - [ComponentConfiguration.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/ComponentConfiguration.java)
           - [Configurable.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/Configurable.java)
           - [ConfigurableComponent.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/conf/ConfigurableComponent.java)
