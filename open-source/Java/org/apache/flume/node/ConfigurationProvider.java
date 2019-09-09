@@ -19,6 +19,12 @@
 
 package org.apache.flume.node;
 
+/**
+ * 配置提供者
+ */
 public interface ConfigurationProvider {
+  /**
+   * 获取配置对象 MaterializedConfiguration
+   */
   MaterializedConfiguration getConfiguration();
 }
