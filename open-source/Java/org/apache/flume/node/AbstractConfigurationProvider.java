@@ -107,6 +107,7 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
       Map<String, SourceRunner> sourceRunnerMap = Maps.newHashMap();
       Map<String, SinkRunner> sinkRunnerMap = Maps.newHashMap();
       try {
+        // 通过 agentConf 参数构建所有 channels 对象, 调用他们的 configure(c) 方法, 并加入到 channelComponentMap 参数.
         loadChannels(agentConf, channelComponentMap);
         loadSources(agentConf, channelComponentMap, sourceRunnerMap);
         loadSinks(agentConf, channelComponentMap, sinkRunnerMap);
@@ -151,6 +152,9 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
     return agentName;
   }
 
+  /**
+   * 通过 agentConf 参数构建所有 channels 对象, 调用他们的 configure(c) 方法, 并加入到 channelComponentMap 参数.
+   */
   private void loadChannels(AgentConfiguration agentConf,
       Map<String, ChannelComponent> channelComponentMap)
           throws InstantiationException {
