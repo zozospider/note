@@ -28,6 +28,10 @@ import org.apache.flume.SourceRunner;
 
 import com.google.common.collect.ImmutableMap;
 
+/**
+ * MaterializedConfiguration 接口的简单实现.
+ * 可添加单个 Channel, SourceRunner, SinkRunner, 获取所有 Channels, SourceRunners, SinkRunners
+ */
 public class SimpleMaterializedConfiguration implements MaterializedConfiguration {
 
   private final Map<String, Channel> channels;
