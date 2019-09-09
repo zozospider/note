@@ -177,19 +177,32 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
       channelsNotReused.get(channelKlass).addAll(channelNames);
     }
 
+    // 获取所有 channels 名称集合
     Set<String> channelNames = agentConf.getChannelSet();
+    /**
+     * a. 获取 channels 中继承了 ComponentConfiguration 类的 map
+     * b. 遍历所有 channels 名称
+     * c. 通过当前 channel 名称对应的 ComponentConfiguration 子类构造 1 个 Channel 对象
+     * d. 调用当前 Channel 的 configure(c) 方法
+     * e. 加入到传入参数 channelComponentMap 中
+     */
+    // a
     Map<String, ComponentConfiguration> compMap = agentConf.getChannelConfigMap();
     /*
      * Components which have a ComponentConfiguration object
      * 具有 ComponentConfiguration 对象的 Components
      */
+    // b
     for (String chName : channelNames) {
+      // c
       ComponentConfiguration comp = compMap.get(chName);
       if (comp != null) {
         Channel channel = getOrCreateChannel(channelsNotReused,
             comp.getComponentName(), comp.getType());
         try {
+          // d
           Configurables.configure(channel, comp);
+          // e
           channelComponentMap.put(comp.getComponentName(),
               new ChannelComponent(channel));
           LOGGER.info("Created channel " + chName);
@@ -205,13 +218,23 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
      * and use only Context
      * 没有 ComponentConfiguration 对象且仅使用 Context 的组件
      */
+    /**
+     * a. 遍历所有 channels 名称
+     * b. 通过当前 channel 名称对应的上下文对象构造 1 个 Channel 对象
+     * c. 调用当前 Channel 的 configure(c) 方法
+     * d. 加入到传入参数 channelComponentMap 中
+     */
+    // a
     for (String chName : channelNames) {
+      // b
       Context context = agentConf.getChannelContext().get(chName);
       if (context != null) {
         Channel channel = getOrCreateChannel(channelsNotReused, chName,
             context.getString(BasicConfigurationConstants.CONFIG_TYPE));
         try {
+          // c
           Configurables.configure(channel, context);
+          // d
           channelComponentMap.put(chName, new ChannelComponent(channel));
           LOGGER.info("Created channel " + chName);
         } catch (Exception e) {
@@ -240,21 +263,27 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
     }
   }
 
+  /**
+   * 直接构建 1 个新的或从内存缓存中返回 1 个已有的 Channel 对象
+   */
   private Channel getOrCreateChannel(
       ListMultimap<Class<? extends Channel>, String> channelsNotReused,
       String name, String type)
       throws FlumeException {
 
+    // 通过 channel type 获取对应的 channel class
     Class<? extends Channel> channelClass = channelFactory.getClass(type);
     /*
      * Channel has requested a new instance on each re-configuration
      * Channel 已在每次重新配置时请求新实例
+     * 如果当前 channel class 标记为一次性使用的, 则不用到内存缓存, 直接返回 1 个新的 Channel 实例
      */
     if (channelClass.isAnnotationPresent(Disposable.class)) {
       Channel channel = channelFactory.create(name, type);
       channel.setName(name);
       return channel;
     }
+    // 其他情况下, 先判断内存缓存是否存在, 不存在则新建 1 个 Channel 并加入内存缓存
     Map<String, Channel> channelMap = channelCache.get(channelClass);
     if (channelMap == null) {
       channelMap = new HashMap<String, Channel>();
