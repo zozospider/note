@@ -93,8 +93,11 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
   protected abstract FlumeConfiguration getFlumeConfiguration();
 
   public MaterializedConfiguration getConfiguration() {
+    // 新建此方法需要返回的 MaterializedConfiguration 接口实现对象
     MaterializedConfiguration conf = new SimpleMaterializedConfiguration();
+    // 调用子类 (PropertiesFileConfigurationProvider / MemoryConfigurationProvider / ...) 的 getFlumeConfiguration() 方法, 获取 FlumeConfiguration
     FlumeConfiguration fconfig = getFlumeConfiguration();
+    // 从 FlumeConfiguration 对象中获取当前 agent 名称对应的 AgentConfiguration 对象 (即当前启动的 agent 的配置信息)
     AgentConfiguration agentConf = fconfig.getConfigurationFor(getAgentName());
     if (agentConf != null) {
       Map<String, ChannelComponent> channelComponentMap = Maps.newHashMap();
