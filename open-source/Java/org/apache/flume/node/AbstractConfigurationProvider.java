@@ -92,6 +92,9 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
 
   protected abstract FlumeConfiguration getFlumeConfiguration();
 
+  /**
+   * 实现 ConfigurationProvider 接口的 getConfiguration() 方法. 获取配置对象 MaterializedConfiguration.
+   */
   public MaterializedConfiguration getConfiguration() {
     // 新建此方法需要返回的 MaterializedConfiguration 接口实现对象
     MaterializedConfiguration conf = new SimpleMaterializedConfiguration();
