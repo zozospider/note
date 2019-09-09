@@ -30,7 +30,7 @@ import com.google.common.collect.ImmutableMap;
 
 /**
  * MaterializedConfiguration 接口的简单实现.
- * 可添加单个 Channel, SourceRunner, SinkRunner, 获取所有 Channels, SourceRunners, SinkRunners
+ * 可添加单个 Channel, SourceRunner, SinkRunner, 获取所有 Channels, SourceRunners, SinkRunners.
  */
 public class SimpleMaterializedConfiguration implements MaterializedConfiguration {
 
