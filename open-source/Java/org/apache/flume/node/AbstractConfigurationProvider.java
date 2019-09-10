@@ -107,10 +107,11 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
       Map<String, SourceRunner> sourceRunnerMap = Maps.newHashMap();
       Map<String, SinkRunner> sinkRunnerMap = Maps.newHashMap();
       try {
-        // 通过 agentConf 参数构建所有 channels 对象, 调用他们的 configure(c) 方法, 并加入到 channelComponentMap 参数.
+        // 通过 agentConf 参数构建所有 channels 对象, 调用他们的 configure(c) 方法, 并将 ChannelComponent 加入到 channelComponentMap 参数等.
         loadChannels(agentConf, channelComponentMap);
-        // 通过 agentConf 参数构建所有 sources 对象, 获取对应的 ChannelSelector, ChannelProcessor, SourceRunner, 并将 SourceRunner 加入到 channelComponentMap 参数等.
+        // 通过 agentConf 参数构建所有 sources 对象, 获取 / 创建对应的 ChannelSelector, ChannelProcessor, SourceRunner 对象并设置它们之间的关系, 并将 SourceRunner 加入到 channelComponentMap 参数等.
         loadSources(agentConf, channelComponentMap, sourceRunnerMap);
+        // 通过 agentConf 参数构建所有 sinks 对象, 获取并设置对应的 Channel. 然后获取 / 创建对应的 SinkGroup (可选), SinkProcessor, SinkRunner 对象并设置它们之间的关系, 并将 SinkRunner 加入到 sinkRunnerMap 参数等.
         loadSinks(agentConf, channelComponentMap, sinkRunnerMap);
         Set<String> channelNames = new HashSet<String>(channelComponentMap.keySet());
         for (String channelName : channelNames) {
@@ -154,7 +155,7 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
   }
 
   /**
-   * 通过 agentConf 参数构建所有 channels 对象, 调用他们的 configure(c) 方法, 并加入到 channelComponentMap 参数.
+   * 通过 agentConf 参数构建所有 channels 对象, 调用他们的 configure(c) 方法, 并将 ChannelComponent 加入到 channelComponentMap 参数.
    */
   private void loadChannels(AgentConfiguration agentConf,
       Map<String, ChannelComponent> channelComponentMap)
@@ -305,7 +306,7 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
   }
 
   /**
-   * 通过 agentConf 参数构建所有 sources 对象, 获取对应的 ChannelSelector, ChannelProcessor, SourceRunner, 并将 SourceRunner 加入到 channelComponentMap 参数等.
+   * 通过 agentConf 参数构建所有 sources 对象, 获取 / 创建对应的 ChannelSelector, ChannelProcessor, SourceRunner 对象并设置它们之间的关系, 并将 SourceRunner 加入到 channelComponentMap 参数等.
    */
   private void loadSources(AgentConfiguration agentConf,
       Map<String, ChannelComponent> channelComponentMap,
@@ -321,7 +322,7 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
      * d. 调用当前 Source 的 configure(c) 方法
      * e. 获取当前 Source 对应的所有 channels (不能为空)
      * f. 获取当前 Source 对应的 ChannelSelectorConfiguration
-     * g. 通过当前 Source 对应的所有 channels 和 ChannelSelectorConfiguration 构造 1 个 ChannelSelector 对象
+     * g. 通过当前 Source 对应的所有 channels 和 ChannelSelectorConfiguration 构造 1 个 ChannelSelector 对象 (默认 selector.type = replicating)
      * h. 通过 ChannelSelector 构造 1 个 ChannelProcessor 对象
      * i. 调用当前 ChannelProcessor 的 configure(c) 方法
      * j. 将当前 ChannelProcessor 设置到 Source 中
@@ -522,6 +523,9 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
     }
   }
 
+  /**
+   * 通过 agentConf 参数构建所有 sinks 对象, 获取并设置对应的 Channel. 然后获取 / 创建对应的 SinkGroup (可选), SinkProcessor, SinkRunner 对象并设置它们之间的关系, 并将 SinkRunner 加入到 sinkRunnerMap 参数等.
+   */
   private void loadSinks(AgentConfiguration agentConf,
       Map<String, ChannelComponent> channelComponentMap, Map<String, SinkRunner> sinkRunnerMap)
       throws InstantiationException {
@@ -629,12 +633,12 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
       }
     }
 
-    // 在已配置和未配置 sinkGroups 两种情况下, 分别创建对应的 SinkGroup (可选), SinkProcessor, SinkRunner 对象, 并加入到 sinkRunnerMap 参数.
+    // 在已配置和未配置 sinkGroups 两种情况下, 分别获取 / 创建对应的 SinkGroup (可选), SinkProcessor, SinkRunner 对象并设置它们之间的关系, 并将 SinkRunner 加入到 sinkRunnerMap 参数.
     loadSinkGroups(agentConf, sinks, sinkRunnerMap);
   }
 
   /**
-   * 在已配置和未配置 sinkGroups 两种情况下, 分别创建对应的 SinkGroup (可选), SinkProcessor, SinkRunner 对象, 并加入到 sinkRunnerMap 参数.
+   * 在已配置和未配置 sinkGroups 两种情况下, 分别获取 / 创建对应的 SinkGroup (可选), SinkProcessor, SinkRunner 对象并设置它们之间的关系, 并将 SinkRunner 加入到 sinkRunnerMap 参数.
    */
   private void loadSinkGroups(AgentConfiguration agentConf,
       Map<String, Sink> sinks, Map<String, SinkRunner> sinkRunnerMap)
