@@ -640,6 +640,7 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
     // 获取 SinkGroups 中继承了 ComponentConfiguration 类的 map
     Map<String, ComponentConfiguration> compMap =
         agentConf.getSinkGroupConfigMap();
+    // 记录被 sinkGroups 配置了的 sinks
     Map<String, String> usedSinks = new HashMap<String, String>();
     /**
      * a. 遍历所有 sinkGroups 名称
@@ -694,14 +695,25 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
     }
     // add any unassigned sinks to solo collectors
     // 将任何未分配的 sinks 添加到 solo collectors
+    /**
+     * 没有配置到 SinkGroup 的 sink 使用 DefaultSinkProcessor, 该 DefaultSinkProcessor 只包含 1 个 Sink
+     * a. 筛选出没有配置到 SinkGroup 的 sink
+     * b. 创建 DefaultSinkProcessor, 设置该 DefaultSinkProcessor 的 sinks 属性为当前的这 1 个 Sink
+     * c. 调用当前 SinkProcessor 的 configure(c) 方法 (上下文参数通过默认的空构造方法创建)
+     * d. 加入到传入参数 sinkRunnerMap 中
+     */
     for (Entry<String, Sink> entry : sinks.entrySet()) {
+      // a
       if (!usedSinks.containsValue(entry.getKey())) {
         try {
+          // b
           SinkProcessor pr = new DefaultSinkProcessor();
           List<Sink> sinkMap = new ArrayList<Sink>();
           sinkMap.add(entry.getValue());
           pr.setSinks(sinkMap);
+          // c
           Configurables.configure(pr, new Context());
+          // d
           sinkRunnerMap.put(entry.getKey(), new SinkRunner(pr));
         } catch (Exception e) {
           String msg = String.format("SinkGroup %s has been removed due to " +
@@ -711,8 +723,13 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
       }
     }
   }
+  /**
+   * Channel Component 封装对象
+   */
   private static class ChannelComponent {
+    // 当前 Channel 对象
     final Channel channel;
+    // 当前 Channel 关联的 sources, sinks 名称集合
     final List<String> components;
 
     ChannelComponent(Channel channel) {
