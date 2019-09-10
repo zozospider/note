@@ -113,10 +113,13 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
         loadSources(agentConf, channelComponentMap, sourceRunnerMap);
         // 通过 agentConf 参数构建所有 sinks 对象, 获取并设置对应的 Channel. 然后获取 / 创建对应的 SinkGroup (可选), SinkProcessor, SinkRunner 对象并设置它们之间的关系, 并将 SinkRunner 加入到 sinkRunnerMap 参数等.
         loadSinks(agentConf, channelComponentMap, sinkRunnerMap);
+        // 遍历所有 channel 名称, 将所有 Channel 加入到需要返回的 MaterializedConfiguration 对象中
         Set<String> channelNames = new HashSet<String>(channelComponentMap.keySet());
         for (String channelName : channelNames) {
           ChannelComponent channelComponent = channelComponentMap.get(channelName);
+          // 如果当前 Channel 关联的 sources, sinks 名称集合为空, 则打印 WARN 日志并从 channelComponentMap 和 channelCache 中移除
           if (channelComponent.components.isEmpty()) {
+            // Channel c1 has no components connected and has been removed.
             LOGGER.warn(String.format("Channel %s has no components connected" +
                 " and has been removed.", channelName));
             channelComponentMap.remove(channelName);
@@ -125,15 +128,20 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
             if (nameChannelMap != null) {
               nameChannelMap.remove(channelName);
             }
+          // 将当前 Channel 加入到需要返回的 MaterializedConfiguration 对象中
           } else {
+            // Channel c1 connected to r1
+            // Channel c1 connected to s1
             LOGGER.info(String.format("Channel %s connected to %s",
                 channelName, channelComponent.components.toString()));
             conf.addChannel(channelName, channelComponent.channel);
           }
         }
+        // 遍历 sourceRunnerMap, 将所有 SourceRunner 加入到需要返回的 MaterializedConfiguration 对象中
         for (Map.Entry<String, SourceRunner> entry : sourceRunnerMap.entrySet()) {
           conf.addSourceRunner(entry.getKey(), entry.getValue());
         }
+        // 遍历 sourceRunnerMap, 将所有 SinkRunner 加入到需要返回的 MaterializedConfiguration 对象中
         for (Map.Entry<String, SinkRunner> entry : sinkRunnerMap.entrySet()) {
           conf.addSinkRunner(entry.getKey(), entry.getValue());
         }
