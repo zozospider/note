@@ -109,6 +109,7 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
       try {
         // 通过 agentConf 参数构建所有 channels 对象, 调用他们的 configure(c) 方法, 并加入到 channelComponentMap 参数.
         loadChannels(agentConf, channelComponentMap);
+        // 通过 agentConf 参数构建所有 sources 对象, 获取对应的 ChannelSelector, ChannelProcessor, SourceRunner, 并将 SourceRunner 加入到 channelComponentMap 参数等.
         loadSources(agentConf, channelComponentMap, sourceRunnerMap);
         loadSinks(agentConf, channelComponentMap, sinkRunnerMap);
         Set<String> channelNames = new HashSet<String>(channelComponentMap.keySet());
@@ -217,16 +218,16 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
         }
       }
     }
-    /*
-     * Components which DO NOT have a ComponentConfiguration object
-     * and use only Context
-     * 没有 ComponentConfiguration 对象且仅使用 Context 的组件
-     */
     /**
      * a. 遍历所有 channels 名称
      * b. 通过当前 channel 名称对应的上下文对象构造 1 个 Channel 对象
      * c. 调用当前 Channel 的 configure(c) 方法
      * d. 加入到传入参数 channelComponentMap 中
+     */
+    /*
+     * Components which DO NOT have a ComponentConfiguration object
+     * and use only Context
+     * 没有 ComponentConfiguration 对象且仅使用 Context 的组件
      */
     // a
     for (String chName : channelNames) {
@@ -303,19 +304,40 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
     return channel;
   }
 
+  /**
+   * 通过 agentConf 参数构建所有 sources 对象, 获取对应的 ChannelSelector, ChannelProcessor, SourceRunner, 并将 SourceRunner 加入到 channelComponentMap 参数等.
+   */
   private void loadSources(AgentConfiguration agentConf,
       Map<String, ChannelComponent> channelComponentMap,
       Map<String, SourceRunner> sourceRunnerMap)
       throws InstantiationException {
 
+    // 获取所有 sources 名称集合
     Set<String> sourceNames = agentConf.getSourceSet();
+    /**
+     * a. 获取 sources 中继承了 ComponentConfiguration 类的 map
+     * b. 遍历所有 sources 名称
+     * c. 通过当前 Source 名称对应的 ComponentConfiguration 子类构造 1 个 Source 对象
+     * d. 调用当前 Source 的 configure(c) 方法
+     * e. 获取当前 Source 对应的所有 channels (不能为空)
+     * f. 获取当前 Source 对应的 ChannelSelectorConfiguration
+     * g. 通过当前 Source 对应的所有 channels 和 ChannelSelectorConfiguration 构造 1 个 ChannelSelector 对象
+     * h. 通过 ChannelSelector 构造 1 个 ChannelProcessor 对象
+     * i. 调用当前 ChannelProcessor 的 configure(c) 方法
+     * j. 将当前 ChannelProcessor 设置到 Source 中
+     * k. 通过当前 Source 构造 1 个 SourceRunner 对象, 并加入到传入参数 sourceRunnerMap 中
+     * l. 遍历当前 Source 对应的所有 channels, 将每个 Channel 对应的 channelComponentMap 参数中的 ChannelComponent 对象的 components 属性添加当前 Source 名称
+     */
+    // a
     Map<String, ComponentConfiguration> compMap =
         agentConf.getSourceConfigMap();
     /*
      * Components which have a ComponentConfiguration object
      * 具有 ComponentConfiguration 对象的 Components
      */
+    // b
     for (String sourceName : sourceNames) {
+      // c
       ComponentConfiguration comp = compMap.get(sourceName);
       if (comp != null) {
         SourceConfiguration config = (SourceConfiguration) comp;
@@ -323,7 +345,9 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
         Source source = sourceFactory.create(comp.getComponentName(),
             comp.getType());
         try {
+          // d
           Configurables.configure(source, config);
+          // e
           Set<String> channelNames = config.getChannels();
           List<Channel> sourceChannels =
                   getSourceChannels(channelComponentMap, source, channelNames);
@@ -332,18 +356,25 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
                 "channel",  sourceName);
             throw new IllegalStateException(msg);
           }
+          // f
           ChannelSelectorConfiguration selectorConfig =
               config.getSelectorConfiguration();
 
+          // g
           ChannelSelector selector = ChannelSelectorFactory.create(
               sourceChannels, selectorConfig);
 
+          // h
           ChannelProcessor channelProcessor = new ChannelProcessor(selector);
+          // i
           Configurables.configure(channelProcessor, config);
 
+          // j
           source.setChannelProcessor(channelProcessor);
+          // k
           sourceRunnerMap.put(comp.getComponentName(),
               SourceRunner.forSource(source));
+          // l
           for (Channel channel : sourceChannels) {
             ChannelComponent channelComponent =
                 Preconditions.checkNotNull(channelComponentMap.get(channel.getName()),
@@ -357,20 +388,39 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
         }
       }
     }
+    /**
+     * a. 获取 sources 中所有对应的上下文的 map
+     * b. 遍历所有 sources 名称
+     * c. 通过当前 Source 名称对应的上下文对象构造 1 个 Source 对象
+     * d. 调用当前 Source 的 configure(c) 方法
+     * e. 获取当前 Source 对应的所有 channels (不能为空)
+     * f. 通过当前 Source 对应的上下文对象获取当前 Source 对应的 selectorConfig map
+     * g. 通过当前 Source 对应的所有 channels 和 selectorConfig map 构造 1 个 ChannelSelector 对象
+     * h. 通过 ChannelSelector 构造 1 个 ChannelProcessor 对象
+     * i. 调用当前 ChannelProcessor 的 configure(c) 方法
+     * j. 将当前 ChannelProcessor 设置到 Source 中
+     * k. 通过当前 Source 构造 1 个 SourceRunner 对象, 并加入到传入参数 sourceRunnerMap 中
+     * l. 遍历当前 Source 对应的所有 channels, 将每个 Channel 对应的 channelComponentMap 参数中的 ChannelComponent 对象的 components 属性添加当前 Source 名称
+     */
     /*
      * Components which DO NOT have a ComponentConfiguration object
      * and use only Context
      * 没有 ComponentConfiguration 对象且仅使用 Context 的 Components
      */
+    // a
     Map<String, Context> sourceContexts = agentConf.getSourceContext();
+    // b
     for (String sourceName : sourceNames) {
+      // c
       Context context = sourceContexts.get(sourceName);
       if (context != null) {
         Source source =
             sourceFactory.create(sourceName,
                                  context.getString(BasicConfigurationConstants.CONFIG_TYPE));
         try {
+          // d
           Configurables.configure(source, context);
+          // e
           String[] channelNames = context.getString(
               BasicConfigurationConstants.CONFIG_CHANNELS).split("\\s+");
           List<Channel> sourceChannels =
@@ -380,17 +430,24 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
                 "channel",  sourceName);
             throw new IllegalStateException(msg);
           }
+          // f
           Map<String, String> selectorConfig = context.getSubProperties(
               BasicConfigurationConstants.CONFIG_SOURCE_CHANNELSELECTOR_PREFIX);
 
+          // g
           ChannelSelector selector = ChannelSelectorFactory.create(
               sourceChannels, selectorConfig);
 
+          // h
           ChannelProcessor channelProcessor = new ChannelProcessor(selector);
+          // i
           Configurables.configure(channelProcessor, context);
+          // j
           source.setChannelProcessor(channelProcessor);
+          // k
           sourceRunnerMap.put(sourceName,
               SourceRunner.forSource(source));
+          // l
           for (Channel channel : sourceChannels) {
             ChannelComponent channelComponent =
                 Preconditions.checkNotNull(channelComponentMap.get(channel.getName()),
@@ -406,6 +463,12 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
     }
   }
 
+  /**
+   * 获取当前 Source 对应的所有 channels
+   * channelComponentMap: 当前 Agent 中的所有 Channel 名称和 ChannelComponent 映射的 map
+   * source: 当前 Source
+   * channelNames: 当前 Source 的所有 Channel 名称
+   */
   private List<Channel> getSourceChannels(Map<String, ChannelComponent> channelComponentMap,
                   Source source, Collection<String> channelNames) throws InstantiationException {
     List<Channel> sourceChannels = new ArrayList<Channel>();
@@ -419,6 +482,9 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
     return sourceChannels;
   }
 
+  /**
+   * 所配置的当前 Source 对应 Channel 的 transactionCapacity 必须大于或等于当前 Source 的 batchSize
+   */
   private void checkSourceChannelCompatibility(Source source, Channel channel)
       throws InstantiationException {
     if (source instanceof BatchSizeSupported && channel instanceof TransactionCapacitySupported) {
