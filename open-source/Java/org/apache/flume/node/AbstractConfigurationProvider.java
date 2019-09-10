@@ -646,13 +646,19 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
      * b. 遍历当前 sinkGroup 名称对应的 ComponentConfiguration 子类 (SinkGroupConfiguration) 的所有 sinks 名称
      * c. 从 sinks 参数中取出当前 sink 名称对应的 value Sink (不能为 null)
      * d. 将取出的 Sink 加入到当前 sinkGroup 对应的 groupSinks 集合中
+     * e. 通过当前 sinkGroup 对应的 groupSinks 集合构建 1 个 SinkGroup 对象
+     * f. 调用当前 SinkGroup 的 configure(c) 方法
+     * g. 通过当前 SinkGroup 的 SinkProcessor 属性构造 1 个 SinkRunner 对象, 并加入到传入参数 sinkRunnerMap 中
      */
+    // a
     for (String groupName: sinkGroupNames) {
+      // b
       ComponentConfiguration comp = compMap.get(groupName);
       if (comp != null) {
         SinkGroupConfiguration groupConf = (SinkGroupConfiguration) comp;
         List<Sink> groupSinks = new ArrayList<Sink>();
         for (String sink : groupConf.getSinks()) {
+          // c
           Sink s = sinks.remove(sink);
           if (s == null) {
             String sinkUser = usedSinks.get(sink);
@@ -667,12 +673,16 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
                       groupName));
             }
           }
+          // d
           groupSinks.add(s);
           usedSinks.put(sink, groupName);
         }
         try {
+          // e
           SinkGroup group = new SinkGroup(groupSinks);
+          // f
           Configurables.configure(group, groupConf);
+          // g
           sinkRunnerMap.put(comp.getComponentName(),
               new SinkRunner(group.getProcessor()));
         } catch (Exception e) {
