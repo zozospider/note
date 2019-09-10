@@ -502,6 +502,9 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
     }
   }
 
+  /**
+   * 所配置的当前 Sink 对应 Channel 的 transactionCapacity 必须大于或等于当前 Sink 的 batchSize
+   */
   private void checkSinkChannelCompatibility(Sink sink, Channel channel)
       throws InstantiationException {
     if (sink instanceof BatchSizeSupported && channel instanceof TransactionCapacitySupported) {
@@ -522,21 +525,39 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
   private void loadSinks(AgentConfiguration agentConf,
       Map<String, ChannelComponent> channelComponentMap, Map<String, SinkRunner> sinkRunnerMap)
       throws InstantiationException {
+    // 获取所有 sinks 名称集合
     Set<String> sinkNames = agentConf.getSinkSet();
+    /**
+     * a. 获取 sinks 中继承了 ComponentConfiguration 类的 map
+     * b. 初始化 sinks map, 用于存储所有 sinks
+     * c. 遍历所有 sinks 名称
+     * d. 通过当前 Sink 名称对应的 ComponentConfiguration 子类构造 1 个 Sink 对象
+     * e. 调用当前 Sink 的 configure(c) 方法
+     * f. 获取当前 Sink 对应的 Channel (不能为空, 所配置的当前 Sink 对应 Channel 的 transactionCapacity 必须大于或等于当前 Sink 的 batchSize)
+     * g. 将当前 Channel 设置到 Sink 中
+     * h. 将当前 Sink 加入到 sinks map 中
+     * i. 将当前 Sink 名称到传入参数 channelComponentMap 中
+     */
+    // a
     Map<String, ComponentConfiguration> compMap =
         agentConf.getSinkConfigMap();
+    // b
     Map<String, Sink> sinks = new HashMap<String, Sink>();
     /*
      * Components which have a ComponentConfiguration object
      * 具有 ComponentConfiguration 对象的 Components
      */
+    // c
     for (String sinkName : sinkNames) {
+      // d
       ComponentConfiguration comp = compMap.get(sinkName);
       if (comp != null) {
         SinkConfiguration config = (SinkConfiguration) comp;
         Sink sink = sinkFactory.create(comp.getComponentName(), comp.getType());
         try {
+          // e
           Configurables.configure(sink, config);
+          // f
           ChannelComponent channelComponent = channelComponentMap.get(config.getChannel());
           if (channelComponent == null) {
             String msg = String.format("Sink %s is not connected to a " +
@@ -544,8 +565,11 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
             throw new IllegalStateException(msg);
           }
           checkSinkChannelCompatibility(sink, channelComponent.channel);
+          // g
           sink.setChannel(channelComponent.channel);
+          // h
           sinks.put(comp.getComponentName(), sink);
+          // i
           channelComponent.components.add(sinkName);
         } catch (Exception e) {
           String msg = String.format("Sink %s has been removed due to an " +
@@ -554,19 +578,34 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
         }
       }
     }
+    /**
+     * a. 获取 sinks 中所有对应的上下文的 map
+     * b. 遍历所有 sinks 名称
+     * c. 通过当前 Sink 名称对应的上下文对象构造构造 1 个 Sink 对象
+     * d. 调用当前 Sink 的 configure(c) 方法
+     * e. 获取当前 Sink 对应的 Channel (不能为空, 所配置的当前 Sink 对应 Channel 的 transactionCapacity 必须大于或等于当前 Sink 的 batchSize)
+     * f. 将当前 Channel 设置到 Sink 中
+     * g. 将当前 Sink 加入到 sinks map 中
+     * h. 将当前 Sink 名称到传入参数 channelComponentMap 中
+     */
     /*
      * Components which DO NOT have a ComponentConfiguration object
      * and use only Context
      * 没有 ComponentConfiguration 对象且仅使用 Context 的 Components
      */
+    // a
     Map<String, Context> sinkContexts = agentConf.getSinkContext();
+    // b
     for (String sinkName : sinkNames) {
+      // c
       Context context = sinkContexts.get(sinkName);
       if (context != null) {
         Sink sink = sinkFactory.create(sinkName, context.getString(
             BasicConfigurationConstants.CONFIG_TYPE));
         try {
+          // d
           Configurables.configure(sink, context);
+          // e
           ChannelComponent channelComponent =
               channelComponentMap.get(
                   context.getString(BasicConfigurationConstants.CONFIG_CHANNEL));
@@ -576,8 +615,11 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
             throw new IllegalStateException(msg);
           }
           checkSinkChannelCompatibility(sink, channelComponent.channel);
+          // f
           sink.setChannel(channelComponent.channel);
+          // g
           sinks.put(sinkName, sink);
+          // h
           channelComponent.components.add(sinkName);
         } catch (Exception e) {
           String msg = String.format("Sink %s has been removed due to an " +
