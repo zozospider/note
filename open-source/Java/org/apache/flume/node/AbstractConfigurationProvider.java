@@ -637,10 +637,16 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
           throws InstantiationException {
     // 获取所有 sinkGroups 名称
     Set<String> sinkGroupNames = agentConf.getSinkgroupSet();
-    // 获取 sinks 中继承了 ComponentConfiguration 类的 map
+    // 获取 SinkGroups 中继承了 ComponentConfiguration 类的 map
     Map<String, ComponentConfiguration> compMap =
         agentConf.getSinkGroupConfigMap();
     Map<String, String> usedSinks = new HashMap<String, String>();
+    /**
+     * a. 遍历所有 sinkGroups 名称
+     * b. 遍历当前 sinkGroup 名称对应的 ComponentConfiguration 子类 (SinkGroupConfiguration) 的所有 sinks 名称
+     * c. 从 sinks 参数中取出当前 sink 名称对应的 value Sink (不能为 null)
+     * d. 将取出的 Sink 加入到当前 sinkGroup 对应的 groupSinks 集合中
+     */
     for (String groupName: sinkGroupNames) {
       ComponentConfiguration comp = compMap.get(groupName);
       if (comp != null) {
