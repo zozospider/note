@@ -55,6 +55,7 @@
         - lifecycle
           - [LifecycleAware.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/lifecycle/LifecycleAware.java)
           - [LifecycleState.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/lifecycle/LifecycleState.java)
+          - [LifecycleSupervisor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/lifecycle/LifecycleSupervisor.java)
         - node
           - [AbstractConfigurationProvider.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/node/AbstractConfigurationProvider.java)
           - [Application.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/node/Application.java)
