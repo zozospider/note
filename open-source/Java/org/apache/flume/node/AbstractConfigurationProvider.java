@@ -94,6 +94,10 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
 
   /**
    * 实现 ConfigurationProvider 接口的 getConfiguration() 方法. 获取配置对象 MaterializedConfiguration.
+   * 主要逻辑为:
+   * a. 获取配置文件对应的 FlumeConfiguration 对象和当前 agent 对应的 AgentConfiguration 对象
+   * b. 构建所有配置的 channels, sources (ChannelSelector, ChannelProcessor, SourceRunner), sinks (SinkGroup, SinkProcessor, SinkRunner) 对象, 并调用它们的 configure(c) 方法.
+   * c. 将所有 channels, sourceRunners, sinkRunners 设置到 MaterializedConfiguration 并返回.
    */
   public MaterializedConfiguration getConfiguration() {
     // 新建此方法需要返回的 MaterializedConfiguration 接口实现对象
