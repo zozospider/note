@@ -629,9 +629,13 @@ public abstract class AbstractConfigurationProvider implements ConfigurationProv
       }
     }
 
+    // 在已配置和未配置 sinkGroups 两种情况下, 分别创建对应的 SinkGroup (可选), SinkProcessor, SinkRunner 对象, 并加入到 sinkRunnerMap 参数.
     loadSinkGroups(agentConf, sinks, sinkRunnerMap);
   }
 
+  /**
+   * 在已配置和未配置 sinkGroups 两种情况下, 分别创建对应的 SinkGroup (可选), SinkProcessor, SinkRunner 对象, 并加入到 sinkRunnerMap 参数.
+   */
   private void loadSinkGroups(AgentConfiguration agentConf,
       Map<String, Sink> sinks, Map<String, SinkRunner> sinkRunnerMap)
           throws InstantiationException {
