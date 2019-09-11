@@ -122,8 +122,10 @@ public class Application {
   }
 
   private void stopAllComponents() {
+    // 在 materializedConfiguration 不为 null 的情况下 (即重新加载配置而非重新启动), 需要停止所有 components.
     if (this.materializedConfiguration != null) {
       logger.info("Shutting down configuration: {}", this.materializedConfiguration);
+      // 停止所有 sourceRunners
       for (Entry<String, SourceRunner> entry :
            this.materializedConfiguration.getSourceRunners().entrySet()) {
         try {
@@ -134,6 +136,7 @@ public class Application {
         }
       }
 
+      // 停止所有 sinkRunners
       for (Entry<String, SinkRunner> entry :
            this.materializedConfiguration.getSinkRunners().entrySet()) {
         try {
@@ -144,6 +147,7 @@ public class Application {
         }
       }
 
+      // 停止所有 channels
       for (Entry<String, Channel> entry :
            this.materializedConfiguration.getChannels().entrySet()) {
         try {
@@ -154,6 +158,7 @@ public class Application {
         }
       }
     }
+    // 停止监控服务
     if (monitorServer != null) {
       monitorServer.stop();
     }
