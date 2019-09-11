@@ -39,6 +39,12 @@ public class JMXPollUtil {
   private static Logger LOG = LoggerFactory.getLogger(JMXPollUtil.class);
   private static MBeanServer mbeanServer = ManagementFactory.getPlatformMBeanServer();
 
+  /**
+   * 获取所有实现了 MBeans 接口的实现对象的相关数据:
+   * ChannelCounterMBean: ChannelCounter
+   * SinkCounterMBean: SinkCounter
+   * SourceCounterMBean: SourceCounter
+   */
   public static Map<String, Map<String, String>> getAllMBeans() {
     Map<String, Map<String, String>> mbeanMap = Maps.newHashMap();
     Set<ObjectInstance> queryMBeans = null;

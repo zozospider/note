@@ -119,6 +119,9 @@ public class HTTPMetricsServer implements MonitorService {
     Type mapType = new TypeToken<Map<String, Map<String, String>>>() {}.getType();
     Gson gson = new Gson();
 
+    /**
+     * 获取所有实现了 MBeans 接口的实现对象的相关数据, 将其转换为 JSON 格式并返回.
+     */
     @Override
     public void handle(String target, Request r1,
             HttpServletRequest request,
@@ -148,8 +151,11 @@ public class HTTPMetricsServer implements MonitorService {
       } else if (target.equalsIgnoreCase("/metrics")) {
         response.setContentType("application/json;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
+        // 获取所有实现了 MBeans 接口的实现对象的相关数据
         Map<String, Map<String, String>> metricsMap = JMXPollUtil.getAllMBeans();
+        // 转换为 JSON 格式
         String json = gson.toJson(metricsMap, mapType);
+        // 返回
         response.getWriter().write(json);
         response.flushBuffer();
         ((Request) request).setHandled(true);
