@@ -59,6 +59,10 @@ public class HTTPMetricsServer implements MonitorService {
   public static int DEFAULT_PORT = 41414;
   public static String CONFIG_PORT = "port";
 
+  /**
+   * 实现 MonitorService 接口的 start() 方法
+   * 使用 Jetty 启动一个 HTTP 服务, 端口默认为 41414
+   */
   @Override
   public void start() {
     jettyServer = new Server();
@@ -83,6 +87,10 @@ public class HTTPMetricsServer implements MonitorService {
 
   }
 
+  /**
+   * 实现 MonitorService 接口的 stop() 方法
+   * 停止当前的 Jetty HTTP 服务
+   */
   @Override
   public void stop() {
     try {
@@ -94,11 +102,18 @@ public class HTTPMetricsServer implements MonitorService {
 
   }
 
+  /**
+   * 实现 Configurable 接口的 configure(c) 方法
+   * 获取上下文中配置的端口, 默认为 41414
+   */
   @Override
   public void configure(Context context) {
     port = context.getInteger(CONFIG_PORT, DEFAULT_PORT);
   }
 
+  /**
+   * Http 接收请求逻辑
+   */
   private class HTTPMetricsHandler extends AbstractHandler {
 
     Type mapType = new TypeToken<Map<String, Map<String, String>>>() {}.getType();
@@ -129,6 +144,7 @@ public class HTTPMetricsServer implements MonitorService {
         response.flushBuffer();
         ((Request) request).setHandled(true);
         return;
+      // 请求路径必须为 /metrics
       } else if (target.equalsIgnoreCase("/metrics")) {
         response.setContentType("application/json;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
