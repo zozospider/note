@@ -63,6 +63,7 @@ public class Application {
   public static final String CONF_MONITOR_CLASS = "flume.monitoring.type";
   public static final String CONF_MONITOR_PREFIX = "flume.monitoring.";
 
+  // reload 时用于存储所有 components
   private final List<LifecycleAware> components;
   private final LifecycleSupervisor supervisor;
   private MaterializedConfiguration materializedConfiguration;
@@ -78,23 +79,34 @@ public class Application {
     supervisor = new LifecycleSupervisor();
   }
 
+  /**
+   * 启动所有 components (reload 时用到)
+   */
   public void start() {
+    // 锁定
     lifecycleLock.lock();
     try {
+      // 启动所有 components (reload 时该 components 不为空)
       for (LifecycleAware component : components) {
         supervisor.supervise(component,
             new SupervisorPolicy.AlwaysRestartPolicy(), LifecycleState.START);
       }
     } finally {
+      // 解锁
       lifecycleLock.unlock();
     }
   }
 
+  /**
+   * 停止所有 components (如果已存在), 启动所有 components, 加载并启动监控服务
+   */
   @Subscribe
   public void handleConfigurationEvent(MaterializedConfiguration conf) {
     try {
       lifecycleLock.lockInterruptibly();
+      // 停止所有 components (如果已存在)
       stopAllComponents();
+      // 启动所有 components, 加载并启动监控服务
       startAllComponents(conf);
     } catch (InterruptedException e) {
       logger.info("Interrupted while trying to handle configuration event");
@@ -121,8 +133,11 @@ public class Application {
     }
   }
 
+  /**
+   * 停止所有 components (如果已存在)
+   */
   private void stopAllComponents() {
-    // 在 materializedConfiguration 不为 null 的情况下 (即重新加载配置而非重新启动), 需要停止所有 components.
+    // 在当前对象的成员变量 materializedConfiguration 不为 null 的情况下 (即重新加载配置而非重新启动), 需要停止所有 components.
     if (this.materializedConfiguration != null) {
       logger.info("Shutting down configuration: {}", this.materializedConfiguration);
       // 停止所有 sourceRunners
@@ -164,11 +179,16 @@ public class Application {
     }
   }
 
+  /**
+   * 启动所有 components, 加载并启动监控服务
+   */
   private void startAllComponents(MaterializedConfiguration materializedConfiguration) {
     logger.info("Starting new configuration:{}", materializedConfiguration);
 
+    // 设置到当前对象的成员变量 materializedConfiguration
     this.materializedConfiguration = materializedConfiguration;
 
+    // 启动所有 channels (异步)
     for (Entry<String, Channel> entry :
         materializedConfiguration.getChannels().entrySet()) {
       try {
@@ -183,11 +203,15 @@ public class Application {
     /*
      * Wait for all channels to start.
      * 等待所有 channels 开始.
+     * 由于所有 channels 通过异步启动, 在此需要等待所有 channels 状态都变为 START 才进入下面的逻辑.
      */
     for (Channel ch : materializedConfiguration.getChannels().values()) {
       while (ch.getLifecycleState() != LifecycleState.START
           && !supervisor.isComponentInErrorState(ch)) {
         try {
+          // Waiting for channel: c1 to start. Sleeping for 500 ms
+          // Waiting for channel: c2 to start. Sleeping for 500 ms
+          // ...
           logger.info("Waiting for channel: " + ch.getName() +
               " to start. Sleeping for 500 ms");
           Thread.sleep(500);
@@ -198,6 +222,7 @@ public class Application {
       }
     }
 
+    // 启动所有 sinkRunners (异步)
     for (Entry<String, SinkRunner> entry : materializedConfiguration.getSinkRunners().entrySet()) {
       try {
         logger.info("Starting Sink " + entry.getKey());
@@ -208,6 +233,7 @@ public class Application {
       }
     }
 
+    // 启动所有 sourceRunners (异步)
     for (Entry<String, SourceRunner> entry :
          materializedConfiguration.getSourceRunners().entrySet()) {
       try {
@@ -219,28 +245,49 @@ public class Application {
       }
     }
 
+    // 加载并启动监控服务
     this.loadMonitoring();
   }
 
+  /**
+   * 加载并启动监控服务
+   */
   @SuppressWarnings("unchecked")
   private void loadMonitoring() {
     Properties systemProps = System.getProperties();
     Set<String> keys = systemProps.stringPropertyNames();
     try {
+      /**
+       * 如果系统参数中有 flume.monitoring.type, 则初始化对应的监控服务
+       * a. 判断系统参数中是否有 flume.monitoring.type
+       * b. 如果有则获取传入参数值
+       * c. 根据传入参数值, 判断是否是已知类型
+       * d. 如果是已知类型, 则创建已知的 MonitorService 实例对象
+       * e. 如果不是已知类型, 则创建配置的 MonitorService 实例对象
+       * f. 将传入的监控参数加入到上下文对象
+       * g. 调用当前 MonitorService 的 configure(c) 方法
+       * h. 启动当前 MonitorService
+       */
+      // a
       if (keys.contains(CONF_MONITOR_CLASS)) {
+        // b
         String monitorType = systemProps.getProperty(CONF_MONITOR_CLASS);
         Class<? extends MonitorService> klass;
         try {
+          // c
+          // d
           //Is it a known type?
           // 它是一种已知类型吗?
           klass = MonitoringType.valueOf(
               monitorType.toUpperCase(Locale.ENGLISH)).getMonitorClass();
         } catch (Exception e) {
+          // e
           //Not a known type, use FQCN
           // 不是已知类型, 使用 FQCN
           klass = (Class<? extends MonitorService>) Class.forName(monitorType);
         }
         this.monitorServer = klass.newInstance();
+        // f
         Context context = new Context();
         for (String key : keys) {
           if (key.startsWith(CONF_MONITOR_PREFIX)) {
@@ -248,7 +295,9 @@ public class Application {
                 systemProps.getProperty(key));
           }
         }
+        // g
         monitorServer.configure(context);
+        // h
         monitorServer.start();
       }
     } catch (Exception e) {
@@ -316,12 +365,14 @@ public class Application {
       }
 
       Application application;
+      // 以下为使用 ZooKeeper 配置逻辑 (即不使用配置文件)
       if (isZkConfigured) {
         // get options
         // 得到选项
         String zkConnectionStr = commandLine.getOptionValue('z');
         String baseZkPath = commandLine.getOptionValue('p');
 
+        // 以下为 reload 逻辑
         if (reload) {
           EventBus eventBus = new EventBus(agentName + "-event-bus");
           List<LifecycleAware> components = Lists.newArrayList();
@@ -331,6 +382,7 @@ public class Application {
           components.add(zookeeperConfigurationProvider);
           application = new Application(components);
           eventBus.register(application);
+        // 以下为非 reload 逻辑
         } else {
           StaticZooKeeperConfigurationProvider zookeeperConfigurationProvider =
               new StaticZooKeeperConfigurationProvider(
@@ -338,7 +390,7 @@ public class Application {
           application = new Application();
           application.handleConfigurationEvent(zookeeperConfigurationProvider.getConfiguration());
         }
-      // 以下为不使用 ZooKeeper 配置逻辑
+      // 以下为不使用 ZooKeeper 配置逻辑 (即使用配置文件)
       } else {
         // 配置文件 File 对象
         File configurationFile = new File(commandLine.getOptionValue('f'));
@@ -366,6 +418,7 @@ public class Application {
         }
         List<LifecycleAware> components = Lists.newArrayList();
 
+        // 以下为 reload 逻辑
         if (reload) {
           EventBus eventBus = new EventBus(agentName + "-event-bus");
           PollingPropertiesFileConfigurationProvider configurationProvider =
@@ -374,16 +427,18 @@ public class Application {
           components.add(configurationProvider);
           application = new Application(components);
           eventBus.register(application);
-        // 没有 reload
+        // 以下为非 reload 逻辑
         } else {
           // 新建 ConfigurationProvider 的具体实现对象 PropertiesFileConfigurationProvider, 传入参数: agent 名称, 配置文件 File 对象
           PropertiesFileConfigurationProvider configurationProvider =
               new PropertiesFileConfigurationProvider(agentName, configurationFile);
           application = new Application();
           // 通过 ConfigurationProvider 接口的 getConfiguration() 接口获取 MaterializedConfiguration (即 Flume 配置文件的具体化)
+          // 停止所有 components (如果已存在), 启动所有 components, 加载并启动监控服务
           application.handleConfigurationEvent(configurationProvider.getConfiguration());
         }
       }
+      // 启动所有 components (reload 时用到)
       application.start();
 
       final Application appReference = application;
