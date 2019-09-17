@@ -204,7 +204,7 @@ public class MultiplexingChannelSelector extends AbstractChannelSelector {
         reqdChannels = defaultChannels;
       }
       // 将 required channels 从 optional channels 中删除
-      for (Channel c :  ) {
+      for (Channel c : reqdChannels) {
         if (confChannels.contains(c)) {
           confChannels.remove(c);
         }
