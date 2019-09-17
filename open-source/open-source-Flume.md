@@ -10,7 +10,6 @@
           - [AbstractChannelSelector.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/channel/AbstractChannelSelector.java)
           - [BasicChannelSemantics.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/channel/BasicChannelSemantics.java)
           - [BasicTransactionSemantics.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/channel/BasicTransactionSemantics.java)
-          - [ChannelFactory.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/channel/ChannelFactory.java)
           - [ChannelProcessor.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/channel/ChannelProcessor.java)
           - [ChannelSelector.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/channel/ChannelSelector.java)
           - [DefaultChannelFactory.java](https://github.com/zozospider/note/blob/master/open-source/Java/org/apache/flume/channel/DefaultChannelFactory.java)
