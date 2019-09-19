@@ -20,7 +20,7 @@
 
 # 一. hostname 和 host 设置 (本地, 伪分布式, 完全分布式都需要配置)
 
-在 Hadoop 中, 各个节点会会进行如下两部操作:
+在 Hadoop 中, 各个节点会进行如下两部操作:
 
 - step1. 获取本机的 hostname 值
 ```java
