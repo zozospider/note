@@ -32,10 +32,14 @@
   <description>version of this configuration file</description>
 </property>
 
+<!-- 指定 Hadoop 运行时产生文件的存储目录 -->
 <property>
   <name>hadoop.tmp.dir</name>
   <value>/tmp/hadoop-${user.name}</value>
   <description>A base for other temporary directories.</description>
+  <!--
+  <description>其他临时目录的基础.</description>
+  -->
 </property>
 
 <property>
@@ -505,6 +509,7 @@ for ldap providers in the same way as above does.
 
 <!-- file system properties -->
 
+<!-- 指定 HDFS 中 NameNode 的地址 -->
 <property>
   <name>fs.defaultFS</name>
   <value>file:///</value>
@@ -513,6 +518,11 @@ for ldap providers in the same way as above does.
   uri's scheme determines the config property (fs.SCHEME.impl) naming
   the FileSystem implementation class.  The uri's authority is used to
   determine the host, port, etc. for a filesystem.</description>
+  <!--
+  <description>默认 file system 的名称. 一个 URI, 其 scheme 和 authority 确定 FileSystem 的实现.
+  uri 的 scheme 确定命名 FileSystem 实现类的 config 属性 (fs.SCHEME.impl).
+  uri 的 authority 用于确定 file system 的 host, port 等.</description>
+  -->
 </property>
 
 <property>

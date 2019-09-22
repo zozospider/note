@@ -78,12 +78,18 @@
   </description>
 </property>
 
+<!-- 指定 Hadoop SecondaryNameNode 的地址 -->
 <property>
   <name>dfs.namenode.secondary.http-address</name>
   <value>0.0.0.0:50090</value>
   <description>
     The secondary namenode http server address and port.
   </description>
+  <!--
+  <description>
+    secondary namenode http 服务器 address 和 port.
+  </description>
+  -->
 </property>
 
 <property>
@@ -279,6 +285,7 @@
   </description>
 </property>
 
+<!-- namenode 元数据存储目录 -->
 <property>
   <name>dfs.namenode.name.dir</name>
   <value>file://${hadoop.tmp.dir}/dfs/name</value>
@@ -286,6 +293,10 @@
       should store the name table(fsimage).  If this is a comma-delimited list
       of directories then the name table is replicated in all of the
       directories, for redundancy. </description>
+  <!--
+  <description>确定 DFS 名称节点在 local filesystem 上应该存储名称表 (fsimage) 的位置.
+  如果这是用逗号分隔的目录列表, 则将名称表复制到所有目录中, 以实现冗余. </description>
+  -->
 </property>
 
 <property>
@@ -446,6 +457,7 @@
   symbolic.</description>
 </property>
 
+<!-- 指定 HDFS 副本数 -->
 <property>
   <name>dfs.replication</name>
   <value>3</value>
@@ -453,6 +465,11 @@
   The actual number of replications can be specified when the file is created.
   The default is used if replication is not specified in create time.
   </description>
+  <!--
+  <description>默认块复制.
+  创建文件时可以指定实际的复制数量. 如果在创建时未指定复制, 则使用默认值.
+  </description>
+  -->
 </property>
 
 <property>
