@@ -1069,8 +1069,8 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
   <!-- 指定 HDFS 中 NameNode 的地址 -->
   <property>
     <name>fs.defaultFS</name>
-    <value>hdfs://vm017:9000</value>
     <!-- value: file:/// -->
+    <value>hdfs://vm017:9000</value>
     <description>
       The name of the default file system. A URI whose scheme and authority determine the FileSystem implementation. The uri's scheme determines the config property (fs.SCHEME.impl) naming the FileSystem implementation class. The uri's authority is used to determine the host, port, etc. for a filesystem.
     </description>
@@ -1079,8 +1079,8 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
   <!-- 指定 Hadoop 运行时产生文件的存储目录 -->
   <property>
     <name>hadoop.tmp.dir</name>
-    <value>/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp</value>
     <!-- value: /tmp/hadoop-${user.name} -->
+    <value>/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp</value>
     <description>
       A base for other temporary directories.
     </description>
@@ -1115,8 +1115,8 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
   <!-- 指定 HDFS 副本数 -->
   <property>
     <name>dfs.replication</name>
-    <value>1</value>
     <!-- value: 3 -->
+    <value>1</value>
     <description>
       Default block replication. The actual number of replications can be specified when the file is created. The default is used if replication is not specified in create time.
     </description>
@@ -1638,8 +1638,8 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
   <!-- Reducer 获取数据的方式 -->
   <property>
     <name>yarn.nodemanager.aux-services</name>
-    <value>mapreduce_shuffle</value>
     <!-- value: -->
+    <value>mapreduce_shuffle</value>
     <description>
       A comma separated list of services where service name should only contain a-zA-Z0-9_ and can not start with numbers
     </description>
@@ -1648,8 +1648,8 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
   <!-- 指定 YARN 的 ResourceManager 对应节点的 hostname -->
   <property>
     <name>yarn.resourcemanager.hostname</name>
+    <!-- value: 0.0.0.0 -->
     <value>vm017</value>
-		<!-- value: 0.0.0.0 -->
     <description>
       The hostname of the RM.
     </description>
@@ -1693,8 +1693,8 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
   <!-- 指定 MapReduce 运行在 YARN 上 -->
   <property>
     <name>mapreduce.framework.name</name>
-    <value>yarn</value>
     <!-- value: local -->
+    <value>yarn</value>
     <description>
       The runtime framework for executing MapReduce jobs. Can be one of local, classic or yarn.
     </description>
@@ -1866,8 +1866,8 @@ zozo	2
   <!-- 历史服务器端地址 -->
   <property>
     <name>mapreduce.jobhistory.address</name>
-    <value>vm017:10020</value>
     <!-- value: 0.0.0.0:10020 -->
+    <value>vm017:10020</value>
     <description>
       MapReduce JobHistory Server IPC host:port
     </description>
@@ -1876,8 +1876,8 @@ zozo	2
   <!-- 历史服务器端 web 端地址 -->
   <property>
     <name>mapreduce.jobhistory.webapp.address</name>
-    <value>vm017:19888</value>
     <!-- value: 0.0.0.0:19888 -->
+    <value>vm017:19888</value>
     <description>
       MapReduce JobHistory Server Web UI host:port
     </description>
@@ -1990,8 +1990,8 @@ stopping resourcemanager
   <!-- 开启日志聚集功能 -->
   <property>
     <name>yarn.log-aggregation-enable</name>
-    <value>true</value>
     <!-- value: false -->
+    <value>true</value>
     <description>
       Whether to enable log aggregation. Log aggregation collects each container's logs and moves these logs onto a file-system, for e.g. HDFS, after the application completes. Users can configure the "yarn.nodemanager.remote-app-log-dir" and "yarn.nodemanager.remote-app-log-dir-suffix" properties to determine where these logs are moved to. Users can access the logs via the Application Timeline Server.
     </description>
@@ -2000,8 +2000,8 @@ stopping resourcemanager
   <!-- 日志保留时间设置 7 天 -->
   <property>
     <name>yarn.log-aggregation.retain-seconds</name>
-    <value>604800</value>
     <!-- value: -1 -->
+    <value>604800</value>
     <description>
       How long to keep aggregation logs before deleting them. -1 disables. Be careful set this too small and you will spam the name node.
     </description>
@@ -2131,8 +2131,8 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
   <!-- 指定 HDFS 中 NameNode 的地址 -->
   <property>
     <name>fs.defaultFS</name>
-    <value>hdfs://vm017:9000</value>
     <!-- value: file:/// -->
+    <value>hdfs://vm017:9000</value>
     <description>
       The name of the default file system. A URI whose scheme and authority determine the FileSystem implementation. The uri's scheme determines the config property (fs.SCHEME.impl) naming the FileSystem implementation class. The uri's authority is used to determine the host, port, etc. for a filesystem.
     </description>
@@ -2141,8 +2141,8 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
   <!-- 指定 Hadoop 运行时产生文件的存储目录 -->
   <property>
     <name>hadoop.tmp.dir</name>
-    <value>/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp</value>
     <!-- value: /tmp/hadoop-${user.name} -->
+    <value>/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp</value>
     <description>
       A base for other temporary directories.
     </description>
@@ -2256,8 +2256,8 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
   <!-- Reducer 获取数据的方式 -->
   <property>
     <name>yarn.nodemanager.aux-services</name>
-    <value>mapreduce_shuffle</value>
     <!-- value: -->
+    <value>mapreduce_shuffle</value>
     <description>
       A comma separated list of services where service name should only contain a-zA-Z0-9_ and can not start with numbers
     </description>
@@ -2266,8 +2266,8 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
   <!-- 指定 YARN 的 ResourceManager 对应节点的 hostname -->
   <property>
     <name>yarn.resourcemanager.hostname</name>
-    <value>vm03</value>
     <!-- value: 0.0.0.0 -->
+    <value>vm03</value>
     <description>
       The hostname of the RM.
     </description>
@@ -2313,8 +2313,8 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
   <!-- 指定 MapReduce 运行在 YARN 上 -->
   <property>
     <name>mapreduce.framework.name</name>
-    <value>yarn</value>
     <!-- value: local -->
+    <value>yarn</value>
     <description>
       The runtime framework for executing MapReduce jobs. Can be one of local, classic or yarn.
     </description>
