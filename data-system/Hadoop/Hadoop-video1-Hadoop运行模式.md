@@ -846,7 +846,7 @@ org.apache.hadoop.mapred.FileAlreadyExistsException: Output directory file:/home
 
 ## 1.2 WordCount 案例
 
-统计单词出现到次数.
+统计单词出现的次数.
 
 ```
 [zozo@VM_0_17_centos hadoop-2.7.2]$ mkdir input-wordcount
