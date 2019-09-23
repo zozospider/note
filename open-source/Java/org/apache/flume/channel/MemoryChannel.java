@@ -130,7 +130,7 @@ public class MemoryChannel extends BasicChannelSemantics implements TransactionC
       Event event;
       // 调整大小期间, 通过 queueLock 锁定保护 queue
       synchronized (queueLock) {
-        // 从 queue 中移除并返问队列头部的一个 event (非阻塞) (此时数据已从 Channel 取出), 没有则返回 null
+        // 移除并返问 queue 头部的一个 event (非阻塞) (此时数据已从 Channel 取出), 没有则返回 null
         event = queue.poll();
       }
       Preconditions.checkNotNull(event, "Queue.poll returned NULL despite semaphore " +
