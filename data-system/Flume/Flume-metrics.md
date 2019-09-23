@@ -12,14 +12,14 @@
     "StartTime": "1496839492821",          // source 组件启动的时间
     "StopTime": "0",                       // source 组件停止时间
     "OpenConnectionCount": "0",            // 当前有效的连接数
-    // --- Received
-    "AppendReceivedCount": "0",            // source 端刚刚追加的且目前已收到的 event 数量
-    "AppendBatchReceivedCount": "0",       // source 端刚刚追加的批量的数量, 比如一批 100, 该度量为 2, 就是 source 端收到了 200 个 events
+    // --- Event
     "EventReceivedCount": "4913189",       // source 端累计收到的 event 数量
-    // --- Accepted
+    "EventAcceptedCount": "4912519",       // source 端累计成功放入 channel 的 event 数量
+    "AppendReceivedCount": "0",            // source 端刚刚追加的且目前已收到的 event 数量
     "AppendAcceptedCount": "0",            // source 端刚刚追加放入 channel 的 event 数量
+    // --- Batch
+    "AppendBatchReceivedCount": "0",       // source 端刚刚追加的批量的数量, 比如一批 100, 该度量为 2, 就是 source 端收到了 200 个 events
     "AppendBatchAcceptedCount": "0",       // source 端追加到 channel 的数量
-    "EventAcceptedCount": "4912519"        // source 端累计成功放入 channel 的 event 数量
   },
   "CHANNEL.c1": {
     "Type": "CHANNEL",
