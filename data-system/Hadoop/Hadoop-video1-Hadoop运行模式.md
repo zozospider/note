@@ -2436,6 +2436,11 @@ hadoop-2.7.2-data/tmp/dfs/name/current:
 ```
 
 - 2. 在 __vm017__ 上启动 NameNode
+
+```
+[zozo@vm017 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start namenode
+```
+
 ```
 [zozo@vm017 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start namenode
 starting namenode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-namenode-vm017.out
@@ -2446,6 +2451,11 @@ starting namenode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zoz
 ```
 
 - 3. 在 __vm017__ 上启动 DataNode, 成功后会在当前节点生成 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data` 目录
+
+```
+[zozo@vm017 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start datanode
+```
+
 ```
 [zozo@vm017 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start datanode
 starting datanode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-datanode-vm017.out
@@ -2517,6 +2527,11 @@ hadoop-2.7.2-data/tmp/dfs/name/current:
 ### 3.4.2 vm06: 启动 DataNode
 
 - 1. 在 __vm06__ 上启动 DataNode, 成功后会在当前节点生成 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data` 目录
+
+```
+[zozo@vm06 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start datanode
+```
+
 ```
 [zozo@vm06 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start datanode
 starting datanode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-datanode-vm06.out
@@ -2578,6 +2593,11 @@ hadoop-2.7.2-data/tmp/dfs/data/current/BP-958959802-172.16.0.17-1559480611076/tm
 ### 3.4.3 vm03: 启动 DataNode
 
 - 1. 在 __vm03__ 上启动 DataNode, 成功后会在当前节点生成 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data` 目录
+
+```
+[zozo@vm03 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start datanode
+```
+
 ```
 [zozo@vm03 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start datanode
 starting datanode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-datanode-vm03.out
