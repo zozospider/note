@@ -2664,6 +2664,106 @@ hadoop-2.7.2-data/tmp/dfs/data/current/BP-958959802-172.16.0.17-1559480611076/tm
 
 请参考: [Hadoop-video1-Hadoop运行环境搭建 - 配置 SSH 免密登录 (仅完全分布式需要配置)](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA.md#%E4%BA%8C-%E9%85%8D%E7%BD%AE-ssh-%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95-%E4%BB%85%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E9%9C%80%E8%A6%81%E9%85%8D%E7%BD%AE)
 
+## 3.6 集群群起
 
+### 3.6.1 停止已有的服务 (如果有)
+
+- 1. 在 __vm017__ 上停止 NameNode
+
+```
+[zozo@vm017 hadoop-2.7.2]$ sbin/hadoop-daemon.sh stop namenode
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+29079 org.apache.hadoop.hdfs.server.namenode.NameNode
+29197 org.apache.hadoop.hdfs.server.datanode.DataNode
+29614 sun.tools.jps.Jps -m -l
+[zozo@vm017 hadoop-2.7.2]$ sbin/hadoop-daemon.sh stop namenode
+stopping namenode
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+29767 sun.tools.jps.Jps -m -l
+29197 org.apache.hadoop.hdfs.server.datanode.DataNode
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- 2. 在 __vm017__ 上停止 DataNode
+
+```
+[zozo@vm017 hadoop-2.7.2]$ sbin/hadoop-daemon.sh stop datanode
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+29828 sun.tools.jps.Jps -m -l
+29197 org.apache.hadoop.hdfs.server.datanode.DataNode
+[zozo@vm017 hadoop-2.7.2]$ sbin/hadoop-daemon.sh stop datanode
+stopping datanode
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+29876 sun.tools.jps.Jps -m -l
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- 3. 在 __vm06__ 上停止 DataNode
+
+```
+[zozo@vm06 hadoop-2.7.2]$ sbin/hadoop-daemon.sh stop datanode
+```
+
+```
+[zozo@vm06 hadoop-2.7.2]$ jps -m -l
+7362 org.apache.hadoop.hdfs.server.datanode.DataNode
+7979 sun.tools.jps.Jps -m -l
+[zozo@vm06 hadoop-2.7.2]$ sbin/hadoop-daemon.sh stop datanode
+stopping datanode
+[zozo@vm06 hadoop-2.7.2]$ jps -m -l
+8028 sun.tools.jps.Jps -m -l
+[zozo@vm06 hadoop-2.7.2]$ 
+```
+
+- 4. 在 __vm03__ 上停止 DataNode
+
+```
+[zozo@vm03 hadoop-2.7.2]$ sbin/hadoop-daemon.sh stop datanode
+```
+
+```
+[zozo@vm03 hadoop-2.7.2]$ jps -m -l
+24388 sun.tools.jps.Jps -m -l
+23727 org.apache.hadoop.hdfs.server.datanode.DataNode
+[zozo@vm03 hadoop-2.7.2]$ sbin/hadoop-daemon.sh stop datanode
+stopping datanode
+[zozo@vm03 hadoop-2.7.2]$ jps -m -l
+24446 sun.tools.jps.Jps -m -l
+[zozo@vm03 hadoop-2.7.2]$ 
+```
+
+### 3.6.2 配置 slaves
+
+修改所有节点的配置文件 `./etc/hadoop/slaves`, 新增所有 DataNode 节点的 hostname
+
+```
+[zozo@vm017 hadoop-2.7.2]$ cat etc/hadoop/slaves
+vm017
+vm06
+vm03
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+```
+[zozo@vm06 hadoop-2.7.2]$ cat etc/hadoop/slaves
+vm017
+vm06
+vm03
+[zozo@vm06 hadoop-2.7.2]$ 
+```
+
+```
+[zozo@vm03 hadoop-2.7.2]$ cat etc/hadoop/slaves
+vm017
+vm06
+vm03
+[zozo@vm03 hadoop-2.7.2]$ 
+```
 
 ---
