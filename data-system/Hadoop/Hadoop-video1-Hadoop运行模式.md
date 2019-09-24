@@ -2328,6 +2328,11 @@ export JAVA_HOME=/home/zozo/app/java/jdk1.8.0_192
 ### 3.4.1 vm017: 格式化, 启动 NameNode, DataNode
 
 - 1. 在 __vm017__ 上执行格式化, 成功后会在当前节点生成 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/name` 目录
+
+```bash
+bin/hdfs namenode -format
+```
+
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hdfs namenode -format
 19/06/02 21:03:30 INFO namenode.NameNode: STARTUP_MSG: 
