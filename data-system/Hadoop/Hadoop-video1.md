@@ -26,5 +26,6 @@
       - [mapred-default.xml](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1/mapred-default.xml)
   - other
     - [最详细的 Hadoop 入门教程](https://www.jianshu.com/p/0d4a365ef350)
+    - [解决关闭Hadoop时no namenode to stop异常](https://blog.csdn.net/GYQJN/article/details/50805472)
 
 ---
