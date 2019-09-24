@@ -2811,7 +2811,7 @@ vm06: starting secondarynamenode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/
 [zozo@vm03 hadoop-2.7.2]$ 
 ```
 
-访问 HDFS 控制台 URL: http://193.112.38.200:50070 检查服务是否正常
+- 访问 HDFS 控制台 URL: http://193.112.38.200:50070 检查服务是否正常
 
 ### 3.6.4 群起 YARN
 
@@ -2857,7 +2857,7 @@ vm03: starting nodemanager, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/y
 [zozo@vm06 hadoop-2.7.2]$ 
 ```
 
-访问 YARN 控制台 URL: http://111.230.233.137:8088 检查服务是否正常
+- 访问 YARN 控制台 URL: http://111.230.233.137:8088 检查服务是否正常
 
 
 
