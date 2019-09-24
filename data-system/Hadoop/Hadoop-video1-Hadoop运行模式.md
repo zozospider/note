@@ -2766,4 +2766,99 @@ vm03
 [zozo@vm03 hadoop-2.7.2]$ 
 ```
 
+### 3.6.3 格式化 NameNode (视情况而定)
+
+`TODO`
+
+### 3.6.3 群起 HDFS
+
+- 在 __vm017__ (NameNode 所在节点) 上启动 HDFS
+
+```
+[zozo@vm017 hadoop-2.7.2]$ sbin/start-dfs.sh
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+31148 sun.tools.jps.Jps -m -l
+[zozo@vm017 hadoop-2.7.2]$ sbin/start-dfs.sh
+Starting namenodes on [vm017]
+vm017: starting namenode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-namenode-vm017.out
+vm03: starting datanode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-datanode-vm03.out
+vm017: starting datanode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-datanode-vm017.out
+vm06: starting datanode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-datanode-vm06.out
+Starting secondary namenodes [vm06]
+vm06: starting secondarynamenode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-secondarynamenode-vm06.out
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+31654 sun.tools.jps.Jps -m -l
+31416 org.apache.hadoop.hdfs.server.datanode.DataNode
+31276 org.apache.hadoop.hdfs.server.namenode.NameNode
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+```
+[zozo@vm06 hadoop-2.7.2]$ jps -m -l
+9408 sun.tools.jps.Jps -m -l
+9328 org.apache.hadoop.hdfs.server.namenode.SecondaryNameNode
+9217 org.apache.hadoop.hdfs.server.datanode.DataNode
+[zozo@vm06 hadoop-2.7.2]$ 
+```
+
+```
+[zozo@vm03 hadoop-2.7.2]$ jps -m -l
+25690 sun.tools.jps.Jps -m -l
+25550 org.apache.hadoop.hdfs.server.datanode.DataNode
+[zozo@vm03 hadoop-2.7.2]$ 
+```
+
+访问 HDFS 控制台 URL: http://193.112.38.200:50070 检查服务是否正常
+
+### 3.6.4 群起 YARN
+
+- 在 __vm03__ (ResourceManager 所在节点) 上启动 HDFS
+
+```
+[zozo@vm03 hadoop-2.7.2]$ sbin/start-yarn.sh
+```
+
+```
+[zozo@vm03 hadoop-2.7.2]$ jps -m -l
+26019 sun.tools.jps.Jps -m -l
+25550 org.apache.hadoop.hdfs.server.datanode.DataNode
+[zozo@vm03 hadoop-2.7.2]$ sbin/start-yarn.sh
+starting yarn daemons
+starting resourcemanager, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/yarn-zozo-resourcemanager-vm03.out
+vm017: starting nodemanager, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/yarn-zozo-nodemanager-vm017.out
+vm06: starting nodemanager, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/yarn-zozo-nodemanager-vm06.out
+vm03: starting nodemanager, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/yarn-zozo-nodemanager-vm03.out
+[zozo@vm03 hadoop-2.7.2]$ jps -m -l
+26480 sun.tools.jps.Jps -m -l
+26195 org.apache.hadoop.yarn.server.nodemanager.NodeManager
+26086 org.apache.hadoop.yarn.server.resourcemanager.ResourceManager
+25550 org.apache.hadoop.hdfs.server.datanode.DataNode
+[zozo@vm03 hadoop-2.7.2]$ 
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+32064 org.apache.hadoop.yarn.server.nodemanager.NodeManager
+31416 org.apache.hadoop.hdfs.server.datanode.DataNode
+31276 org.apache.hadoop.hdfs.server.namenode.NameNode
+32206 sun.tools.jps.Jps -m -l
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+```
+[zozo@vm06 hadoop-2.7.2]$ jps -m -l
+9328 org.apache.hadoop.hdfs.server.namenode.SecondaryNameNode
+9217 org.apache.hadoop.hdfs.server.datanode.DataNode
+9954 sun.tools.jps.Jps -m -l
+9800 org.apache.hadoop.yarn.server.nodemanager.NodeManager
+[zozo@vm06 hadoop-2.7.2]$ 
+```
+
+访问 YARN 控制台 URL: http://111.230.233.137:8088 检查服务是否正常
+
+
+
 ---
