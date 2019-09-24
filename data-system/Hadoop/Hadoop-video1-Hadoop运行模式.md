@@ -1459,7 +1459,7 @@ HDFS 控制台 URL: http://193.112.38.200:50070
 - `Startup Progress`: 启动处理
 - `Utilities`: 工具
   - `Browse the file system`: 浏览文件系统
-	- `Logs`: 日志
+  - `Logs`: 日志
 
 以下为通过 `Utilities` - `Browse the file system` 查看 HDFS 的文件信息
 
