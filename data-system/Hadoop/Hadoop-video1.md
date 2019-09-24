@@ -10,7 +10,7 @@
 - code
 
 
-- link
+- out
   - video
     - [尚硅谷大数据之Hadoop](https://www.bilibili.com/video/av32081351)
   - site
@@ -24,5 +24,7 @@
       - [hdfs-default.xml](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1/hdfs-default.xml)
       - [yarn-default.xml](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1/yarn-default.xml)
       - [mapred-default.xml](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1/mapred-default.xml)
+  - other
+    - [最详细的 Hadoop 入门教程](https://www.jianshu.com/p/0d4a365ef350)
 
 ---
