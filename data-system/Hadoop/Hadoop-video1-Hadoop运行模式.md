@@ -2879,5 +2879,8 @@ vm03: starting nodemanager, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/y
 
 访问 HDFS 控制台 URL: http://193.112.38.200:50070 检查文件是否上传成功
 
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop/Volumes/DISK2/app/GitHub/note/data-system/Hadoop/Hadoop-video1-Hadoop运行模式/集群测试查看HDFS-1.png?raw=true)
+
+
 
 ---
