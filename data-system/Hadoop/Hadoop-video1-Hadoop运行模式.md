@@ -3017,5 +3017,8 @@ sbin/stop-dfs.sh
 sbin/stop-yarn.sh
 ```
 
+### 3.6.8 集群时间同步
+
+`TODO`
 
 ---
