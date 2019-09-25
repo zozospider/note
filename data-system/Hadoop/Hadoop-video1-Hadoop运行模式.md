@@ -2944,6 +2944,78 @@ qq
 -rw-rw-r-- 1 zozo zozo 212046774 9月  25 20:38 /home/zozo/app/hadoop/hadoop-2.7.2.tar.gz.tmp
 ```
 
+### 3.6.7 集群启动 / 停止方式总结
+
+- 1. 各个服务组件逐一启动 / 停止
+
+```bash
+# hdfs/yarn start/stop
+sbin/hadoop-daemon.sh start/stop namenode/datanode/secodarynamenode
+sbin/yarn-daemon.sh start/stop resourcemanager/nodemanager
+```
+
+```bash
+# hdfs start/stop
+sbin/hadoop-daemon.sh start namenode
+sbin/hadoop-daemon.sh stop namenode
+
+sbin/hadoop-daemon.sh start datanode
+sbin/hadoop-daemon.sh stop datanode
+
+sbin/hadoop-daemon.sh start secodarynamenode
+sbin/hadoop-daemon.sh stop secodarynamenode
+
+# yarn start/stop
+sbin/yarn-daemon.sh start resourcemanager
+sbin/yarn-daemon.sh stop resourcemanager
+
+sbin/yarn-daemon.sh start nodemanager
+sbin/yarn-daemon.sh stop nodemanager
+```
+
+```bash
+# start hdfs/yarn
+sbin/hadoop-daemon.sh start namenode
+sbin/hadoop-daemon.sh start datanode
+sbin/hadoop-daemon.sh start secodarynamenode
+sbin/yarn-daemon.sh start resourcemanager
+sbin/yarn-daemon.sh start nodemanager
+
+
+sbin/hadoop-daemon.sh stop namenode
+sbin/hadoop-daemon.sh stop datanode
+sbin/hadoop-daemon.sh stop secodarynamenode
+sbin/yarn-daemon.sh stop resourcemanager
+sbin/yarn-daemon.sh stop nodemanager
+```
+
+- 2. 各个模块分开启动 / 停止
+
+```bash
+# hdfs/yarn start/stop
+sbin/start-dfs.sh / stop-dfs.sh
+sbin/start-yarn.sh / stop-yarn.sh
+```
+
+```bash
+# hdfs start/stop
+sbin/start-dfs.sh
+sbin/stop-dfs.sh
+
+# yarn start/stop
+sbin/start-yarn.sh
+sbin/stop-yarn.sh
+```
+
+```bash
+# start hdfs/yarn
+sbin/start-dfs.sh
+sbin/start-yarn.sh
+
+# stop hdfs/yarn
+sbin/stop-dfs.sh
+sbin/stop-yarn.sh
+```
 
 
 ---
