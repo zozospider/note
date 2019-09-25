@@ -2881,6 +2881,13 @@ vm03: starting nodemanager, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/y
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E9%9B%86%E7%BE%A4%E6%B5%8B%E8%AF%95%E6%9F%A5%E7%9C%8BHDFS-1.png?raw=true)
 
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E9%9B%86%E7%BE%A4%E6%B5%8B%E8%AF%95%E6%9F%A5%E7%9C%8BHDFS-2.png?raw=true)
+
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E9%9B%86%E7%BE%A4%E6%B5%8B%E8%AF%95%E6%9F%A5%E7%9C%8BHDFS-3.png?raw=true)
+
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E9%9B%86%E7%BE%A4%E6%B5%8B%E8%AF%95%E6%9F%A5%E7%9C%8BHDFS-4.png?raw=true)
+
+
 
 
 ---
