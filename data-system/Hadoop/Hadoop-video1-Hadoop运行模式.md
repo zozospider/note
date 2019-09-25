@@ -2864,18 +2864,25 @@ vm03: starting nodemanager, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/y
 - 1. 上传小文件到集群
 
 ```
-[zozo@vm03 hadoop-2.7.2]$ bin/hdfs dfs -put /home/zozo/app/hadoop/fortest/wcinput/wc.input /
-[zozo@vm03 hadoop-2.7.2]$ 
+[zozo@vm017 hadoop-2.7.2]$ cat /home/zozo/app/hadoop/fortest/wcinput/wc.input
+aaa
+bbb
+aaa aaa
+b cc dd
+ee vv ee
+qq
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfs -put /home/zozo/app/hadoop/fortest/wcinput/wc.input /
+[zozo@vm017 hadoop-2.7.2]$ 
 ```
 
 - 2. 上传大文件到集群
 
 ```
-[zozo@vm03 hadoop-2.7.2]$ bin/hdfs dfs -put /home/zozo/app/hadoop/hadoop-2.7.2.tar.gz /
-[zozo@vm03 hadoop-2.7.2]$ 
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfs -put /home/zozo/app/hadoop/hadoop-2.7.2.tar.gz /
+[zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-- 3. 查看文件位置
+- 3. 控制台查看文件位置
 
 访问 HDFS 控制台 URL: http://193.112.38.200:50070 检查文件是否上传成功
 
@@ -2887,6 +2894,56 @@ vm03: starting nodemanager, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/y
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E9%9B%86%E7%BE%A4%E6%B5%8B%E8%AF%95%E6%9F%A5%E7%9C%8BHDFS-4.png?raw=true)
 
+- 4. 服务器查看文件存储位置
+
+之前从本地上传的 `/home/zozo/app/hadoop/fortest/wcinput/wc.input` 文件保存在如下 1 个文件中:
+
+- `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data/current/BP-1195551085-172.16.0.17-1569330784638/current/finalized/subdir0/subdir0/blk_1073741825`
+
+```
+[zozo@vm017 subdir0]$ pwd
+/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data/current/BP-1195551085-172.16.0.17-1569330784638/current/finalized/subdir0/subdir0
+[zozo@vm017 subdir0]$ ll
+总用量 208720
+-rw-rw-r-- 1 zozo zozo        36 9月  25 20:04 blk_1073741825
+-rw-rw-r-- 1 zozo zozo        11 9月  25 20:04 blk_1073741825_1001.meta
+-rw-rw-r-- 1 zozo zozo 134217728 9月  25 20:04 blk_1073741826
+-rw-rw-r-- 1 zozo zozo   1048583 9月  25 20:04 blk_1073741826_1002.meta
+-rw-rw-r-- 1 zozo zozo  77829046 9月  25 20:04 blk_1073741827
+-rw-rw-r-- 1 zozo zozo    608047 9月  25 20:04 blk_1073741827_1003.meta
+[zozo@vm017 subdir0]$ cat blk_1073741825
+aaa
+bbb
+aaa aaa
+b cc dd
+ee vv ee
+qq
+[zozo@vm017 subdir0]$ 
+```
+
+之前从本地上传的 `/home/zozo/app/hadoop/hadoop-2.7.2.tar.gz` 文件被切割保存在如下 2 个文件中, 且这 2 个文件在服务器上的大小对应 HDFS 控制台中 `Block0` 和 `Block1` 显示的 `Size` (即分别为 `134217728` 和 `77829046`). 若将服务器上的这 2 个文件追加到一个文件中, 合并后的文件和之前从本地上传的 `/home/zozo/app/hadoop/hadoop-2.7.2.tar.gz` 文件一致.
+
+- `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data/current/BP-1195551085-172.16.0.17-1569330784638/current/finalized/subdir0/subdir0/blk_1073741826`
+- `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data/current/BP-1195551085-172.16.0.17-1569330784638/current/finalized/subdir0/subdir0/blk_1073741827`
+
+```
+[zozo@vm017 subdir0]$ pwd
+/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data/current/BP-1195551085-172.16.0.17-1569330784638/current/finalized/subdir0/subdir0
+[zozo@vm017 subdir0]$ ll
+总用量 208720
+-rw-rw-r-- 1 zozo zozo        36 9月  25 20:04 blk_1073741825
+-rw-rw-r-- 1 zozo zozo        11 9月  25 20:04 blk_1073741825_1001.meta
+-rw-rw-r-- 1 zozo zozo 134217728 9月  25 20:04 blk_1073741826
+-rw-rw-r-- 1 zozo zozo   1048583 9月  25 20:04 blk_1073741826_1002.meta
+-rw-rw-r-- 1 zozo zozo  77829046 9月  25 20:04 blk_1073741827
+-rw-rw-r-- 1 zozo zozo    608047 9月  25 20:04 blk_1073741827_1003.meta
+[zozo@vm017 subdir0]$ cat blk_1073741826 >> /home/zozo/app/hadoop/hadoop-2.7.2.tar.gz.tmp
+[zozo@vm017 subdir0]$ cat blk_1073741827 >> /home/zozo/app/hadoop/hadoop-2.7.2.tar.gz.tmp
+[zozo@vm017 subdir0]$ ll /home/zozo/app/hadoop/hadoop-2.7.2.tar.gz.tmp
+-rw-rw-r-- 1 zozo zozo 212046774 9月  25 20:38 /home/zozo/app/hadoop/hadoop-2.7.2.tar.gz.tmp
+[zozo@vm017 subdir0]$ ll /home/zozo/app/hadoop/hadoop-2.7.2.tar.gz
+-rw-r--r-- 1 zozo zozo 212046774 6月   2 00:46 /home/zozo/app/hadoop/hadoop-2.7.2.tar.gz
+```
 
 
 
