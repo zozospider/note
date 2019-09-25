@@ -2770,7 +2770,7 @@ vm03
 
 `TODO`
 
-### 3.6.3 群起 HDFS
+### 3.6.4 群起 HDFS
 
 - 在 __vm017__ (NameNode 所在节点) 上启动 HDFS
 
@@ -2813,7 +2813,7 @@ vm06: starting secondarynamenode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/
 
 - 访问 HDFS 控制台 URL: http://193.112.38.200:50070 检查服务是否正常
 
-### 3.6.4 群起 YARN
+### 3.6.5 群起 YARN
 
 - 在 __vm03__ (ResourceManager 所在节点) 上启动 HDFS
 
@@ -2859,6 +2859,25 @@ vm03: starting nodemanager, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/y
 
 - 访问 YARN 控制台 URL: http://111.230.233.137:8088 检查服务是否正常
 
+### 3.6.6 集群基本测试
+
+- 1. 上传小文件到集群
+
+```
+[zozo@vm03 hadoop-2.7.2]$ bin/hdfs dfs -put /home/zozo/app/hadoop/fortest/wcinput/wc.input /
+[zozo@vm03 hadoop-2.7.2]$ 
+```
+
+- 2. 上传大文件到集群
+
+```
+[zozo@vm03 hadoop-2.7.2]$ bin/hdfs dfs -put /home/zozo/app/hadoop/hadoop-2.7.2.tar.gz /
+[zozo@vm03 hadoop-2.7.2]$ 
+```
+
+- 3. 查看文件位置
+
+访问 HDFS 控制台 URL: http://193.112.38.200:50070 检查文件是否上传成功
 
 
 ---
