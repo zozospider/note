@@ -2949,13 +2949,13 @@ qq
 - 1. 各个服务组件逐一启动 / 停止
 
 ```bash
-# hdfs/yarn start/stop
+# start/stop hdfs/yarn
 sbin/hadoop-daemon.sh start/stop namenode/datanode/secodarynamenode
 sbin/yarn-daemon.sh start/stop resourcemanager/nodemanager
 ```
 
 ```bash
-# hdfs start/stop
+# start/stop hdfs
 sbin/hadoop-daemon.sh start namenode
 sbin/hadoop-daemon.sh stop namenode
 
@@ -2965,7 +2965,7 @@ sbin/hadoop-daemon.sh stop datanode
 sbin/hadoop-daemon.sh start secodarynamenode
 sbin/hadoop-daemon.sh stop secodarynamenode
 
-# yarn start/stop
+# start/stop yarn
 sbin/yarn-daemon.sh start resourcemanager
 sbin/yarn-daemon.sh stop resourcemanager
 
@@ -2981,7 +2981,7 @@ sbin/hadoop-daemon.sh start secodarynamenode
 sbin/yarn-daemon.sh start resourcemanager
 sbin/yarn-daemon.sh start nodemanager
 
-
+# stop hdfs/yarn
 sbin/hadoop-daemon.sh stop namenode
 sbin/hadoop-daemon.sh stop datanode
 sbin/hadoop-daemon.sh stop secodarynamenode
@@ -2992,17 +2992,17 @@ sbin/yarn-daemon.sh stop nodemanager
 - 2. 各个模块分开启动 / 停止
 
 ```bash
-# hdfs/yarn start/stop
+# start/stop hdfs/yarn
 sbin/start-dfs.sh / stop-dfs.sh
 sbin/start-yarn.sh / stop-yarn.sh
 ```
 
 ```bash
-# hdfs start/stop
+# start/stop hdfs
 sbin/start-dfs.sh
 sbin/stop-dfs.sh
 
-# yarn start/stop
+# start/stop yarn
 sbin/start-yarn.sh
 sbin/stop-yarn.sh
 ```
