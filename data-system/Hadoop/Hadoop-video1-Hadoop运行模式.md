@@ -2939,10 +2939,9 @@ qq
 -rw-rw-r-- 1 zozo zozo    608047 9月  25 20:04 blk_1073741827_1003.meta
 [zozo@vm017 subdir0]$ cat blk_1073741826 >> /home/zozo/app/hadoop/hadoop-2.7.2.tar.gz.tmp
 [zozo@vm017 subdir0]$ cat blk_1073741827 >> /home/zozo/app/hadoop/hadoop-2.7.2.tar.gz.tmp
-[zozo@vm017 subdir0]$ ll /home/zozo/app/hadoop/hadoop-2.7.2.tar.gz.tmp
--rw-rw-r-- 1 zozo zozo 212046774 9月  25 20:38 /home/zozo/app/hadoop/hadoop-2.7.2.tar.gz.tmp
-[zozo@vm017 subdir0]$ ll /home/zozo/app/hadoop/hadoop-2.7.2.tar.gz
+[zozo@vm017 subdir0]$ ll /home/zozo/app/hadoop/hadoop-2.7.2.tar.gz*
 -rw-r--r-- 1 zozo zozo 212046774 6月   2 00:46 /home/zozo/app/hadoop/hadoop-2.7.2.tar.gz
+-rw-rw-r-- 1 zozo zozo 212046774 9月  25 20:38 /home/zozo/app/hadoop/hadoop-2.7.2.tar.gz.tmp
 ```
 
 
