@@ -38,6 +38,33 @@ HDFS 的使用场景: 适合一次写, 多次读的场景, 且不支持文件的
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BHDFS-1.png?raw=true)
 
+## NameNode
+
+- 管理 HDFS 的名称空间
+- 管理副本策略
+- 管理数据块 (Block) 映射信息
+- 处理客户端请求
+
+## DataNode
+
+- 存储实际的数据块
+- 执行数据块的读 / 写操作
+
+## Client
+
+- 文件切分: 文件上传 HDFS 的时候, Client 将文件切分成一个个的 Block, 然后进行上传.
+- 与 NameNode 交互, 获取文件的位置信息.
+- 与 NameNode 交互, 读取 / 写入数据.
+- Client 提供一些命令来管理 HDFS, 比如 NameNode 格式化.
+- Client 可以通过一些命令来访问 HDFS, 比如对 HDFS 增删查改.
+
+## Secondary NameNode
+
+并非 NameNode 的热备份, 当 NameNode 挂掉的时候, 它并不能马上替换 NameNode 并提供服务.
+
+- 辅助 NameNode, 分担其工作量, 比如定期合并 Fsimages 和 Edits, 并推送给 NameNode.
+- 在紧急情况下, 可恢复 NameNode.
+
 ---
 
 # 四. HDFS 文件块大小
