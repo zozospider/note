@@ -45,7 +45,7 @@ HDFS 的使用场景: 适合一次写, 多次读的场景, 且不支持文件的
 
 # 三. HDFS 组成架构
 
-![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9F%A5%E7%9C%8BHDFS-1.png?raw=true)
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-HDFS%E6%A6%82%E8%BF%B0/hdfsarchitecture.png?raw=true)
 
 ## NameNode
 
