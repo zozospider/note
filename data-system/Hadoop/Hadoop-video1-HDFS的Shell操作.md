@@ -1,4 +1,9 @@
 
+- [一. 基本语法](#一-基本语法)
+- [二. 常用命令](#二-常用命令)
+    - [-help](#-help)
+    - [-mkdir](#-mkdir)
+    - [-moveFromLocal](#-movefromlocal)
 
 ---
 
@@ -249,7 +254,7 @@ ls: 无法访问/home/zozo/app/hadoop/fortest/f1: 没有那个文件或目录
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/d1_a/
 Found 1 items
 -rw-r--r--   3 zozo supergroup          8 2019-09-27 13:57 /d1/d1_a/f1
-[zozo@vm017 hadoop-2.7.2]$
+[zozo@vm017 hadoop-2.7.2]$ 
 ```
 
 ---
