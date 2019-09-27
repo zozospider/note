@@ -129,7 +129,9 @@ bin/hadoop command [genericOptions] [commandOptions]
 
 # 二. 常用命令
 
-- `-help`
+## -help
+
+说明:
 
 ```bash
 # 输出指定命令参数的帮助文档
@@ -162,7 +164,9 @@ Most commands print help when invoked w/o parameters.
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-- `ls`
+ ## ls
+
+说明:
 
 ```bash
 # 显示目录信息
