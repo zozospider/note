@@ -11,7 +11,7 @@
 
 以下两个命令都可以对 HDFS 进行操作:
 
-```bash
+```
 bin/hadoop fs ...
 bin/hdfs dfs ...
 ```
@@ -136,12 +136,14 @@ bin/hadoop command [genericOptions] [commandOptions]
 
 ## -help
 
+- 说明
+
 ```bash
 # 输出指定命令参数的帮助文档
-[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help /HDFS_CMD
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help HDFS_CMD
 ```
 
-Demo:
+- Demo
 
 ```bash
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help ls
@@ -163,7 +165,7 @@ Demo:
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-通过以下命令可查看所有说明:
+- 通过以下命令可查看所有说明
 
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help
@@ -540,9 +542,14 @@ bin/hadoop command [genericOptions] [commandOptions]
 
  ## -ls
 
+- 说明
+
 ```bash
 # 显示目录信息
-# bin/hadoop fs -ls [-d] [-h] [-R] [<path> ...]
+bin/hadoop fs -ls [-d] [-h] [-R] [<path> ...]
+```
+
+```bash
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help ls
 -ls [-d] [-h] [-R] [<path> ...] :
   List the contents that match the specified file pattern. If path is not
@@ -562,7 +569,7 @@ bin/hadoop command [genericOptions] [commandOptions]
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-DEMO:
+- DEMO
 
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /
@@ -574,9 +581,14 @@ Found 2 items
 
 ## -mkdir
 
+- 说明
+
 ```bash
 # 在 HDFS 上创建目录
-# bin/hadoop fs -mkdir [-p] <path> ...
+bin/hadoop fs -mkdir [-p] <path> ...
+```
+
+```bash
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help mkdir
 -mkdir [-p] <path> ... :
   Create a directory in specified location.
@@ -585,7 +597,7 @@ Found 2 items
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-DEMO:
+- DEMO
 
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -mkdir -p /d1/d1_a
@@ -604,16 +616,21 @@ drwxr-xr-x   - zozo supergroup          0 2019-09-27 13:51 /d1/d1_a
 
 ## -moveFromLocal
 
+- 说明
+
 ```bash
 # 从本地剪切到 HDFS
-# bin/hadoop fs -moveFromLocal <localsrc> ... <dst>
+bin/hadoop fs -moveFromLocal <localsrc> ... <dst>
+```
+
+```bash
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help moveFromLocal
 -moveFromLocal <localsrc> ... <dst> :
   Same as -put, except that the source is deleted after it's copied.
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-DEMO:
+- DEMO
 
 ```
 [zozo@vm017 hadoop-2.7.2]$ ll /home/zozo/app/hadoop/fortest/f1
@@ -655,6 +672,8 @@ I am f1
 
 ## -appendToFile
 
+- 说明
+
 ```bash
 # 追加一个本地文件到 HDFS 已经存在的文件末尾
 bin/hadoop fs -appendToFile <localsrc> ... <dst>
@@ -669,7 +688,7 @@ bin/hadoop fs -appendToFile <localsrc> ... <dst>
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-DEMO:
+- DEMO
 
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -cat /d1/d1_a/f1
@@ -680,6 +699,55 @@ I am appender for f1
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -cat /d1/d1_a/f1
 I am f1
 I am appender for f1
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+## -chgrp, -chmod, -chown
+
+```bash
+# -chgrp: 修改文件所属组
+bin/hadoop fs -chgrp [-R] GROUP PATH...
+# -chmod: 修改文件操作权限
+bin/hadoop fs -chmod [-R] <MODE[,MODE]... | OCTALMODE> PATH...
+# -chown: 修改文件所有者
+bin/hadoop fs -chown [-R] [OWNER][:[GROUP]] PATH...
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help chgrp
+-chgrp [-R] GROUP PATH... :
+  This is equivalent to -chown ... :GROUP ...
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help chmod
+-chmod [-R] <MODE[,MODE]... | OCTALMODE> PATH... :
+  Changes permissions of a file. This works similar to the shell's chmod command
+  with a few exceptions.
+                                                                                 
+  -R           modifies the files recursively. This is the only option currently 
+               supported.                                                        
+  <MODE>       Mode is the same as mode used for the shell's command. The only   
+               letters recognized are 'rwxXt', e.g. +t,a+r,g-w,+rwx,o=r.         
+  <OCTALMODE>  Mode specifed in 3 or 4 digits. If 4 digits, the first may be 1 or
+               0 to turn the sticky bit on or off, respectively.  Unlike the     
+               shell command, it is not possible to specify only part of the     
+               mode, e.g. 754 is same as u=rwx,g=rx,o=r.                         
+  
+  If none of 'augo' is specified, 'a' is assumed and unlike the shell command, no
+  umask is applied.
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help chown
+-chown [-R] [OWNER][:[GROUP]] PATH... :
+  Changes owner and group of a file. This is similar to the shell's chown command
+  with a few exceptions.
+                                                                                 
+  -R  modifies the files recursively. This is the only option currently          
+      supported.                                                                 
+  
+  If only the owner or group is specified, then only the owner or group is
+  modified. The owner and group names may only consist of digits, alphabet, and
+  any of [-_./@a-zA-Z0-9]. The names are case sensitive.
+  
+  WARNING: Avoid using '.' to separate user name and group though Linux allows it.
+  If user names have dots in them and you are using local file system, you might
+  see surprising results since the shell command 'chown' is used for local files.
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
