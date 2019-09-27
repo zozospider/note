@@ -235,7 +235,7 @@ drwxr-xr-x   - zozo supergroup          0 2019-09-27 13:51 /d1/d1_a
 
 ```bash
 # 从本地剪切到 HDFS
-bin/hadoop fs -moveFromLocal /LOCAL_PATH/local_file /HDFS_PATH
+bin/hadoop fs -moveFromLocal /LOCAL_PATH/LOCAL_FILE /HDFS_PATH
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help moveFromLocal
 -moveFromLocal <localsrc> ... <dst> :
   Same as -put, except that the source is deleted after it's copied.
