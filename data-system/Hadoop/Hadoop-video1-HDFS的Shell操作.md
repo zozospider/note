@@ -4,6 +4,19 @@
     - [-help](#-help)
     - [-mkdir](#-mkdir)
     - [-moveFromLocal](#-movefromlocal)
+    - [-cat](#-cat)
+    - [-appendToFile](#-appendtofile)
+    - [-chgrp, -chmod, -chown](#-chgrp--chmod--chown)
+    - [-put / -copyFromLocal](#-put---copyfromlocal)
+    - [-get / -copyToLocal](#-get---copytolocal)
+    - [-getmerge](#-getmerge)
+    - [-cp](#-cp)
+    - [-mv](#-mv)
+    - [-tail](#-tail)
+    - [-rm](#-rm)
+    - [-rmdir](#-rmdir)
+    - [-du](#-du)
+    - [-setrep](#-setrep)
 
 ---
 
@@ -139,7 +152,7 @@ bin/hadoop command [genericOptions] [commandOptions]
 - 说明
 
 ```bash
-# 输出指定命令参数的帮助文档
+# 输出指定 HDFS 命令参数的帮助文档
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help HDFS_CMD
 ```
 
@@ -545,7 +558,7 @@ bin/hadoop command [genericOptions] [commandOptions]
 - 说明
 
 ```bash
-# 显示目录信息
+# 显示 HDFS 目录信息
 bin/hadoop fs -ls [-d] [-h] [-R] [<path> ...]
 ```
 
@@ -600,6 +613,10 @@ bin/hadoop fs -mkdir [-p] <path> ...
 - DEMO
 
 ```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /
+Found 2 items
+-rw-r--r--   3 zozo supergroup  212046774 2019-09-25 20:04 /hadoop-2.7.2.tar.gz
+-rw-r--r--   3 zozo supergroup         36 2019-09-25 20:04 /wc.input
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -mkdir -p /d1/d1_a
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /
 Found 3 items
@@ -634,14 +651,14 @@ bin/hadoop fs -moveFromLocal <localsrc> ... <dst>
 
 ```
 [zozo@vm017 hadoop-2.7.2]$ ll /home/zozo/app/hadoop/fortest/f1
--rw-rw-r-- 1 zozo zozo 8 9月  27 13:55 /home/zozo/app/hadoop/fortest/f1
-[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/d1_a/
+-rw-r--r-- 1 zozo zozo 30 9月  28 02:06 /home/zozo/app/hadoop/fortest/f1
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/d1_a/f1
+ls: `/d1/d1_a/f1': No such file or directory
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -moveFromLocal /home/zozo/app/hadoop/fortest/f1 /d1/d1_a/
 [zozo@vm017 hadoop-2.7.2]$ ll /home/zozo/app/hadoop/fortest/f1
 ls: 无法访问/home/zozo/app/hadoop/fortest/f1: 没有那个文件或目录
-[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/d1_a/
-Found 1 items
--rw-r--r--   3 zozo supergroup          8 2019-09-27 13:57 /d1/d1_a/f1
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/d1_a/f1
+-rw-r--r--   3 zozo supergroup         30 2019-09-28 02:09 /d1/d1_a/f1
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
@@ -650,7 +667,7 @@ Found 1 items
 - 说明
 
 ```bash
-# 显示文件内容
+# 显示 HDFS 文件内容
 bin/hadoop fs -cat [-ignoreCrc] <src> ...
 ```
 
@@ -675,7 +692,7 @@ I am f1
 - 说明
 
 ```bash
-# 追加一个本地文件到 HDFS 已经存在的文件末尾
+# 追加一个本地文件到 HDFS 上已经存在的文件末尾
 bin/hadoop fs -appendToFile <localsrc> ... <dst>
 ```
 
@@ -704,12 +721,14 @@ I am appender for f1
 
 ## -chgrp, -chmod, -chown
 
+- 说明
+
 ```bash
-# -chgrp: 修改文件所属组
+# -chgrp: 修改 HDFS 文件 / 文件夹所属组
 bin/hadoop fs -chgrp [-R] GROUP PATH...
-# -chmod: 修改文件操作权限
+# -chmod: 修改 HDFS 文件 / 文件夹操作权限
 bin/hadoop fs -chmod [-R] <MODE[,MODE]... | OCTALMODE> PATH...
-# -chown: 修改文件所有者
+# -chown: 修改 HDFS 文件 / 文件夹所有者
 bin/hadoop fs -chown [-R] [OWNER][:[GROUP]] PATH...
 ```
 
@@ -750,5 +769,405 @@ bin/hadoop fs -chown [-R] [OWNER][:[GROUP]] PATH...
   see surprising results since the shell command 'chown' is used for local files.
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
+
+- DEMO
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/d1_a/f1
+-rw-r--r--   3 zozo supergroup         30 2019-09-27 23:59 /d1/d1_a/f1
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -chgrp zozo /d1/d1_a/f1
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/d1_a/f1
+-rw-r--r--   3 zozo zozo         30 2019-09-27 23:59 /d1/d1_a/f1
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -chmod 754 /d1/d1_a/f1
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/d1_a/f1
+-rwxr-xr--   3 zozo zozo         30 2019-09-27 23:59 /d1/d1_a/f1
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -chown zozo /d1/d1_a/f1
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/d1_a/f1
+-rwxr-xr--   3 zozo zozo         30 2019-09-27 23:59 /d1/d1_a/f1
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -chown zozo:zozo /d1/d1_a/f1
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/d1_a/f1
+-rwxr-xr--   3 zozo zozo         30 2019-09-27 23:59 /d1/d1_a/f1
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+## -put / -copyFromLocal
+
+- 说明
+
+```bash
+# 从本地拷贝文件到 HDFS
+bin/hadoop fs -put [-f] [-p] [-l] <localsrc> ... <dst>
+bin/hadoop fs -copyFromLocal [-f] [-p] [-l] <localsrc> ... <dst>
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help put
+-put [-f] [-p] [-l] <localsrc> ... <dst> :
+  Copy files from the local file system into fs. Copying fails if the file already
+  exists, unless the -f flag is given.
+  Flags:
+                                                                       
+  -p  Preserves access and modification times, ownership and the mode. 
+  -f  Overwrites the destination if it already exists.                 
+  -l  Allow DataNode to lazily persist the file to disk. Forces        
+         replication factor of 1. This flag will result in reduced
+         durability. Use with care.
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help copyFromLocal
+-copyFromLocal [-f] [-p] [-l] <localsrc> ... <dst> :
+  Identical to the -put command.
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- DEMO
+
+```
+[zozo@vm017 hadoop-2.7.2]$ ll /home/zozo/app/hadoop/fortest/f2
+-rw-rw-r-- 1 zozo zozo 8 9月  28 00:30 /home/zozo/app/hadoop/fortest/f2
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/d1_a/f2
+ls: `/d1/d1_a/f2': No such file or directory
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -put /home/zozo/app/hadoop/fortest/f2 /d1/d1_a/
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/d1_a/f2
+-rw-r--r--   3 zozo supergroup          8 2019-09-28 02:08 /d1/d1_a/f2
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+## -get / -copyToLocal
+
+- 说明
+
+```bash
+# 从 HDFS 拷贝文件到本地
+bin/hadoop fs -get [-p] [-ignoreCrc] [-crc] <src> ... <localdst>
+bin/hadoop fs -copyToLocal [-p] [-ignoreCrc] [-crc] <src> ... <localdst>
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help get
+-get [-p] [-ignoreCrc] [-crc] <src> ... <localdst> :
+  Copy files that match the file pattern <src> to the local name.  <src> is kept. 
+  When copying multiple files, the destination must be a directory. Passing -p
+  preserves access and modification times, ownership and the mode.
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help copyToLocal
+-copyToLocal [-p] [-ignoreCrc] [-crc] <src> ... <localdst> :
+  Identical to the -get command.
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- DEMO
+
+```
+[zozo@vm017 fortest]$ ll /home/zozo/app/hadoop/fortest/f1
+ls: 无法访问/home/zozo/app/hadoop/fortest/f1: 没有那个文件或目录
+-rw-rw-r-- 1 zozo zozo 21 9月  28 00:00 appendToF1
+-rw-rw-r-- 1 zozo zozo  8 9月  28 00:30 f2
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -get /d1/d1_a/f1 /home/zozo/app/hadoop/fortest/
+[zozo@vm017 hadoop-2.7.2]$ ll /home/zozo/app/hadoop/fortest/f1
+-rw-r--r-- 1 zozo zozo 30 9月  28 02:06 /home/zozo/app/hadoop/fortest/f1
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+## -getmerge
+
+- 说明
+
+```bash
+# 合并下载 HDFS 的多个文件到本地, 比如将 HDFS 目录下的 /d/f1, /d/f2, /d/f3 ... 合并成一个文件下载到本地
+bin/hadoop fs -getmerge [-nl] <src> <localdst>
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help getmerge
+-getmerge [-nl] <src> <localdst> :
+  Get all the files in the directories that match the source file pattern and
+  merge and sort them to only one file on local fs. <src> is kept.
+                                                        
+  -nl  Add a newline character at the end of each file. 
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- DEMO
+
+```
+[zozo@vm017 hadoop-2.7.2]$ ll /home/zozo/app/hadoop/fortest/f12
+ls: 无法访问/home/zozo/app/hadoop/fortest/f12: 没有那个文件或目录
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -cat /d1/d1_a/f1
+I am f1
+I am appender for f1 
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -cat /d1/d1_a/f2
+I am f2
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -getmerge /d1/d1_a/f* /home/zozo/app/hadoop/fortest/f12
+[zozo@vm017 hadoop-2.7.2]$ cat /home/zozo/app/hadoop/fortest/f12
+I am f1
+I am appender for f1 
+I am f2
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+## -cp
+
+- 说明
+
+```bash
+# 从 HDFS 到一个路径拷贝到另一个路径
+bin/hadoop fs -cp [-f] [-p | -p[topax]] <src> ... <dst>
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help cp
+-cp [-f] [-p | -p[topax]] <src> ... <dst> :
+  Copy files that match the file pattern <src> to a destination.  When copying
+  multiple files, the destination must be a directory. Passing -p preserves status
+  [topax] (timestamps, ownership, permission, ACLs, XAttr). If -p is specified
+  with no <arg>, then preserves timestamps, ownership, permission. If -pa is
+  specified, then preserves permission also because ACL is a super-set of
+  permission. Passing -f overwrites the destination if it already exists. raw
+  namespace extended attributes are preserved if (1) they are supported (HDFS
+  only) and, (2) all of the source and target pathnames are in the /.reserved/raw
+  hierarchy. raw namespace xattr preservation is determined solely by the presence
+  (or absence) of the /.reserved/raw prefix and not by the -p option.
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- DEMO
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/f2
+ls: `/d1/f2': No such file or directory
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -cp /d1/d1_a/f2 /d1/
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/f2
+-rw-r--r--   3 zozo supergroup          8 2019-09-28 02:40 /d1/f2
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+## -mv
+
+- 说明
+
+```bash
+# 在 HDFS 目录中移动文件
+bin/hadoop fs -mv <src> ... <dst>
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help mv
+-mv <src> ... <dst> :
+  Move files that match the specified file pattern <src> to a destination <dst>. 
+  When moving multiple files, the destination must be a directory.
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- DEMO
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /f2
+ls: `/f2': No such file or directory
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/f2
+-rw-r--r--   3 zozo supergroup          8 2019-09-28 02:38 /d1/f2
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -mv /d1/f2 /
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /f2
+-rw-r--r--   3 zozo supergroup          8 2019-09-28 02:38 /f2
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/f2
+ls: `/d1/f2': No such file or directory
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+## -tail
+
+- 说明
+
+```bash
+# 显示 HDFS 一个文件的末尾部分 (并非按照行来截取, 而是按照大小截取, 截取的位置可能不是完整的一行, 参考下文 DEMO)
+bin/hadoop fs -cat [-ignoreCrc] <src> ...
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help cat
+-cat [-ignoreCrc] <src> ... :
+  Fetch all files that match the file pattern <src> and display their content on
+  stdout.
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- DEMO
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -cat /d1/d1_a/multiLines
+ZooKeeper™: A high-performance coordination service for distributed applications.
+
+Hadoop Common: The common utilities that support the other Hadoop modules.
+Hadoop Distributed File System (HDFS™): A distributed file system that provides high-throughput access to application data.
+Hadoop YARN: A framework for job scheduling and cluster resource management.
+Hadoop MapReduce: A YARN-based system for parallel processing of large data sets.
+Hadoop Ozone: An object store for Hadoop.
+Hadoop Submarine: A machine learning engine for Hadoop.
+
+Who Uses Hadoop?
+A wide variety of companies and organizations use Hadoop for both research and production. Users are encouraged to add themselves to the Hadoop PoweredBy wiki page.
+This is the second stable release of Apache Hadoop 3.2 line. It contains 493 bug fixes, improvements and enhancements since 3.2.0
+
+Users are encouraged to read the overview of major changes since 3.2.0 For details of 493 bug fixes, improvements, and other enhancements since the previous 3.2.0 release, please check release notes and changelog detail the changes since 3.2.0
+Ozone 0.4.0 alpha version supports kerberos and transparent data encryption. This is first secure Ozone release. It is compatible with apache Spark, Hive and Yarn.
+
+For more information check the ozone site.
+This is the second stable release of Apache Hadoop 3.1 line. It contains 325 bug fixes, improvements and enhancements since 3.1.1.
+
+Apache Hadoop, Hadoop, Apache, the Apache feather logo, and the Apache Hadoop project logo are either registered trademarks or trademarks of the Apache Software Foundation in the United States and other countries
+
+Copyright © 2018 The Apache Software Foundation.
+
+Privacy policy
+
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -tail /d1/d1_a/multiLines
+Hadoop PoweredBy wiki page.
+This is the second stable release of Apache Hadoop 3.2 line. It contains 493 bug fixes, improvements and enhancements since 3.2.0
+
+Users are encouraged to read the overview of major changes since 3.2.0 For details of 493 bug fixes, improvements, and other enhancements since the previous 3.2.0 release, please check release notes and changelog detail the changes since 3.2.0
+Ozone 0.4.0 alpha version supports kerberos and transparent data encryption. This is first secure Ozone release. It is compatible with apache Spark, Hive and Yarn.
+
+For more information check the ozone site.
+This is the second stable release of Apache Hadoop 3.1 line. It contains 325 bug fixes, improvements and enhancements since 3.1.1.
+
+Apache Hadoop, Hadoop, Apache, the Apache feather logo, and the Apache Hadoop project logo are either registered trademarks or trademarks of the Apache Software Foundation in the United States and other countries
+
+Copyright © 2018 The Apache Software Foundation.
+
+Privacy policy
+
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+## -rm
+
+- 说明
+
+```bash
+# 删除 HDFS 的文件 / 文件夹
+bin/hadoop fs -rm [-f] [-r|-R] [-skipTrash] <src> ...
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help rm
+-rm [-f] [-r|-R] [-skipTrash] <src> ... :
+  Delete all files that match the specified file pattern. Equivalent to the Unix
+  command "rm <src>"
+                                                                                 
+  -skipTrash  option bypasses trash, if enabled, and immediately deletes <src>   
+  -f          If the file does not exist, do not display a diagnostic message or 
+              modify the exit status to reflect an error.                        
+  -[rR]       Recursively deletes directories                                    
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- DEMO
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/d1_a/multiLines
+-rw-r--r--   3 zozo supergroup       1722 2019-09-28 02:23 /d1/d1_a/multiLines
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -rm /d1/d1_a/multiLines
+19/09/28 02:29:32 INFO fs.TrashPolicyDefault: Namenode trash configuration: Deletion interval = 0 minutes, Emptier interval = 0 minutes.
+Deleted /d1/d1_a/multiLines
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/d1_a/multiLines
+ls: `/d1/d1_a/multiLines': No such file or directory
+[zozo@vm017 hadoop-2.7.2]$ 
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /d1
+drwxr-xr-x   - zozo supergroup          0 2019-09-28 02:35 /d1/d1_a
+-rw-r--r--   3 zozo supergroup         30 2019-09-28 02:35 /d1/d1_a/f1
+-rw-r--r--   3 zozo supergroup          8 2019-09-28 02:35 /d1/d1_a/f2
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -rm -r /d1/d1_a
+19/09/28 02:36:08 INFO fs.TrashPolicyDefault: Namenode trash configuration: Deletion interval = 0 minutes, Emptier interval = 0 minutes.
+Deleted /d1/d1_a
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /d1
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+## -rmdir
+
+- 说明
+
+```bash
+# 删除 HDFS 的空目录
+bin/hadoop fs -rmdir [--ignore-fail-on-non-empty] <dir> ...
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help rmdir
+-rmdir [--ignore-fail-on-non-empty] <dir> ... :
+  Removes the directory entry specified by each directory argument, provided it is
+  empty.
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- DEMO
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /d1/d1_a
+-rw-r--r--   3 zozo supergroup         30 2019-09-28 02:36 /d1/d1_a/f1
+-rw-r--r--   3 zozo supergroup          8 2019-09-28 02:36 /d1/d1_a/f2
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -rmdir /d1/d1_a
+rmdir: `/d1/d1_a': Directory is not empty
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /d1/d1_b
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -rmdir /d1/d1_b
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /d1/d1_b
+ls: `/d1/d1_b': No such file or directory
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+## -du
+
+- 说明
+
+```bash
+# 统计文件 / 文件夹大小信息
+bin/hadoop fs -du [-s] [-h] <path> ...
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help du
+-du [-s] [-h] <path> ... :
+  Show the amount of space, in bytes, used by the files that match the specified
+  file pattern. The following flags are optional:
+                                                                                 
+  -s  Rather than showing the size of each individual file that matches the      
+      pattern, shows the total (summary) size.                                   
+  -h  Formats the sizes of files in a human-readable fashion rather than a number
+      of bytes.                                                                  
+  
+  Note that, even without the -s option, this only shows size summaries one level
+  deep into a directory.
+  
+  The output is in the form 
+  	size	name(full path)
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- DEMO
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /
+Found 4 items
+drwxr-xr-x   - zozo supergroup          0 2019-09-28 02:48 /d1
+-rw-r--r--   3 zozo supergroup          8 2019-09-28 02:38 /f2
+-rw-r--r--   3 zozo supergroup  212046774 2019-09-25 20:04 /hadoop-2.7.2.tar.gz
+-rw-r--r--   3 zozo supergroup         36 2019-09-25 20:04 /wc.input
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -du /
+38         /d1
+8          /f2
+212046774  /hadoop-2.7.2.tar.gz
+36         /wc.input
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -du -h /
+38       /d1
+8        /f2
+202.2 M  /hadoop-2.7.2.tar.gz
+36       /wc.input
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -du -s /
+212046856  /
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -du -s -h /
+202.2 M  /
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+## -setrep
+
+
 
 ---
