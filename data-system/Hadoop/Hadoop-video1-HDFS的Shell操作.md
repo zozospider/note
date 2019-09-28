@@ -1041,7 +1041,7 @@ Privacy policy
 - 说明
 
 ```bash
-# 删除 HDFS 的文件 / 文件夹
+# 删除 HDFS 的路径 (文件 / 文件夹)
 bin/hadoop fs -rm [-f] [-r|-R] [-skipTrash] <src> ...
 ```
 

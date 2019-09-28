@@ -26,6 +26,7 @@
       - [mapred-default.xml](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1/mapred-default.xml)
   - other
     - [最详细的 Hadoop 入门教程](https://www.jianshu.com/p/0d4a365ef350)
+    - [Hadoop默认端口应用一览](https://blog.csdn.net/yeruby/article/details/49406073)
     - [解决关闭Hadoop时no namenode to stop异常](https://blog.csdn.net/GYQJN/article/details/50805472)
     - [CentOS7的/tmp目录自动清理规则](https://blog.csdn.net/LWJdear/article/details/79912332)
 
