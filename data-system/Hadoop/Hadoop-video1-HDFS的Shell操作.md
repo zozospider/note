@@ -1168,6 +1168,83 @@ drwxr-xr-x   - zozo supergroup          0 2019-09-28 02:48 /d1
 
 ## -setrep
 
+- 说明
 
+```bash
+# 设置 HDFS 中文件的副本数
+# 如果设置的副本数小于节点数, 将在设置的副本数个节点上建立副本.
+# 如果设置的副本数大于节点数, 将在所有节点上建立副本, 等到有节点数增加时, 增加相应的副本, 达到设置的副本数后不再增加副本.
+bin/hadoop fs -setrep [-R] [-w] <rep> <path> ...
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -help setrep
+-setrep [-R] [-w] <rep> <path> ... :
+  Set the replication level of a file. If <path> is a directory then the command
+  recursively changes the replication factor of all files under the directory tree
+  rooted at <path>.
+                                                                                 
+  -w  It requests that the command waits for the replication to complete. This   
+      can potentially take a very long time.                                     
+  -R  It is accepted for backwards compatibility. It has no effect.              
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- DEMO
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/d1_a/f1
+-rw-r--r--   3 zozo supergroup         30 2019-09-28 02:36 /d1/d1_a/f1
+[zozo@vm017 subdir0]$ pwd
+/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data/current/BP-1195551085-172.16.0.17-1569330784638/current/finalized/subdir0/subdir0
+[zozo@vm017 subdir0]$ ll blk_1073741840
+-rw-rw-r-- 1 zozo zozo 30 9月  28 02:36 blk_1073741840
+
+[zozo@vm06 subdir0]$ pwd
+/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data/current/BP-1195551085-172.16.0.17-1569330784638/current/finalized/subdir0/subdir0
+[zozo@vm06 subdir0]$ ll blk_1073741840
+-rw-rw-r-- 1 zozo zozo 30 9月  28 02:36 blk_1073741840
+[zozo@vm06 subdir0]$ 
+
+[zozo@vm03 subdir0]$ pwd
+/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/data/current/BP-1195551085-172.16.0.17-1569330784638/current/finalized/subdir0/subdir0
+[zozo@vm03 subdir0]$ ll blk_1073741840
+-rw-rw-r-- 1 zozo zozo 30 9月  28 02:36 blk_1073741840
+[zozo@vm03 subdir0]$ 
+
+
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -setrep 2 /d1/d1_a/f1
+Replication 2 set: /d1/d1_a/f1
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/d1_a/f1
+-rw-r--r--   2 zozo supergroup         30 2019-09-28 02:36 /d1/d1_a/f1
+[zozo@vm017 subdir0]$ ll blk_1073741840
+-rw-rw-r-- 1 zozo zozo 30 9月  28 02:36 blk_1073741840
+[zozo@vm017 subdir0]$ 
+
+[zozo@vm06 subdir0]$ ll blk_1073741840
+-rw-rw-r-- 1 zozo zozo 30 9月  28 02:36 blk_1073741840
+[zozo@vm06 subdir0]$ 
+
+[zozo@vm03 subdir0]$ ll blk_1073741840
+ls: 无法访问blk_1073741840: 没有那个文件或目录
+[zozo@vm03 subdir0]$ 
+
+
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -setrep 5 /d1/d1_a/f1
+Replication 5 set: /d1/d1_a/f1
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /d1/d1_a/f1
+-rw-r--r--   5 zozo supergroup         30 2019-09-28 02:36 /d1/d1_a/f1
+[zozo@vm017 subdir0]$ ll blk_1073741840
+-rw-rw-r-- 1 zozo zozo 30 9月  28 02:36 blk_1073741840
+[zozo@vm017 subdir0]$ 
+
+[zozo@vm06 subdir0]$ ll blk_1073741840
+-rw-rw-r-- 1 zozo zozo 30 9月  28 02:36 blk_1073741840
+[zozo@vm06 subdir0]$ 
+
+[zozo@vm03 subdir0]$ ll blk_1073741840
+-rw-rw-r-- 1 zozo zozo 30 9月  28 12:41 blk_1073741840
+[zozo@vm03 subdir0]$ 
+```
 
 ---
