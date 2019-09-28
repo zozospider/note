@@ -80,6 +80,7 @@ bogon:note-distributed-zookeeper-video zoz$
 - [IntelliJ-IDEA 提交代码到 Github-2](https://blog.csdn.net/rongxiang111/article/details/78120126)
 - [git上传本地Intellij idea 项目到github](https://blog.csdn.net/u010237107/article/details/50910879)
 
+
 1. CVS - import into Version Control - Share Project on GitHub
 2. CVS - import into Version Control - Create Git Repository (如果已经创建会有提示, 就不用了)
 3. 右键 - Git - add (第一次尝试可能没反应, 就不用管了)
@@ -92,10 +93,43 @@ bogon:note-distributed-zookeeper-video zoz$
 # note-data-structures-video1
 
 - [note: zozoSpider/note/Mathematics/data-structures/data-structures-video1](https://github.com/zozospider/note/blob/master/Mathematics/data-structures/data-structures-video1.md)
+```
+
+如果使用 Mac 操作的时候存在如下 Apple 的提示, 需要打开 terminal, 输入 `sudo xcodebuild -license` 命令, 然后多次按空格查看协议内容, 然后输入 `agree` 同意协议. terminal 操作完成后需要完全退出 IDEA & terminal 软件后再打开:
+
+- [Agreeing to the Xcode/iOS license requires admin privileges, please re-run as root via sudo](https://stackoverflow.com/questions/26485555/agreeing-to-the-xcode-ios-license-requires-admin-privileges-please-re-run-as-ro?rq=1)
+
+- 提示如下:
+```
+23:47	Accept XCode/iOS License to Run Git: Run “sudo xcodebuild -license” and retry (admin rights required)
+23:51	Git Init Failed
+			Сannot Run Git: 
+			Agreeing to the Xcode/iOS license requires admin privileges, please run “sudo xcodebuild -license” and then retry this command.
+```
+
+- terminal 操作记录如下:
+```
+spiderxmac:note-hadoop-video1 zoz$ sudo xcodebuild -license
+Password:
+
+You have not agreed to the Xcode license agreements. You must agree to both license agreements below in order to use Xcode.
+
+Hit the Enter key to view the license agreements at '/Applications/Xcode.app/Contents/Resources/English.lproj/License.rtf'
+
+Xcode and Apple SDKs Agreement
+
+“Apple” means Apple Inc., a California corporation with its principal place of business at One Infinite Loop, Cupertino, California 95014, U.S.A.
+
+...
+
+By typing 'agree' you are agreeing to the terms of the software license agreements. Type 'print' to print them or anything else to cancel, [agree, print, cancel] agree
+
+You can view the license agreements in Xcode's About Box, or at /Applications/Xcode.app/Contents/Resources/English.lproj/License.rtf
+
+spiderxmac:note-hadoop-video1 zoz$ 
+```
 
 ---
-
-```
 
 # Tomcat 配置 (设置自动更新资源, 默认首页打开 URL)
 
