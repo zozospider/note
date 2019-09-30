@@ -47,3 +47,5 @@
 - 1005:
 - 1006: P105-P122: MapReduce
 - 1007: P123-P136: MapReduce
+
+FEYNMAN TECHNIQUE
