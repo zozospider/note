@@ -1,4 +1,8 @@
 
+- [一. HDFS 写数据流程](#一-hdfs-写数据流程)
+- [二. 节点距离计算](#二-节点距离计算)
+- [三. 副本选择](#三-副本选择)
+- [四. HDFS 读数据流程](#四-hdfs-读数据流程)
 
 ---
 
@@ -34,6 +38,6 @@ For the common case, when the replication factor is three, HDFS’s placement po
 
 # 四. HDFS 读数据流程
 
-
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-HDFS%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81/HDFS%E8%AF%BB%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B.png?raw=true)
 
 ---
