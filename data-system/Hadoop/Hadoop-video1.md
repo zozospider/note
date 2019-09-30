@@ -35,3 +35,14 @@
     - [CentOS7的/tmp目录自动清理规则](https://blog.csdn.net/LWJdear/article/details/79912332)
 
 ---
+
+# plan
+
+- 0930: P68-P72: HDFS 的数据流, NN & 2NN
+- 1001: P73-P90: 3h: HDFS
+- 1002: P91-P105: MapReduce
+- 1003:
+- 1004:
+- 1005:
+- 1006: P105-P122: MapReduce
+- 1007: P123-P136: MapReduce
