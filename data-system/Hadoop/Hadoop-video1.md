@@ -6,6 +6,10 @@
   - [从Hadoop框架讨论大数据生态](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-从Hadoop框架讨论大数据生态.md)
   - [Hadoop运行环境搭建](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop运行环境搭建.md)
   - [Hadoop运行模式](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop运行模式.md)
+  - [HDFS概述](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-HDFS概述.md)
+  - [HDFS的Shell操作](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-HDFS的Shell操作.md)
+  - [HDFS客户端操作](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-HDFS客户端操作.md)
+  - [HDFS的数据流](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-HDFS的数据流.md)
 
 - code
   - [zozospider/note-hadoop-video1](https://github.com/zozospider/note-hadoop-video1)
