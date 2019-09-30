@@ -38,6 +38,6 @@ For the common case, when the replication factor is three, HDFS’s placement po
 
 # 四. HDFS 读数据流程
 
-![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-HDFS%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81/HDFS%E8%AF%BB%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B.png?raw=true)
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-HDFS%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81/HDFS%E7%9A%84%E8%AF%BB%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B.png?raw=true)
 
 ---
