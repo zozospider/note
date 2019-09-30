@@ -8,7 +8,7 @@
   - [Hadoop运行模式](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop运行模式.md)
 
 - code
-
+  - [zozospider/note-hadoop-video1](https://github.com/zozospider/note-hadoop-video1)
 
 - out
   - video
