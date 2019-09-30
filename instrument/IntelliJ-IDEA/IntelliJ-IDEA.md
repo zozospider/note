@@ -70,6 +70,10 @@ rm '.idea/uiDesigner.xml'
 bogon:note-distributed-zookeeper-video zoz$ 
 ```
 
+# IDEA 删除项目
+
+- [IntelliJ IDEA 如何彻底删除项目](https://blog.csdn.net/WJJPro/article/details/78449532)
+
 # IDEA 提交忽略文件
 
 - [intellij idea 忽略文件不提交](https://blog.csdn.net/wangjun5159/article/details/74932433)
