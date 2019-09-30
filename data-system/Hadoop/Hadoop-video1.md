@@ -39,7 +39,7 @@
 
 # plan
 
-- 0930: P68-P71: HDFS 的数据流
+- 0930: P68-P71: HDFS 的数据流 __DONE__
 - 1001: P72-P90: 3h: HDFS
 - 1002: P91-P105: MapReduce
 - 1003:
