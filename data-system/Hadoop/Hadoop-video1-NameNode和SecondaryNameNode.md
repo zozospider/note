@@ -162,11 +162,42 @@ bin/hadoop command [genericOptions] [commandOptions]
 
 ## 2.2 操作测试 - 每小时滚动前 - 执行 HDFS 删除命令
 
-在 __每小时滚动前__, 在 HDFS 上执行删除操作, 将 `/d2/d2_c` 和 `/d2/d2_d` 两个文件夹 (包含子文件) 删除.
+_注: `2019-10-01 22:32:00` 前_
 
-然后在执行操作后的 __每小时滚动前__ 和 __每小时滚动后__ 分别观察 Fsimage 和 Edis 文件变化情况, 如下:
+在 __每小时滚动前__, 在 HDFS 上执行删除操作, 将 `/d2/d2_c` 和 `/d2/d2_d` 文件夹 (包含子文件) 删除.
+
+```bash
+# `x` 表示不确认的操作记录
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /
+drwxr-xr-x   - zozo supergroup          0 2019-10-01 21:50 /d2
+drwxr-xr-x   - zozo supergroup          0 2019-09-28 18:47 /d2/d2_a
+-rw-r--r--   3 zozo supergroup          8 2019-09-28 17:29 /d2/d2_a/f1
+-rw-r--r--   2 zozo supergroup          8 2019-09-28 18:03 /d2/d2_a/f2_rename
+drwxr-xr-x   - zozo supergroup          0 2019-09-xx xx:xx /d2/d2_b
+-rw-r--r--   3 zozo supergroup          x 2019-09-xx xx:xx /d2/d2_b/f1
+drwxr-xr-x   - zozo supergroup          0 2019-09-xx xx:xx /d2/d2_c
+-rw-r--r--   3 zozo supergroup          x 2019-09-xx xx:xx /d2/d2_c/f3
+-rw-r--r--   3 zozo supergroup  212046774 2019-09-25 20:04 /hadoop-2.7.2.tar.gz
+-rw-r--r--   3 zozo supergroup         36 2019-09-25 20:04 /wc.input
+# 执行时间: `2019-10-01 21:49:19`
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -rm -R /d2/d2_c
+# 执行时间: `2019-10-01 21:50:01`
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -rm -R /d2/d2_b
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /
+drwxr-xr-x   - zozo supergroup          0 2019-10-01 21:50 /d2
+drwxr-xr-x   - zozo supergroup          0 2019-09-28 18:47 /d2/d2_a
+-rw-r--r--   3 zozo supergroup          8 2019-09-28 17:29 /d2/d2_a/f1
+-rw-r--r--   2 zozo supergroup          8 2019-09-28 18:03 /d2/d2_a/f2_rename
+-rw-r--r--   3 zozo supergroup  212046774 2019-09-25 20:04 /hadoop-2.7.2.tar.gz
+-rw-r--r--   3 zozo supergroup         36 2019-09-25 20:04 /wc.input
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+然后在执行操作后的 __每小时滚动前__ (`2019-10-01 22:32:00` 前) 和 __每小时滚动后__ (`2019-10-01 22:32:00` 后) 分别观察 Fsimage 和 Edis 文件变化情况, 如下:
 
 ## 2.3 操作测试 - 每小时滚动前 - Fsimage 和 Edis 文件存储情况
+
+_注: `2019-10-01 22:32:00` 前_
 
 - 进入 `vm017` (NameNode), 查看保存元数据路径下有多个 Fsimage 和 Edits 文件, 且还有 `seen_txid` 和 `edits_inprogress_0000000000000000660`.
 - 进入 `vm06` (SecondaryNameNode), 查看保存元数据路径下有多个 Fsimage 和 Edits 文件, 且 Fsimage 和 Edits 文件数和内容和 `vm017` (NameNode) 相同, 但是没有 `seen_txid` 和 `edits_inprogress_0000000000000000660` 这两个文件.
@@ -553,6 +584,8 @@ bin/hadoop command [genericOptions] [commandOptions]
 
 ## 2.4 操作测试 - 每小时滚动前 - 查看 Fsimage 内容
 
+_注: `2019-10-01 22:32:00` 前_
+
 执行以下命令将 `fsimage_0000000000000000659` 文件转换成 XML 格式的 `fsimage_0000000000000000659_viewer` 可视化文件:
 
 ```bash
@@ -779,6 +812,8 @@ bin/hadoop command [genericOptions] [commandOptions]
 
 ## 2.5 操作测试 - 每小时滚动前 - 查看 Edits 内容
 
+_注: `2019-10-01 22:32:00` 前_
+
 - step 1
 
 执行以下命令将 `edits_0000000000000000658-0000000000000000659` 文件转换成 XML 格式的 `edits_0000000000000000658-0000000000000000659_viewer` 可视化文件:
@@ -869,6 +904,8 @@ bin/hadoop command [genericOptions] [commandOptions]
 ```
 
 ## 2.6 操作测试 - 每小时滚动后 - Fsimage 和 Edis 文件存储情况
+
+_注: `2019-10-01 22:32:00` 后_
 
 - 进入 `vm017` (NameNode), 查看保存元数据路径下有多个 Fsimage 和 Edits 文件, 且还有 `seen_txid` 和 `edits_inprogress_0000000000000000664`.
 - 进入 `vm06` (SecondaryNameNode), 查看保存元数据路径下有多个 Fsimage 和 Edits 文件, 且 Fsimage 和 Edits 文件数和内容和 `vm017` (NameNode) 相同, 但是没有 `seen_txid` 和 `edits_inprogress_0000000000000000664` 这两个文件.
@@ -1257,6 +1294,8 @@ bin/hadoop command [genericOptions] [commandOptions]
 
 ## 2.7 操作测试 - 每小时滚动后 - 查看 Fsimage 内容
 
+_注: `2019-10-01 22:32:00` 后_
+
 执行以下命令将 `fsimage_0000000000000000663` 文件转换成 XML 格式的 `fsimage_0000000000000000663_viewer` 可视化文件:
 
 ```bash
@@ -1420,6 +1459,8 @@ bin/hadoop command [genericOptions] [commandOptions]
 ```
 
 ## 2.8 操作测试 - 每小时滚动后 - 查看 Edits 内容
+
+_注: `2019-10-01 22:32:00` 后_
 
 - step 1
 
