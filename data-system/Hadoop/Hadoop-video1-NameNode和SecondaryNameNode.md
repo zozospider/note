@@ -1,10 +1,10 @@
 
 - [一 NameNode 和 SecondaryNameNode 工作机制](#一-namenode-和-secondarynamenode-工作机制)
 - [二 Fsimage 和 Edis 解析](#二-fsimage-和-edis-解析)
-    - [2.1 查看 Fsimage 和 Edits](#21-查看-fsimage-和-edits)
-        - [2.1.1 查看 Fsimage](#211-查看-fsimage)
-        - [2.1.2 查看 Edits](#212-查看-edits)
-    - [2.2 操作测试](#22-操作测试)
+    - [2.1 命令说明](#21-命令说明)
+        - [2.1.1 转换 Fsimage 文件命令](#211-转换-fsimage-文件命令)
+        - [2.1.2 转换 Edits 文件命令](#212-转换-edits-文件命令)
+    - [2.2 操作测试 - 每小时滚动前 - 执行 HDFS 删除命令](#22-操作测试---每小时滚动前---执行-hdfs-删除命令)
     - [2.3 操作测试 - 每小时滚动前 - Fsimage 和 Edis 文件存储情况](#23-操作测试---每小时滚动前---fsimage-和-edis-文件存储情况)
     - [2.4 操作测试 - 每小时滚动前 - 查看 Fsimage 内容](#24-操作测试---每小时滚动前---查看-fsimage-内容)
     - [2.5 操作测试 - 每小时滚动前 - 查看 Edits 内容](#25-操作测试---每小时滚动前---查看-edits-内容)
@@ -38,9 +38,9 @@ NameNode 的 data 目录 (`{}/dfs/name/current`) 下存储了多个 Fsimage 和 
 
 其中最近的一个 `{}/dfs/name/current/fsimage_xxx` 文件保存了每小时滚动前的 HDFS 所有元数据, `{}/dfs/name/current/edits_inprogress_xxx` 文件保存了当前小时的操作记录. 每次小时滚动时, 会将 `edits_inprogress_xxx` 文件内的操作记录合并到新建的最新的 `fsimage_xxx` 文件中, 然后将重新产生一个新的 `{}/dfs/name/current/edits_inprogress_xxx` 文件继续保存下一个小时的操作记录.
 
-## 2.1 查看 Fsimage 和 Edits
+## 2.1 命令说明
 
-### 2.1.1 查看 Fsimage
+### 2.1.1 转换 Fsimage 文件命令
 
 - 说明
 
@@ -99,7 +99,7 @@ Optional command line arguments:
 [zozo@vm017 current]$ 
 ```
 
-### 2.1.2 查看 Edits
+### 2.1.2 转换 Edits 文件命令
 
 - 说明
 
@@ -160,7 +160,7 @@ bin/hadoop command [genericOptions] [commandOptions]
 [zozo@vm017 current]$ 
 ```
 
-## 2.2 操作测试
+## 2.2 操作测试 - 每小时滚动前 - 执行 HDFS 删除命令
 
 在 __每小时滚动前__, 在 HDFS 上执行删除操作, 将 `/d2/d2_c` 和 `/d2/d2_d` 两个文件夹 (包含子文件) 删除.
 
@@ -561,7 +561,9 @@ bin/hadoop command [genericOptions] [commandOptions]
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-格式化之后的 `fsimage_0000000000000000659_viewer` 文件内容中包含了近乎所有节点信息 (最近操作的除外), 如下所示 (此时包含 hdfs 中 `/d2/d2_c` 和 `/d2/d2_b` 这两个文件夹):
+格式化之后的 `fsimage_0000000000000000659_viewer` 文件内容中包含了近乎所有节点信息 (最近 1 小时操作的除外), 如下所示:
+
+- 此时虽然删除 `/d2/d2_c` 和 `/d2/d2_b` (包含子文件) 的操作已经执行成功, 但是在 Fsimage 文件中, 这两个文件夹 (包含子文件) 还存在 (因为保存的是 __每小时滚动前__ 的镜像).
 
 ```xml
 <?xml version="1.0"?>
@@ -1263,7 +1265,9 @@ bin/hadoop command [genericOptions] [commandOptions]
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-格式化之后的 `fsimage_0000000000000000663_viewer` 文件内容中包含了近乎所有节点信息 (最近操作的除外), 如下所示 (此时 HDFS 中 `/d2/d2_c` 和 `/d2/d2_b` 这两个文件夹已经不存在了):
+格式化之后的 `fsimage_0000000000000000663_viewer` 文件内容中包含了近乎所有节点信息 (最近操作的除外), 如下所示:
+
+- 此时, 在 Fsimage 文件中, `/d2/d2_c` 和 `/d2/d2_b` 这两个文件夹已经不存在了 (因为每小时滚动发生后, 已经将滚动前的镜像和删除操作记录合并了)
 
 ```xml
 <?xml version="1.0"?>
