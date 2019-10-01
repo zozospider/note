@@ -34,7 +34,7 @@ NameNode 的元数据是如何存储的?
 
 # 二 Fsimage 和 Edis 解析
 
-NameNode 的 data 目录 (`{hadoop.tmp.dir}/dfs/name/current`) 下存储了多个 Fsimage 和 Edits 文件. 可以通过 `hdfs oiv` 和 `hdfs oev` 命令将 Fsimage 和 Edits 文件内容转换成指定格式的可读文件.
+NameNode 的目录 `{hadoop.tmp.dir}/dfs/name/current` 下存储了多个 Fsimage (镜像) 和 Edits (最近操作记录) 文件. 可以通过 `hdfs oiv` 和 `hdfs oev` 命令将 Fsimage 和 Edits 文件内容转换成指定格式的可读文件.
 
 其中最近的一个 `{hadoop.tmp.dir}/dfs/name/current/fsimage_xxx` 文件保存了每小时滚动前的 HDFS 所有元数据, `{hadoop.tmp.dir}/dfs/name/current/edits_inprogress_xxx` 文件保存了当前小时的操作记录. 每次小时滚动时, 会将 `edits_inprogress_xxx` 文件内的操作记录合并到新建的最新的 `fsimage_xxx` 文件中, 然后将重新产生一个新的 `{hadoop.tmp.dir}/dfs/name/current/edits_inprogress_xxx` 文件继续保存下一个小时的操作记录.
 
