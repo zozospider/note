@@ -13,7 +13,7 @@ NameNode 的元数据是如何存储的?
 - 如果长时间添加数据到 Edits 中会导致数据过大, 恢复时间过长. 因此需要定期合并 Fsimage 和 Edits.
 - 如果定期合并 Fsimage 和 Edits 由 NameNode 节点完成, 效率过低. 因此引入 SecondaryNameNode 用于合并 Fsimage 和 Edits.
 
-![image]()
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-NameNode%E5%92%8CSecondaryNameNode/NameNode%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6.png?raw=true)
 
 ---
 
