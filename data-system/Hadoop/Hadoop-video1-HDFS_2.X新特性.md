@@ -336,7 +336,7 @@ I am f1
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-- 2 分钟后再查看回收站:
+- 2 分钟后再查看回收站, 回收站中的文件被移到当前目录的时间戳文件夹下 (__并没有被彻底删除__):
 
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /user/zozo/.Trash/
@@ -347,7 +347,7 @@ drwx------   - zozo supergroup          0 2019-10-02 20:50 /user/zozo/.Trash/191
 -rw-r--r--   3 zozo supergroup         30 2019-10-02 19:59 /user/zozo/.Trash/191002205200/home/zozo/d1/f1
 ```
 
-- 一段时间后再查看回收站:
+- 一段时间后再查看回收站 (__此时已被彻底删除__):
 
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /user/zozo/.Trash/
@@ -361,7 +361,39 @@ drwx------   - zozo supergroup          0 2019-10-02 20:50 /user/zozo/.Trash/191
 ## 3.5 清空回收站
 
 ```
-bin/hadoop fs -expunge
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -expunge
+```
+
+- 将 HDFS 文件删除后, 文件会被移动到回收站中:
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /f2
+-rw-r--r--   3 zozo supergroup          8 2019-10-02 18:20 /f2
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -rm /f2
+19/10/02 21:38:24 INFO fs.TrashPolicyDefault: Namenode trash configuration: Deletion interval = 2 minutes, Emptier interval = 0 minutes.
+Moved: 'hdfs://vm017:9000/f2' to trash at: hdfs://vm017:9000/user/zozo/.Trash/Current
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /user/zozo/.Trash
+drwx------   - zozo supergroup          0 2019-10-02 21:38 /user/zozo/.Trash/Current
+-rw-r--r--   3 zozo supergroup          8 2019-10-02 18:20 /user/zozo/.Trash/Current/f2
+```
+
+- 执行清空回收站命令后, 回收站中的文件被移到当前目录的时间戳文件夹下 (__并没有被彻底删除__)
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -expunge
+19/10/02 21:38:52 INFO fs.TrashPolicyDefault: Namenode trash configuration: Deletion interval = 2 minutes, Emptier interval = 0 minutes.
+19/10/02 21:38:52 INFO fs.TrashPolicyDefault: Created trash checkpoint: /user/zozo/.Trash/191002213852
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /user/zozo/.Trash
+drwx------   - zozo supergroup          0 2019-10-02 21:38 /user/zozo/.Trash/191002213852
+-rw-r--r--   3 zozo supergroup          8 2019-10-02 18:20 /user/zozo/.Trash/191002213852/f2
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- 一段时间后再查看回收站 (__此时已被彻底删除__):
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /user/zozo/.Trash
+[zozo@vm017 hadoop-2.7.2]$ 
 ```
 
 ---
