@@ -1,5 +1,23 @@
 
-
+- [一 集群间数据拷贝](#一-集群间数据拷贝)
+- [二 小文件存档](#二-小文件存档)
+    - [2.1 启动 YARN 进程](#21-启动-yarn-进程)
+    - [2.2 归档文件](#22-归档文件)
+    - [2.3 查看归档](#23-查看归档)
+    - [2.4 解归档文件](#24-解归档文件)
+- [三 回收站](#三-回收站)
+    - [3.1 启用回收站](#31-启用回收站)
+    - [3.2 重启集群 (如果已启动)](#32-重启集群-如果已启动)
+    - [3.3 删除数据并查看回收站](#33-删除数据并查看回收站)
+    - [3.4 恢复回收站数据](#34-恢复回收站数据)
+    - [3.5 清空回收站](#35-清空回收站)
+- [四 快照管理](#四-快照管理)
+        - [4.1 开启 / 禁用指定目录的快照功能](#41-开启--禁用指定目录的快照功能)
+        - [4.2 创建快照](#42-创建快照)
+        - [4.3 列出当前用户所有可快照目录并查看](#43-列出当前用户所有可快照目录并查看)
+        - [4.4 重命名快照](#44-重命名快照)
+        - [4.5 比较两个快照的不同之处](#45-比较两个快照的不同之处)
+        - [4.6 恢复快照](#46-恢复快照)
 
 ---
 
@@ -402,9 +420,14 @@ drwx------   - zozo supergroup          0 2019-10-02 21:38 /user/zozo/.Trash/191
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-HDFS_2.X%E6%96%B0%E7%89%B9%E6%80%A7/%E5%BF%AB%E7%85%A7%E7%AE%A1%E7%90%86.png?raw=true)
 
-## 4.1 案例
+### 4.1 开启 / 禁用指定目录的快照功能
 
-### 4.1.1 开启 / 禁用指定目录的快照功能
+```bash
+# 开启指定目录的快照功能
+bin/hdfs dfsadmin -allowSnapshot <snapshotDir>
+# 禁用指定目录的快照功能
+bin/hdfs dfsadmin -disallowSnapshot <snapshotDir>
+```
 
 ```bash
 # 开启指定目录的快照功能
@@ -422,16 +445,77 @@ drwx------   - zozo supergroup          0 2019-10-02 21:38 /user/zozo/.Trash/191
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-### 4.1.2 对目录创建快照
+### 4.2 创建快照
 
-### 4.1.3 列出当前用户所有可快照目录并查看
+```bash
+# 对目录创建快照
+bin/hdfs dfs -createSnapshot <snapshotDir> [<snapshotName>]
+```
 
-### 4.1.4 指定名称创建快照
+```bash
+# 对目录创建快照
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfs -help createSnapshot
+-createSnapshot <snapshotDir> [<snapshotName>] :
+  Create a snapshot on a directory
+[zozo@vm017 hadoop-2.7.2]$ 
+```
 
-### 4.1.5 重命名快照
+### 4.3 列出当前用户所有可快照目录并查看
 
-### 4.1.6 比较两个快照的不同之处
+```bash
+# 列出当前用户所有可快照目录
+bin/hdfs lsSnapshottableDir
+```
 
-### 4.1.7 恢复快照
+```bash
+# 列出当前用户所有可快照目录
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs lsSnapshottableDir -help
+Usage: 
+hdfs lsSnapshottableDir: 
+	Get the list of snapshottable directories that are owned by the current user.
+	Return all the snapshottable directories if the current user is a super user.
+
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+### 4.4 重命名快照
+
+```bash
+# 重命名快照
+bin/hdfs dfs -renameSnapshot <snapshotDir> <oldName> <newName>
+```
+
+```bash
+# 重命名快照
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfs -help renameSnapshot
+-renameSnapshot <snapshotDir> <oldName> <newName> :
+  Rename a snapshot from oldName to newName
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+### 4.5 比较两个快照的不同之处
+
+```bash
+# 比较两个快照的不同之处
+bin/hdfs snapshotDiff <snapshotDir> <from> <to>
+```
+
+```bash
+# 比较两个快照的不同之处
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs snapshotDiff -help
+Usage: 
+hdfs snapshotDiff <snapshotDir> <from> <to>:
+	Get the difference between two snapshots, 
+	or between a snapshot and the current tree of a directory.
+	For <from>/<to>, users can use "." to present the current status,
+	and use ".snapshot/snapshot_name" to present a snapshot,
+	where ".snapshot/" can be omitted
+
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+### 4.6 恢复快照
+
+将快照目录下的文件拷贝出来.
 
 ---
