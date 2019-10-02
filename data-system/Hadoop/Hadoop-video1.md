@@ -11,6 +11,7 @@
   - [HDFS客户端操作](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-HDFS客户端操作.md)
   - [HDFS的数据流](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-HDFS的数据流.md)
   - [NameNode和SecondaryNameNode](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-NameNode和SecondaryNameNode.md)
+  - [DataNode](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-DataNode.md)
 
 - code
   - [zozospider/note-hadoop-video1](https://github.com/zozospider/note-hadoop-video1)
