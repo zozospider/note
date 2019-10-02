@@ -17,7 +17,12 @@
         - [4.1.1 停止 NameNode 进程并删除存储数据](#411-停止-namenode-进程并删除存储数据)
         - [4.1.2 拷贝 SecondaryNameNode 中的数据到 NameNode 存储数据目录中](#412-拷贝-secondarynamenode-中的数据到-namenode-存储数据目录中)
         - [4.1.3 重新启动 NameNode 并测试](#413-重新启动-namenode-并测试)
-    - [4.2 使用 -importCheckpoint 选项 (推荐)](#42-使用--importcheckpoint-选项-推荐)
+    - [4.2 使用 -importCheckpoint 选项 (推荐) (`TODO`)](#42-使用--importcheckpoint-选项-推荐-todo)
+        - [4.2.1 修改配置](#421-修改配置)
+        - [4.2.2 停止 NameNode 进程并删除存储数据](#422-停止-namenode-进程并删除存储数据)
+        - [4.2.3 将 SecondaryNameNode 存储目录拷贝到 NameNode 存储目录的平级目录上, 并删除 in_user.lock 文件](#423-将-secondarynamenode-存储目录拷贝到-namenode-存储目录的平级目录上-并删除-in_userlock-文件)
+        - [4.2.4 执行导入检查点命令](#424-执行导入检查点命令)
+        - [4.2.5 启动 NameNode](#425-启动-namenode)
 - [五 集群安全模式](#五-集群安全模式)
 - [六 NameNode 多目录设置](#六-namenode-多目录设置)
 
@@ -1623,17 +1628,17 @@ CheckPoint 触发条件:
 总用量 8
 drwx------ 3 zozo zozo 4096 9月  24 21:30 data
 drwxrwxr-x 3 zozo zozo 4096 9月  24 21:30 name
-[zozo@vm017 dfs]$ mv name name_backup20191002
+[zozo@vm017 dfs]$ mv name name_backup20191002_1
 [zozo@vm017 dfs]$ ll
 总用量 8
 drwx------ 3 zozo zozo 4096 9月  24 21:30 data
-drwxrwxr-x 3 zozo zozo 4096 9月  24 21:30 name_backup20191002
+drwxrwxr-x 3 zozo zozo 4096 9月  24 21:30 name_backup20191002_1
 [zozo@vm017 dfs]$ 
 ```
 
 ### 4.1.2 拷贝 SecondaryNameNode 中的数据到 NameNode 存储数据目录中
 
-- `vm06` (SecondaryNameNode) 上拷贝存储目录 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/namesecondary` 到 `vm017` (NameNode) 的 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/name` 上:
+- `vm06` (SecondaryNameNode) 上拷贝存储目录 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/namesecondary` 到 `vm017` (NameNode) 的 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/` 上, 并重命名为 `name`:
 
 ```
 [zozo@vm06 dfs]$ pwd
@@ -1652,14 +1657,14 @@ drwxrwxr-x 3 zozo zozo 4096 9月  24 21:31 namesecondary
 [zozo@vm017 dfs]$ ll
 总用量 12
 drwx------ 3 zozo zozo 4096 9月  24 21:30 data
-drwxrwxr-x 3 zozo zozo 4096 9月  24 21:30 name_backup20191002
+drwxrwxr-x 3 zozo zozo 4096 9月  24 21:30 name_backup20191002_1
 drwxrwxr-x 3 zozo zozo 4096 10月  2 11:02 namesecondary
 [zozo@vm017 dfs]$ mv namesecondary name
 [zozo@vm017 dfs]$ ll
 总用量 12
 drwx------ 3 zozo zozo 4096 9月  24 21:30 data
 drwxrwxr-x 3 zozo zozo 4096 10月  2 11:02 name
-drwxrwxr-x 3 zozo zozo 4096 9月  24 21:30 name_backup20191002
+drwxrwxr-x 3 zozo zozo 4096 9月  24 21:30 name_backup20191002_1
 [zozo@vm017 dfs]$ 
 ```
 
@@ -1701,13 +1706,362 @@ drwxr-xr-x   - zozo supergroup          0 2019-09-28 18:47 /d2/d2_a
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-## 4.2 使用 -importCheckpoint 选项 (推荐)
+## 4.2 使用 -importCheckpoint 选项 (推荐) (`TODO`)
 
+### 4.2.1 修改配置
 
+- 所有节点修改 `etc/hadoop/hdfs-site.xml` 增加如下配置:
+
+```xml
+<!-- 注: 以下配置仅用于测试 -importCheckpoint 效果, 测试完成后需要删除该配置 (使用默认值 3600 秒) -->
+<property>
+  <name>dfs.namenode.checkpoint.period</name>
+  <value>300</value>
+  <description>The number of seconds between two periodic checkpoints.
+  </description>
+</property>
+```
+
+### 4.2.2 停止 NameNode 进程并删除存储数据
+
+- `vm017` (NameNode) 上将 NameNode 进程停止:
+
+```
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+27158 org.apache.hadoop.hdfs.server.datanode.DataNode
+27465 org.apache.hadoop.yarn.server.nodemanager.NodeManager
+27017 org.apache.hadoop.hdfs.server.namenode.NameNode
+28063 sun.tools.jps.Jps -m -l
+[zozo@vm017 hadoop-2.7.2]$ kill -9 27017
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+28099 sun.tools.jps.Jps -m -l
+27158 org.apache.hadoop.hdfs.server.datanode.DataNode
+27465 org.apache.hadoop.yarn.server.nodemanager.NodeManager
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+此时已无法访问 HDFS 控制台: http://193.112.38.200:50070
+
+- `vm017` (NameNode) 上将 NameNode 存储目录 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/name` 下的子目录和文件删除:
+
+```
+[zozo@vm017 dfs]$ pwd
+/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs
+[zozo@vm017 dfs]$ ll
+总用量 12
+drwx------ 3 zozo zozo 4096 10月  2 13:30 data
+drwxrwxr-x 3 zozo zozo 4096 10月  2 13:30 name
+drwxrwxr-x 3 zozo zozo 4096 9月  24 21:30 name_backup20191002_1
+[zozo@vm017 dfs]$ mv name name_backup20191002_2
+[zozo@vm017 dfs]$ mkdir name
+[zozo@vm017 dfs]$ ll
+总用量 16
+drwx------ 3 zozo zozo 4096 10月  2 13:30 data
+drwxrwxr-x 2 zozo zozo 4096 10月  2 13:36 name
+drwxrwxr-x 3 zozo zozo 4096 9月  24 21:30 name_backup20191002_1
+drwxrwxr-x 3 zozo zozo 4096 10月  2 13:30 name_backup20191002_2
+[zozo@vm017 dfs]$ ll name
+总用量 0
+[zozo@vm017 dfs]$ 
+```
+
+### 4.2.3 将 SecondaryNameNode 存储目录拷贝到 NameNode 存储目录的平级目录上, 并删除 in_user.lock 文件
+
+- `vm06` (SecondaryNameNode) 上拷贝存储目录 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/namesecondary` 到 `vm017` (NameNode) 的 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/` 上, 并删除 `in_user.lock` 文件:
+
+```
+[zozo@vm06 dfs]$ pwd
+/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs
+[zozo@vm06 dfs]$ ll
+总用量 8
+drwx------ 3 zozo zozo 4096 10月  2 13:30 data
+drwxrwxr-x 3 zozo zozo 4096 10月  2 13:30 namesecondary
+[zozo@vm06 dfs]$ scp -r /home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/namesecondary zozo@vm017:/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/namesecondary
+[zozo@vm06 dfs]$ 
+```
+
+```
+[zozo@vm017 dfs]$ pwd
+/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs
+[zozo@vm017 dfs]$ ll
+总用量 20
+drwx------ 3 zozo zozo 4096 10月  2 13:30 data
+drwxrwxr-x 2 zozo zozo 4096 10月  2 13:36 name
+drwxrwxr-x 3 zozo zozo 4096 9月  24 21:30 name_backup20191002_1
+drwxrwxr-x 3 zozo zozo 4096 10月  2 13:30 name_backup20191002_2
+drwxrwxr-x 3 zozo zozo 4096 10月  2 13:37 namesecondary
+[zozo@vm017 dfs]$ ll namesecondary/
+总用量 24
+drwxrwxr-x 2 zozo zozo 20480 10月  2 13:37 current
+-rw-rw-r-- 1 zozo zozo    10 10月  2 13:37 in_use.lock
+[zozo@vm017 dfs]$ rm namesecondary/in_use.lock 
+[zozo@vm017 dfs]$ ll name
+总用量 0
+[zozo@vm017 dfs]$ ll namesecondary/
+总用量 20
+drwxrwxr-x 2 zozo zozo 20480 10月  2 13:37 current
+[zozo@vm017 dfs]$ 
+```
+
+### 4.2.4 执行导入检查点命令
+
+- `vm06` (SecondaryNameNode) 上执行以下命令:
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs namenode -importCheckpoint
+```
+
+执行失败! `TODO`
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs namenode -importCheckpoint
+19/10/02 13:39:34 INFO namenode.NameNode: STARTUP_MSG: 
+/************************************************************
+STARTUP_MSG: Starting NameNode
+STARTUP_MSG:   host = vm017/172.16.0.17
+STARTUP_MSG:   args = [-importCheckpoint]
+STARTUP_MSG:   version = 2.7.2
+STARTUP_MSG:   classpath = /home/zozo/app/hadoop/hadoop-2.7.2/etc/hadoop:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/xz-1.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/httpcore-4.2.5.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/apacheds-i18n-2.0.0-M15.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/curator-client-2.7.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/protobuf-java-2.5.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/xmlenc-0.52.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-lang-2.6.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/htrace-core-3.1.0-incubating.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/mockito-all-1.8.5.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/hadoop-auth-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-beanutils-core-1.8.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/curator-recipes-2.7.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/apacheds-kerberos-codec-2.0.0-M15.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/java-xmlbuilder-0.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jaxb-api-2.2.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jackson-jaxrs-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/paranamer-2.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jersey-json-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jersey-server-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jackson-core-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-httpclient-3.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-beanutils-1.7.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jsp-api-2.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jackson-xc-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jsr305-3.0.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/api-util-1.0.0-M20.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/guava-11.0.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-net-3.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-codec-1.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/activation-1.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-digester-1.8.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jets3t-0.9.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/httpclient-4.2.5.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jersey-core-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/hadoop-annotations-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/servlet-api-2.5.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/stax-api-1.0-2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/junit-4.11.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/gson-2.2.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-logging-1.1.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-cli-1.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jetty-util-6.1.26.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/slf4j-api-1.7.10.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/asm-3.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jettison-1.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-math3-3.1.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-collections-3.2.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/avro-1.7.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jetty-6.1.26.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/zookeeper-3.4.6.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jsch-0.1.42.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/log4j-1.2.17.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/api-asn1-api-1.0.0-M20.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-configuration-1.6.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/curator-framework-2.7.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-compress-1.4.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/netty-3.6.2.Final.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/snappy-java-1.0.4.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/commons-io-2.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/hamcrest-core-1.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jaxb-impl-2.2.3-1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/lib/jackson-mapper-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/hadoop-nfs-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/hadoop-common-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/common/hadoop-common-2.7.2-tests.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/protobuf-java-2.5.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/xmlenc-0.52.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-lang-2.6.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/htrace-core-3.1.0-incubating.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/xml-apis-1.3.04.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jersey-server-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-daemon-1.0.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jackson-core-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jsr305-3.0.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/guava-11.0.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/xercesImpl-2.9.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-codec-1.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jersey-core-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/servlet-api-2.5.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-logging-1.1.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-cli-1.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jetty-util-6.1.26.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/asm-3.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/netty-all-4.0.23.Final.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/leveldbjni-all-1.8.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jetty-6.1.26.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/log4j-1.2.17.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/netty-3.6.2.Final.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-io-2.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/lib/jackson-mapper-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/hadoop-hdfs-nfs-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/hadoop-hdfs-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/hdfs/hadoop-hdfs-2.7.2-tests.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/xz-1.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/aopalliance-1.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/protobuf-java-2.5.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/javax.inject-1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-lang-2.6.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/zookeeper-3.4.6-tests.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-client-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-guice-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jaxb-api-2.2.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-jaxrs-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-json-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-server-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-core-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-xc-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jsr305-3.0.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/guava-11.0.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-codec-1.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/activation-1.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-core-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/servlet-api-2.5.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/stax-api-1.0-2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-logging-1.1.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-cli-1.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jetty-util-6.1.26.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/asm-3.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/leveldbjni-all-1.8.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jettison-1.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-collections-3.2.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jetty-6.1.26.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/zookeeper-3.4.6.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/log4j-1.2.17.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/guice-servlet-3.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-compress-1.4.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/netty-3.6.2.Final.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/guice-3.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/commons-io-2.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jaxb-impl-2.2.3-1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-mapper-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-web-proxy-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-nodemanager-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-applications-unmanaged-am-launcher-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-resourcemanager-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-tests-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-sharedcachemanager-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-applications-distributedshell-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-registry-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-applicationhistoryservice-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-common-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-client-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-api-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-common-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/xz-1.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/aopalliance-1.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/protobuf-java-2.5.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/javax.inject-1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/jersey-guice-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/paranamer-2.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/jersey-server-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/jackson-core-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/jersey-core-1.9.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/hadoop-annotations-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/junit-4.11.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/asm-3.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/leveldbjni-all-1.8.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/avro-1.7.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/log4j-1.2.17.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/guice-servlet-3.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/commons-compress-1.4.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/netty-3.6.2.Final.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/snappy-java-1.0.4.1.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/guice-3.0.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/commons-io-2.4.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/hamcrest-core-1.3.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/lib/jackson-mapper-asl-1.9.13.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-core-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-shuffle-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-plugins-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-app-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.7.2-tests.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-common-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.7.2.jar:/home/zozo/app/hadoop/hadoop-2.7.2/contrib/capacity-scheduler/*.jar
+STARTUP_MSG:   build = https://git-wip-us.apache.org/repos/asf/hadoop.git -r b165c4fe8a74265c792ce23f546c64604acf0e41; compiled by 'jenkins' on 2016-01-26T00:08Z
+STARTUP_MSG:   java = 1.8.0_192
+************************************************************/
+19/10/02 13:39:34 INFO namenode.NameNode: registered UNIX signal handlers for [TERM, HUP, INT]
+19/10/02 13:39:34 INFO namenode.NameNode: createNameNode [-importCheckpoint]
+19/10/02 13:39:35 INFO impl.MetricsConfig: loaded properties from hadoop-metrics2.properties
+19/10/02 13:39:35 INFO impl.MetricsSystemImpl: Scheduled snapshot period at 10 second(s).
+19/10/02 13:39:35 INFO impl.MetricsSystemImpl: NameNode metrics system started
+19/10/02 13:39:35 INFO namenode.NameNode: fs.defaultFS is hdfs://vm017:9000
+19/10/02 13:39:35 INFO namenode.NameNode: Clients are to use vm017:9000 to access this namenode/service.
+19/10/02 13:39:35 INFO hdfs.DFSUtil: Starting Web-server for hdfs at: http://0.0.0.0:50070
+19/10/02 13:39:35 INFO mortbay.log: Logging to org.slf4j.impl.Log4jLoggerAdapter(org.mortbay.log) via org.mortbay.log.Slf4jLog
+19/10/02 13:39:35 INFO server.AuthenticationFilter: Unable to initialize FileSignerSecretProvider, falling back to use random secrets.
+19/10/02 13:39:35 INFO http.HttpRequestLog: Http request log for http.requests.namenode is not defined
+19/10/02 13:39:35 INFO http.HttpServer2: Added global filter 'safety' (class=org.apache.hadoop.http.HttpServer2$QuotingInputFilter)
+19/10/02 13:39:35 INFO http.HttpServer2: Added filter static_user_filter (class=org.apache.hadoop.http.lib.StaticUserWebFilter$StaticUserFilter) to context hdfs
+19/10/02 13:39:35 INFO http.HttpServer2: Added filter static_user_filter (class=org.apache.hadoop.http.lib.StaticUserWebFilter$StaticUserFilter) to context static
+19/10/02 13:39:35 INFO http.HttpServer2: Added filter static_user_filter (class=org.apache.hadoop.http.lib.StaticUserWebFilter$StaticUserFilter) to context logs
+19/10/02 13:39:35 INFO http.HttpServer2: Added filter 'org.apache.hadoop.hdfs.web.AuthFilter' (class=org.apache.hadoop.hdfs.web.AuthFilter)
+19/10/02 13:39:35 INFO http.HttpServer2: addJerseyResourcePackage: packageName=org.apache.hadoop.hdfs.server.namenode.web.resources;org.apache.hadoop.hdfs.web.resources, pathSpec=/webhdfs/v1/*
+19/10/02 13:39:35 INFO http.HttpServer2: Jetty bound to port 50070
+19/10/02 13:39:35 INFO mortbay.log: jetty-6.1.26
+19/10/02 13:39:35 INFO mortbay.log: Started HttpServer2$SelectChannelConnectorWithSafeStartup@0.0.0.0:50070
+19/10/02 13:39:35 WARN namenode.FSNamesystem: !!! WARNING !!!
+	The NameNode currently runs without persistent storage.
+	Any changes to the file system meta-data may be lost.
+	Recommended actions:
+		- shutdown and restart NameNode with configured "dfs.namenode.name.dir" in hdfs-site.xml;
+		- use Backup Node as a persistent and up-to-date storage of the file system meta-data.
+19/10/02 13:39:35 WARN namenode.FSNamesystem: !!! WARNING !!!
+	The NameNode currently runs without persistent storage.
+	Any changes to the file system meta-data may be lost.
+	Recommended actions:
+		- shutdown and restart NameNode with configured "dfs.namenode.edits.dir" in hdfs-site.xml;
+		- use Backup Node as a persistent and up-to-date storage of the file system meta-data.
+19/10/02 13:39:35 WARN namenode.FSNamesystem: !!! WARNING !!!
+	The NameNode currently runs without persistent storage.
+	Any changes to the file system meta-data may be lost.
+	Recommended actions:
+		- shutdown and restart NameNode with configured "dfs.namenode.name.dir" in hdfs-site.xml;
+		- use Backup Node as a persistent and up-to-date storage of the file system meta-data.
+19/10/02 13:39:35 WARN namenode.FSNamesystem: !!! WARNING !!!
+	The NameNode currently runs without persistent storage.
+	Any changes to the file system meta-data may be lost.
+	Recommended actions:
+		- shutdown and restart NameNode with configured "dfs.namenode.edits.dir.required" in hdfs-site.xml;
+		- use Backup Node as a persistent and up-to-date storage of the file system meta-data.
+19/10/02 13:39:35 WARN namenode.FSNamesystem: !!! WARNING !!!
+	The NameNode currently runs without persistent storage.
+	Any changes to the file system meta-data may be lost.
+	Recommended actions:
+		- shutdown and restart NameNode with configured "dfs.namenode.name.dir" in hdfs-site.xml;
+		- use Backup Node as a persistent and up-to-date storage of the file system meta-data.
+19/10/02 13:39:35 WARN namenode.FSNamesystem: !!! WARNING !!!
+	The NameNode currently runs without persistent storage.
+	Any changes to the file system meta-data may be lost.
+	Recommended actions:
+		- shutdown and restart NameNode with configured "dfs.namenode.edits.dir" in hdfs-site.xml;
+		- use Backup Node as a persistent and up-to-date storage of the file system meta-data.
+19/10/02 13:39:35 WARN namenode.FSNamesystem: !!! WARNING !!!
+	The NameNode currently runs without persistent storage.
+	Any changes to the file system meta-data may be lost.
+	Recommended actions:
+		- shutdown and restart NameNode with configured "dfs.namenode.name.dir" in hdfs-site.xml;
+		- use Backup Node as a persistent and up-to-date storage of the file system meta-data.
+19/10/02 13:39:35 INFO namenode.FSNamesystem: No KeyProvider found.
+19/10/02 13:39:35 INFO namenode.FSNamesystem: fsLock is fair:true
+19/10/02 13:39:36 INFO blockmanagement.DatanodeManager: dfs.block.invalidate.limit=1000
+19/10/02 13:39:36 INFO blockmanagement.DatanodeManager: dfs.namenode.datanode.registration.ip-hostname-check=true
+19/10/02 13:39:36 INFO blockmanagement.BlockManager: dfs.namenode.startup.delay.block.deletion.sec is set to 000:00:00:00.000
+19/10/02 13:39:36 INFO blockmanagement.BlockManager: The block deletion will start around 2019 十月 02 13:39:36
+19/10/02 13:39:36 INFO util.GSet: Computing capacity for map BlocksMap
+19/10/02 13:39:36 INFO util.GSet: VM type       = 64-bit
+19/10/02 13:39:36 INFO util.GSet: 2.0% max memory 889 MB = 17.8 MB
+19/10/02 13:39:36 INFO util.GSet: capacity      = 2^21 = 2097152 entries
+19/10/02 13:39:36 INFO blockmanagement.BlockManager: dfs.block.access.token.enable=false
+19/10/02 13:39:36 INFO blockmanagement.BlockManager: defaultReplication         = 3
+19/10/02 13:39:36 INFO blockmanagement.BlockManager: maxReplication             = 512
+19/10/02 13:39:36 INFO blockmanagement.BlockManager: minReplication             = 1
+19/10/02 13:39:36 INFO blockmanagement.BlockManager: maxReplicationStreams      = 2
+19/10/02 13:39:36 INFO blockmanagement.BlockManager: replicationRecheckInterval = 3000
+19/10/02 13:39:36 INFO blockmanagement.BlockManager: encryptDataTransfer        = false
+19/10/02 13:39:36 INFO blockmanagement.BlockManager: maxNumBlocksToLog          = 1000
+19/10/02 13:39:36 INFO namenode.FSNamesystem: fsOwner             = zozo (auth:SIMPLE)
+19/10/02 13:39:36 INFO namenode.FSNamesystem: supergroup          = supergroup
+19/10/02 13:39:36 INFO namenode.FSNamesystem: isPermissionEnabled = true
+19/10/02 13:39:36 INFO namenode.FSNamesystem: HA Enabled: false
+19/10/02 13:39:36 INFO namenode.FSNamesystem: Append Enabled: true
+19/10/02 13:39:36 INFO util.GSet: Computing capacity for map INodeMap
+19/10/02 13:39:36 INFO util.GSet: VM type       = 64-bit
+19/10/02 13:39:36 INFO util.GSet: 1.0% max memory 889 MB = 8.9 MB
+19/10/02 13:39:36 INFO util.GSet: capacity      = 2^20 = 1048576 entries
+19/10/02 13:39:36 INFO namenode.FSDirectory: ACLs enabled? false
+19/10/02 13:39:36 INFO namenode.FSDirectory: XAttrs enabled? true
+19/10/02 13:39:36 INFO namenode.FSDirectory: Maximum size of an xattr: 16384
+19/10/02 13:39:36 INFO namenode.NameNode: Caching file names occuring more than 10 times
+19/10/02 13:39:36 INFO util.GSet: Computing capacity for map cachedBlocks
+19/10/02 13:39:36 INFO util.GSet: VM type       = 64-bit
+19/10/02 13:39:36 INFO util.GSet: 0.25% max memory 889 MB = 2.2 MB
+19/10/02 13:39:36 INFO util.GSet: capacity      = 2^18 = 262144 entries
+19/10/02 13:39:36 INFO namenode.FSNamesystem: dfs.namenode.safemode.threshold-pct = 0.9990000128746033
+19/10/02 13:39:36 INFO namenode.FSNamesystem: dfs.namenode.safemode.min.datanodes = 0
+19/10/02 13:39:36 INFO namenode.FSNamesystem: dfs.namenode.safemode.extension     = 30000
+19/10/02 13:39:36 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.window.num.buckets = 10
+19/10/02 13:39:36 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.num.users = 10
+19/10/02 13:39:36 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.windows.minutes = 1,5,25
+19/10/02 13:39:36 INFO namenode.FSNamesystem: Retry cache on namenode is enabled
+19/10/02 13:39:36 INFO namenode.FSNamesystem: Retry cache will use 0.03 of total heap and retry cache entry expiry time is 600000 millis
+19/10/02 13:39:36 INFO util.GSet: Computing capacity for map NameNodeRetryCache
+19/10/02 13:39:36 INFO util.GSet: VM type       = 64-bit
+19/10/02 13:39:36 INFO util.GSet: 0.029999999329447746% max memory 889 MB = 273.1 KB
+19/10/02 13:39:36 INFO util.GSet: capacity      = 2^15 = 32768 entries
+19/10/02 13:39:36 INFO common.Storage: Lock on /home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/namesecondary/in_use.lock acquired by nodename 28708@vm017
+19/10/02 13:39:36 WARN namenode.FSNamesystem: !!! WARNING !!!
+	The NameNode currently runs without persistent storage.
+	Any changes to the file system meta-data may be lost.
+	Recommended actions:
+		- shutdown and restart NameNode with configured "dfs.namenode.edits.dir.required" in hdfs-site.xml;
+		- use Backup Node as a persistent and up-to-date storage of the file system meta-data.
+19/10/02 13:39:36 INFO namenode.FileJournalManager: Recovering unfinalized segments in /home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/namesecondary/current
+19/10/02 13:39:36 INFO namenode.FSImage: No edit log streams selected.
+19/10/02 13:39:36 INFO namenode.FSImageFormatPBINode: Loading 7 INodes.
+19/10/02 13:39:36 INFO namenode.FSImageFormatProtobuf: Loaded FSImage in 0 seconds.
+19/10/02 13:39:36 INFO namenode.FSImage: Loaded image for txid 692 from /home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/namesecondary/current/fsimage_0000000000000000692
+19/10/02 13:39:36 INFO namenode.FSImage: Save namespace ...
+19/10/02 13:39:36 WARN namenode.FSNamesystem: Encountered exception loading fsimage
+java.io.IOException: No image directories available!
+	at org.apache.hadoop.hdfs.server.namenode.FSImage.saveFSImageInAllDirs(FSImage.java:1150)
+	at org.apache.hadoop.hdfs.server.namenode.FSImage.saveNamespace(FSImage.java:1105)
+	at org.apache.hadoop.hdfs.server.namenode.FSImage.saveNamespace(FSImage.java:1080)
+	at org.apache.hadoop.hdfs.server.namenode.FSImage.doImportCheckpoint(FSImage.java:545)
+	at org.apache.hadoop.hdfs.server.namenode.FSImage.recoverTransitionRead(FSImage.java:284)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFSImage(FSNamesystem.java:975)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFromDisk(FSNamesystem.java:681)
+	at org.apache.hadoop.hdfs.server.namenode.NameNode.loadNamesystem(NameNode.java:584)
+	at org.apache.hadoop.hdfs.server.namenode.NameNode.initialize(NameNode.java:644)
+	at org.apache.hadoop.hdfs.server.namenode.NameNode.<init>(NameNode.java:811)
+	at org.apache.hadoop.hdfs.server.namenode.NameNode.<init>(NameNode.java:795)
+	at org.apache.hadoop.hdfs.server.namenode.NameNode.createNameNode(NameNode.java:1488)
+	at org.apache.hadoop.hdfs.server.namenode.NameNode.main(NameNode.java:1554)
+19/10/02 13:39:36 INFO mortbay.log: Stopped HttpServer2$SelectChannelConnectorWithSafeStartup@0.0.0.0:50070
+19/10/02 13:39:36 INFO impl.MetricsSystemImpl: Stopping NameNode metrics system...
+19/10/02 13:39:36 INFO impl.MetricsSystemImpl: NameNode metrics system stopped.
+19/10/02 13:39:36 INFO impl.MetricsSystemImpl: NameNode metrics system shutdown complete.
+19/10/02 13:39:36 ERROR namenode.NameNode: Failed to start namenode.
+java.io.IOException: No image directories available!
+	at org.apache.hadoop.hdfs.server.namenode.FSImage.saveFSImageInAllDirs(FSImage.java:1150)
+	at org.apache.hadoop.hdfs.server.namenode.FSImage.saveNamespace(FSImage.java:1105)
+	at org.apache.hadoop.hdfs.server.namenode.FSImage.saveNamespace(FSImage.java:1080)
+	at org.apache.hadoop.hdfs.server.namenode.FSImage.doImportCheckpoint(FSImage.java:545)
+	at org.apache.hadoop.hdfs.server.namenode.FSImage.recoverTransitionRead(FSImage.java:284)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFSImage(FSNamesystem.java:975)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.loadFromDisk(FSNamesystem.java:681)
+	at org.apache.hadoop.hdfs.server.namenode.NameNode.loadNamesystem(NameNode.java:584)
+	at org.apache.hadoop.hdfs.server.namenode.NameNode.initialize(NameNode.java:644)
+	at org.apache.hadoop.hdfs.server.namenode.NameNode.<init>(NameNode.java:811)
+	at org.apache.hadoop.hdfs.server.namenode.NameNode.<init>(NameNode.java:795)
+	at org.apache.hadoop.hdfs.server.namenode.NameNode.createNameNode(NameNode.java:1488)
+	at org.apache.hadoop.hdfs.server.namenode.NameNode.main(NameNode.java:1554)
+19/10/02 13:39:36 INFO util.ExitUtil: Exiting with status 1
+19/10/02 13:39:36 INFO namenode.NameNode: SHUTDOWN_MSG: 
+/************************************************************
+SHUTDOWN_MSG: Shutting down NameNode at vm017/172.16.0.17
+************************************************************/
+[zozo@vm017 hadoop-2.7.2]$ jps
+27158 DataNode
+27465 NodeManager
+28766 Jps
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+### 4.2.5 启动 NameNode
+
+- `vm017` (NameNode) 上启动 NameNode
+
+(上一步执行失败, 无法启动! `TODO`)
 
 ---
 
 # 五 集群安全模式
+
+## 5.1 说明
+
+- NameNode 启动
+
+NameNode 启动时, 首先将 Fsimage (镜像) 载入内存, 并执行 Edits (操作记录日志) 中的各项操作. 一旦在内存中成功建立文件系统元数据的映像, 则创建一个新的 Fsimage 文件和一个空的 Edits (操作记录日志). 此时 NameNode 开始监听 DataNode 请求. 这个过程中, NameNode 一直处于安全模式.
+
+- DataNode 启动
+
+系统中的数据块的位置并不是由 NameNode 维护的, 而是以块列表的形式存储在 DataNode 中. 在系统正常工作期间, NameNode 在内存中保留所有块位置的映射信息. 在安全模式下, 各个 DataNode 会向 NameNode 发送最新的块列表信息, NameNode 了解到足够多的块信息后即可运行文件系统.
+
+- 安全模式退出判断
+
+如果满足 `最小副本条件`, NameNode 会在 30 秒之后就退出安全模式. `最小副本条件` 是指在整个文件系统中 `99.9%` 的块满足最小副本级别 (默认 dfs.replication.min=1).
+
+_注: 在启动一个刚刚格式化的 HDFS 集群时, 因为系统中还没有任何块, 所以 NameNode 不会进入安全模式._
+
+## 5.2 语法
+
+```bash
+-safemode <enter|leave|get|wait>
+
+# 进入安全模式
+bin/hdfs dfsadmin -safemode enter
+# 离开安全模式
+bin/hdfs dfsadmin -safemode leave
+# 查看安全模式状态
+bin/hdfs dfsadmin -safemode get
+# 等待安全模式
+bin/hdfs dfsadmin -safemode wait
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfsadmin -help safemode
+-safemode <enter|leave|get|wait>:  Safe mode maintenance command.
+		Safe mode is a Namenode state in which it
+			1.  does not accept changes to the name space (read-only)
+			2.  does not replicate or delete blocks.
+		Safe mode is entered automatically at Namenode startup, and
+		leaves safe mode automatically when the configured minimum
+		percentage of blocks satisfies the minimum replication
+		condition.  Safe mode can also be entered manually, but then
+		it can only be turned off manually as well.
+
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+## 5.3 使用
+
+- 查看安全模式状态
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfsadmin -safemode get
+Safe mode is OFF
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+![image]()
+
+
 
 ---
 
