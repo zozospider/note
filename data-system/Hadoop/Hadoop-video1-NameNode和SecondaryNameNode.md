@@ -13,6 +13,11 @@
     - [2.8 操作测试 - 每小时滚动后 - 查看 Edits 内容](#28-操作测试---每小时滚动后---查看-edits-内容)
 - [三 CheckPoint 时间设置](#三-checkpoint-时间设置)
 - [四 NameNode 故障处理](#四-namenode-故障处理)
+    - [4.1 将 SecondaryNameNode 中的数据拷贝到 NameNode 中](#41-将-secondarynamenode-中的数据拷贝到-namenode-中)
+        - [4.1.1 停止 NameNode 进程并删除存储数据](#411-停止-namenode-进程并删除存储数据)
+        - [4.1.2 拷贝 SecondaryNameNode 中的数据到 NameNode 存储数据目录中](#412-拷贝-secondarynamenode-中的数据到-namenode-存储数据目录中)
+        - [4.1.3 重新启动 NameNode 并测试](#413-重新启动-namenode-并测试)
+    - [4.2 使用 -importCheckpoint 选项 (推荐)](#42-使用--importcheckpoint-选项-推荐)
 - [五 集群安全模式](#五-集群安全模式)
 - [六 NameNode 多目录设置](#六-namenode-多目录设置)
 
