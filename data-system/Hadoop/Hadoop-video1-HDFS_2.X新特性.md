@@ -288,16 +288,80 @@ ls: Invalid path for the Har Filesystem. har:///home/zozo/har
 
 ## 3.1 启用回收站
 
-在 `core-site.xml` 中增加如下配置:
+在所有节点的 `core-site.xml` 中增加如下配置:
 
 ```xml
-  <!-- 回收站配置 -->
+  <!-- 回收站文件存活时间 (分钟), (默认 0 表示禁用) -->
   <property>
     <name>fs.trash.interval</name>
-    <value>0</value>
+    <!-- <value>0</value> -->
+    <value>2</value>
     <description>Number of minutes after which the checkpoint gets deleted.  If zero, the trash feature is disabled. This option may be configured both on the server and the client. If trash is disabled server side then the client side configuration is checked. If trash is enabled on the server side then the value configured on the server is used and the client configuration value is ignored.
     </description>
   </property>
+
+  <!-- Static Web User Filter properties. -->
+  <!-- 默认用户需要修改为 zozo, 否则为默认用户 dr.who -->
+  <property>
+    <description>
+    The user name to filter as, on static web filters while rendering content. An example use is the HDFS web UI (user to be used for browsing files).
+    </description>
+    <name>hadoop.http.staticuser.user</name>
+    <!-- <value>dr.who</value> -->
+    <value>zozo</value>
+  </property>
+```
+
+## 3.2 重启集群 (如果已启动)
+
+
+## 3.3 删除数据并查看回收站
+
+- 删除数据并查看回收站:
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -rm /home/zozo/d1/f1
+19/10/02 20:50:50 INFO fs.TrashPolicyDefault: Namenode trash configuration: Deletion interval = 2 minutes, Emptier interval = 0 minutes.
+Moved: 'hdfs://vm017:9000/home/zozo/d1/f1' to trash at: hdfs://vm017:9000/user/zozo/.Trash/Current
+[zozo@vm017 hadoop-2.7.2]$ 
+[zozo@vm017 hadoop-2.7.2]$ 
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /user/zozo/.Trash/
+drwx------   - zozo supergroup          0 2019-10-02 20:50 /user/zozo/.Trash/Current
+drwx------   - zozo supergroup          0 2019-10-02 20:50 /user/zozo/.Trash/Current/home
+drwx------   - zozo supergroup          0 2019-10-02 20:50 /user/zozo/.Trash/Current/home/zozo
+drwx------   - zozo supergroup          0 2019-10-02 20:50 /user/zozo/.Trash/Current/home/zozo/d1
+-rw-r--r--   3 zozo supergroup         30 2019-10-02 19:59 /user/zozo/.Trash/Current/home/zozo/d1/f1
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -cat /user/zozo/.Trash/Current/home/zozo/d1/f1
+I am f1
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- 2 分钟后再查看回收站:
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /user/zozo/.Trash/
+drwx------   - zozo supergroup          0 2019-10-02 20:50 /user/zozo/.Trash/191002205200
+drwx------   - zozo supergroup          0 2019-10-02 20:50 /user/zozo/.Trash/191002205200/home
+drwx------   - zozo supergroup          0 2019-10-02 20:50 /user/zozo/.Trash/191002205200/home/zozo
+drwx------   - zozo supergroup          0 2019-10-02 20:50 /user/zozo/.Trash/191002205200/home/zozo/d1
+-rw-r--r--   3 zozo supergroup         30 2019-10-02 19:59 /user/zozo/.Trash/191002205200/home/zozo/d1/f1
+```
+
+- 一段时间后再查看回收站:
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /user/zozo/.Trash/
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+## 3.4 恢复回收站数据
+
+恢复回收站的数据需要在回收站的数据删除前, 将数据拷贝出来. 否则无法恢复.
+
+## 3.5 清空回收站
+
+```
+bin/hadoop fs -expunge
 ```
 
 ---
