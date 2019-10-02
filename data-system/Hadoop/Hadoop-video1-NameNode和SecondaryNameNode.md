@@ -1556,9 +1556,149 @@ _注: `2019-10-01 22:32:00` 后_
 
 # 三 CheckPoint 时间设置
 
+CheckPoint 触发条件:
+- 定时时间到
+- Edits 中的操作次数达到上限
+
+`hdfs-site.xml` 文件中配置定时执行 CheckPoint 的时间间隔 (默认 1 小时):
+```xml
+<property>
+  <name>dfs.namenode.checkpoint.period</name>
+  <value>3600</value>
+  <description>The number of seconds between two periodic checkpoints.
+  </description>
+</property>
+```
+
+`hdfs-site.xml` 文件中配置操作次数达到指定次数时 (默认 100 万次), 触发 CheckPoint.
+
+```xml
+<property>
+  <name>dfs.namenode.checkpoint.txns</name>
+  <value>1000000</value>
+  <description>The Secondary NameNode or CheckpointNode will create a checkpoint
+  of the namespace every 'dfs.namenode.checkpoint.txns' transactions, regardless
+  of whether 'dfs.namenode.checkpoint.period' has expired.
+  </description>
+</property>
+```
+
 ---
 
 # 四 NameNode 故障处理
+
+## 4.1 将 SecondaryNameNode 中的数据拷贝到 NameNode 中
+
+### 4.1.1 停止 NameNode 进程并删除存储数据
+
+- `vm017` (NameNode) 上将 NameNode 进程停止:
+
+```
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+32064 org.apache.hadoop.yarn.server.nodemanager.NodeManager
+9094 sun.tools.jps.Jps -m -l
+31416 org.apache.hadoop.hdfs.server.datanode.DataNode
+31276 org.apache.hadoop.hdfs.server.namenode.NameNode
+[zozo@vm017 hadoop-2.7.2]$ kill -9 31276
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+32064 org.apache.hadoop.yarn.server.nodemanager.NodeManager
+31416 org.apache.hadoop.hdfs.server.datanode.DataNode
+9564 sun.tools.jps.Jps -m -l
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+此时已无法访问 HDFS 控制台: http://193.112.38.200:50070
+
+- `vm017` (NameNode) 上将 NameNode 存储目录 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/name` 删除:
+
+```
+[zozo@vm017 dfs]$ pwd
+/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs
+[zozo@vm017 dfs]$ ll
+总用量 8
+drwx------ 3 zozo zozo 4096 9月  24 21:30 data
+drwxrwxr-x 3 zozo zozo 4096 9月  24 21:30 name
+[zozo@vm017 dfs]$ mv name name_backup20191002
+[zozo@vm017 dfs]$ ll
+总用量 8
+drwx------ 3 zozo zozo 4096 9月  24 21:30 data
+drwxrwxr-x 3 zozo zozo 4096 9月  24 21:30 name_backup20191002
+[zozo@vm017 dfs]$ 
+```
+
+### 4.1.2 拷贝 SecondaryNameNode 中的数据到 NameNode 存储数据目录中
+
+- `vm06` (SecondaryNameNode) 上拷贝存储目录 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/namesecondary` 到 `vm017` (NameNode) 的 `/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/name` 上:
+
+```
+[zozo@vm06 dfs]$ pwd
+/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs
+[zozo@vm06 dfs]$ ll
+总用量 8
+drwx------ 3 zozo zozo 4096 9月  24 21:30 data
+drwxrwxr-x 3 zozo zozo 4096 9月  24 21:31 namesecondary
+[zozo@vm06 dfs]$ scp -r /home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/namesecondary zozo@vm017:/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs/namesecondary
+[zozo@vm06 dfs]$ 
+```
+
+```
+[zozo@vm017 dfs]$ pwd
+/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/dfs
+[zozo@vm017 dfs]$ ll
+总用量 12
+drwx------ 3 zozo zozo 4096 9月  24 21:30 data
+drwxrwxr-x 3 zozo zozo 4096 9月  24 21:30 name_backup20191002
+drwxrwxr-x 3 zozo zozo 4096 10月  2 11:02 namesecondary
+[zozo@vm017 dfs]$ mv namesecondary name
+[zozo@vm017 dfs]$ ll
+总用量 12
+drwx------ 3 zozo zozo 4096 9月  24 21:30 data
+drwxrwxr-x 3 zozo zozo 4096 10月  2 11:02 name
+drwxrwxr-x 3 zozo zozo 4096 9月  24 21:30 name_backup20191002
+[zozo@vm017 dfs]$ 
+```
+
+此时已成功将 SecondaryNameNode 中的数据拷贝到 NameNode 中
+
+### 4.1.3 重新启动 NameNode 并测试
+
+- `vm017` (NameNode) 上启动 NameNode:
+
+```
+[zozo@vm017 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start namenode
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+32064 org.apache.hadoop.yarn.server.nodemanager.NodeManager
+10854 sun.tools.jps.Jps -m -l
+31416 org.apache.hadoop.hdfs.server.datanode.DataNode
+[zozo@vm017 hadoop-2.7.2]$ sbin/hadoop-daemon.sh start namenode
+starting namenode, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-namenode-vm017.out
+[zozo@vm017 hadoop-2.7.2]$ jps -m -l
+32064 org.apache.hadoop.yarn.server.nodemanager.NodeManager
+31416 org.apache.hadoop.hdfs.server.datanode.DataNode
+10908 org.apache.hadoop.hdfs.server.namenode.NameNode
+10991 sun.tools.jps.Jps -m -l
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+- 测试集群: 此时集群可正常访问
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /
+drwxr-xr-x   - zozo supergroup          0 2019-10-01 21:50 /d2
+drwxr-xr-x   - zozo supergroup          0 2019-09-28 18:47 /d2/d2_a
+-rw-r--r--   3 zozo supergroup          8 2019-09-28 17:29 /d2/d2_a/f1
+-rw-r--r--   2 zozo supergroup          8 2019-09-28 18:03 /d2/d2_a/f2_rename
+-rw-r--r--   3 zozo supergroup  212046774 2019-09-25 20:04 /hadoop-2.7.2.tar.gz
+-rw-r--r--   3 zozo supergroup         36 2019-09-25 20:04 /wc.input
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+## 4.2 使用 -importCheckpoint 选项 (推荐)
+
+
 
 ---
 
