@@ -2164,7 +2164,7 @@ Safe mode is OFF
 
 ---
 
-# 六 NameNode 多目录设置
+# 六 NameNode 多目录配置
 
 NameNode 的本地数据存储目录可以配置成多个, 每个目录存放的内容相同, 增加可靠性.
 
@@ -2304,6 +2304,7 @@ drwxrwxr-x 3 zozo zozo 4096 10月  2 15:51 name3
 
 ```
 [zozo@vm017 hadoop-2.7.2]$ sbin/start-dfs.sh
+[zozo@vm03 hadoop-2.7.2]$ sbin/start-yarn.sh
 ```
 
 ```
@@ -2329,5 +2330,7 @@ vm03: starting nodemanager, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/y
 ```
 
 后续 NameNode 的三个数据目录下的文件内容会一直保持相同.
+
+_注: NameSecondary 数据目录还是一个._
 
 ---
