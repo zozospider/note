@@ -11,7 +11,7 @@
 
 # 二 数据完整性
 
-![image]()
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-DataNode/%E6%95%B0%E6%8D%AE%E5%AE%8C%E6%95%B4%E6%80%A7.png?raw=true)
 
 ---
 
