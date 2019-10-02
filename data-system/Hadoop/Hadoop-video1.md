@@ -12,6 +12,7 @@
   - [HDFS的数据流](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-HDFS的数据流.md)
   - [NameNode和SecondaryNameNode](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-NameNode和SecondaryNameNode.md)
   - [DataNode](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-DataNode.md)
+  - [HDFS_2.X新特性](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-HDFS_2.X新特性.md)
 
 - code
   - [zozospider/note-hadoop-video1](https://github.com/zozospider/note-hadoop-video1)
