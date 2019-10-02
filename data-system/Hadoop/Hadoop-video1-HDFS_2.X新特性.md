@@ -400,4 +400,38 @@ drwx------   - zozo supergroup          0 2019-10-02 21:38 /user/zozo/.Trash/191
 
 # 四 快照管理
 
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-HDFS_2.X%E6%96%B0%E7%89%B9%E6%80%A7/%E5%BF%AB%E7%85%A7%E7%AE%A1%E7%90%86.png?raw=true)
+
+## 4.1 案例
+
+### 4.1.1 开启 / 禁用指定目录的快照功能
+
+```bash
+# 开启指定目录的快照功能
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfsadmin -help allowSnapshot
+-allowSnapshot <snapshotDir>:
+	Allow snapshots to be taken on a directory.
+
+[zozo@vm017 hadoop-2.7.2]$ 
+
+# 禁用指定目录的快照功能
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfsadmin -help disallowSnapshot
+-disallowSnapshot <snapshotDir>:
+	Do not allow snapshots to be taken on a directory any more.
+
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+### 4.1.2 对目录创建快照
+
+### 4.1.3 列出当前用户所有可快照目录并查看
+
+### 4.1.4 指定名称创建快照
+
+### 4.1.5 重命名快照
+
+### 4.1.6 比较两个快照的不同之处
+
+### 4.1.7 恢复快照
+
 ---
