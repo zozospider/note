@@ -284,7 +284,21 @@ ls: Invalid path for the Har Filesystem. har:///home/zozo/har
 
 # 三 回收站
 
-![image]()
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-HDFS_2.X%E6%96%B0%E7%89%B9%E6%80%A7/%E5%9B%9E%E6%94%B6%E7%AB%99.png?raw=true)
+
+## 3.1 启用回收站
+
+在 `core-site.xml` 中增加如下配置:
+
+```xml
+  <!-- 回收站配置 -->
+  <property>
+    <name>fs.trash.interval</name>
+    <value>0</value>
+    <description>Number of minutes after which the checkpoint gets deleted.  If zero, the trash feature is disabled. This option may be configured both on the server and the client. If trash is disabled server side then the client side configuration is checked. If trash is enabled on the server side then the value configured on the server is used and the client configuration value is ignored.
+    </description>
+  </property>
+```
 
 ---
 
