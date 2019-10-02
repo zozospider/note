@@ -1579,25 +1579,23 @@ CheckPoint 触发条件:
 
 `hdfs-site.xml` 文件中配置定时执行 CheckPoint 的时间间隔 (默认 1 小时):
 ```xml
-<property>
-  <name>dfs.namenode.checkpoint.period</name>
-  <value>3600</value>
-  <description>The number of seconds between two periodic checkpoints.
-  </description>
-</property>
+  <property>
+    <name>dfs.namenode.checkpoint.period</name>
+    <value>3600</value>
+    <description>The number of seconds between two periodic checkpoints.
+    </description>
+  </property>
 ```
 
 `hdfs-site.xml` 文件中配置操作次数达到指定次数时 (默认 100 万次), 触发 CheckPoint.
 
 ```xml
-<property>
-  <name>dfs.namenode.checkpoint.txns</name>
-  <value>1000000</value>
-  <description>The Secondary NameNode or CheckpointNode will create a checkpoint
-  of the namespace every 'dfs.namenode.checkpoint.txns' transactions, regardless
-  of whether 'dfs.namenode.checkpoint.period' has expired.
-  </description>
-</property>
+  <property>
+    <name>dfs.namenode.checkpoint.txns</name>
+    <value>1000000</value>
+    <description>The Secondary NameNode or CheckpointNode will create a checkpoint of the namespace every 'dfs.namenode.checkpoint.txns' transactions, regardless of whether 'dfs.namenode.checkpoint.period' has expired.
+    </description>
+  </property>
 ```
 
 ---
@@ -1720,13 +1718,13 @@ drwxr-xr-x   - zozo supergroup          0 2019-09-28 18:47 /d2/d2_a
 - 所有节点修改 `etc/hadoop/hdfs-site.xml` 增加如下配置:
 
 ```xml
-<!-- 注: 以下配置仅用于测试 -importCheckpoint 效果, 测试完成后需要删除该配置 (使用默认值 3600 秒) -->
-<property>
-  <name>dfs.namenode.checkpoint.period</name>
-  <value>300</value>
-  <description>The number of seconds between two periodic checkpoints.
-  </description>
-</property>
+  <!-- 注: 以下配置仅用于测试 -importCheckpoint 效果, 测试完成后需要删除该配置 (使用默认值 3600 秒) -->
+  <property>
+    <name>dfs.namenode.checkpoint.period</name>
+    <value>300</value>
+    <description>The number of seconds between two periodic checkpoints.
+    </description>
+  </property>
 ```
 
 ### 4.2.2 停止 NameNode 进程并删除存储数据
@@ -2175,18 +2173,14 @@ NameNode 的本地数据存储目录可以配置成多个, 每个目录存放的
 在 `./etc/hadoop/hdfs-site.xml` 中增加如下配置:
 
 ```xml
-<!-- namenode 元数据存储目录 -->
-<property>
-  <name>dfs.namenode.name.dir</name>
-  <value>file://${hadoop.tmp.dir}/dfs/name1,file://${hadoop.tmp.dir}/dfs/name2,file://${hadoop.tmp.dir}/dfs/name3</value>
-  <description>Determines where on the local filesystem the DFS name node
-      should store the name table(fsimage).  If this is a comma-delimited list
-      of directories then the name table is replicated in all of the
-      directories, for redundancy. </description>
-  <!--
-  <description>确定 DFS 名称节点在 local filesystem 上应该存储名称表 (fsimage) 的位置.
-  如果这是用逗号分隔的目录列表, 则将名称表复制到所有目录中, 以实现冗余. </description>
-  -->
+  <!-- namenode 元数据存储目录 -->
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value>file://${hadoop.tmp.dir}/dfs/name1,file://${hadoop.tmp.dir}/dfs/name2,file://${hadoop.tmp.dir}/dfs/name3</value>
+    <description>Determines where on the local filesystem the DFS name node should store the name table(fsimage).  If this is a comma-delimited list of directories then the name table is replicated in all of the directories, for redundancy. </description>
+    <!--
+    <description>确定 DFS 名称节点在 local filesystem 上应该存储名称表 (fsimage) 的位置. 如果这是用逗号分隔的目录列表, 则将名称表复制到所有目录中, 以实现冗余. </description>
+    -->
 </property>
 ```
 
