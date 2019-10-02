@@ -2059,9 +2059,103 @@ Safe mode is OFF
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-![image]()
+HDFS 控制台 URL: http://193.112.38.200:50070 查看状态如下:
 
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-NameNode%E5%92%8CSecondaryNameNode/safemode-1.png?raw=true)
 
+- 进入安全模式
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfsadmin -safemode enter
+Safe mode is ON
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfsadmin -safemode get
+Safe mode is ON
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /
+drwxr-xr-x   - zozo supergroup          0 2019-10-01 21:50 /d2
+drwxr-xr-x   - zozo supergroup          0 2019-09-28 18:47 /d2/d2_a
+-rw-r--r--   3 zozo supergroup          8 2019-09-28 17:29 /d2/d2_a/f1
+-rw-r--r--   2 zozo supergroup          8 2019-09-28 18:03 /d2/d2_a/f2_rename
+-rw-r--r--   3 zozo supergroup  212046774 2019-09-25 20:04 /hadoop-2.7.2.tar.gz
+-rw-r--r--   3 zozo supergroup         36 2019-09-25 20:04 /wc.input
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -mkdir /d3
+mkdir: Cannot create directory /d3. Name node is in safe mode.
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -put /home/zozo/app/hadoop/fortest/f1 /
+put: Cannot create file/f2._COPYING_. Name node is in safe mode.
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+HDFS 控制台 URL: http://193.112.38.200:50070 查看状态如下:
+
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-NameNode%E5%92%8CSecondaryNameNode/safemode-2.png?raw=true)
+
+- 离开安全模式状态
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfsadmin -safemode leave
+Safe mode is OFF
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfsadmin -safemode get
+Safe mode is OFF
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /
+drwxr-xr-x   - zozo supergroup          0 2019-10-01 21:50 /d2
+drwxr-xr-x   - zozo supergroup          0 2019-09-28 18:47 /d2/d2_a
+-rw-r--r--   3 zozo supergroup          8 2019-09-28 17:29 /d2/d2_a/f1
+-rw-r--r--   2 zozo supergroup          8 2019-09-28 18:03 /d2/d2_a/f2_rename
+-rw-r--r--   3 zozo supergroup  212046774 2019-09-25 20:04 /hadoop-2.7.2.tar.gz
+-rw-r--r--   3 zozo supergroup         36 2019-09-25 20:04 /wc.input
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -mkdir /d3
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -put /home/zozo/app/hadoop/fortest/f1 /
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+HDFS 控制台 URL: http://193.112.38.200:50070 查看状态如下:
+
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-NameNode%E5%92%8CSecondaryNameNode/safemode-3.png?raw=true)
+
+- 等待安全模式
+
+```bash
+# 开启 safe mode
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfsadmin -safemode enter
+Safe mode is ON
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfsadmin -safemode get
+Safe mode is ON
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /f2
+ls: /f2: No such file or directory
+
+# 执行 safemode_wait.sh 脚本, 此时脚本被阻塞 (等待 safe mode 关闭)
+[zozo@vm017 fortest]$ cat /home/zozo/app/hadoop/fortest/safemode_wait.sh 
+#!/bin/sh
+
+cd /home/zozo/app/hadoop/hadoop-2.7.2/
+
+/home/zozo/app/hadoop/hadoop-2.7.2/bin/hdfs dfsadmin -safemode wait
+
+# waiting ...
+
+/home/zozo/app/hadoop/hadoop-2.7.2/bin/hadoop fs -put /home/zozo/app/hadoop/fortest/f2 /
+
+[zozo@vm017 fortest]$ sh safemode_wait.sh 
+
+```
+
+```bash
+# 离开 safe mode
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfsadmin -safemode leave
+Safe mode is OFF
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfsadmin -safemode get
+Safe mode is OFF
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+```bash
+# 此时 safemode_wait.sh 脚本执行完毕
+[zozo@vm017 fortest]$ sh safemode_wait.sh 
+Safe mode is OFF
+# 此时文件上传到 HDFS 成功
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls /f2
+-rw-r--r--   3 zozo supergroup          8 2019-10-02 15:13 /f2
+[zozo@vm017 hadoop-2.7.2]$ 
+```
 
 ---
 
