@@ -78,11 +78,81 @@ vm03
   </property>
 ```
 
-3. 执行以下命令刷新 NameNode
+3. 刷新 NameNode
 
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfsadmin -refreshNodes
 ```
 
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hdfs dfsadmin -refreshNodes
+Refresh nodes successful
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+4. 刷新 ResourceManager
+
+```
+[zozo@vm03 hadoop-2.7.2]$ bin/yarn rmadmin -refreshNodes
+```
+
+```
+[zozo@vm03 hadoop-2.7.2]$ bin/yarn rmadmin -refreshNodes
+19/10/02 17:24:35 INFO client.RMProxy: Connecting to ResourceManager at vm03/172.16.0.3:8033
+[zozo@vm03 hadoop-2.7.2]$ 
+```
+
+5. 如果负载不均衡, 执行再平衡命令
+
+```
+[zozo@vm017 hadoop-2.7.2]$ sbin/start-balancer.sh 
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ sbin/start-balancer.sh 
+starting balancer, logging to /home/zozo/app/hadoop/hadoop-2.7.2/logs/hadoop-zozo-balancer-vm017.out
+Time Stamp               Iteration#  Bytes Already Moved  Bytes Left To Move  Bytes Being Moved
+[zozo@vm017 hadoop-2.7.2]$ 
+```
+
+---
+
+# 黑名单退役
+
+在黑名单上面的主机都会被强制退出.
+
+操作步骤如下:
+
+1. 在 NameNode 上创建 `./etc/hadoop/dfs.hosts.exclude` 文件
+
+2. 所有节点的 `./etc/hadoop/hdfs-site.xml` 新增如下配置:
+
+```xml
+<!-- 黑名单 -->
+  <property>
+    <name>dfs.hosts.exclude</name>
+    <value></value>
+    <description>Names a file that contains a list of hosts that are not permitted to connect to the namenode.  The full pathname of the file must be specified.  If the value is empty, no hosts are excluded.</description>
+  </property> 
+```
+
+3. 刷新 NameNode
+
+4. 刷新 ResourceManager
+
+5. 检查 HDFS 控制台: http://193.112.38.200:50070, 退役节点状态为 `Decommission in progress` (退役中), 说明数据节点正在复制数据块到其他节点. 等待退役节点状态直到变为 `Decommissioned` (已退役).
+
+![image]()
+
+![image]()
+
+6. 停止该节点. 注意: 如果服役的节点小于等于数据块副本数, 是不能退役成功的, 需要修改副本数后才能退役.
+
+```
+sbin/hadoop-daemon.sh stop datanode
+sbin/hadoop-daemon.sh stop nodemanager
+```
+
+6. 如果负载不均衡, 执行再平衡命令
 
 ---
