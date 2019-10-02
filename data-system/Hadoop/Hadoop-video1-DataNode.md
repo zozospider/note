@@ -142,9 +142,9 @@ Time Stamp               Iteration#  Bytes Already Moved  Bytes Left To Move  By
 
 5. 检查 HDFS 控制台: http://193.112.38.200:50070, 退役节点状态为 `Decommission in progress` (退役中), 说明数据节点正在复制数据块到其他节点. 等待退役节点状态直到变为 `Decommissioned` (已退役).
 
-![image]()
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-DataNode/%E9%BB%91%E5%90%8D%E5%8D%95%E9%80%80%E5%BD%B9%E4%B8%AD.png?raw=true)
 
-![image]()
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-DataNode/%E9%BB%91%E5%90%8D%E5%8D%95%E5%B7%B2%E9%80%80%E5%BD%B9.png?raw=true)
 
 6. 停止该节点. 注意: 如果服役的节点小于等于数据块副本数, 是不能退役成功的, 需要修改副本数后才能退役.
 
