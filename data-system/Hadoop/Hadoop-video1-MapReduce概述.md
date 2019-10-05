@@ -35,17 +35,38 @@ MapReduce 核心功能是将用户编写的业务逻辑代码和自带默认组�
 
 # 三 MapReduce 核心思想
 
----
-
-# 四 MapReduce 进程
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce%E6%A6%82%E8%BF%B0/MapReduce%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3.png?raw=true)
 
 ---
 
-# 五 官方 WordCount 源码
+# 四 官方 WordCount 源码
+
+`TODO`: 反编译官方 jar 包中的 WordCount 案例.
 
 ---
 
-# 六 常用数据序列化类型
+# 五 常用数据序列化类型
+
+| Java 类型 | Hadoop Writable 类型 |
+| :--- | :--- |
+| boolean | BooleanWritable |
+| byte | ByteWritable |
+| int | IntWritable |
+| float | FloatWritable |
+| long | LongWritable |
+| double | DoubleWritable |
+| String | Text |
+| map | MapWritable |
+| array | ArrayWritable |
+
+---
+
+# 六 MapReduce 进程
+
+一个完整的 MapReduce 程序在分布式运行时有 3 个实例进程:
+- `MrAppMaster`: 负责整个程序的过程调度及状态协调.
+- `MapTask`: 负责 Map 阶段的整个数据处理流程.
+- `ReduceTask`: 负责 Reduce 阶段的整个数据处理流程.
 
 ---
 
