@@ -63,6 +63,13 @@ Java 的序列化是一个重量级序列化框架 (Serializable), 一个对象�
 
 # 三 序列化案例实操
 
-![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce%E6%A6%82%E8%BF%B0/WordCount%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90.png?raw=true)
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E5%BA%8F%E5%88%97%E5%8C%96/%E5%BA%8F%E5%88%97%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90.png?raw=true)
+
+## 8.1 代码和本地运行
+
+参考以下项目:
+
+- code
+  - [zozospider/note-hadoop-video1](https://github.com/zozospider/note-hadoop-video1)
 
 ---
