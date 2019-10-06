@@ -109,6 +109,8 @@ MapReduce 核心功能是将用户编写的业务逻辑代码和自带默认组�
 
 # 八 WordCount 案例实操
 
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce%E6%A6%82%E8%BF%B0/WordCount%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90.png?raw=true)
+
 参考以下项目:
 
 - code
