@@ -12,6 +12,11 @@
     - [7.2 Reducer](#72-reducer)
     - [7.3 Driver](#73-driver)
 - [八 WordCount 案例实操](#八-wordcount-案例实操)
+    - [8.1 代码和本地运行](#81-代码和本地运行)
+    - [8.2 集群运行](#82-集群运行)
+        - [8.2.1 打包](#821-打包)
+        - [8.2.2 上传](#822-上传)
+        - [8.2.3 运行](#823-运行)
 
 ---
 
@@ -120,23 +125,23 @@ MapReduce 核心功能是将用户编写的业务逻辑代码和自带默认组�
 
 ## 8.2 集群运行
 
-- step1
+### 8.2.1 打包
 
 maven 打包本地项目 (指定 main class).
 
-- step2
+### 8.2.2 上传
 
 将打包好的 jar 包 `note-hadoop-video1-1.0-SNAPSHOT.jar` 上传到集群 NameNode 节点.
 
-- step3
+### 8.2.3 运行
 
-运行 MapReduce 程序:
+执行以下命令运行 MapReduce 程序:
 
 ```
 bin/hadoop jar /home/zozo/app/hadoop/mapReduce/jar/wordCount/note-hadoop-video1-1.0-SNAPSHOT.jar com.zozospider.hadoop.mapreduce.wordcount.WordCountDriver /user/zozo/mapReduce/input/wordCount /user/zozo/mapReduce/output/wordCount
 ```
 
-运行前:
+- 运行前:
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /
 -rw-r--r--   3 zozo supergroup         30 2019-10-06 15:06 /f1
@@ -165,7 +170,7 @@ enough book love me
 end[zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-运行中:
+- 运行中:
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop jar /home/zozo/app/hadoop/mapReduce/jar/wordCount/note-hadoop-video1-1.0-SNAPSHOT.jar com.zozospider.hadoop.mapreduce.wordcount.WordCountDriver /user/zozo/mapReduce/input/wordCount /user/zozo/mapReduce/output/wordCount
 19/10/06 15:36:51 INFO client.RMProxy: Connecting to ResourceManager at vm03/172.16.0.3:8032
@@ -240,7 +245,7 @@ end[zozo@vm017 hadoop-2.7.2]$
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
-运行后:
+- 运行后:
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /
 -rw-r--r--   3 zozo supergroup         30 2019-10-06 15:06 /f1
