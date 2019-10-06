@@ -136,6 +136,7 @@ maven 打包本地项目 (指定 main class).
 bin/hadoop jar /home/zozo/app/hadoop/mapReduce/jar/wordCount/note-hadoop-video1-1.0-SNAPSHOT.jar com.zozospider.hadoop.mapreduce.wordcount.WordCountDriver /user/zozo/mapReduce/input/wordCount /user/zozo/mapReduce/output/wordCount
 ```
 
+运行前:
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /
 -rw-r--r--   3 zozo supergroup         30 2019-10-06 15:06 /f1
@@ -164,6 +165,7 @@ enough book love me
 end[zozo@vm017 hadoop-2.7.2]$ 
 ```
 
+运行中:
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop jar /home/zozo/app/hadoop/mapReduce/jar/wordCount/note-hadoop-video1-1.0-SNAPSHOT.jar com.zozospider.hadoop.mapreduce.wordcount.WordCountDriver /user/zozo/mapReduce/input/wordCount /user/zozo/mapReduce/output/wordCount
 19/10/06 15:36:51 INFO client.RMProxy: Connecting to ResourceManager at vm03/172.16.0.3:8032
@@ -238,6 +240,7 @@ end[zozo@vm017 hadoop-2.7.2]$
 [zozo@vm017 hadoop-2.7.2]$ 
 ```
 
+运行后:
 ```
 [zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -ls -R /
 -rw-r--r--   3 zozo supergroup         30 2019-10-06 15:06 /f1
