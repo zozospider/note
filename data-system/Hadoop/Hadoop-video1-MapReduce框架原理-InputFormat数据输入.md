@@ -58,10 +58,61 @@ Job
 
 ## 2.2 Job 提交流程 - 切片
 
-![image]()
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86-InputFormat%E6%95%B0%E6%8D%AE%E8%BE%93%E5%85%A5/FileInputFormat%E5%88%87%E7%89%87%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90.png?raw=true)
 
 ---
 
 # 三 FileInputFormat 切片机制
 
+![image]()
+
+源码中计算切片大小的公式:
+
+- `mapreduce.input.fileinputformat.split.minsize` = 1;
+- `mapreduce.input.fileinputformat.split.maxsize` = Long.MAX_VALUE;
+
+```java
+Math.max(minSize, Math.min(maxSize, blockSize));
+```
+
+切片大小设置:
+
+- `maxsize` (切片最大值): 此参数如果调得比 blockSize 小, 则会让切片变小且等于配置的参数值.
+- `minsize` (切片最小值): 此参数如果调得比 blockSize 大, 则可以让切片变得比 blockSize 大.
+
+获取切片信息 API:
+
+```java
+// 获取切片的文件名称
+String name = inputSplit.getPath().getName();
+// 根据文件类型获取切片信息
+FileSplit inputSplit = (FileSplit) context.getInputSplit();
+```
+
 ---
+
+# 四 CombineTextInputFormat 切片机制
+
+框架默认的 `TextInputFormat` 切片机制是对任务按文件规划切片, 不管文件多小, 都会是一个单独的切片, 都会交给一个 MapTask 处理. 如果有大量小文件, 就会产生大量的 MapTask, 处理效率很低. 此时可以考虑使用 `CombineTextInputFormat`.
+
+## 4.1 应用场景
+
+`CombineTextInputFormat` 用于小文件过多的场景, 它可以将多个小文件从逻辑上规划到一个切片中, 这样多个小文件就可以交给一个 MapTask 处理.
+
+## 4.2 虚拟存储切片最大值设置
+
+```java
+// 注意: 虚拟存储切片最大值设置需要根据实际的小文件大小情况而定
+// CombineTextInputFormat.setMaxInputSplitSize(job, 4194304);
+// CombineFileInputFormat.setMaxInputSplitSize(job, 4194304);
+FileInputFormat.setMaxInputSplitSize(job, 4194304);
+```
+
+## 4.3 切片机制
+
+生成切片过程包括虚拟存储过程和切片过程:
+
+![image]()
+
+---
+
