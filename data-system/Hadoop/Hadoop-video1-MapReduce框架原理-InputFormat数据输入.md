@@ -16,11 +16,43 @@ _思考: 1G 的数据, 启动 8 个 MapTask, 可以提高集群的并发能力. 
 - __数据块__: Block 是 HDFS 物理上把数据分成一块一块.
 - __数据切片__: 数据切片只是在逻辑上对输入进行分片, 并不会在磁盘上将其切分成片进行存储.
 
-![image]()
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86-InputFormat%E6%95%B0%E6%8D%AE%E8%BE%93%E5%85%A5/%E6%95%B0%E6%8D%AE%E5%88%87%E7%89%87%E4%B8%8EMapTask%E5%B9%B6%E8%A1%8C%E5%BA%A6%E5%86%B3%E5%AE%9A%E6%9C%BA%E5%88%B6.png?raw=true)
 
 ---
 
 # 二 Job 提交流程源码和切片源码
+
+## 2.1 Job 提交流程源码
+
+```java
+Job
+  waitForCompletion();
+    submit();
+      // 1 建立连接
+      connect();
+        // 创建提交 Job 的代理
+        new Cluster(getConfiguration());
+          // 判断是本地还是 YARN 模式
+          initialize(jobTrackAddr, conf);
+      // 2 提交 Job
+      submitter.submitJobInternal(Job.this, cluster);
+        // 创建给集群提交数据的 Stag 路径
+        Path jobStagingArea = JobSubmissionFiles.getStagingDir(cluster, conf);
+        // 获取 JobId, 并创建 Job 路径
+        JobID jobId = submitClient.getNewJobID();
+        // 拷贝 jar 包到集群
+        copyAndConfigureFiles(job, submitJobDir);
+          rUploader.uploadFiles(job, jobSubmitDir);
+        // 计算切片, 生成切片规划文件
+        int maps = writeSplits(job, submitJobDir);
+          maps = writeNewSplits(job, jobSubmitDir);
+            List<InputSplit> splits = input.getSplits(job);
+        // 向 Stag 路径写 XML 配置文件
+        writeConf(conf, submitJobFile);
+          conf.writeXml(out);
+        // 提交 Job, 返回提交状态
+        status = submitClient.submitJob(jobId, submitJobDir.toString(), job.getCredentials());
+```
 
 ---
 
