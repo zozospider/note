@@ -114,5 +114,15 @@ FileInputFormat.setMaxInputSplitSize(job, 4194304);
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86-InputFormat%E6%95%B0%E6%8D%AE%E8%BE%93%E5%85%A5/CombineTextInputFormat%E5%88%87%E7%89%87%E6%9C%BA%E5%88%B6.png?raw=true)
 
+## 4.4 源码逻辑
+
+```java
+CombineFileInputFormat extends FileInputFormat
+  getSplits(JobContext job)
+    getMoreSplits(job, myPaths, maxSize, minSizeNode, minSizeRack, splits);
+      files[i] = new OneFileInfo(stat, conf, isSplitable(job, stat.getPath()), rackToBlocks, blockToNodes, nodeToBlocks, rackToNodes, maxSize);
+        if (left > maxSize && left < 2 * maxSize) {
+```
+
 ---
 
