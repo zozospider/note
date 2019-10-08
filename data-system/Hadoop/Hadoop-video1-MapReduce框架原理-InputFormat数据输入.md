@@ -64,7 +64,7 @@ Job
 
 # 三 FileInputFormat 切片机制
 
-![image]()
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86-InputFormat%E6%95%B0%E6%8D%AE%E8%BE%93%E5%85%A5/FileInputFormat%E5%88%87%E7%89%87%E6%9C%BA%E5%88%B6.png?raw=true)
 
 源码中计算切片大小的公式:
 
@@ -112,7 +112,7 @@ FileInputFormat.setMaxInputSplitSize(job, 4194304);
 
 生成切片过程包括虚拟存储过程和切片过程:
 
-![image]()
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86-InputFormat%E6%95%B0%E6%8D%AE%E8%BE%93%E5%85%A5/CombineTextInputFormat%E5%88%87%E7%89%87%E6%9C%BA%E5%88%B6.png?raw=true)
 
 ---
 
