@@ -103,31 +103,31 @@
 # skill
 
 ## Mathematics
-- Calculus  `50+`
-- Advanced mathematics  `50+`
-- Linear algebra  `50+`
-- data structures  `90+`
-- algorithms  `90+`
+- Calculus  `***`
+- Advanced mathematics  `***`
+- Linear algebra  `***`
+- data structures  `*****`
+- algorithms  `*****`
 
 ## base
-- Design Patterns  `90+`
-- Linux  `50+`
+- Design Patterns  `*****`
+- Linux  `***`
 
 ## data-system
-- ZooKeeper  `90+`
-- Hadoop  `90+`
-- 图数据库  `90+`
-- MySQL  `50+`
-- Spark  `50+`
-- Kafka  `50+`
-- Flume  `50+`
-- Hive  `50+`
-- HBase  `50+`
-- Flink  `50+`
-- Elasticsearch  `50+`
+- ZooKeeper  `*****`
+- Hadoop  `*****`
+- Spark  `****`
+- Kafka  `***`
+- Flume  `***`
+- Hive  `***`
+- HBasee  `***`
+- Flink  `***`
+- 图数据库  `****`
+- Elasticsearch  `****`
+- Logstash
+- MySQL
 - Redis
 - MongoDB
-- Logstash
 - Storm
 - Pulsar
 - Kylin
@@ -141,13 +141,13 @@
 - Java Annotations
 - Java Reflection
 - JDK
-- JVM  `90+`
+- JVM  `*****`
 - JMX
 - JConsole
 - Java concurrency programming
 - Disruptor
-- Java network programming  `90+`
-- Netty  `90+`
+- Java network programming  `*****`
+- Netty  `*****`
 
 ## Python
 - Python
@@ -161,7 +161,7 @@
 ## language
 - C
 - Go
-- Scala  `90+`
+- Scala  `***`
 - Kotlin
 - ECMA Script 6
 - Node.js
@@ -199,7 +199,5 @@
 ---
 
 亿速云
-
-`90+` `50+`
 
 ---
