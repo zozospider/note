@@ -22,7 +22,7 @@ _思考: 1G 的数据, 启动 8 个 MapTask, 可以提高集群的并发能力. 
 
 # 二 Job 提交流程源码和切片源码
 
-## 2.1 Job 提交流程源码
+## 2.1 Job 提交流程
 
 ```java
 Job
@@ -53,6 +53,12 @@ Job
         // 提交 Job, 返回提交状态
         status = submitClient.submitJob(jobId, submitJobDir.toString(), job.getCredentials());
 ```
+
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86-InputFormat%E6%95%B0%E6%8D%AE%E8%BE%93%E5%85%A5/Job%E6%8F%90%E4%BA%A4%E6%B5%81%E7%A8%8B%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90.png?raw=true)
+
+## 2.2 Job 提交流程 - 切片
+
+![image]()
 
 ---
 
