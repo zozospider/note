@@ -3,6 +3,11 @@
 
 ---
 
+- out
+  - [MapReduce编程——输入类FileInputFormat（切片）及其4个实现类（kv）的用法](https://blog.csdn.net/wx1528159409/article/details/90236351)
+
+---
+
 # 一 切片与 MapTask 并行度决定机制
 
 ## 1.1 问题引出
