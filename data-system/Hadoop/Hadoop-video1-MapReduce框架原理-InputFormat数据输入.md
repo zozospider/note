@@ -1,5 +1,17 @@
 
-
+- [一 切片与 MapTask 并行度决定机制](#一-切片与-maptask-并行度决定机制)
+    - [1.1 问题引出](#11-问题引出)
+    - [1.2 MapTask 并行度机制](#12-maptask-并行度机制)
+- [二 Job 提交流程源码和切片源码](#二-job-提交流程源码和切片源码)
+    - [2.1 Job 提交流程](#21-job-提交流程)
+    - [2.2 Job 提交流程 - 切片](#22-job-提交流程---切片)
+- [三 FileInputFormat 切片机制](#三-fileinputformat-切片机制)
+- [四 CombineTextInputFormat 切片机制](#四-combinetextinputformat-切片机制)
+    - [4.1 应用场景](#41-应用场景)
+    - [4.2 虚拟存储切片最大值设置](#42-虚拟存储切片最大值设置)
+    - [4.3 切片机制](#43-切片机制)
+    - [4.4 源码逻辑](#44-源码逻辑)
+    - [4.5 代码测试](#45-代码测试)
 
 ---
 
@@ -143,3 +155,26 @@ CombineFileInputFormat extends FileInputFormat
 
 ---
 
+# 五 FileInputFormat 实现类
+
+_思考: 在运行 MapReduce 程序时, 输入的文件格式包括: 基于行的日志文件, 二进制格式文件, 数据库表等. 那么, 针对不同的数据类型, MapReduce 是如何读取这些数据的呢?_
+
+`FileInputFormat` 常见的接口实现类包括: `TextInputFormat`, `KeyValueTextInputFormat`, `NLineInputFormat`, `CombineTextInputFormat`, `自定义 InputFormat` 等.
+
+---
+
+# 六 FileInputFormat 实现类 - TextInputFormat
+
+---
+
+# 七 FileInputFormat 实现类 - KeyValueTextInputFormat
+
+---
+
+# 八 FileInputFormat 实现类 - NLineInputFormat
+
+---
+
+# 九 FileInputFormat 实现类 - 自定义 InputFormat
+
+---
