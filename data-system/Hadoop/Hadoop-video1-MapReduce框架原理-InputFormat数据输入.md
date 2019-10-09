@@ -5,6 +5,10 @@
 
 - out
   - [MapReduce编程——输入类FileInputFormat（切片）及其4个实现类（kv）的用法](https://blog.csdn.net/wx1528159409/article/details/90236351)
+  - [MapReduce Input Split（输入分/切片）详解](https://blog.csdn.net/Dr_Guo/article/details/51150278)
+  - [Hadoop MapReduce Splits 切片源码分析及切片机制](https://blog.csdn.net/yljphp/article/details/89067858)
+  - [Hadoop FileInputFormat 默认切片机制](https://blog.csdn.net/yljphp/article/details/89069951)
+  - [Hadoop CombineTextInputFormat 切片机制](https://blog.csdn.net/yljphp/article/details/89070948)
 
 ---
 
