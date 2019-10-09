@@ -9,6 +9,7 @@
   - [Hadoop MapReduce Splits 切片源码分析及切片机制](https://blog.csdn.net/yljphp/article/details/89067858)
   - [Hadoop FileInputFormat 默认切片机制](https://blog.csdn.net/yljphp/article/details/89069951)
   - [Hadoop CombineTextInputFormat 切片机制](https://blog.csdn.net/yljphp/article/details/89070948)
+  - [MapReduce-CombineTextInputFormat 切片机制](https://www.bbsmax.com/A/WpdK4b7mzV/)
 
 ---
 
