@@ -134,5 +134,12 @@ CombineFileInputFormat extends FileInputFormat
         if (left > maxSize && left < 2 * maxSize) {
 ```
 
+## 4.5 代码测试
+
+参考以下项目:
+
+- code
+  - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.wordcount.WordCountDriverForCombineTextInputFormat1, com.zozospider.hadoop.mapreduce.wordcount.WordCountDriverForCombineTextInputFormat2)](https://github.com/zozospider/note-hadoop-video1)
+
 ---
 
