@@ -165,6 +165,8 @@ _思考: 在运行 MapReduce 程序时, 输入的文件格式包括: 基于行�
 
 # 六 FileInputFormat 实现类 - TextInputFormat
 
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86-InputFormat%E6%95%B0%E6%8D%AE%E8%BE%93%E5%85%A5/TextInputFormat.png?raw=true)
+
 ---
 
 # 七 FileInputFormat 实现类 - KeyValueTextInputFormat
