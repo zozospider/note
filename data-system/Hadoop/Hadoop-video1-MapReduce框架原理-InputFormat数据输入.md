@@ -12,6 +12,13 @@
     - [4.3 切片机制](#43-切片机制)
     - [4.4 源码逻辑](#44-源码逻辑)
     - [4.5 代码测试](#45-代码测试)
+- [五 FileInputFormat 实现类](#五-fileinputformat-实现类)
+- [六 FileInputFormat 实现类 - TextInputFormat](#六-fileinputformat-实现类---textinputformat)
+- [七 FileInputFormat 实现类 - KeyValueTextInputFormat](#七-fileinputformat-实现类---keyvaluetextinputformat)
+    - [7.1 代码测试](#71-代码测试)
+- [八 FileInputFormat 实现类 - NLineInputFormat](#八-fileinputformat-实现类---nlineinputformat)
+    - [8.1 代码测试](#81-代码测试)
+- [九 FileInputFormat 实现类 - 自定义 InputFormat](#九-fileinputformat-实现类---自定义-inputformat)
 
 ---
 
@@ -185,6 +192,12 @@ _思考: 在运行 MapReduce 程序时, 输入的文件格式包括: 基于行�
 ---
 
 # 八 FileInputFormat 实现类 - NLineInputFormat
+
+
+
+## 8.1 代码测试
+
+
 
 ---
 
