@@ -19,6 +19,7 @@
 - [八 FileInputFormat 实现类 - NLineInputFormat](#八-fileinputformat-实现类---nlineinputformat)
     - [8.1 代码测试](#81-代码测试)
 - [九 FileInputFormat 实现类 - 自定义 InputFormat](#九-fileinputformat-实现类---自定义-inputformat)
+    - [9.1 代码测试](#91-代码测试)
 
 ---
 
@@ -158,7 +159,7 @@ CombineFileInputFormat extends FileInputFormat
 参考以下项目:
 
 - code
-  - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.input.combinetextinputformat.CombineTextInputFormatDriver1, com.zozospider.hadoop.mapreduce.input.combinetextinputformat.CombineTextInputFormatDriver2, com.zozospider.hadoop.mapreduce.input.combinetextinputformat.CombineTextInputFormatDriver3, com.zozospider.hadoop.mapreduce.input.combinetextinputformat.CombineTextInputFormatDriver4, com.zozospider.hadoop.mapreduce.input.combinetextinputformat.CombineTextInputFormatDriver5)](https://github.com/zozospider/note-hadoop-video1)
+  - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.input.combinetext.CombineTextDriver1, com.zozospider.hadoop.mapreduce.input.combinetext.CombineTextDriver2, com.zozospider.hadoop.mapreduce.input.combinetext.CombineTextDriver3, com.zozospider.hadoop.mapreduce.input.combinetext.CombineTextDriver4, com.zozospider.hadoop.mapreduce.input.combinetext.CombineTextDriver5)](https://github.com/zozospider/note-hadoop-video1)
 
 ---
 
@@ -187,7 +188,7 @@ _思考: 在运行 MapReduce 程序时, 输入的文件格式包括: 基于行�
 参考以下项目:
 
 - code
-  - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.input.keyvaluetextinputformat.KeyValueTextInputFormatDriver)](https://github.com/zozospider/note-hadoop-video1)
+  - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.input.keyvaluetext.KeyValueTextDriver)](https://github.com/zozospider/note-hadoop-video1)
 
 ---
 
@@ -202,7 +203,7 @@ _思考: 在运行 MapReduce 程序时, 输入的文件格式包括: 基于行�
 参考以下项目:
 
 - code
-  - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.input.nlineinputformat.NLineInputFormatDriver)](https://github.com/zozospider/note-hadoop-video1)
+  - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.input.nline.NLineDriver)](https://github.com/zozospider/note-hadoop-video1)
 
 ---
 
@@ -219,6 +220,6 @@ _思考: 在运行 MapReduce 程序时, 输入的文件格式包括: 基于行�
 参考以下项目:
 
 - code
-  - [zozospider/note-hadoop-video1 ()](https://github.com/zozospider/note-hadoop-video1)
+  - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.input.custom.CustomDriver)](https://github.com/zozospider/note-hadoop-video1)
 
 ---
