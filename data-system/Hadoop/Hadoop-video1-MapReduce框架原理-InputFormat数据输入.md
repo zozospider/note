@@ -197,17 +197,28 @@ _思考: 在运行 MapReduce 程序时, 输入的文件格式包括: 基于行�
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86-InputFormat%E6%95%B0%E6%8D%AE%E8%BE%93%E5%85%A5/NLineInputFormat2.png?raw=true)
 
+## 8.1 代码测试
+
 参考以下项目:
 
 - code
   - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.input.nlineinputformat.NLineInputFormatDriver)](https://github.com/zozospider/note-hadoop-video1)
 
-## 8.1 代码测试
-
-
-
 ---
 
 # 九 FileInputFormat 实现类 - 自定义 InputFormat
+
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86-InputFormat%E6%95%B0%E6%8D%AE%E8%BE%93%E5%85%A5/CustomInputFormat1.png?raw=true)
+
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86-InputFormat%E6%95%B0%E6%8D%AE%E8%BE%93%E5%85%A5/CustomInputFormat2.png?raw=true)
+
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86-InputFormat%E6%95%B0%E6%8D%AE%E8%BE%93%E5%85%A5/CustomInputFormat3.png?raw=true)
+
+## 9.1 代码测试
+
+参考以下项目:
+
+- code
+  - [zozospider/note-hadoop-video1 ()](https://github.com/zozospider/note-hadoop-video1)
 
 ---
