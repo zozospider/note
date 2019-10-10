@@ -1,5 +1,16 @@
 
-
+- [一 Partitioner 分区 - 默认分区 HashPartitioner](#一-partitioner-分区---默认分区-hashpartitioner)
+    - [1.1 代码测试](#11-代码测试)
+- [二 Partitioner 分区 - 自定义分区 CustomPartitioner](#二-partitioner-分区---自定义分区-custompartitioner)
+    - [2.1 代码测试](#21-代码测试)
+    - [2.2 总结](#22-总结)
+- [三 Comparable 排序](#三-comparable-排序)
+    - [3.1 概述](#31-概述)
+    - [3.2 分类](#32-分类)
+- [四 Comparable 排序 - 全排序](#四-comparable-排序---全排序)
+    - [4.1 代码测试](#41-代码测试)
+- [五 Comparable 排序 - 分区排序](#五-comparable-排序---分区排序)
+    - [5.1 代码测试](#51-代码测试)
 
 ---
 
@@ -39,18 +50,53 @@ public class HashPartitioner<K, V> extends Partitioner<K, V> {
 
 ## 2.2 总结
 
-![image]()
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86-Shuffle%E6%9C%BA%E5%88%B6/Partitioner%E5%88%86%E5%8C%BA%E6%80%BB%E7%BB%93.png?raw=true)
 
 ---
 
-# 二 
+# 三 Comparable 排序
+
+## 3.1 概述
+
+MapTask 和 ReduceTask 均会默认对数据按照 key 进行排序 (不管是否需要).
+
+默认排序是按照字典顺序排序, 时间方法是快速排序.
+
+对于 MapTask, 它会将处理结果暂时放到环形缓冲区中, 当环形缓冲区使用率达到一定阈值后, 再对缓冲区中的数据进行一次快速排序, 并将这些有序数据溢写到磁盘上, 当数据处理完毕后, 它会对磁盘上的所有文件进行归并排序.
+
+对于 ReduceTask, 它从每个 MapTask 上远程拷贝相应的数据文件, 如果文件大小超过一定阈值, 则溢写到磁盘上, 否则存储在内存中. 如果磁盘上的文件数目达到一定阈值, 则进行一次归并排序以生成一个更大的文件, 如果内存中文件大小或者数据超过一定阈值, 则进行一次合并后将数据溢写到磁盘上. 当所有数据拷贝完毕后, ReduceTask 统一对内存和磁盘上的所有数据进行一次归并排序.
+
+## 3.2 分类
+
+- 全排序: 最终输出结果只有 1 个文件, 且文件内部有序. 实现方式是只设置 1 个 ReduceTask. 但该方法在处理大型文件时效率极低, 丧失了 MapReduce 所提供的并行架构.
+- 部分排序: MapReduce 根据输入记录的键值对数据集排序. 保证输出的每个文件内部有序.
+- 辅助排序 (`GroupingComparator` 分组): 在 Reduce 端对 key 进行分组. 应用于: 在接受的 key 为 bean 对象时, 想让 1 个或几个字段相同 (全部字段比较不相同) 的 key 进入到同一个 reduce 方法时, 可以采用分组排序.
+- 二次排序: 在自定义排序过程中, 如果 compareTo 中的判断条件为 2 个即为二次排序.
 
 ---
 
-# 三 
+# 四 Comparable 排序 - 全排序
+
+## 4.1 代码测试
+
+需求: 
+
+参考以下项目:
+
+- code
+  - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.comparable.all.AllDriver)](https://github.com/zozospider/note-hadoop-video1)
 
 ---
 
-# 四 
+# 五 Comparable 排序 - 分区排序
+
+## 5.1 代码测试
+
+需求: 
+
+参考以下项目:
+
+- code
+  - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.comparable.partitioned.PartitionedDriver)](https://github.com/zozospider/note-hadoop-video1)
 
 ---
