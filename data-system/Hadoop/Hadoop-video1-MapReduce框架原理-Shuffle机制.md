@@ -100,3 +100,8 @@ MapTask 和 ReduceTask 均会默认对数据按照 key 进行排序 (不管是�
   - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.comparable.partitioned.PartitionedDriver)](https://github.com/zozospider/note-hadoop-video1)
 
 ---
+
+# 分组排序
+
+- [Hadoop中WritableComparable 和 comparator](https://www.cnblogs.com/robert-blue/p/4159434.html)
+- [Hadoop Mapreduce分区、分组、二次排序过程详解(https://www.cnblogs.com/hadoop-dev/p/5910459.html)
