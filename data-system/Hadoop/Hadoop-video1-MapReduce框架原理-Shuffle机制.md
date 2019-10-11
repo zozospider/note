@@ -101,6 +101,15 @@ MapTask 和 ReduceTask 均会默认对数据按照 key 进行排序 (不管是�
 
 ---
 
+# 六 Combiner 合并
+
+Combiner 是 MapReduce 程序中 Mapper 和 Reducer 之外的一种组件, Combiner 组件的父类就是 Reducer. Combiner 的意义就是对每一个 MapTask 的输出进行局部汇总, 以减少网络传输量.
+
+Combiner 和 Reducer 的区别在于: Combiner 是在每一个 MapTask 所在的节点运行, Reducer 是接收全局所有 Mapper 的输出结果.
+
+__注意__: Combiner 能够应用的前提是: 不管 Combiner Function 被调用多少次, 对应的 Reduce 输出结果都应该是一样的 (不能影响最终业务逻辑). 如求最大值可以使用 Combiner, 但是求平均值不能使用 Combiner.
+
+
 # 分组排序
 
 - [Hadoop中WritableComparable 和 comparator](https://www.cnblogs.com/robert-blue/p/4159434.html)
