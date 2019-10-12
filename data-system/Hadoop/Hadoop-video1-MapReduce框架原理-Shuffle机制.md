@@ -14,7 +14,7 @@
     - [6.1 代码测试](#61-代码测试)
 - [七 Combiner (Reducer)](#七-combiner-reducer)
     - [7.1 代码测试](#71-代码测试)
-- [八 Comparator (分组)](#八-comparator-分组)
+- [八 Grouping Comparator (分组)](#八-grouping-comparator-分组)
     - [8.1 代码测试](#81-代码测试)
 
 ---
@@ -29,7 +29,7 @@
 
 Mapper -> 分区 -> 排序 -> Combiner (Reducer) -> 分组 -> Reducer
 
-Mapper -> Partitioner (分区) -> Comparable (排序) -> Combiner (Reducer) -> Comparator (分组) -> Reducer
+Mapper -> Partitioner (分区) -> Comparable (排序) -> Combiner (Reducer) -> Grouping Comparator (分组) -> Reducer
 
 Mapper -> Partitioner -> WritableComparable -> Reducer -> WritableComparator -> Reducer
 
@@ -141,13 +141,13 @@ __注意__: Combiner 能够应用的前提是: 不管 Combiner Function 被调�
 
 ---
 
-# 八 Comparator (分组)
+# 八 Grouping Comparator (分组)
 
 ## 8.1 代码测试
 
 参考以下项目:
 
 - code
-  - [zozospider/note-hadoop-video1 ()](https://github.com/zozospider/note-hadoop-video1)
+  - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.groupingcomparator.GroupingComparatorDriver)](https://github.com/zozospider/note-hadoop-video1)
 
 ---
