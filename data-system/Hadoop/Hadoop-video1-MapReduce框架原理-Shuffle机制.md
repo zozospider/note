@@ -148,6 +148,29 @@ __注意__: Combiner 能够应用的前提是: 不管 Combiner Function 被调�
 参考以下项目:
 
 - code
-  - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.groupingcomparator.GroupingComparatorDriver)](https://github.com/zozospider/note-hadoop-video1)
+  - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.groupingcomparator.GroupingComparatorDriver1, com.zozospider.hadoop.mapreduce.groupingcomparator.GroupingComparatorDriver2)](https://github.com/zozospider/note-hadoop-video1)
+
+---
+
+# 九 设置 MapReduce 并行度
+
+ReduceTask 的并行度同样影响整个 job 的执行并发度和执行效率, 但与 MapTask 但并发数由切片数决定不同, ReduceTask 数量可以手动设置:
+
+```java
+// 默认是 1
+job.setNumReduceTasks(1);
+```
+
+## 9.1 实验数据
+
+![image]()
+
+## 9.2 注意事项
+
+ReduceTask 个数默认 = 1, 所以输出文件个数为 1 个. 当 ReduceTask 个数 = 0 时, 表示没有 Reduce 阶段, 输出文件个数和 Map 个数一致.
+
+如果分区数不是 1, 但是 ReduceTask 为 1, 那么就不会执行分区过程 (因为源码逻辑是, 执行分区前提是判断 ReduceNum 是否大于 1, 不大于则不执行分区).
+
+ReduceTask 个数并不是任意设置, 还需要考虑集群性能和业务需求, 比如需要全局计算汇总结果, 就只能有 1 个 ReduceTask. 另外, 如果数据分布不均匀, 就有可能在 Reduce 阶段产生数据倾斜.
 
 ---
