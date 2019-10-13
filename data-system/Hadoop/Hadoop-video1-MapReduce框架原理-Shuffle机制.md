@@ -163,7 +163,7 @@ job.setNumReduceTasks(1);
 
 ## 9.1 实验数据
 
-![image]()
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86-Shuffle%E6%9C%BA%E5%88%B6/%E6%B5%8B%E8%AF%95ReduceTask%E4%B8%AA%E6%95%B0.png?raw=true)
 
 ## 9.2 注意事项
 
