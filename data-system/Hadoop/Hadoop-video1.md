@@ -45,7 +45,7 @@
     - [Hadoop默认端口应用一览](https://blog.csdn.net/yeruby/article/details/49406073)
     - [解决关闭Hadoop时no namenode to stop异常](https://blog.csdn.net/GYQJN/article/details/50805472)
     - [CentOS7的/tmp目录自动清理规则](https://blog.csdn.net/LWJdear/article/details/79912332)
-    - [Hadoop Windows 运行时缺少hadoop.dll 和 winutils.exe](https://www.iteye.com/blog/xpenxpen-2311504)
+    - [Hadoop Windows 运行时缺少 hadoop.dll 和 winutils.exe](https://www.iteye.com/blog/xpenxpen-2311504)
       - [GitHub: sardetushar/hadooponwindows](https://github.com/sardetushar/hadooponwindows/tree/master/bin)
     - [Hadoop系列](https://home.cnblogs.com/u/zhangyinhua/feed/blog/3.html)
       - [Hadoop（一）之初识大数据与Hadoop](https://www.cnblogs.com/zhangyinhua/p/7647334.html)
