@@ -102,12 +102,80 @@ mvn dependency:copy-dependencies -DoutputDirectory=lib -DincludeScope=compile
                       <descriptorRef>jar-with-dependencies</descriptorRef>  
                   </descriptorRefs>  
              </configuration>
-        </plugin>
+          </plugin>
+        </plugins>
 ```
 
 - 2. 在pom.xml同级目录下打开命令行执行如下命令:
 ```
 mvn assembly:assembly
+```
+
+## 包含本地 jar 包
+
+- [Maven如何把本地依赖的jar包打包进无依赖的可执行jar包](https://fooyou.github.io/document/2016/01/15/maven-assemble-local-jar.html)
+
+- `pom.xml` 配置引入本地 jar 包依赖如下:
+
+```xml
+<dependency>
+  <groupId>com.zozospider</groupId>
+  <artifactId>test</artifactId>
+  <version>1.0</version>
+  <scope>system</scope>
+  <systemPath>${project.basedir}/lib/mallet.jar</systemPath>
+</dependency>
+```
+
+- `pom.xml` 配置打包插件 `maven-assembly-plugin` 如下:
+
+```xml
+<plugins>
+  <plugin>  
+    <artifactId>maven-assembly-plugin</artifactId>  
+    <configuration>
+      <descriptors>
+        <descriptor>assembly.xml</descriptor>
+      </descriptors>
+      <!-- 这部分可有可无, 加上的话则直接生成可运行 jar 包 -->
+      <!--
+      <archive>
+        <manifest>
+          <mainClass>${exec.mainClass}</mainClass>
+        </manifest>
+      </archive>
+      -->
+      <!--
+      <descriptorRefs>  
+        <descriptorRef>jar-with-dependencies</descriptorRef>  
+      </descriptorRefs>
+      -->
+    </configuration>
+  </plugin>
+</plugins>
+```
+
+- 其中 `assembly.xml` 内容如下:
+
+```xml
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+  <!-- TODO: a jarjar format would be better -->
+  <id>jar-with-dependencies</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory>/</outputDirectory>
+      <useProjectArtifact>true</useProjectArtifact>
+      <unpack>true</unpack>
+      <scope>system</scope>
+    </dependencySet>
+  </dependencySets>
+</assembly>
 ```
 
 ## 上传本地 jar 包到私服
