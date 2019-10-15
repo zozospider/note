@@ -69,44 +69,50 @@ PATH
 
 ## 导出依赖的 jar 包
 
-pom.xml 所在目录执行以下命令：
+pom.xml 所在目录执行以下命令:
+
 ```
 mvn dependency:copy-dependencies
 ```
 
-导出到自定义目录中：
+导出到自定义目录中:
+
 ```
 mvn dependency:copy-dependencies -DoutputDirectory=lib
 ```
 
-设置依赖级别（通常使用 compile 级别）：
+设置依赖级别 (通常使用 compile 级别):
+
 ```
 mvn dependency:copy-dependencies -DoutputDirectory=lib -DincludeScope=compile
 ```
 
 ## 打出的包包含所有依赖的 jar
 
-- 1. 在pom.xml中添加maven-assembly-plugin插件
+- 1. 在 `pom.xml` 中添加 `maven-assembly-plugin` 插件
 ```xml
-        <plugins>
-          <plugin>  
-              <artifactId>maven-assembly-plugin</artifactId>  
-              <configuration>  
-                  <!-- 这部分可有可无, 加上的话则直接生成可运行 jar 包 -->
-                  <!--<archive>-->
-                      <!--<manifest>-->
-                          <!--<mainClass>${exec.mainClass}</mainClass>-->
-                      <!--</manifest>-->
-                  <!--</archive>-->
-                  <descriptorRefs>  
-                      <descriptorRef>jar-with-dependencies</descriptorRef>  
-                  </descriptorRefs>  
-             </configuration>
-          </plugin>
-        </plugins>
+<plugins>
+  <plugin>  
+    <artifactId>maven-assembly-plugin</artifactId>  
+    <configuration>  
+      <!-- 这部分可有可无, 加上的话则直接生成可运行 jar 包 -->
+      <!--
+      <archive>
+        <manifest>
+          <mainClass>${exec.mainClass}</mainClass>
+        </manifest>
+      </archive>
+      -->
+      <descriptorRefs>  
+        <descriptorRef>jar-with-dependencies</descriptorRef>  
+      </descriptorRefs>  
+    </configuration>
+  </plugin>
+</plugins>
 ```
 
-- 2. 在pom.xml同级目录下打开命令行执行如下命令:
+- 2. 在 `pom.xml` 同级目录下打开命令行执行如下命令:
+
 ```
 mvn assembly:assembly
 ```
