@@ -25,6 +25,14 @@
 
 - MapReduce 支持的压缩编码方式如下:
 
+| 压缩格式 | 编解码器 |
+| :--- | :--- |
+| Deflate | `org.apache.hadoop.io.compress.DeflateCodec` |
+| Gzip | `org.apache.hadoop.io.compress.GzipCodec` |
+| BZip2 | `org.apache.hadoop.io.compress.BZip2Codec` |
+| LZO | `com.hadoop.compression.lzo.LzopCodec` |
+| Snappy | `org.apache.hadoop.io.compress.SnappyCodec` |
+
 | 压缩格式 | 是否 Hadoop 自带 | 算法 | 文件扩展名 | 是否可切片 | 换成压缩格式后, 原程序是否需要修改 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | Deflate | 是 | Deflate | .deflate | 否 | 和文本处理一样, 不需要修改 |
@@ -41,17 +49,6 @@
 | BZip2 | 8.3GB | 1.1GB | 2.4MB/s | 9.5MB/s | |
 | LZO | 8.3GB | 2.9GB | 49.3MB/s | 74.6MB/s | |
 | Snappy | | | 250MB/s | 500MB/s | http://google.github.io/snappy/ |
-
-- 对应编解码器:
-
-| 压缩格式 | 编解码器 |
-| :--- | :--- |
-| Deflate | `org.apache.hadoop.io.compress.DeflateCodec` |
-| Gzip | `org.apache.hadoop.io.compress.GzipCodec` |
-| BZip2 | `org.apache.hadoop.io.compress.BZip2Codec` |
-| LZO | `com.hadoop.compression.lzo.LzopCodec` |
-| Snappy | `org.apache.hadoop.io.compress.SnappyCodec` |
-
 
 ---
 
