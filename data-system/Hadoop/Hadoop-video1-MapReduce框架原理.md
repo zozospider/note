@@ -8,5 +8,5 @@
   - [OutputFormat数据输出](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce框架原理-OutputFormat数据输出.md)
   - [Join多种应用](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce框架原理-Join多种应用.md)
   - [计数器应用](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce框架原理-计数器应用.md)
-  - [数据清洗(ETL)](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce框架原理-数据清洗(ETL).md)
-  - [MapReduce开发总结](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce框架原理-MapReduce开发总结.md)
+
+---
