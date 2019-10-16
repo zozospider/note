@@ -25,13 +25,13 @@
 
 MapReduce 支持的压缩编码方式如下:
 
-| 压缩格式 | 是否 Hadoop 自带 | 算法 | 文件扩展名 | 是否可切片 | 换成压缩格式后, 原程序是否需要修改 |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| Deflate | 是 | Deflate | .deflate | 否 | 和文本处理一样, 不需要修改 |
-| Gzip | 是 | Deflate | .gz | 否 | 和文本处理一样, 不需要修改 |
-| BZip2 | 是 | BZip2 | .bz2 | 是 | 和文本处理一样, 不需要修改 |
-| LZO | 否, 需要安装 | LZO | .lzo | 是 | 需要建索引, 需要指定输入格式 |
-| Snappy | 否, 需要安装 | Snappy | .snappy | 否 | 和文本处理一样, 不需要修改 |
+| 压缩格式 | 是否 Hadoop 自带 | 算法 | 文件扩展名 | 是否可切片 | 换成压缩格式后, 原程序是否需要修改 | 编解码器 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| Deflate | 是 | Deflate | .deflate | 否 | 和文本处理一样, 不需要修改 | `org.apache.hadoop.io.compress.DeflateCodec` |
+| Gzip | 是 | Deflate | .gz | 否 | 和文本处理一样, 不需要修改 | `org.apache.hadoop.io.compress.GzipCodec` |
+| BZip2 | 是 | BZip2 | .bz2 | 是 | 和文本处理一样, 不需要修改 | `org.apache.hadoop.io.compress.BZip2Codec` |
+| LZO | 否, 需要安装 | LZO | .lzo | 是 | 需要建索引, 需要指定输入格式 | `com.hadoop.compression.lzo.LzopCodec` |
+| Snappy | 否, 需要安装 | Snappy | .snappy | 否 | 和文本处理一样, 不需要修改 | `org.apache.hadoop.io.compress.SnappyCodec` |
 
 ---
 
