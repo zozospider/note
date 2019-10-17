@@ -214,20 +214,20 @@ CompressionCodec 有两个方法可以用于轻松地压缩或解压缩数据:
 参考以下项目:
 
 - code
-  - [zozospider/note-hadoop-video1 ()](https://github.com/zozospider/note-hadoop-video1)
+  - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.compress.local.LocalCompress)](https://github.com/zozospider/note-hadoop-video1)
 
 ## 7.2 Map 输出端采用压缩
 
 参考以下项目:
 
 - code
-  - [zozospider/note-hadoop-video1 ()](https://github.com/zozospider/note-hadoop-video1)
+  - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.compress.mapout.MapOutDriver)](https://github.com/zozospider/note-hadoop-video1)
 
 ## 7.3 Reduce 输出端采用压缩
 
 参考以下项目:
 
 - code
-  - [zozospider/note-hadoop-video1 ()](https://github.com/zozospider/note-hadoop-video1)
+  - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.compress.reduceout.ReduceOutDriver)](https://github.com/zozospider/note-hadoop-video1)
 
 ---
