@@ -13,7 +13,7 @@ YARN 是一个资源调度平台, 负责为运算程序提供服务器运算资�
 
 YARN 主要由 ResourceManager, NodeManager, ApplicationMaster, Container 等组件构成.
 
-![image]()
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-YARN%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6%E5%99%A8/YARN%E6%9E%B6%E6%9E%84.png?raw=true)
 
 ---
 
