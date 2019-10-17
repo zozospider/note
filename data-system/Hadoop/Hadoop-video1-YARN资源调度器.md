@@ -15,7 +15,7 @@ YARN 主要由 ResourceManager, NodeManager, ApplicationMaster, Container 等组
 
 # 二 YARN 工作机制
 
-![image]{https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-YARN%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6%E5%99%A8/YARN%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6.png?raw=true}
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-YARN%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6%E5%99%A8/YARN%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6.png?raw=true)
 
 ---
 
