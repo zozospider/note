@@ -17,7 +17,7 @@ YARN 主要由 ResourceManager, NodeManager, ApplicationMaster, Container 等组
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-YARN%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6%E5%99%A8/YARN%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6.png?raw=true)
 
-![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86-MapReduce%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6/Map1.png?raw=true)
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-YARN%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6%E5%99%A8/%E4%BD%9C%E4%B8%9A%E6%8F%90%E4%BA%A4%E6%B5%81%E7%A8%8B%E4%B9%8BMapReduce.png?raw=true)
 
 - 一. 作业提交
   - 1. Client 调用 job.waitForCompletion() 方法, 向整个集群提交 MapReduce 作业.
