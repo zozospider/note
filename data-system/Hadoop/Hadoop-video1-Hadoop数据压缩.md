@@ -110,10 +110,124 @@ __应用场景__:
 
 # 五 压缩位置选择
 
-![image]()
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9/%E5%8E%8B%E7%BC%A9%E4%BD%8D%E7%BD%AE%E9%80%89%E6%8B%A9.png?raw=true)
 
 ---
 
-# 六 
+# 六 压缩参数配置
+
+要在 Hadoop 中启用压缩, 可以配置如下参数:
+
+## 6.1 Mapper 输入
+
+- 位置: `core-site.xml`
+- 备注: Hadoop 使用文件扩展名判断是否支持某种编解码器
+
+```xml
+<property>
+  <name>io.compression.codecs</name>
+  <value></value>
+  <description>A comma-separated list of the compression codec classes that can
+  be used for compression/decompression. In addition to any classes specified
+  with this property (which take precedence), codec classes on the classpath
+  are discovered using a Java ServiceLoader.</description>
+</property>
+```
+
+## 6.2 Mapper 输出
+
+- 位置: `mapred-site.xml`
+- 备注: 这个参数设置为 true 启用压缩
+
+```xml
+<property>
+  <name>mapreduce.map.output.compress</name>
+  <value>false</value>
+  <description>Should the outputs of the maps be compressed before being
+               sent across the network. Uses SequenceFile compression.
+  </description>
+</property>
+```
+
+- 位置: `mapred-site.xml`
+- 备注: 此阶段企业较多使用 LZO / Snappy
+
+```xml
+<property>
+  <name>mapreduce.map.output.compress.codec</name>
+  <value>org.apache.hadoop.io.compress.DefaultCodec</value>
+  <description>If the map outputs are compressed, how should they be 
+               compressed?
+  </description>
+</property>
+```
+
+## 6.3 Reduce 输出
+
+- 位置: `mapred-site.xml`
+- 备注: 这个参数设置为 true 启用压缩
+
+```xml
+<property>
+  <name>mapreduce.output.fileoutputformat.compress</name>
+  <value>false</value>
+  <description>Should the job outputs be compressed?
+  </description>
+</property>
+```
+
+- 位置: `mapred-site.xml`
+- 备注: 使用标准工具或编解码器, 如 gzip / bzip2
+
+```xml
+<property>
+  <name>mapreduce.output.fileoutputformat.compress.codec</name>
+  <value>org.apache.hadoop.io.compress.DefaultCodec</value>
+  <description>If the job outputs are compressed, how should they be compressed?
+  </description>
+</property>
+```
+
+- 位置: `mapred-site.xml`
+- 备注: SequenceFile 输出使用的压缩类型: NONE / BLOCK
+
+```xml
+<property>
+  <name>mapreduce.output.fileoutputformat.compress.type</name>
+  <value>RECORD</value>
+  <description>If the job outputs are to compressed as SequenceFiles, how should
+               they be compressed? Should be one of NONE, RECORD or BLOCK.
+  </description>
+</property>
+```
+
+---
+
+# 七 代码测试
+
+## 7.1 数据流的压缩和解压缩
+
+CompressionCodec 有两个方法可以用于轻松地压缩或解压缩数据:
+- 要想对正在被写入一个输出流的数据进行压缩, 可调用 createOutputStream(OutputStreamout) 方法创建一个 CompressionOutputStream, 将其以压缩格式写入底层的流.
+- 要想对从输入流读取而来的数据进行解压缩, 可调用 createInputStream(InputStreamin) 方法创建一个 CompressionInputStream, 从底层的流读取未压缩的数据.
+
+参考以下项目:
+
+- code
+  - [zozospider/note-hadoop-video1 ()](https://github.com/zozospider/note-hadoop-video1)
+
+## 7.2 Map 输出端采用压缩
+
+参考以下项目:
+
+- code
+  - [zozospider/note-hadoop-video1 ()](https://github.com/zozospider/note-hadoop-video1)
+
+## 7.3 Reduce 输出端采用压缩
+
+参考以下项目:
+
+- code
+  - [zozospider/note-hadoop-video1 ()](https://github.com/zozospider/note-hadoop-video1)
 
 ---
