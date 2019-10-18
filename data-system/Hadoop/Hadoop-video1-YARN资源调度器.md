@@ -47,6 +47,16 @@ YARN 主要由 ResourceManager, NodeManager, ApplicationMaster, Container 等组
 
 # 三 资源调度器
 
+Hadoop 作业调度器主要有 3 种: `FIFO Scheduler`, `Capacity Scheduler` (默认), `Fair Scheduler`.
+
+```xml
+  <property>
+    <description>The class to use as the resource scheduler.</description>
+    <name>yarn.resourcemanager.scheduler.class</name>
+    <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler</value>
+  </property>
+```
+
 ---
 
 # 四 任务的推测执行
