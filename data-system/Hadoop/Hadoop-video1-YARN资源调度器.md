@@ -57,6 +57,12 @@ Hadoop 作业调度器主要有 3 种: `FIFO Scheduler`, `Capacity Scheduler` (�
   </property>
 ```
 
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-YARN%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6%E5%99%A8/FIFO_Scheduler.png?raw=true)
+
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-YARN%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6%E5%99%A8/Capacity_Scheduler.png?raw=true)
+
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-YARN%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6%E5%99%A8/Fair_Scheduler.png?raw=true)
+
 ---
 
 # 四 任务的推测执行
