@@ -57,14 +57,55 @@ Hadoop 作业调度器主要有 3 种: `FIFO Scheduler`, `Capacity Scheduler` (�
   </property>
 ```
 
+## 3.1 FIFO Scheduler (先进先出调度器)
+
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-YARN%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6%E5%99%A8/FIFO_Scheduler.png?raw=true)
 
+## 3.2 Capacity Scheduler (容量调度器)
+
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-YARN%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6%E5%99%A8/Capacity_Scheduler.png?raw=true)
+
+## 3.3 Fair Scheduler (公平调度器)
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-YARN%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6%E5%99%A8/Fair_Scheduler.png?raw=true)
 
 ---
 
 # 四 任务的推测执行
+
+## 4.1 推测执行机制
+
+一个作业由若干个 Map 任务和 Reduce 任务构成. 因硬件老化, 软件 Bug 等, 某些任务可能运行非常慢, 作业完成时间取决于最慢的任务完成时间.
+
+推测执行机制通过发现拖后腿的任务 (比如某个任务运行速度远慢于任务平均速度). 为拖后腿任务启动 1 个备份任务同时运行. 谁先运行完就采用谁的结果.
+
+推测执行的条件是:
+- 每个 Task 只能有 1 个备份 Task.
+- 当前 Job 已完成的 Task 不能小于 5%.
+
+不能开启推测执行的情况是:
+- 任务间存在严重的负载倾斜.
+- 特殊任务, 比如任务向数据库中写数据.
+
+在 `mapred-site.xml` 中开启推测执行:
+```xml
+<property>
+  <name>mapreduce.map.speculative</name>
+  <value>true</value>
+  <description>If true, then multiple instances of some map tasks 
+               may be executed in parallel.</description>
+</property>
+
+<property>
+  <name>mapreduce.reduce.speculative</name>
+  <value>true</value>
+  <description>If true, then multiple instances of some reduce tasks 
+               may be executed in parallel.</description>
+</property>
+```
+
+## 4.2 推测执行算法原理
+
+![image]()
 
 ---
