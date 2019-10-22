@@ -7,6 +7,7 @@
     - [变量比较](#变量比较)
         - [整数比较](#整数比较)
         - [字符串比较](#字符串比较)
+    - [并且 / 或者](#并且--或者)
     - [参数变量](#参数变量)
 
 ---
@@ -191,6 +192,36 @@ if [ "$1" == "$a" ]; then # ok
 # if [ $1 == $a ]; then # can do but not a good style
 # if [ $1==$a ]; then # not ok
   echo "22 var1 == a"
+fi
+```
+
+## 并且 / 或者
+
+- 并且
+
+```bash
+if [ bool1 -a bool2 ]; then
+  echo "bool1 and bool2"
+fi
+```
+
+```bash
+if [ bool1 && bool2 ]; then
+  echo "bool1 and bool2"
+fi
+```
+
+- 或者
+
+```bash
+if [ bool1 -o bool2 ]; then
+  echo "bool1 or bool2"
+fi
+```
+
+```bash
+if [ bool1 || bool2 ]; then
+  echo "bool1 or bool2"
 fi
 ```
 
