@@ -78,7 +78,8 @@ MapReduce 优化方法主要从 6 个方面考虑:
 
 以下参数 (`mapred-site.xml`) 在 MapReduce 应用程序中配置就可以生效:
 
-- `mapred-site.xml` - `mapreduce.map.memory.mb`: 1 个 MapTask 可使用的资源上限 (单位 MB, 默认 1024). 如果 MapTask 实际使用的资源超过该值, 则会被强制杀死.
+- 参数: `mapred-site.xml` - `mapreduce.map.memory.mb`
+- 说明: 1 个 MapTask 可使用的资源上限 (单位 MB, 默认 1024). 如果 MapTask 实际使用的资源超过该值, 则会被强制杀死.
 
 ```xml
 <property>
@@ -90,7 +91,8 @@ MapReduce 优化方法主要从 6 个方面考虑:
 </property>
 ```
 
-- `mapred-site.xml` - `mapreduce.reduce.memory.mb`: 1 个 ReduceTask 可使用的资源上限 (单位 MB, 默认 1024). 如果 ReduceTask 实际使用的资源超过该值, 则会被强制杀死.
+- 参数: `mapred-site.xml` - `mapreduce.reduce.memory.mb`
+- 说明: 1 个 ReduceTask 可使用的资源上限 (单位 MB, 默认 1024). 如果 ReduceTask 实际使用的资源超过该值, 则会被强制杀死.
 
 ```xml
 <property>
