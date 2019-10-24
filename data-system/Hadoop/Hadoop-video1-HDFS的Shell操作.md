@@ -1247,4 +1247,29 @@ Replication 5 set: /d1/d1_a/f1
 [zozo@vm03 subdir0]$ 
 ```
 
+## 统计文本行数
+
+```bash
+# The main difference between -cat and -text is that text detects the encoding of the file and decodes it to plain text whenever possible whereas cat doesnt do it.
+# -cat 和 -text 之间的主要区别在于, text 会检测文件的编码, 并在可能的情况下将其解码为纯文本, 而 cat 则不会.
+bin/hadoop fs -text /f1 | wc -l
+bin/hadoop fs -cat /f1 | wc -l
+```
+
+```
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -text /f1
+I am f1
+I am appender for f1
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -text /f1 | wc -l
+2
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -cat /f1
+I am f1
+I am appender for f1
+[zozo@vm017 hadoop-2.7.2]$ bin/hadoop fs -cat | wc -l
+-cat: Not enough arguments: expected 1 but got 0
+Usage: hadoop fs [generic options] -cat [-ignoreCrc] <src> ...
+0
+[zozo@vm017 hadoop-2.7.2]$
+```
+
 ---
