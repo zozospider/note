@@ -66,11 +66,43 @@ MapReduce 优化方法主要从 6 个方面考虑:
 
 ## 2.5 数据倾斜
 
+数据倾斜包括数据频率倾斜 (某一个区域的数据量要远远大于其他区域) 和数据大小倾斜 (部分记录的大小远远大于平均值).
 
+减少数据倾斜的办法:
+- 抽样和范围分区: 可以通过对原始数据进行抽样, 通过得到的结果集来预设分区边界值.
+- 自定义分区: 基于出输出键的背景知识进行自定义分区. 例如, 如果 Map 输出键的单次来源于一本书, 且其中某几个专业词汇较多, 那么就可以自定义分区将这些专业词汇发送给固定的一部分 Reduce 实例, 而将其他的发送给剩余的 Reduce 实例.
+- Combine (Reduce): 使用 Combine (Reduce) 可以大量地减少数据倾斜, 在可能的情况下, Combine 的目的就是聚合并精简数据.
+- 采用 Map Join, 尽量避免 Reduce Join.
 
-## 2.6 常用的调优参数
+## 2.6 常用调优参数 - 资源相关
 
+以下参数 (`mapred-site.xml`) 在 MapReduce 应用程序中配置就可以生效:
 
+- `mapred-site.xml: mapreduce.map.memory.mb`: 1 个 MapTask 可使用的资源上限 (单位 MB, 默认 1024). 如果 MapTask 实际使用的资源超过该值, 则会被强制杀死.
+
+```xml
+<property>
+  <name>mapreduce.map.memory.mb</name>
+  <value>1024</value>
+  <description>The amount of memory to request from the scheduler for each
+  map task.
+  </description>
+</property>
+```
+
+- `mapred-site.xml: mapreduce.reduce.memory.mb`: 1 个 ReduceTask 可使用的资源上限 (单位 MB, 默认 1024). 如果 ReduceTask 实际使用的资源超过该值, 则会被强制杀死.
+
+```xml
+<property>
+  <name>mapreduce.reduce.memory.mb</name>
+  <value>1024</value>
+  <description>The amount of memory to request from the scheduler for each
+  reduce task.
+  </description>
+</property>
+```
+
+## 2.7 常用调优参数 - 容错相关 (MapReduce 性能优化)
 
 ---
 
