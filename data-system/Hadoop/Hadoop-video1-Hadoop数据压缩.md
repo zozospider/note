@@ -120,7 +120,7 @@ __应用场景__:
 
 ## 6.1 Mapper 输入
 
-- 位置: `core-site.xml`
+- 参数: `io.compression.codecs` (`core-site.xml`)
 - 备注: Hadoop 使用文件扩展名判断是否支持某种编解码器
 
 ```xml
@@ -136,7 +136,7 @@ __应用场景__:
 
 ## 6.2 Mapper 输出
 
-- 位置: `mapred-site.xml`
+- 参数: `mapreduce.map.output.compress` (`mapred-site.xml`)
 - 备注: 这个参数设置为 true 启用压缩
 
 ```xml
@@ -149,7 +149,7 @@ __应用场景__:
 </property>
 ```
 
-- 位置: `mapred-site.xml`
+- 参数: `mapreduce.map.output.compress.codec` (`mapred-site.xml`)
 - 备注: 此阶段企业较多使用 LZO / Snappy
 
 ```xml
@@ -164,7 +164,7 @@ __应用场景__:
 
 ## 6.3 Reduce 输出
 
-- 位置: `mapred-site.xml`
+- 参数: `mapreduce.output.fileoutputformat.compress` (`mapred-site.xml`)
 - 备注: 这个参数设置为 true 启用压缩
 
 ```xml
@@ -176,7 +176,7 @@ __应用场景__:
 </property>
 ```
 
-- 位置: `mapred-site.xml`
+- 参数: `mapred-site.xml`
 - 备注: 使用标准工具或编解码器, 如 gzip / bzip2
 
 ```xml
@@ -188,7 +188,7 @@ __应用场景__:
 </property>
 ```
 
-- 位置: `mapred-site.xml`
+- 参数: `mapreduce.output.fileoutputformat.compress.type` (`mapred-site.xml`)
 - 备注: SequenceFile 输出使用的压缩类型: NONE / BLOCK
 
 ```xml
