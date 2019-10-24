@@ -497,6 +497,61 @@ sysctl -a | grep fs
 
 ---
 
+# 磁盘 IO
+
+## top
+
+```
+> top
+top - 16:15:05 up 6 days,  6:25,  2 users,  load average: 1.45, 1.77, 2.14
+Tasks: 147 total,   1 running, 146 sleeping,   0 stopped,   0 zombie
+Cpu(s):  0.2% us,  0.2% sy,  0.0% ni, 86.9% id, 12.6% wa,  0.0% hi,  0.0% si
+Mem:   4037872k total,  4003648k used,    34224k free,     5512k buffers
+Swap:  7164948k total,   629192k used,  6535756k free,  3511184k cached
+```
+
+`12.6% wa`: IO 等待所占用的 CPU 时间的百分比, 高过 30% 时 IO 压力高
+
+## IOSTAT
+
+Iostat 是 sysstat 工具集的一个工具, 需要安装:
+- Centos 的安装方式是: `yum install sysstat`
+- Ubuntu 的安装方式是: `aptitude install sysstat`
+
+### iostat -x
+
+```
+> iostat -x 1 10
+Linux 2.6.18-92.el5xen 02/03/2009
+avg-cpu: %user %nice %system %iowait %steal %idle
+1.10 0.00 4.82 39.54 0.07 54.46
+Device: rrqm/s wrqm/s r/s w/s rsec/s wsec/s avgrq-sz avgqu-sz await svctm %util
+sda 0.00 3.50 0.40 2.50 5.60 48.00 18.48 0.00 0.97 0.97 0.28
+sdb 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00
+sdc 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00
+sdd 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00
+sde 0.00 0.10 0.30 0.20 2.40 2.40 9.60 0.00 1.60 1.60 0.08
+sdf 17.40 0.50 102.00 0.20 12095.20 5.60 118.40 0.70 6.81 2.09 21.36
+sdg 232.40 1.90 379.70 0.50 76451.20 19.20 201.13 4.94 13.78 2.45 93.16
+```
+
+- `rrqm/s`: 每秒进行 merge 的读操作数目, 即 `delta(rmerge)/s`
+- `wrqm/s`: 每秒进行 merge 的写操作数目, 即 `delta(wmerge)/s`
+- `r/s`: 每秒完成的读 I/O 设备次数, 即 `delta(rio)/s`
+- `w/s`: 每秒完成的写 I/O 设备次数, 即 `delta(wio)/s`
+- `rsec/s`: 每秒读扇区数, 即 `delta(rsect)/s`
+- `wsec/s`: 每秒写扇区数, 即 `delta(wsect)/s`
+- `rkB/s`: 每秒读K字节数, 是 `rsect/s` 的一半，因为每扇区大小为 512 字节 (需要计算)
+- `wkB/s`: 每秒写K字节数, 是 `wsect/s` 的一半 (需要计算)
+- `avgrq-sz`: 平均每次设备 I/O 操作的数据大小 (扇区), 即 `delta(rsect+wsect)/delta(rio+wio)`
+- `avgqu-sz`: 平均 I/O 队列长度, 即 `delta(aveq)/s/1000` (因为 `aveq` 的单位为毫秒)
+- `await`: 平均每次设备 I/O 操作的等待时间 (毫秒), 即 `delta(ruse+wuse)/delta(rio+wio)`
+- `svctm`: 平均每次设备 I/O 操作的服务时间 (毫秒), 即 `delta(use)/delta(rio+wio)`
+- `%util`: 1 秒中有百分之多少的时间用于 I/O 操作，或者说 1 秒中有多少时间 I/O 队列是非空的, 即 `delta(use)/s/1000` (因为 `use` 的单位为毫秒). 如果 `%util` 接近 100%, 说明产生的 I/O 请求太多, I/O 系统已经满负荷, 该磁盘可能存在瓶颈. `idle` 小于 70% IO 压力就较大了, 一般读取速度有较多的 wait. 同时可以结合 vmstat 查看查看 `b` 参数 (等待资源的进程数) 和 `wa` 参数 (IO 等待所占用的 CPU 时间的百分比, 高过 30% 时 IO 压力高)
+另外还可以参考 `svctm` 一般要小于 await (因为同时等待的请求的等待时间被重复计算了), svctm 的大小一般和磁盘性能有关, CPU / 内存的负荷也会对其有影响, 请求过多也会间接导致 svctm 的增加. await 的大小一般取决于服务时间(svctm) 以及 I/O 队列的长度和 I/O 请求的发出模式。如果 svctm 比较接近 await，说明 I/O 几乎没有等待时间；如果 await 远大于 svctm，说明 I/O 队列太长，应用得到的响应时间变慢，如果响应时间超过了用户可以容许的范围，这时可以考虑更换更快的磁盘, 调整内核 elevator 算法, 优化应用, 或者升级 CPU. 队列长度 (`avgqu-sz`) 也可作为衡量系统 I/O 负荷的指标, 但由于 `avgqu-sz` 是按照单位时间的平均值, 所以不能反映瞬间的 I/O 洪水.
+
+---
+
 # awk
 
 - 查找某个文件某个字段是否等于某个值, 打印整行内容:
