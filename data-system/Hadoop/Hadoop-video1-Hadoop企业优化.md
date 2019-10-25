@@ -334,6 +334,40 @@ __注__: 以下参数 (`yarn-site.xml`) 需要在 YARN 启动之前配置才能�
 
 # 三 HDFS 小文件优化方法
 
+HDFS 上每个文件都要在 NameNode 上建立一个索引 (大小约为 150 byte), 当小文件比较多的时候, 就会产生很多的索引文件, 一方面会大量占用 NameNode 的内存空间, 另一方面索引文件过大使得索引速度变慢.
 
+小文件的优化可从以下几种方式考虑:
+- 在数据采集的时候, 就将小文件或小批数据合成大文件再上传 HDFS.
+- 在业务处理之前, 在 HDFS 上使用 MapReduce 程序对小文件进行合并.
+- 在 MapReduce 处理时, 采用 CombineTextInputFormat 提高效率.
+
+## 3.1 Hadoop Archive
+
+是一个高效地将小文件放入 HDFS 块中的文件存档工具, 它能够将多个小文件打包成一个 HAR 文件, 这样就减少了 NameNode 的内存使用.
+
+## 3.2 Sequence File
+
+Sequence File 由一系列的二进制 Key - Value 组成, 如果 Key 为文件名, Value 为文件内容, 则可以将大批小文件合并成一个大文件.
+
+## 3.3 CombineFileInputFormat
+
+CombineFileInputFormat 是一种新的 InputFormat, 用于将多个文件合并成一个 Split, 另外, 它会考虑数据的存储位置.
+
+## 3.4 开启 JVM 重用
+
+对于大量的小文件 Job, 开启 JVM 重用会减少大概 45% 运行时间. 通过以下方式设置:
+
+- 参数: `mapreduce.map.maxattempts` (`mapred-site.xml`)
+- 备注: 1 个 Map 运行在一个 JVM 上, 开启 JVM 重用的话, 该 Map 在 JVM 上运行完毕后, JVM 继续运行其他 Map.
+
+```xml
+<property>
+  <name>mapreduce.job.jvm.numtasks</name>
+  <value>1</value>
+  <description>How many tasks to run per jvm. If set to -1, there is
+  no limit. 
+  </description>
+</property>
+```
 
 ---
