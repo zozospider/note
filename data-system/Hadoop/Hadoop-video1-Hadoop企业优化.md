@@ -1,5 +1,20 @@
 
-
+- [一 MapReduce 跑的慢的原因](#一-mapreduce-跑的慢的原因)
+- [二 MapReduce 优化方法](#二-mapreduce-优化方法)
+    - [2.1 数据输入](#21-数据输入)
+    - [2.2 Map 阶段](#22-map-阶段)
+    - [2.3 Reduce 阶段](#23-reduce-阶段)
+    - [2.4 IO 传输](#24-io-传输)
+    - [2.5 数据倾斜](#25-数据倾斜)
+    - [2.6 常用调优参数 - 资源相关](#26-常用调优参数---资源相关)
+        - [2.6.1 mapred-site.xml](#261-mapred-sitexml)
+        - [2.6.2 yarn-site.xml](#262-yarn-sitexml)
+    - [2.7 常用调优参数 - 容错相关 (MapReduce 性能优化)](#27-常用调优参数---容错相关-mapreduce-性能优化)
+- [三 HDFS 小文件优化方法](#三-hdfs-小文件优化方法)
+    - [3.1 Hadoop Archive](#31-hadoop-archive)
+    - [3.2 Sequence File](#32-sequence-file)
+    - [3.3 CombineFileInputFormat](#33-combinefileinputformat)
+    - [3.4 开启 JVM 重用](#34-开启-jvm-重用)
 
 ---
 
