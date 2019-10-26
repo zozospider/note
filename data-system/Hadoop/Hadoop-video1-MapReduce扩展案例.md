@@ -12,7 +12,7 @@
 参考以下项目:
 
 - code
-  - [zozospider/note-hadoop-video1 ()](https://github.com/zozospider/note-hadoop-video1)
+  - [zozospider/note-hadoop-video1 (com.zozospider.hadoop.mapreduce.multijob.MultiJob1Driver, com.zozospider.hadoop.mapreduce.multijob.MultiJob2Driver)](https://github.com/zozospider/note-hadoop-video1)
 
 ---
 
