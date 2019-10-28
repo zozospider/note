@@ -67,16 +67,3 @@
       - [Hadoop（十七）之MapReduce作业配置与Mapper和Reducer类](https://www.cnblogs.com/zhangyinhua/p/7740888.html)
 
 ---
-
-# plan
-
-- 0930: P68-P71: HDFS 的数据流 __DONE__
-- 1001: P72-P90: 3h: HDFS
-- 1002: P91-P105: MapReduce
-- 1003:
-- 1004:
-- 1005:
-- 1006: P105-P122: MapReduce
-- 1007: P123-P136: MapReduce
-
-FEYNMAN TECHNIQUE
