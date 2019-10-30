@@ -13,6 +13,7 @@
   - [NameNode和SecondaryNameNode](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-NameNode和SecondaryNameNode.md)
   - [DataNode](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-DataNode.md)
   - [HDFS_2.X新特性](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-HDFS_2.X新特性.md)
+  - [Hadoop_HA](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop_HA.md)
   - [MapReduce概述](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce概述.md)
   - [Hadoop序列化](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop序列化.md)
   - [MapReduce框架原理](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce框架原理.md)
@@ -21,7 +22,6 @@
   - [Hadoop企业优化](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-Hadoop企业优化.md)
   - [MapReduce扩展案例](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-MapReduce扩展案例.md)
   - [常见错误及解决方案](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-常见错误及解决方案.md)
-
 
 - code
   - [zozospider/note-hadoop-video1](https://github.com/zozospider/note-hadoop-video1)
