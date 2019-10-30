@@ -34,7 +34,7 @@ HDFS HA 功能通过配置 Active / Standby 两个 NameNodes 实现在集群中�
 |  |  |  | __ResourceManager__ |
 
 | 节点 / 模块 | __HDFS__ | __YARN__ |  __HA__ |
-| :--- | :--- | :--- |
+| :--- | :--- | :--- | :--- |
 | __vm017__ | DataNode | NodeManager |  |
 |  | __NameNode__ |  |  |
 |  |  |  | JournalNode |
@@ -70,16 +70,16 @@ HDFS HA 功能通过配置 Active / Standby 两个 NameNodes 实现在集群中�
 |  | __ResourceManager__ |  | __ResourceManager__ |
 
 | 节点 / 模块 | __HDFS__ | __YARN__ | __HA__ |
-| :--- | :--- | :--- |
-| __vm017__ | DataNode | NodeManager |
+| :--- | :--- | :--- | :--- |
+| __vm017__ | DataNode | NodeManager |  |
 |  | __NameNode__ |  |  |
 |  |  |  | JournalNode |
 |  |  |  | ZooKeeper |
-| __vm06__ | DataNode | NodeManager |
+| __vm06__ | DataNode | NodeManager |  |
 |  | __NameNode__ | __ResourceManager__ |  |
 |  |  |  | JournalNode |
 |  |  |  | ZooKeeper |
-| __vm03__ | DataNode | NodeManager |
+| __vm03__ | DataNode | NodeManager |  |
 |  |  | __ResourceManager__ |  |
 |  |  |  | JournalNode |
 |  |  |  | ZooKeeper |
