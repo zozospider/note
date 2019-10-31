@@ -133,6 +133,14 @@ HDFS HA 功能通过配置 Active / Standby 两个 NameNodes 实现在集群中�
     <name>dfs.ha.fencing.ssh.private-key-files</name>
     <value>/home/zozo/.ssh/id_rsa</value>
   </property>
+
+<!-- 关闭权限检查 (默认开启, 正式环境不建议关闭) -->
+<!--
+  <property>
+    <name>dfs.permissions.enabled</name>
+    <value>false</value>
+  </property>
+-->
 ```
 
 ---
