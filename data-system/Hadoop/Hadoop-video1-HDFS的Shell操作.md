@@ -1272,4 +1272,11 @@ Usage: hadoop fs [generic options] -cat [-ignoreCrc] <src> ...
 [zozo@vm017 hadoop-2.7.2]$
 ```
 
+## 查看 LZO 文件内容
+
+```bash
+hadoop fs -text /Data/Logs/2018-08-22/2018-08-22_log.lzo
+hadoop fs -cat /Data/Logs/2018-08-22/2018-08-22_log.lzo | lzop -dc | head -10
+```
+
 ---
