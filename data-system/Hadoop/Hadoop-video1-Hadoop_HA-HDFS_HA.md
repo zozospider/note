@@ -51,8 +51,91 @@ HDFS HA 功能通过配置 Active / Standby 两个 NameNodes 实现在集群中�
 |  |  | __ResourceManager__ |  |
 |  |  |  | JournalNode |
 
----
+## 3.2 配置
 
+### 3.2.1 配置 core-site.xml
+
+```xml
+<!-- 把两个 NameNode 的地址组装成一个集群 mycluster -->
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://mycluster</value>
+  </property>
+
+<!-- 指定 Hadoop 运行时产生文件的存储目录 -->
+  <property>
+    <name>hadoop.tmp.dir</name>
+    <value>/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp</value>
+  </property>
+
+<!-- 指定 JournalNode 运行时产生文件的存储目录 -->
+  <property>
+    <name>dfs.journalnode.edits.dir</name>
+    <value>/home/zozo/app/hadoop/hadoop-2.7.2-data/tmp/journal</value>
+  </property>
+```
+
+### 3.2.2 配置 hdfs-site.xml
+
+```xml
+<!-- NameNode 集群名称 -->
+  <property>
+    <name>dfs.nameservices</name>
+    <value>mycluster</value>
+  </property>
+
+<!-- 集群中 NameNode 节点都有哪些 -->
+  <property>
+    <name>dfs.ha.namenodes.mycluster</name>
+    <value>nn1,nn2</value>
+  </property>
+
+<!-- nn1, nn2 的 RPC 通信地址 -->
+  <property>
+    <name>dfs.namenode.rpc-address.mycluster.nn1</name>
+    <value>vm017:8020</value>
+  </property>
+  <property>
+    <name>dfs.namenode.rpc-address.mycluster.nn2</name>
+    <value>vm06:8020</value>
+  </property>
+
+<!-- nn1, nn2 的 HTTP 通信地址 -->
+  <property>
+    <name>dfs.namenode.http-address.mycluster.nn1</name>
+    <value>vm017:50070</value>
+  </property>
+  <property>
+    <name>dfs.namenode.http-address.mycluster.nn2</name>
+    <value>vm06:50070</value>
+  </property>
+
+<!-- 指定 NameNode 元数据在 JournalNode 上的存放位置 -->
+  <property>
+    <name>dfs.namenode.shared.edits.dir</name>
+    <value>qjournal://vm017:8485;vm06:8485;vm03:8485/mycluster</value>
+  </property>
+
+<!-- 访问代理类: client, mycluster, active 配置失败切换实现方式 -->
+  <property>
+    <name>dfs.client.failover.proxy.provider.mycluster</name>
+    <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+  </property>
+
+<!-- 配置隔离机制, 即同一时刻只能有 1 台服务器对外响应 -->
+  <property>
+    <name>dfs.ha.fencing.methods</name>
+    <value>sshfence</value>
+  </property>
+
+<!-- 使用隔离机制时需要 ssh 无秘钥登录 -->
+  <property>
+    <name>dfs.ha.fencing.ssh.private-key-files</name>
+    <value>/home/zozo/.ssh/id_rsa</value>
+  </property>
+```
+
+---
 
 # 四 自动故障转移 - 原理
 
