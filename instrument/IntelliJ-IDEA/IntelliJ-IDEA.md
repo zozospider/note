@@ -152,8 +152,11 @@ spiderxmac:note-hadoop-video1 zoz$
 
 # Debug 模式多线程调试
 
+所有断点都必须是 Thread 类型 (包括 main 线程, 否则会很奇怪)
+
 - [Idea Intellij多线程调试](https://blog.csdn.net/fuzzytalker/article/details/50925218)
 - [IntelliJ IDEA多线程调试](https://my.oschina.net/athantang/blog/888720)
 - [IntelliJ IDEA 进行多线程调试](https://www.cnblogs.com/756623607-zhang/p/7090928.html)
+- [IDEA 多线程Debug (所有断点都必须是 Thread 类型)](https://blog.csdn.net/u011781521/article/details/79251819)
 
 ---
