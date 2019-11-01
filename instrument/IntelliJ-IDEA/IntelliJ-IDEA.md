@@ -147,3 +147,13 @@ spiderxmac:note-hadoop-video1 zoz$
 
 - https://blog.csdn.net/weixin_36210698/article/details/79557695
 - https://www.cnblogs.com/vhua/p/idea_1.html
+
+---
+
+# Debug 模式多线程调试
+
+- [Idea Intellij多线程调试](https://blog.csdn.net/fuzzytalker/article/details/50925218)
+- [IntelliJ IDEA多线程调试](https://my.oschina.net/athantang/blog/888720)
+- [IntelliJ IDEA 进行多线程调试](https://www.cnblogs.com/756623607-zhang/p/7090928.html)
+
+---
