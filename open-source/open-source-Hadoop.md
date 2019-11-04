@@ -15,8 +15,8 @@
           * MapTaskRunnable `IC`: _run()_
           * ReduceTaskRunnable `IC`: _run()_
     * __MapTask__, __ReduceTask__
-      * MapTask \[_run()_, _runNewMapper()_, _createSortingCollector()_\] `C` -> Task `AC`
-        * NewOutputCollector \[_NewOutputCollector()_, _write()_\] `IC` -> RecordWriter `I`
+      * MapTask `C` (-> Task `AC`): _run()_, _runNewMapper()_, _createSortingCollector()_
+        * NewOutputCollector `IC` (-> RecordWriter `I`): _NewOutputCollector()_, _write()_
         * MapOutputBuffer \[_init()_, _collect()_, _sortAndSpill()_\] `IC` -> MapOutputCollector `I`
           * SpillThread \[_run()_\] `IC`
       * ReduceTask
