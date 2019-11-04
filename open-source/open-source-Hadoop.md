@@ -12,10 +12,10 @@
     * __LocalJobRunner__
       * LocalJobRunner `C`
         * Job \[_Job()_, _run()_, _runTasks()_\] `IC`
-          * MapTaskRunnable `IC`
+          * MapTaskRunnable \[run(), \] `IC`
           * ReduceTaskRunnable `IC`
     * __MapTask__, __ReduceTask__
-      * MapTask `C`
+      * MapTask `C` -> Task `AC`
         * NewOutputCollector `IC` -> RecordWriter `I`
         * MapOutputBuffer `IC` -> MapOutputCollector `I`
           * SpillThread `IC`
