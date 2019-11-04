@@ -13,7 +13,7 @@
       * JobSubmitter `C` | _submitJobInternal()_, _copyAndConfigureFiles()_, _writeSplits()_, _writeConf()_, _submitJob()_
       * InputFormat `I` | _getSplits()_
     * __LocalJobRunner__
-      * LocalJobRunner `C` > ClientProtocol `I`
+      * LocalJobRunner `C` > ClientProtocol `I` | _submitJob()_
         * Job `IC` | _Job()_, _run()_, _runTasks()_
           * MapTaskRunnable `IC` | _run()_
           * ReduceTaskRunnable `IC` | _run()_
