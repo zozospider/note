@@ -11,9 +11,9 @@
       * Job `C`
     * __LocalJobRunner__
       * LocalJobRunner `C`
-        * Job \[_Job()_, _run()_, _runTasks()_\] `IC`
-          * MapTaskRunnable \[_run()_\] `IC`
-          * ReduceTaskRunnable \[_run()_\] `IC`
+        * Job `IC`: _Job()_, _run()_, _runTasks()_
+          * MapTaskRunnable `IC`: _run()_
+          * ReduceTaskRunnable `IC`: _run()_
     * __MapTask__, __ReduceTask__
       * MapTask \[_run()_, _runNewMapper()_, _createSortingCollector()_\] `C` -> Task `AC`
         * NewOutputCollector \[_NewOutputCollector()_, _write()_\] `IC` -> RecordWriter `I`
