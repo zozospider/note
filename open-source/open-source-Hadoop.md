@@ -11,7 +11,7 @@
       * Job `C`
     * __LocalJobRunner__
       * LocalJobRunner `C`
-        * Job (_Job()_, _run()_, _runTasks()_) `IC`
+        * Job (_Job()_ _run()_ _runTasks()_) `IC`
           * MapTaskRunnable `IC`
           * ReduceTaskRunnable `IC`
     * __MapTask__, __ReduceTask__
