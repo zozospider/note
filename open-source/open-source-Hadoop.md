@@ -10,8 +10,8 @@
     * __Job__
       * Job `C`
     * __LocalJobRunner__
-      * LocalJobRunner
-        * Job `C`
+      * LocalJobRunner `C`
+        * Job (Job(), run(), runTasks()) `IC`
           * MapTaskRunnable `IC`
           * ReduceTaskRunnable `IC`
     * __MapTask__, __ReduceTask__
