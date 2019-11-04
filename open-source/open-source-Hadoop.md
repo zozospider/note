@@ -10,8 +10,16 @@
     * __Job__
       * Job `C`
     * __LocalJobRunner__
-      * LocalJobRunner (Job (MapTaskRunnable, ReduceTaskRunnable)) `C`
+      * LocalJobRunner
+        * Job `C`
+          * MapTaskRunnable `IC`
+          * ReduceTaskRunnable `IC`
     * __MapTask__, __ReduceTask__
-      * MapTask (NewOutputCollector, MapOutputBuffer) `C`, ReduceTask
+      * MapTask `C`
+        * NewOutputCollector `IC` -> RecordWriter `I`
+        * MapOutputBuffer `IC` -> MapOutputCollector `I`
+          * SpillThread `IC`
+      * ReduceTask
+        * NewTrackingRecordWriter `IC` -> RecordWriter `I`
 
 ---
