@@ -21,7 +21,7 @@
         * NewOutputCollector `IC` > RecordWriter `I` | _NewOutputCollector()_ `c1111`, _write()_ `c111221`
         * MapOutputBuffer `IC` > MapOutputCollector `I` | _init()_ `c111111` > `d`, _sortAndSpill()_ `d11`, _collect()_ `c1112211`
           * SpillThread `IC` | _run()_ `d1`
-      * Mapper `C` | _run()_ `c1112`, _setup()_`c11121`, _map()_ `c11122`, _cleanup()_ `c11122`
+      * Mapper `C` | _run()_ `c1112`, _setup()_`c11121`, _map()_ `c11122`, _cleanup()_ `c11123`
       * ReduceTask `C`
         * NewTrackingRecordWriter `IC` > RecordWriter `I`
       * Reducer `C` | _run()_
