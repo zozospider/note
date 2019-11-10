@@ -15,5 +15,9 @@
   * SnapShot `I`, FileSnap `C`
   * TxnLog `I`, FileTxnLog `C`
   * FileTxnSnapLog `C`
+* __ZooKeeper__, __ClientCnxn__, 
+  * ZooKeeper _ZKWatchManager `C`
+  * ClientCnxn _SendThread _EventThread `C`
+  * ClientCnxnSocket `I`, ClientCnxnSocketNIO `C`
 
 ---
