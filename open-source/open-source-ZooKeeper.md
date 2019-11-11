@@ -8,7 +8,7 @@
 * __Archive__, __Recode__
   * InputArchive `I`, BinaryInputArchive `C`
   * OutputArchive `I`, BinaryOutputArchive `C`
-  * Record `I`, ACL `C`, ConnectRequest `C`, CreateRequest `C`
+  * Record `I`, ConnectRequest `C`, CreateRequest `C`, ACL `C`, Datatree `C`
 * __DataTree__
   * Datatree `C`, DataNode `C`, WatchManager `C`
 * __SnapShot__, __TxnLog__
