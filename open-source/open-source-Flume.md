@@ -126,7 +126,7 @@
 
 ---
 
-# 核心源码
+# Core Source
 
   * __LifecycleAware__, __Configurable__
     * LifecycleAware `I`, Configurable `I`

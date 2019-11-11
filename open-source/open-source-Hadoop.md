@@ -3,7 +3,7 @@
 
 ---
 
-# 核心源码
+# Core Source
 
   * __HDFS__
   * __MapReduce__
