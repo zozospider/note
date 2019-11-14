@@ -28,11 +28,16 @@
     - [清空正在写的文件内容](#清空正在写的文件内容)
     - [删除 7 天前的文件](#删除-7-天前的文件)
 - [查找过滤](#查找过滤)
+    - [查找文件](#查找文件)
+    - [查找多个文件中的匹配内容](#查找多个文件中的匹配内容)
 - [统计行数](#统计行数)
 - [重复, 去重](#重复-去重)
 - [文件个数](#文件个数)
 - [打开文件数](#打开文件数)
-- [awk](#awk)
+- [磁盘 IO](#磁盘-io)
+    - [top](#top)
+    - [IOSTAT](#iostat)
+        - [iostat -x](#iostat--x)
 
 ---
 
@@ -398,6 +403,31 @@ find /home/zozo/data/d2 -mtime +7 -name "backup-d2-*.log" -exec rm {} \;
 cat file | grep -v EXCLUDE
 ```
 
+## 查找文件
+```bash
+# 查找当前目录下的所有 file_name 文件
+find /home/zozo/data/d1 - type f -name "file_name"
+find . -name "file_name"
+```
+
+## 查找多个文件中的匹配内容
+
+- [Linux中grep查找含有某字符串的所有文件](https://blog.csdn.net/BabyFish13/article/details/79709028)
+
+```bash
+# 递归查找目录下含有该字符串的所有文件
+grep -rn "data_chushou_pay_info"  /home/hadoop/nisj/dir/
+ 
+# 查找当前目录下后缀名过滤的文件
+grep -Rn "data_chushou_pay_info" *.py
+ 
+# 当前目录及设定子目录下的符合条件的文件
+grep -Rn "data_chushou_pay_info" /home/hadoop/nisj/dir/ *.py
+ 
+# 结合 find 命令过滤目录及文件名后缀
+find /home/hadoop/nisj/dir/ -type f -name '*.py'|xargs grep -n 'data_chushou_pay_info'
+```
+
 ---
 
 # 统计行数
@@ -555,14 +585,5 @@ sdg 232.40 1.90 379.70 0.50 76451.20 19.20 201.13 4.94 13.78 2.45 93.16
 另外还可以参考 `svctm` 一般要小于 await (因为同时等待的请求的等待时间被重复计算了), svctm 的大小一般和磁盘性能有关, CPU / 内存的负荷也会对其有影响, 请求过多也会间接导致 svctm 的增加. await 的大小一般取决于服务时间(svctm) 以及 I/O 队列的长度和 I/O 请求的发出模式。如果 svctm 比较接近 await，说明 I/O 几乎没有等待时间；如果 await 远大于 svctm，说明 I/O 队列太长，应用得到的响应时间变慢，如果响应时间超过了用户可以容许的范围，这时可以考虑更换更快的磁盘, 调整内核 elevator 算法, 优化应用, 或者升级 CPU. 队列长度 (`avgqu-sz`) 也可作为衡量系统 I/O 负荷的指标, 但由于 `avgqu-sz` 是按照单位时间的平均值, 所以不能反映瞬间的 I/O 洪水.
 
 `TODO`
-
----
-
-# awk
-
-- 查找某个文件某个字段是否等于某个值, 打印整行内容:
-```bash
-awk -F '|' '$10 == "value" {print $0}' file
-```
 
 ---
