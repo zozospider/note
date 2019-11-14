@@ -406,8 +406,8 @@ cat file | grep -v EXCLUDE
 ## 查找文件
 ```bash
 # 查找当前目录下的所有 file_name 文件
-find /home/zozo/data/d1 - type f -name "file_name"
-find . -name "file_name"
+find /home/zozo/data/d1 - type f -name "file_name*"
+find . -name "file_name*"
 ```
 
 ## 查找多个文件中的匹配内容
