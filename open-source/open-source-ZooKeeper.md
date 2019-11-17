@@ -27,5 +27,14 @@
   * ServerCnxn `AC`, NIOServerCnxn `C`
   * ZooKeeperServer `C`, ReadOnlyZooKeeperServer `C`
   * RequestProcessor `I`, PrepRequestProcessor `C`, SyncRequestProcessor `C`, FinalRequestProcessor `C`
+* __SessionTracker__
+  * SessionTracker `I`, SessionTrackerImpl `C`
+* __Election__, __QuorumCnxManager__
+  * Election `I`, FastLeaderElection _Notification _ToSend _Messenger _WorkerSender _WorkerReceiver `C`
+  * QuorumCnxManager _Message _Listener _SendWorker _RecvWorker `C`
+* __Learner__, __LearnerHandler__, __QuorumZooKeeperServer__
+  * Learner `C`, Follower `C`, Observer `C`
+  * LearnerHandler `C`
+  * QuorumZooKeeperServer `C`, LeaderZooKeeperServer `C`, LearnerZooKeeperServer `C`, FollowerZooKeeperServer `C`, ObserverZooKeeperServer `C`
 
 ---
