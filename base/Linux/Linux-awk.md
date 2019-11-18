@@ -4,3 +4,7 @@
 awk -F '|' '$10 == "value" {print $0}' file
 ```
 
+- 查找某个文件某个字段总和, 打印总和:
+```bash
+awk -F '|' '{sum += $5};END {print sum}' file
+```
