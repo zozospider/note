@@ -17,6 +17,12 @@ CREATE DATABASE db_1 DEFAULT CHARACTER SET gbk COLLATE gbk_chinese_ci;
 ALTER TABLE tbl_1 MODIFY COLUMN col_1 LONGTEXT;
 ```
 
+## 批量替换字段的部分数据
+
+```sql
+UPDATE tbl_1 SET col_1 = replace(col_1, 'c1', 'c2');
+```
+
 ---
 
 # 导入导出
