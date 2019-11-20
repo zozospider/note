@@ -2,6 +2,8 @@
 # link
 
 - [【Zookeeper】源码分析目录](https://www.cnblogs.com/leesf456/p/6518040.html)
+- [zookeeper-数据同步源码分析](https://juejin.im/post/5cdd57966fb9a03212507c7b#heading-0)
+- [Zookeeper源码](https://blog.reactor.top/categories/Zookeeper%E6%BA%90%E7%A0%81/)
 
 ---
 
