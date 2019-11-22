@@ -61,4 +61,8 @@
 
 ![image](https://github.com/zozospider/note/blob/master/open-source/open-source-ZooKeeper/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%97%B4%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5%E8%BF%87%E7%A8%8B-2.png?raw=true)
 
+![image](https://github.com/zozospider/note/blob/master/open-source/open-source-ZooKeeper/%E4%BA%8B%E5%8A%A1%E8%AF%B7%E6%B1%82-Leader.png?raw=true)
+
+![image](https://github.com/zozospider/note/blob/master/open-source/open-source-ZooKeeper/%E4%BA%8B%E5%8A%A1%E8%AF%B7%E6%B1%82-Follower.png?raw=true)
+
 ---
