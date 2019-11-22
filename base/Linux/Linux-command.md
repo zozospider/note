@@ -408,6 +408,18 @@ cat file | grep -v EXCLUDE
 # 查找当前目录下的所有 file_name 文件
 find /home/zozo/data/d1 - type f -name "file_name*"
 find . -name "file_name*"
+
+# 文件内容较少时
+find . -name "file_name*" -type f | xargs grep -n "content"
+find . -name "file_name*" -type f | xargs grep -n "content" > file_content
+# 文件内容较多时
+find . -name "file_name*" -type f | xargs -i grep -n "content" {} > file_content
+
+# 排序查找重复条数, 重复内容
+sort "file_name*" | uniq -d | wc -l
+sort "file_name*" | uniq -dc
+find . -name "file_name*" -type f | xargs -i cat {} | sort | uniq -d | wc -l > wc
+find . -name "file_name*" -type f | xargs -i cat {} | sort | uniq -dc > file_sort_uniq_dc
 ```
 
 ## 查找多个文件中的匹配内容
