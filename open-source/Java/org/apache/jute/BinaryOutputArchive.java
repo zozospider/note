@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 /**
- * OutputArchive 输出流 serializers (序列化) 实现类: 内存数据 -> 磁盘 / 网络 (通常为二进制数据).
+ * OutputArchive 输出流 serializers (序列化) 实现类: 内存数据 -> 磁盘 / 网络 (二进制数据等).
  */
 public class BinaryOutputArchive implements OutputArchive {
     private ByteBuffer bb = ByteBuffer.allocate(1024);
@@ -103,39 +103,43 @@ public class BinaryOutputArchive implements OutputArchive {
     }
 
     /**
-     * 往磁盘 / 网络 (通常为二进制数据) 中序列化 (输出 / 写) 1 个 String
+     * 往磁盘 / 网络 (二进制数据等) 中序列化 (输出 / 写) 1 个 String
      */
     public void writeString(String s, String tag) throws IOException {
-        // 如果字符串为空, 则写入 -1 长度
+        // 如果字符串为 null, 则往输出流中写入 -1 长度
         if (s == null) {
             writeInt(-1, "len");
             return;
         }
         // 调用自身编码器 (而非 string.getbytes), 将字符串转换成 ByteBuffer
         ByteBuffer bb = stringToByteBuffer(s);
-        // 先写入该字符串长度
+        // 先往输出流中写入该字符串长度
         writeInt(bb.remaining(), "len");
-        // 再写入字符串转换后的字节数组
+        // 再往输出流中写入字符串转换后的字节数组
         out.write(bb.array(), bb.position(), bb.limit());
     }
 
     /**
-     * 往磁盘 / 网络 (通常为二进制数据) 中序列化 (输出 / 写) 1 个 byte[]
+     * 往磁盘 / 网络 (二进制数据等) 中序列化 (输出 / 写) 1 个 byte[]
      */
     public void writeBuffer(byte barr[], String tag)
     throws IOException {
-        // 如果 byte[] 为空, 则写入 -1 长度
+        // 如果 byte[] 为 null, 则往输出流中写入 -1 长度
     	if (barr == null) {
     		out.writeInt(-1);
     		return;
     	}
-        // 先写入该 byte[] 长度
+        // 先往输出流中写入该 byte[] 长度
     	out.writeInt(barr.length);
-        // 再写入 byte[]
+        // 再往输出流中写入 byte[]
         out.write(barr);
     }
     
+    /**
+     * 往磁盘 / 网络 (二进制数据等) 中序列化 (输出 / 写) 1 个 Record
+     */
     public void writeRecord(Record r, String tag) throws IOException {
+        // 调用此 Record 的 serialize 序列化: 内存 -> 磁盘 / 网络 (二进制数据等)
         r.serialize(this, tag);
     }
     
@@ -147,12 +151,12 @@ public class BinaryOutputArchive implements OutputArchive {
      * 开始序列化 (输出 / 写) Vector (List)
      */
     public void startVector(List v, String tag) throws IOException {
-        // 如果字符串为空, 则写入 -1 长度
+        // 如果字符串为空, 则往输出流中写入 -1 长度
     	if (v == null) {
     		writeInt(-1, tag);
     		return;
     	}
-        // 先写入该 List 大小
+        // 先往输出流中写入该 Vector (List) 大小
         writeInt(v.size(), tag);
     }
     
@@ -162,7 +166,7 @@ public class BinaryOutputArchive implements OutputArchive {
      * 开始序列化 (输出 / 写) Map (TreeMap)
      */
     public void startMap(TreeMap v, String tag) throws IOException {
-        // 先写入该 Map 大小
+        // 先往输出流中写入该 Map (TreeMap) 大小
         writeInt(v.size(), tag);
     }
     

@@ -24,28 +24,28 @@ import java.util.TreeMap;
 
 /**
  * Interface that alll the serializers have to implement.
- * 所有 serializers (序列化) 都必须实现的接口: 内存数据 -> 磁盘 / 网络 (通常为二进制数据).
+ * 所有 serializers (序列化) 都必须实现的接口: 内存数据 -> 磁盘 / 网络 (二进制数据等).
  *
  */
 public interface OutputArchive {
-    // 往磁盘 / 网络 (通常为二进制数据) 中序列化 (输出 / 写) 1 个 byte
+    // 往磁盘 / 网络 (二进制数据等) 中序列化 (输出 / 写) 1 个 byte
     public void writeByte(byte b, String tag) throws IOException;
-    // 往磁盘 / 网络 (通常为二进制数据) 中序列化 (输出 / 写) 1 个 boolean
+    // 往磁盘 / 网络 (二进制数据等) 中序列化 (输出 / 写) 1 个 boolean
     public void writeBool(boolean b, String tag) throws IOException;
-    // 往磁盘 / 网络 (通常为二进制数据) 中序列化 (输出 / 写) 1 个 int
+    // 往磁盘 / 网络 (二进制数据等) 中序列化 (输出 / 写) 1 个 int
     public void writeInt(int i, String tag) throws IOException;
-    // 往磁盘 / 网络 (通常为二进制数据) 中序列化 (输出 / 写) 1 个 long
+    // 往磁盘 / 网络 (二进制数据等) 中序列化 (输出 / 写) 1 个 long
     public void writeLong(long l, String tag) throws IOException;
-    // 往磁盘 / 网络 (通常为二进制数据) 中序列化 (输出 / 写) 1 个 float
+    // 往磁盘 / 网络 (二进制数据等) 中序列化 (输出 / 写) 1 个 float
     public void writeFloat(float f, String tag) throws IOException;
-    // 往磁盘 / 网络 (通常为二进制数据) 中序列化 (输出 / 写) 1 个 double
+    // 往磁盘 / 网络 (二进制数据等) 中序列化 (输出 / 写) 1 个 double
     public void writeDouble(double d, String tag) throws IOException;
-    // 往磁盘 / 网络 (通常为二进制数据) 中序列化 (输出 / 写) 1 个 String
+    // 往磁盘 / 网络 (二进制数据等) 中序列化 (输出 / 写) 1 个 String
     public void writeString(String s, String tag) throws IOException;
-    // 往磁盘 / 网络 (通常为二进制数据) 中序列化 (输出 / 写) 1 个 byte[]
+    // 往磁盘 / 网络 (二进制数据等) 中序列化 (输出 / 写) 1 个 byte[]
     public void writeBuffer(byte buf[], String tag)
         throws IOException;
-    // 往磁盘 / 网络 (通常为二进制数据) 中序列化 (输出 / 写) 1 个 Record
+    // 往磁盘 / 网络 (二进制数据等) 中序列化 (输出 / 写) 1 个 Record
     public void writeRecord(Record r, String tag) throws IOException;
     // 开始序列化 (输出 / 写) Record
     public void startRecord(Record r, String tag) throws IOException;

@@ -29,12 +29,12 @@ import java.io.IOException;
 @InterfaceAudience.Public
 public interface Record {
     /**
-     * 序列化: 内存 -> 磁盘 / 网络 (通常为二进制数据)
+     * 序列化: 内存 -> 磁盘 / 网络 (二进制数据等)
      */
     public void serialize(OutputArchive archive, String tag)
         throws IOException;
     /**
-     * 反序列化: 磁盘 / 网络 (通常为二进制数据) -> 内存
+     * 反序列化: 磁盘 / 网络 (二进制数据等) -> 内存
      */
     public void deserialize(InputArchive archive, String tag)
         throws IOException;
