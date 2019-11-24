@@ -119,13 +119,19 @@ public class BinaryOutputArchive implements OutputArchive {
         out.write(bb.array(), bb.position(), bb.limit());
     }
 
+    /**
+     * 往磁盘 / 网络 (通常为二进制数据) 中序列化 (输出 / 写) 1 个 byte[]
+     */
     public void writeBuffer(byte barr[], String tag)
     throws IOException {
+        // 如果 byte[] 为空, 则写入 -1 长度
     	if (barr == null) {
     		out.writeInt(-1);
     		return;
     	}
+        // 先写入该 byte[] 长度
     	out.writeInt(barr.length);
+        // 再写入 byte[]
         out.write(barr);
     }
     
@@ -137,17 +143,26 @@ public class BinaryOutputArchive implements OutputArchive {
     
     public void endRecord(Record r, String tag) throws IOException {}
     
+    /**
+     * 开始序列化 (输出 / 写) Vector (List)
+     */
     public void startVector(List v, String tag) throws IOException {
+        // 如果字符串为空, 则写入 -1 长度
     	if (v == null) {
     		writeInt(-1, tag);
     		return;
     	}
+        // 先写入该 List 大小
         writeInt(v.size(), tag);
     }
     
     public void endVector(List v, String tag) throws IOException {}
     
+    /**
+     * 开始序列化 (输出 / 写) Map (TreeMap)
+     */
     public void startMap(TreeMap v, String tag) throws IOException {
+        // 先写入该 Map 大小
         writeInt(v.size(), tag);
     }
     
