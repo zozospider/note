@@ -34,7 +34,7 @@ public interface OutputArchive {
     public void writeBool(boolean b, String tag) throws IOException;
     // 往磁盘 / 网络 (通常为二进制数据) 中序列化 (输出 / 写) 1 个 int
     public void writeInt(int i, String tag) throws IOException;
-    // 往磁盘 / 网络 (通常为二进制数据) 中序列化 (输出 / 写) 1 个 bylongte
+    // 往磁盘 / 网络 (通常为二进制数据) 中序列化 (输出 / 写) 1 个 long
     public void writeLong(long l, String tag) throws IOException;
     // 往磁盘 / 网络 (通常为二进制数据) 中序列化 (输出 / 写) 1 个 float
     public void writeFloat(float f, String tag) throws IOException;
