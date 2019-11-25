@@ -414,6 +414,8 @@ find . -name "file_name*" -type f | xargs grep -n "content"
 find . -name "file_name*" -type f | xargs grep -n "content" > file_content
 # 文件内容较多时
 find . -name "file_name*" -type f | xargs -i grep -n "content" {} > file_content
+find . -name "file_name*" -type f | xargs -i grep -rn "content" {} > file_content
+find . -name "file_name*" -type f | xargs -i cat {} | grep -n "content" > file_content
 
 # 排序查找重复条数, 重复内容
 sort "file_name*" | uniq -d | wc -l
