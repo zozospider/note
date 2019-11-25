@@ -412,7 +412,7 @@ find . -name "file_name*"
 # 文件内容较少时
 find . -name "file_name*" -type f | xargs grep -n "content"
 find . -name "file_name*" -type f | xargs grep -n "content" > file_content
-# 文件内容较多时 (以下 3 条命令测试效果一样)
+# 文件内容较多时 (以下 3 条命令测试结果一样)
 find . -name "file_name*" -type f | xargs -i grep -n "content" {} > file_content
 find . -name "file_name*" -type f | xargs -i grep -rn "content" {} > file_content
 find . -name "file_name*" -type f | xargs -i cat {} | grep -n "content" > file_content
