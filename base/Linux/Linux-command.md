@@ -429,6 +429,9 @@ sort "file_name*" | uniq -dc
 find . -name "file_name*" -type f | xargs -i cat {} | sort | uniq -d | wc -l > wc
 find . -name "file_name*" -type f | xargs -i cat {} | sort | uniq -dc > file_sort_uniq_dc
 
+# 查找条数
+find . -name "file_name*" -type f | xargs -i cat {} | wc -l
+
 # --- 以下来自网络 ---
 
 # 递归查找目录下含有该字符串的所有文件
