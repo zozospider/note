@@ -8,3 +8,8 @@ awk -F '|' '$10 == "value" {print $0}' file
 ```bash
 awk -F '|' '{sum += $5};END {print sum}' file
 ```
+
+- 查找某个文件某个字段, 去重打印
+```bash
+cat file | awk -F '|' '{print $6}' | sort | uniq >> file_uniq6
+```
