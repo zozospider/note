@@ -408,7 +408,13 @@ cat file | grep -v EXCLUDE
 # 查找当前目录下的所有 file_name 文件
 find /home/zozo/data/d1 - type f -name "file_name*"
 find . -name "file_name*"
+```
 
+## 查找多个文件中的匹配内容
+
+- [Linux中grep查找含有某字符串的所有文件](https://blog.csdn.net/BabyFish13/article/details/79709028)
+
+```bash
 # 文件内容较少时
 find . -name "file_name*" -type f | xargs grep -n "content"
 find . -name "file_name*" -type f | xargs grep -n "content" > file_content
@@ -422,13 +428,9 @@ sort "file_name*" | uniq -d | wc -l
 sort "file_name*" | uniq -dc
 find . -name "file_name*" -type f | xargs -i cat {} | sort | uniq -d | wc -l > wc
 find . -name "file_name*" -type f | xargs -i cat {} | sort | uniq -dc > file_sort_uniq_dc
-```
 
-## 查找多个文件中的匹配内容
+# --- 以下来自网络 ---
 
-- [Linux中grep查找含有某字符串的所有文件](https://blog.csdn.net/BabyFish13/article/details/79709028)
-
-```bash
 # 递归查找目录下含有该字符串的所有文件
 grep -rn "data_chushou_pay_info"  /home/hadoop/nisj/dir/
  
