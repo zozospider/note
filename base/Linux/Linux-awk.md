@@ -1,7 +1,10 @@
 
 - 查找某个文件某个字段是否等于某个值, 打印整行内容:
 ```bash
+# 等于
 awk -F '|' '$10 == "value" {print $0}' file
+# 不等于
+awk -F '|' '$10 != "value" {print $0}' file
 awk -F '|' '$10 == "value" {print $0}' file >> result_file
 cat file | awk -F '|' '$10 == "value" {print $0}'
 cat file | awk -F '|' '$10 == "value" {print $0}' >> result_file
