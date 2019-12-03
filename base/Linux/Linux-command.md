@@ -201,6 +201,20 @@ lzop 工具最适合在注重压缩速度的场合, 压缩文件时会新建 .lz
 enca file
 ```
 
+## Windows 和 Linux 文件编码问题
+
+每行末尾都有 `^M` / `\r` 符号
+
+- [shell脚本里的\r字符](https://blog.csdn.net/commshare/article/details/8797984)
+
+使用以下命令可以转换成 Linux 可识别的格式:
+```bash
+# 方法一: 转换
+dos2unix file
+# 方法二: 去掉 \r
+sed -i ""s/\r//"" file
+```
+
 ---
 
 # crontab
