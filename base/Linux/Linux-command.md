@@ -17,6 +17,7 @@
     - [常用](#常用)
     - [lzop](#lzop)
 - [文件编码](#文件编码)
+    - [Windows 和 Linux 文件编码问题](#windows-和-linux-文件编码问题)
 - [crontab](#crontab)
     - [注意事项](#注意事项)
     - [案例](#案例)
