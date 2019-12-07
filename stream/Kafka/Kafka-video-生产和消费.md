@@ -32,6 +32,8 @@
 
 ---
 
+Kafka 高吞吐原因: 零复制, 顺写, 分段 + 索引, 预读, 后写
+
 # 一. 零拷贝
 
 ![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7%E5%92%8C%E6%B6%88%E8%B4%B9/Kafka%E9%9B%B6%E6%8B%B7%E8%B4%9D.png?raw=true)
