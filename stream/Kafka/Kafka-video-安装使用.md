@@ -3,6 +3,7 @@
 - [一. 安装](#一-安装)
 - [二. 配置](#二-配置)
 - [三. 命令](#三-命令)
+    - [3.0 常用命令](#30-常用命令)
     - [3.1 启动集群](#31-启动集群)
     - [3.2 关闭集群](#32-关闭集群)
     - [3.3 查看当前服务器中的所有 Topic](#33-查看当前服务器中的所有-topic)
@@ -104,6 +105,21 @@ zookeeper.connect=localhost:2181
 ---
 
 # 三. 命令
+
+## 3.0 常用命令
+
+```bash
+# 查看所有分区
+bin/kafka-topics.sh --list --zookeeper 172.16.0.6:2181
+# 删除一个分区
+bin/kafka-topics.sh --delete --zookeeper 172.16.0.6:2181 --topic topic1
+# 创建一个分区
+bin/kafka-topics.sh --create --zookeeper 172.16.0.6:2181 --partitions 3 --replication-factor 2 --topic topic1
+# 查看一个分区
+bin/kafka-topics.sh --describe --zookeeper 172.16.0.6:2181 --topic topic1
+# 查看一个消费者组
+bin/kafka-consumer-groups.sh --bootstrap-server 172.16.0.6:9092 --describe --group group1
+```
 
 ## 3.1 启动集群
 
