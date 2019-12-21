@@ -105,27 +105,27 @@
 # skill
 
 ## Mathematics
-- Calculus  `***`
-- Advanced mathematics  `***`
-- Linear algebra  `***`
-- data structures  `*****`
-- algorithms  `*****`
+- Calculus  `*`
+- Advanced mathematics  `*`
+- Linear algebra  `*`
+- data structures  `***`
+- algorithms  `***`
 
 ## base
-- Design Patterns  `*****`
-- Linux  `***`
+- Design Patterns  `***`
+- Linux  `**`
 
 ## data-system
-- ZooKeeper  `*****`
-- Hadoop  `*****`
-- Spark  `****`
+- ZooKeeper  `***`
+- Hadoop  `***`
+- Spark  `**`
 - Kafka  `***`
 - Flume  `***`
-- Hive  `***`
-- HBasee  `***`
-- Flink  `***`
-- 图数据库  `****`
-- Elasticsearch  `****`
+- Hive  `**`
+- HBasee  `**`
+- Flink  `**`
+- 图数据库  `***`
+- Elasticsearch  `***`
 - Logstash
 - MySQL
 - Redis
@@ -143,13 +143,13 @@
 - Java Annotations
 - Java Reflection
 - JDK
-- JVM  `*****`
+- JVM  `***`
 - JMX
 - JConsole
 - Java concurrency programming
 - Disruptor
-- Java network programming  `*****`
-- Netty  `*****`
+- Java network programming  `***`
+- Netty  `***`
 
 ## Python
 - Python
@@ -197,6 +197,12 @@
 ---
 
 只要一直努力, 终有一日会得到回报, 只要坚持下来, 梦想便会成真. 这是幻想, 多数情况下, 正义不会取得胜利; 多数情况下, 梦想不会成真. 在现实世界中, 这些是常有的事. 可是, 这又怎么样? 起点就在那里, 技术开发有 99% 的可能失败, 只要尝试新东西, 就一定会摔跟头. 很恼火, 所以便连吃饭和睡觉的时间都不放过, 反复去做. 来吧, 超越昨天为止的自己吧. 怎么可能认输.
+
+一天的生活就是一生的缩影.
+
+从现在就去开始考虑, 当前行为的长期后果.
+
+跳脱出来, 从更高的层面去观察自己每天的行为, 永远要去做真正正确的事情, 要去做对的事.
 
 ---
 
