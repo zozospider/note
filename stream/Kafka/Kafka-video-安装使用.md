@@ -121,6 +121,13 @@ bin/kafka-topics.sh --describe --zookeeper 172.16.0.6:2181 --topic topic1
 bin/kafka-consumer-groups.sh --bootstrap-server 172.16.0.6:9092 --describe --group group1
 # 查看消费情况
 bin/kafka-consumer-offset-checker.sh --zookeeper 172.16.0.6:2181 --group group1
+
+# 控制台生产数据
+bin/kafka-console-producer.sh --broker-list 172.16.0.6:9092 --topic topic1
+# 控制台消费数据
+bin/kafka-console-consumer.sh --zookeeper 172.16.0.6:2181 --topic topic1 --from-beginning
+# 控制台消费数据 (指定消费者组)
+bin/kafka-console-consumer.sh --zookeeper 172.16.0.6:2181 --topic topic1 --from-beginning --consumer.config config/consumer.properties
 ```
 
 ## 3.1 启动集群
