@@ -309,6 +309,12 @@ Kafka 生成数据时的应答机制 (ACK) 有如下取值:
 - 一个分区只能被同一个消费者组中的一个消费者消费 / 同一个消费者组中的多个消费者不能消费一个分区, 否则会出现重复消费且无法保证顺序 (右上图).
 - 同一个消费者组中的一个消费者可以消费多个分区 (左下图).
 
+## 8.1 消费者组
+
+![image](https://github.com/zozospider/note/blob/master/stream/Kafka/Kafka-video-%E7%94%9F%E4%BA%A7%E5%92%8C%E6%B6%88%E8%B4%B9/Kafka-consumer-group.png?raw=true)
+
+消费者以 consumer group 的方式工作, 一个或多个消费者组成一个组, 共同消费一个 topic. 每个分区同一时间只能由 group 中的一个消费者消费, 但是多个 group 可以同时消费这个分区.
+
 # 九. ZooKeeper 存储结构
 
 参考如下资料:
