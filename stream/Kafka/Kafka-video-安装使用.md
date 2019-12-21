@@ -119,6 +119,8 @@ bin/kafka-topics.sh --create --zookeeper 172.16.0.6:2181 --partitions 3 --replic
 bin/kafka-topics.sh --describe --zookeeper 172.16.0.6:2181 --topic topic1
 # 查看一个消费者组
 bin/kafka-consumer-groups.sh --bootstrap-server 172.16.0.6:9092 --describe --group group1
+# 查看消费情况
+bin/kafka-consumer-offset-checker.sh --zookeeper 172.16.0.6:2181 --group group1
 ```
 
 ## 3.1 启动集群
