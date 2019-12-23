@@ -31,6 +31,43 @@
 * `dataLogDir`: 日志目录，默认和 dataDir 共享。
 * `clientPort`: 连接服务器的端口，默认 2181。
 
+```properties
+# The number of milliseconds of each tick
+tickTime=2000
+# The number of ticks that the initial 
+# synchronization phase can take
+initLimit=10
+# The number of ticks that can pass between 
+# sending a request and getting an acknowledgement
+syncLimit=5
+# the directory where the snapshot is stored.
+# do not use /tmp for storage, /tmp here is just 
+# example sakes.
+dataDir=/home/zozo/app/zookeeper/zookeeper-3.4.13-data
+dataLogDir=/home/zozo/app/zookeeper/zookeeper-3.4.13-data-log
+# the port at which the clients will connect
+clientPort=2181
+# the maximum number of client connections.
+# increase this if you need to handle more clients
+#maxClientCnxns=60
+#
+# Be sure to read the maintenance section of the 
+# administrator guide before turning on autopurge.
+#
+# http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance
+#
+# The number of snapshots to retain in dataDir
+#autopurge.snapRetainCount=3
+# Purge task interval in hours
+# Set to "0" to disable auto purge feature
+#autopurge.purgeInterval=1
+
+server.1=vm017:2888:3888
+server.2=vm06:2888:3888
+server.3=vm03:2888:3888
+
+```
+
 ## ./bin/zkServer.sh
 
 `./zkServer.sh ` 可携带如下参数：
