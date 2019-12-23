@@ -119,6 +119,7 @@ port=9092
 # server. e.g. "127.0.0.1:3000,127.0.0.1:3001,127.0.0.1:3002".
 # You can also append an optional chroot string to the urls to specify the
 # root directory for all kafka znodes.
+# 建议 connect string 加上 chroot (/kafka_v0 或 /kafka/v0) 方便 ZooKeeper 隔离不同系统路径, 防止冲突
 zookeeper.connect=vm017:2181,vm06:2181,vm03:2181/kafka_v0
 ```
 
