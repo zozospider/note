@@ -22,6 +22,15 @@
 
 # ZooKeeper 配置文件介绍，运行 ZooKeeper
 
+## 配置 myid
+
+```bash
+# 在每个节点配置 myid, 标识当前节点.
+echo 1 > /home/zozo/app/zookeeper/zookeeper-3.4.13-data/myid
+echo 2 > /home/zozo/app/zookeeper/zookeeper-3.4.13-data/myid
+echo 3 > /home/zozo/app/zookeeper/zookeeper-3.4.13-data/myid
+```
+
 ## ./conf/zoo.cfg 配置
 
 * `tickTime`: 用于计算时间的单元，其他配置为该数值的整数倍。如 session 超时：N * tickTime。
@@ -62,6 +71,7 @@ clientPort=2181
 # Set to "0" to disable auto purge feature
 #autopurge.purgeInterval=1
 
+# 伪分布式需要修改端口, 防止冲突
 server.1=vm017:2888:3888
 server.2=vm06:2888:3888
 server.3=vm03:2888:3888
