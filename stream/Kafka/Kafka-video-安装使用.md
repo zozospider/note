@@ -102,6 +102,23 @@ log.retention.hours=168
 zookeeper.connect=localhost:2181
 ```
 
+- 以下为完全分布式至少需要修改的配置 DEMO:
+
+```properties
+# The id of the broker. This must be set to a unique integer for each broker.
+broker.id=1
+
+# A comma separated list of directories under which to store log files
+log.dirs=/home/zozo/app/kafka/kafka_2.12-2.1.0-logs
+
+# Zookeeper connection string (see zookeeper docs for details).
+# This is a comma separated host:port pairs, each corresponding to a zk
+# server. e.g. "127.0.0.1:3000,127.0.0.1:3001,127.0.0.1:3002".
+# You can also append an optional chroot string to the urls to specify the
+# root directory for all kafka znodes.
+zookeeper.connect=vm017:2181,vm06:2181,vm03:2181/kafka_v0
+```
+
 ---
 
 # 三. 命令
@@ -109,6 +126,9 @@ zookeeper.connect=localhost:2181
 ## 3.0 常用命令
 
 ```bash
+# 启动
+bin/kafka-server-start.sh -daemon config/server.properties
+
 # 查看所有分区
 bin/kafka-topics.sh --list --zookeeper 172.16.0.6:2181
 # 删除一个分区
