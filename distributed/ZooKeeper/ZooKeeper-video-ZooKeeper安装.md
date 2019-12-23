@@ -42,10 +42,11 @@ Usage: ./zkServer.sh {start|start-foreground|stop|restart|status|upgrade|print-c
 ```
 
 以下为部分参数介绍：
-* `./zkServer.sh start`: 启动 ZooKeeper。
-* `./zkServer.sh status`: 查看当前 ZooKeeper 状态。
-* `./zkServer.sh stop`: 停止 ZooKeeper。
-* `./zkServer.sh restart`: 如果当前 ZooKeeper 正在运行，则先 stop，再 start。如果当前 ZooKeeper 没有运行，则 start。
+- `./zkServer.sh start`: 启动 ZooKeeper.
+- `nohup bin/zkServer.sh start &`: 后台启动.
+- `./zkServer.sh status`: 查看当前 ZooKeeper 状态.
+- `./zkServer.sh stop`: 停止 ZooKeeper.
+- `./zkServer.sh restart`: 如果当前 ZooKeeper 正在运行, 则先 stop, 再 start. 如果当前 ZooKeeper 没有运行, 则 start.
 
 以下为部分运行记录：
 ```
