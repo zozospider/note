@@ -102,7 +102,7 @@ log.retention.hours=168
 zookeeper.connect=localhost:2181
 ```
 
-- 以下为完全分布式至少需要修改的配置 DEMO:
+- 以下为需要修改的配置 DEMO:
 
 ```properties
 # The id of the broker. This must be set to a unique integer for each broker.
@@ -110,6 +110,9 @@ broker.id=1
 
 # A comma separated list of directories under which to store log files
 log.dirs=/home/zozo/app/kafka/kafka_2.12-2.1.0-logs
+
+# 完全分布式不需要此配置, 默认 9092
+port=9092
 
 # Zookeeper connection string (see zookeeper docs for details).
 # This is a comma separated host:port pairs, each corresponding to a zk
