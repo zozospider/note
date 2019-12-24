@@ -153,10 +153,15 @@ bin/kafka-consumer-offset-checker.sh --zookeeper vm017:2181/kafka_v0 --group gro
 
 # 控制台生产数据
 bin/kafka-console-producer.sh --broker-list vm017:9092 --topic topic1
-# 控制台消费数据
+# 控制台消费数据 (new)
+bin/kafka-console-consumer.sh --bootstrap-server vm017:9092 --topic topic1 --from-beginning
+# 控制台消费数据 (new) (指定消费者组)
+bin/kafka-console-consumer.sh --bootstrap-server vm017:9092 --topic topic1 --from-beginning --consumer.config config/consumer.properties
+
+# 控制台消费数据 (old)
 bin/kafka-console-consumer.sh --zookeeper vm017:2181 --topic topic1 --from-beginning
 bin/kafka-console-consumer.sh --zookeeper vm017:2181/kafka_v0 --topic topic1 --from-beginning
-# 控制台消费数据 (指定消费者组)
+# 控制台消费数据 (old) (指定消费者组)
 bin/kafka-console-consumer.sh --zookeeper vm017:2181 --topic topic1 --from-beginning --consumer.config config/consumer.properties
 bin/kafka-console-consumer.sh --zookeeper vm017:2181/kafka_v0 --topic topic1 --from-beginning --consumer.config config/consumer.properties
 ```
