@@ -40,6 +40,7 @@
   - [open-source-Java](https://github.com/zozospider/note/blob/master/open-source/open-source-Java.md)
   - [open-source-Flume](https://github.com/zozospider/note/blob/master/open-source/open-source-Flume.md)
   - [open-source-ZooKeeper](https://github.com/zozospider/note/blob/master/open-source/open-source-ZooKeeper.md)
+  - [open-source-Kafka](https://github.com/zozospider/note/blob/master/open-source/open-source-Kafka.md)
   - [open-source-Hadoop](https://github.com/zozospider/note/blob/master/open-source/open-source-Hadoop.md)
 
 - distributed
