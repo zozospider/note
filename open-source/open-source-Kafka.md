@@ -10,3 +10,4 @@
   * Producer `I`, KafkaProducer `C`
   * Serializer `I`, StringSerializer `C`
   * Sender `C`, KafkaClient `I`, NetworkClient `C`, KafkaThread `C`
+  * ProducerInterceptor `I`, ProducerInterceptors `C`
