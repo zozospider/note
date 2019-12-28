@@ -83,3 +83,6 @@ Flume 有序, Kafka 同一个分区有序.
 - Sink 怎么将数据发送到 Kafka?
 
 - 怎么手动维护 offset?
+
+关闭自动提交. 调用 commitSync() / commitAsync().
+
