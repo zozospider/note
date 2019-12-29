@@ -195,6 +195,135 @@ JMX MBean -> kafka.controller:type=BrokerTopicMetrics,name=MessagesInPerSec
 __分区数量__: 它是指分配给 broker 的分区总数。包括 Leader 和 Follower.
 JMX MBean -> kafka.controller:type=ReplicaManager,name=PartitionCount
 值区间 -> 非负整数
+__首领数量__: 该度量指标表示 broker 拥有的首领分区数量。我们需要对该指标进行周期性地检查，井适时地发出告警，即使在副本的数量和大小看起来都很完美的时候，它仍然能够显示出集群的不均衡问题。
+JMX MBean -> kafka.controller:type=ReplicaManager,name=LeaderCount
+值区间 -> 非负整数
+可以使用该指标与分区数量一起计算出 broker Leader 分区的百分比, 一个均衡的集群, 如果副本因子为 2, 那么所有 broker 应该都为 50% 左右的 分区的 Leader, 如果副本因子为 3, 那么为 30% 左右.
+__离线分区__: 显示了集群里没有首领的分区数量。
+发生这种情况主要有两个原因: 包含分区副本的所有 broker 都关闭了。由于消息数量不匹配，没有同步副本能够拿到首领身份（井且禁用了不完全首领选举）。
+JMX MBean -> kafka.controller:type=KafkaController,name=OfflinePartitionsCount
+值区间 -> 非负整数
+在一个生产环境 Kafka 集群里，离线分区会影响生产者客户端，导致消息丢失，或者造成回压。这属于“站点去机”问题，需要立即解决。
+__请求度量指标__: Kafka 协议，它有多种不同的请求，每种请求都有相应的度量指标, 每一种请求类型都有 8 个度量指标，它们分别体现了不同请求处理阶段的细节。
+这些指标都是自 broker 启动以来开始计算的，所以在查看那些长时间没有变化的度量指标时，请记住： broker 代理运行的时间越长，数据就越稳定。
+```bash
+# 不同的请求
+CreateTopics, DeleteTopics, DescribeGroups, Fetch, Heartbeat ...
 
+# 8 个度量指标
+# Total Time 表示 broker 花在处理请求上的时间，从收到请求开始计算，直到将响应返回给请求者
+Total Time -> kafka.network:type=RequestMetrics,name=TotalTimeMs,request=Fetch
+# 表示请求停留在队列里的时间，从收到请求开始计算，直到开始处理请求。
+Request Queue Time -> kafka.network:type=RequestMetrics,name=RequestQueueTimeMs,request=Fetch
+# 表示首领分区花在处理请求上的时间，包括把消息写入磁盘（但不一定要冲刷）
+Local Time
+# 表示在请求处理完毕之前，用于等待跟随者的时间。
+Remote Time
+# 表示暂时搁置响应的时间，以便拖慢请求者，把它们限定在客户端的配额范围内。
+Throttle Time
+# 表示响应被发送给请求者之前停留在队列里的时间。
+Response Queue Time
+# 表示实际用于发送响应的时间。
+Response Send Time
+# 速率指标: 表示在单位时间内收到并处理的请求个数。
+Requests Per Second
+
+# 每个度量指标的属性如下。
+百分位: 50thPercentile, 75thPercentile, 95thPercentile, 98thPercentile, 99thPercentil, 999thPercentile
+Count: 从 broker 启动至今处理的请求数量。
+Min: 所有请求的最小值。
+Max: 所有请求的最大值。
+Mean: 所有请求的平均值.
+StdDev: 整体的请求事件标准偏差.
+```
+我们至少要收集 Total Time 和 Requests Per Second 的平均值及较高的百分位（99% 或 99.9%），这样就可以获知发送请求的整体性能。
+
+`173 10.2.3`: __主题和分区的度量指标__:
+__主题实例的度量指标__:
+Bytes in rate -> 
+Bytes out rate ->
+...
+__分区实例的度量指标__: 
+Partition size ->
+Log segment count ->
+Log end offset ->
+Log start offset ->
+
+`174 10.2.4`: __Java虚拟机监控__: 如果 JVM 频繁发生垃圾回收，就会影响 broker 的性能，在这种情况下，就应该得到告警。
+__垃圾回收__: 对于 JVM 来说，最需要监控的是垃圾回收（GC）的状态。如果 JRE 使用 Oracle Java 1.8 并使用了 G1 垃圾回收器，那么需要监控:
+Full GC cycles -> java.lang:type=GarbageCollector,name=G1 Old Generation
+Young GC cycles -> java.lang:type=GarbageCollector,name=G1 young Generation
+我们需要监控这两个指标的 `CollectionCount` (表示从 JVM 启动开始算起的垃圾回收次数), `CollectionTime` (表示从 JVM 启动开始算起的垃圾回收时间, 以 ms 为单位).
+__Java 操作系统监控__: JVM 设置 java.lang:type=OperatingSystem, MaxFileDescriptorCount 表示 JVM 打开的文件描述符的最大值, OpenFileDescriptorCount 表示目前已经打开的文件描述符数量. 如果网络连接不能正常关闭, 很亏就会把文件描述符用完.
+
+`175 10.2.5`: __操作系统监控__: 用户需要监控 CPU 的使用, 内存的使用, 磁盘的使用, 磁盘 IO 和网络的使用情况。
+CPU: 系统负载: broker 在处理请求时使用了大量的 CPU;
+内存: 运行 Kafka 不需要太大的内存; 它会使用堆外的一小部分内存来实现压缩功能, 其余大部分内存则用于缓存。可以通过监控总内存空间和可用交换内存空间来确保内存交换空间不会被占用。
+磁盘: 最重要, Kafka 的性能严重依赖磁盘的性能。我们需要监控磁盘的每秒种读写速度、读写平均队列大小、平均等待时间和磁盘的使用百分比.
+网络: 就是指流入和流出的网络流量，一般使用 b/s 来表示。在没有消费者时，1 个流入比特对应 1 个或多个流出比特，这个数字与主题的复制系数相等。根据消费者的实际数量，流入流量很容易比输出流量高出一个数量级.
+
+`176 10.2.6`: __日志__:
+`kafka.controller`: 日志用于记录集群控制器的信息, 集群中只有一个 broker 会使用此日志. 包含主题的创建和修改操作, broker 状态的变更, 集群的活动.
+`kafka.server.ClientQuotaManager`: 记录生产和消费配额活动相关.
+`kafka.request.logger`: 发送给 broker 的每一个请求的详细信息. (数据量大, 所以如果不是出于调试的目的，不建议启用这个日志)
+`kafka.log.LogCleaner`, `kafka.log.Cleaner`, `kafka.log.LogCleanerManager`: 压缩相关.
+
+`177 10.3`: __客户端监控__:
+`10.3.1`: __生产者度量指标__:
+Overall producer -> kafka.producer:type=producer-metrics,client-id=CLIENTID
+Per-broker -> kafka.producer:type=producer-node-metrics,client-id=CLIENTID,node-id=node-BROKERID
+Per-topic -> kafka.producer:type=producer-topic-metrics,client-id=CLIENTID,topic=TOPICNAME
+上面的每一个 MBean 都有多个属性用于描述生产者的状态。最重要的属性为:
+- 生产者整体度量指标:
+  `record-error-rate`: 如果大于 0, 说明生产者正在丢弃无法发送的消息. 生产者配置了重试次数, 如果达到上限, 就会丢失.
+  `record-retry-rate`:
+  `request-latency-avg`: 表示生产者请求到 broker 需要的平均时间.
+  `outgoing-byte-rate`: 每秒钟消息的字节数.
+  `record-send-rate`: 每秒钟消息的数量.
+  `request-rate`: 每秒钟生产者发送给 broker 的请求数.
+  `request-size-avg`: 生产者发送请求的平均字节数.
+  `batch-size-avg`: 表示单个消息批次的平均字节数.
+  `records-per-request-avg`: 在生产者的单个请求里所包含的消息平均个数.
+  `record-queue-time-avg`: 表示消息在发送给 Kafka 之前在生产者客户端等待的平均毫秒数.
+     以下两种情况都会促使生产者客户端关闭当前批次，然后把它发送给 broker (调用 send 方法):
+       - 生产者客户端有足够多的悄息来填充批次 (根据 `max.partition.bytes` 的配置)
+       - 距离上 次发送批次已经有足够长的时间（根据 `linger.ms` 的配置)
+     `record-queue-time-avg` 用于度量生产消息所使用的时间, 因此，可以通过调优上述两个参数来满足应用程序的延迟需求。
+- Per-broker 和 Per-topic 度量指标:
+  在调试问题时，这些度量会很有用，但不建议对它们进行常规的监控。
+  与 broker 实例的度量指标一样，主题实例的度量指标一般用于诊断问题。
+
+`179 10.3.2`: __消费者度量指标__:
+Overall consumer -> kafka.consumer:type=consumer-metrics,client-id=CLIENTID
+Fetch manager -> kafka.consumer:type=consumer-fetch-manager-metrics,client-id=CLIENTID
+Per-topic
+Per-broker
+Coordinator
+- Fetch Manager 度量指标:
+   `fetch-latency-avg`: 表示从消费者向 broker 发送请求所需要的时间。如果主题有相对稳定和足够的消息流量，那么查看这个指标或许会更有意义。
+   `bytes-consumed-rate` / `records-consumed-rate`: 分别表示客户端每秒读取的消息字节数和每秒读取的消息个数。设置最小值告警阈值。
+   `fetch-rate`: 表示消费者每秒发出请求的数量.
+   `fetch-size-avg`: 表示这些请求的平均字节数.
+   `records-per-request-avg`: 每个请求的平均消息个数.
+- Per-broker 和 Per-topic 度量指标:
+   `request-latency-avg`:
+   `imcoming-byte-rate` / `request-rate`: 分别表示 broker 每秒读取的消息字节数和每秒请求数.
+- Coordinator 度量指标:
+   `sync-time-avg`: 表示同步活动所使用的平均毫秒数.
+   `sync-rate`: 表示每秒钟群组发生的同步次数.
+   `commit-latency-avg`: 提交偏移量所需要的平均时间.
+   `assigned-partitions`: 表示分配给消费者客户端的分区数量.
+
+`10.3.3`: __配额__: Kafka 可以对客户端的请求进行限流，防止客户端拖垮整个集群。
+对于消费者和生产者客户端来说，这都是可配的，可以使用每秒钟允许单个客户端访问单个 broker 的流量字节数来表示. 当 broker 发现客户端的流量已经超出配额时，它就会暂缓向客户端返回响应，等待足够长的时间，直到客户端流量降到配额以下.
+消费者 -> kafka.consumer:type=consumer-fetch-manager-metrics,client=CLIENTID 的属性 fetch-throttle-time-avg
+生产者 -> kafka.producer:type=producer-metrics,client-id=CLIENTID 的属性 producer-throttle-time-avg
+默认情况下， broker 不会开启配额功能。
+
+`182 10.4`: __延时监控__: 对于消费者来说，最需要被监控的指标是消费者的延时。它表示分区最后一个消息和消费者最后读取的消息之间相差的消息个数。
+监控消费者延时最好的办也是使用外部进程，它能够观察 broker 的分区状态，跟踪最近消息的偏移量，也能观察悄费者的状态 ，跟踪消费者提交的最新偏移量。
+可以使用 Burrow 来完成这项工作。 (Burrow 是一个开源的应用程序，最初由 Linkedln 开发。)
+
+`183 10.5`: __端到端监控__: Kafka Monitor (该工具由 Linkedln Kafka 团队开发并开源)
 
 ---
