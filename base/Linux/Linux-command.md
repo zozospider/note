@@ -28,6 +28,7 @@
 - [删除](#删除)
     - [清空正在写的文件内容](#清空正在写的文件内容)
     - [删除 7 天前的文件](#删除-7-天前的文件)
+- [vi 替换](#vi-替换)
 - [查找过滤](#查找过滤)
     - [查找文件](#查找文件)
     - [查找多个文件中的匹配内容](#查找多个文件中的匹配内容)
@@ -408,6 +409,20 @@ find /home/zozo/data/d2 -mtime +7 -name "backup-d2-*.log" -exec rm {} \;
 # remove data before 7 days
 /bin/find /home/zozo/data/d1 -ctime +7 -delete;
 /bin/find /home/zozo/data/d1 -ctime +7 -delete;
+```
+
+---
+
+# vi 替换
+
+```bash
+# 替换当前行所有 str_old 为 str_new
+:s/str_old/str_new/g
+# 等同于 :g/str_old/s//str_new/g, 替换每一行中所有 str_old 为 str_new
+:%s/str_old/str_new/g
+
+# 可以使用 # 作为分隔符: 替换每一行中所有 str/old 为 str/new
+:%s#str/old#str/new#g
 ```
 
 ---
