@@ -23,3 +23,4 @@ zero-copy: `transferTo()`;
 - [Kafka源码系列之kafka如何实现高性能读写的](https://cloud.tencent.com/developer/article/1032487)
 - [Kafka源码分析-Server-日志存储(1](https://www.jianshu.com/p/107ea6311eae)
 - [为什么Kafka速度那么快](https://www.cnblogs.com/binyue/p/10308754.html)
+- [kafka之六：为什么Kafka那么快](https://www.cnblogs.com/duanxz/p/4705164.html)
