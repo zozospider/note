@@ -5,3 +5,5 @@
 - [JMX 入门（三）认证加密](https://blog.csdn.net/isea533/article/details/77600542)
 
 - [如何使用JMX监控Kafka](https://blog.csdn.net/u013256816/article/details/53524884)
+- [kafka开启JMX](https://www.jianshu.com/p/de4b4cbb0f3c)
+- [Apache Kafka Monitoring (Kafka 监控官方文档)](http://kafka.apache.org/documentation/#monitoring)
