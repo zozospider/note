@@ -24,3 +24,4 @@ zero-copy: `transferTo()`;
 - [Kafka源码分析-Server-日志存储(1](https://www.jianshu.com/p/107ea6311eae)
 - [为什么Kafka速度那么快](https://www.cnblogs.com/binyue/p/10308754.html)
 - [kafka之六：为什么Kafka那么快](https://www.cnblogs.com/duanxz/p/4705164.html)
+- [KAFKA：如何做到1秒发布百万级条消息](http://rdc.hundsun.com/portal/article/709.html)
