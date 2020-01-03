@@ -23,6 +23,12 @@ ALTER TABLE tbl_1 MODIFY COLUMN col_1 LONGTEXT;
 UPDATE tbl_1 SET col_1 = replace(col_1, 'c1', 'c2');
 ```
 
+## 添加索引
+
+```sql
+ALTER TABLE tbl_1 ADD INDEX index_col_1 (col_1);
+```
+
 ---
 
 # 导入导出
@@ -103,6 +109,19 @@ mysql>show databases;
 ## 查找表
 ```sql
 select table_schema, table_name from information_schema.tables where table_schema='db_1' and table_name like 'tbl_%';
+```
+
+## 查看正在执行的 sql 语句
+
+```sql
+show processlist;
+show full processlist;
+```
+
+## 解析 sql 语句
+
+```sql
+explain SQL_STRING;
 ```
 
 ---
