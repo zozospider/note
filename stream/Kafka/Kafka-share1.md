@@ -17,3 +17,9 @@ Flume 就是生产者和消费者的耦合性太强, 导致上游到下游到每
 测试:
   - 同等配置, 单个进程.
   - 日志量太大, Flume 读取失败怎么办?
+
+zero-copy: `transferTo()`;
+文件顺序写入: `preallocate`
+- [Kafka源码系列之kafka如何实现高性能读写的](https://cloud.tencent.com/developer/article/1032487)
+- [Kafka源码分析-Server-日志存储(1](https://www.jianshu.com/p/107ea6311eae)
+- [为什么Kafka速度那么快](https://www.cnblogs.com/binyue/p/10308754.html)
