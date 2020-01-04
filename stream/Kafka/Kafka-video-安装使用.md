@@ -132,6 +132,8 @@ zookeeper.connect=vm017:2181,vm06:2181,vm03:2181/kafka_v0
 ```bash
 # 启动
 bin/kafka-server-start.sh -daemon config/server.properties
+#   启用 JMX
+JMX_PORT=9988 bin/kafka-server-start.sh -daemon config/server.properties
 
 # 查看所有分区
 bin/kafka-topics.sh --list --zookeeper vm017:2181
