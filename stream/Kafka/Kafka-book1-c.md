@@ -149,7 +149,7 @@ __度量指标在哪里__: Kafka 提供的所有度量指标都可以通过 Java
 
 `162 10.2`: __broker 的度量指标__:
 `10.2.1`: __非同步分区 (重要)__: 该度量指明了作为 Leader 的 broker 有多少个分区处于非同步状态。当它的值大于零时，就应该想办怯采取相应的行动。
-JMX MBean -> kafka.server:type=ReplicaManager,name=UnderReplicatedPartitionis
+JMX MBean -> kafka.server:type=ReplicaManager,name=UnderReplicatedPartitions
 区间值 -> 非负整数
 如果集群里多个 broker 的非同步分区数量一直保持不变，那说明集群中的某个 broker 已经离线了。整个集群的非同步分区数量等于离线 broker 的分区数量，而且离线 broker 不会生
 成任何度量指标。
