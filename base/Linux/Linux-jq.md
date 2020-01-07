@@ -15,7 +15,7 @@ echo '{"uid":100120,"token":"1fa9fb8004b04f66b7da57393641eddc"}' | jq .
 cd /home/zozo/app/jq
 tar -zxvf jq-1.6.tar.gz
 cd jq-1.6
-# 可能没有这个命令, 需要安装较高版本 (不同 jq 版本对 autoreconf 版本要求不一样)
+# 可能没有这个命令, 需要安装较高版本 (不同 jq 版本对 autoreconf 版本要求不一样, 如果 autoreconf 版本较低, 可以尝试较低版本的 jq)
 autoreconf -i
 # 指定安装目录 (需要先新建 jq16 文件夹)
 ./configure --prefix=/home/zozo/app/jq16 --disable-maintainer-mode
