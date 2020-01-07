@@ -9,6 +9,8 @@ echo '{"uid":100120,"token":"1fa9fb8004b04f66b7da57393641eddc"}' | jq .
 
 - 下载页面: [Download jq](https://stedolan.github.io/jq/download/)
 - 安装包下载地址: [Source tarball for jq 1.6](https://github.com/stedolan/jq/releases/download/jq-1.6/jq-1.6.tar.gz)
+- 安装包下载地址: [Source tarball for jq 1.5](https://github.com/stedolan/jq/releases/download/jq-1.5/jq-1.5.tar.gz)
+- 安装包下载地址: [Source tarball for jq 1.6](https://github.com/stedolan/jq/releases/download/jq-1.4/jq-1.4.tar.gz)
 
 ```bash
 # 解压压缩包
