@@ -532,6 +532,11 @@ sort -n $file | uniq > $file\.new
 # sort -n $file | sed '$!N; /^\(.*\)\n\1$/!P; D'
 ```
 
+- 排序后, 输出到 `xxx_sorted` 文件中:
+```bash
+sort -r xxx > xxx_sorted
+```
+
 ---
 
 # 文件个数
