@@ -57,6 +57,7 @@ PATH
             </archive>
             <!-- 将 jar 包里的所有资源文件排除掉 -->
             <excludes>
+                <!-- exclude 的目录不是 src 下面的, 是以编译结果 classes 为根目录计算的 -->
                 <exclude>**/*.properties</exclude>
             </excludes>
         </configuration>
