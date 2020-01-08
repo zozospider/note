@@ -59,6 +59,7 @@ PATH
             <excludes>
                 <!-- exclude 的目录不是 src 下面的, 是以编译结果 classes 为根目录计算的 -->
                 <exclude>**/*.properties</exclude>
+                <exclude>*.yml</exclude>
             </excludes>
         </configuration>
     </plugin>
