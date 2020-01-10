@@ -15,6 +15,7 @@ ZooKeeper 目录结构.
 原理图: Followes 节点就像普通的 consumer 那样从 Leader 节点那里拉去消息并保存在自己的日志文件中. (document: replication 章节)
 ack 机制: in sync 同步副本定义 (ISR) 和数量配置等 (document: replication 章节)
 
+ZooKeeper 结构: ZooKeeper 目录章节
 
 调优: 磁盘: 固态硬盘 > 机械硬盘, 但合理使用机械硬盘也可以有不错的性能, 性价比高.
 
