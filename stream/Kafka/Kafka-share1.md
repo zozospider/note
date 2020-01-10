@@ -12,7 +12,9 @@ ZooKeeper 目录结构.
 - 数据不能丢失 - 持久化, 容错性
 - 快速生产和消费 - 低延迟, 高性能
 
-原理图: Followes 节点就像普通的 consumer 那样从 Leader 节点那里拉去消息并保存在自己的日志文件中.
+原理图: Followes 节点就像普通的 consumer 那样从 Leader 节点那里拉去消息并保存在自己的日志文件中. (document: replication 章节)
+ack 机制: in sync 同步副本 (document: replication 章节)
+
 
 调优: 磁盘: 固态硬盘 > 机械硬盘, 但合理使用机械硬盘也可以有不错的性能, 性价比高.
 
