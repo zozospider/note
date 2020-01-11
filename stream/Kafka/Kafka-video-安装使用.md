@@ -155,6 +155,11 @@ bin/kafka-consumer-groups.sh --bootstrap-server vm017:9092 --describe --group gr
 # 查看消费情况
 bin/kafka-consumer-offset-checker.sh --zookeeper vm017:2181 --group group1
 bin/kafka-consumer-offset-checker.sh --zookeeper vm017:2181/kafka_v0 --group group1
+# 查看消费者组中所有活动成员列表和分配的分区
+bin/kafka-consumer-groups.sh --bootstrap-server vm017:9092 --describe --group group1 --members --verbose
+bin/kafka-consumer-groups.sh --bootstrap-server vm017:9092 --describe --group group1 --state
+# 删除消费者组
+bin/kafka-consumer-groups.sh --bootstrap-server vm017:9092 --delete --group group1 --group group2
 
 # 控制台生产数据
 bin/kafka-console-producer.sh --broker-list vm017:9092 --topic topic1
@@ -169,6 +174,12 @@ bin/kafka-console-consumer.sh --zookeeper vm017:2181/kafka_v0 --topic topic1 --f
 # 控制台消费数据 (old) (指定消费者组)
 bin/kafka-console-consumer.sh --zookeeper vm017:2181 --topic topic1 --from-beginning --consumer.config config/consumer.properties
 bin/kafka-console-consumer.sh --zookeeper vm017:2181/kafka_v0 --topic topic1 --from-beginning --consumer.config config/consumer.properties
+
+# 配额: http://kafka.apache.org/documentation/#quotas
+# 为 (user = user1, client-id = clientA) 配置自定义配额:
+bin/kafka-configs.sh  --zookeeper localhost:2181 --alter --add-config 'producer_byte_rate=1024,consumer_byte_rate=2048,request_percentage=200' --entity-type users --entity-name user1 --entity-type clients --entity-name clientA
+# 为 user = user1 配置自定义配额:
+bin/kafka-configs.sh  --zookeeper localhost:2181 --alter --add-config 'producer_byte_rate=1024,consumer_byte_rate=2048,request_percentage=200' --entity-type users --entity-name user1
 ```
 
 ## 3.1 启动集群
