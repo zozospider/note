@@ -147,6 +147,9 @@ bin/kafka-topics.sh --create --zookeeper vm017:2181/kafka_v0 --partitions 3 --re
 # 查看一个分区
 bin/kafka-topics.sh --describe --zookeeper vm017:2181 --topic topic1
 bin/kafka-topics.sh --describe --zookeeper vm017:2181/kafka_v0 --topic topic1
+
+# 查看所有消费者组
+bin/kafka-consumer-groups.sh --bootstrap-server vm017:9092 --list
 # 查看一个消费者组
 bin/kafka-consumer-groups.sh --bootstrap-server vm017:9092 --describe --group group1
 # 查看消费情况
