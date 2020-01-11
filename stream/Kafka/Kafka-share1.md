@@ -1,23 +1,12 @@
 
-监控.
-结合生产实际.
-ZooKeeper 目录结构.
-
 最后要加上:
 - 新方案 broker 个数, Topic 名称, Partition 个数, ack 等关键指标如何配置.
 - 新方案补录方式.
-
-期望功能: 
-- 存储大量数据 - 可拓展
-- 数据不能丢失 - 持久化, 容错性
-- 快速生产和消费 - 低延迟, 高性能
 
 原理图: Followes 节点就像普通的 consumer 那样从 Leader 节点那里拉去消息并保存在自己的日志文件中. (document: replication 章节)
 ack 机制: in sync 同步副本定义 (ISR) 和数量配置等 (document: replication 章节)
 
 ZooKeeper 结构: ZooKeeper 目录章节
-
-调优: 磁盘: 固态硬盘 > 机械硬盘, 但合理使用机械硬盘也可以有不错的性能, 性价比高.
 
 最重要的新的 Java 版本的 producer 配置
 acks
