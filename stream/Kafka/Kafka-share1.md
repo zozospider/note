@@ -19,6 +19,12 @@ ZooKeeper 结构: ZooKeeper 目录章节
 
 调优: 磁盘: 固态硬盘 > 机械硬盘, 但合理使用机械硬盘也可以有不错的性能, 性价比高.
 
+最重要的新的 Java 版本的 producer 配置
+acks
+compression
+batch size
+最重要的 consumer 配置是 fetch size。
+
 监控:
 - [Kafka监控工具汇总](https://juejin.im/post/5d5f62085188255d803faebb)
 JmxTool Cruise-control
