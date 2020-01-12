@@ -48,3 +48,5 @@ zero-copy: `transferTo()`;
 - [kafka之六：为什么Kafka那么快](https://www.cnblogs.com/duanxz/p/4705164.html)
 - [KAFKA：如何做到1秒发布百万级条消息](http://rdc.hundsun.com/portal/article/709.html)
 - [Why Is Kafka So Fast](http://searene.me/2017/07/09/Why-is-Kafka-so-fast/)
+
+- [Kafka主要配置文件参数详解](https://mhl.xyz/Cache/kafka-server-properties.html)
