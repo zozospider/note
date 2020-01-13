@@ -7,6 +7,9 @@
 * [Markdown TOC generate](https://magnetikonline.github.io/markdown-toc-generate/)
 * [GitHub Wiki TOC generator](https://ecotrust-canada.github.io/markdown-toc/)
 
+clone 和下载压缩包的区别: 
+- [Git 基础 - 获取 Git 仓库](https://git-scm.com/book/zh/v2/Git-%E5%9F%BA%E7%A1%80-%E8%8E%B7%E5%8F%96-Git-%E4%BB%93%E5%BA%93)
+
 ---
 
 # GitHub
@@ -34,4 +37,5 @@ git config --global https.https://github.com.proxy https://127.0.0.1:1080
 ```
 
 参考: [git clone一个github上的仓库，太慢，经常连接失败，但是github官网流畅访问，为什么？](https://www.zhihu.com/question/27159393) 汪小九答案最后的命令。
+
 
