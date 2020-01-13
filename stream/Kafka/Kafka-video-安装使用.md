@@ -187,9 +187,9 @@ bin/kafka-run-class.sh kafka.tools.JmxTool --jmx-url service:jmx:rmi:///jndi/rmi
 # 指定输出格式
 bin/kafka-run-class.sh kafka.tools.JmxTool --jmx-url service:jmx:rmi:///jndi/rmi://127.0.0.1:9988/jmxrmi --object-name kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec --report-format properties
 # 指定输出属性
-bin/kafka-run-class.sh kafka.tools.JmxTool --jmx-url service:jmx:rmi:///jndi/rmi://127.0.0.1:9988/jmxrmi --object-name kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec --report-format properties --attributes FiveMinuteRate
+bin/kafka-run-class.sh kafka.tools.JmxTool --jmx-url service:jmx:rmi:///jndi/rmi://127.0.0.1:9988/jmxrmi --object-name kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec --report-format properties --attributes OneMinuteRate,FiveMinuteRate
 # 指定输出间隔时间
-bin/kafka-run-class.sh kafka.tools.JmxTool --jmx-url service:jmx:rmi:///jndi/rmi://127.0.0.1:9988/jmxrmi --object-name kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec --report-format properties --attributes FiveMinuteRate --reporting-interval 5000
+bin/kafka-run-class.sh kafka.tools.JmxTool --jmx-url service:jmx:rmi:///jndi/rmi://127.0.0.1:9988/jmxrmi --object-name kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec --report-format properties --attributes OneMinuteRate,FiveMinuteRate --reporting-interval 5000
 ```
 
 ## 3.1 启动集群
