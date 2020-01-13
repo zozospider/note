@@ -182,6 +182,7 @@ bin/kafka-configs.sh  --zookeeper localhost:2181 --alter --add-config 'producer_
 bin/kafka-configs.sh  --zookeeper localhost:2181 --alter --add-config 'producer_byte_rate=1024,consumer_byte_rate=2048,request_percentage=200' --entity-type users --entity-name user1
 
 # 监控
+bin/kafka-run-class.sh kafka.tools.JmxTool --help
 bin/kafka-run-class.sh kafka.tools.JmxTool --jmx-url service:jmx:rmi:///jndi/rmi://127.0.0.1:9988/jmxrmi --object-name kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec
 # 指定输出格式
 bin/kafka-run-class.sh kafka.tools.JmxTool --jmx-url service:jmx:rmi:///jndi/rmi://127.0.0.1:9988/jmxrmi --object-name kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec --report-format properties
