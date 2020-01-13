@@ -52,5 +52,11 @@ zero-copy: `transferTo()`;
 - [Kafka主要配置文件参数详解](https://mhl.xyz/Cache/kafka-server-properties.html)
 
 - [LinkedIn使用Kafka进行关键业务消息传输的经验总结](https://mp.weixin.qq.com/s?__biz=MzU3OTgyMDAwNw==&mid=2247488773&amp;idx=1&amp;sn=b2c9ee4622256e0aac204a9db847c654&source=41#wechat_redirect)
+
 - [linkedin/cruise-control](https://github.com/linkedin/cruise-control)
+- [Connection to node -1 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)](https://stackoverflow.com/questions/56161345/connection-to-node-1-could-not-be-established-broker-may-not-be-available-or)
+要在 Kafka KAFKA_HOME/config/server.properties 设置 listeners=PLAINTEXT://:9092
+- [Getting "Connection to node -1 could not be established. Broker may not be available." on all brokers](https://github.com/linkedin/cruise-control/issues/143)
+要在 cruise-control/config/cruisecontrol.properties 中添加 cruise.control.metrics.reporter.bootstrap.servers=hadoop1:9092,hadoop2:9092,hadoop3:9092
+
 - [linkedin/cruise-control-ui](https://github.com/linkedin/cruise-control-ui)
