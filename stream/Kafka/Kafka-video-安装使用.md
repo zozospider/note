@@ -180,6 +180,15 @@ bin/kafka-console-consumer.sh --zookeeper vm017:2181/kafka_v0 --topic topic1 --f
 bin/kafka-configs.sh  --zookeeper localhost:2181 --alter --add-config 'producer_byte_rate=1024,consumer_byte_rate=2048,request_percentage=200' --entity-type users --entity-name user1 --entity-type clients --entity-name clientA
 # 为 user = user1 配置自定义配额:
 bin/kafka-configs.sh  --zookeeper localhost:2181 --alter --add-config 'producer_byte_rate=1024,consumer_byte_rate=2048,request_percentage=200' --entity-type users --entity-name user1
+
+# 监控
+bin/kafka-run-class.sh kafka.tools.JmxTool --jmx-url service:jmx:rmi:///jndi/rmi://127.0.0.1:9988/jmxrmi --object-name kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec
+# 指定输出格式
+bin/kafka-run-class.sh kafka.tools.JmxTool --jmx-url service:jmx:rmi:///jndi/rmi://127.0.0.1:9988/jmxrmi --object-name kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec --report-format properties
+# 指定输出属性
+bin/kafka-run-class.sh kafka.tools.JmxTool --jmx-url service:jmx:rmi:///jndi/rmi://127.0.0.1:9988/jmxrmi --object-name kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec --report-format properties --attributes FiveMinuteRate
+# 指定输出间隔时间
+bin/kafka-run-class.sh kafka.tools.JmxTool --jmx-url service:jmx:rmi:///jndi/rmi://127.0.0.1:9988/jmxrmi --object-name kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec --report-format properties --attributes FiveMinuteRate --reporting-interval 5000
 ```
 
 ## 3.1 启动集群
