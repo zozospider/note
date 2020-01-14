@@ -6,10 +6,12 @@
 # linkedin: cruise-control & cruise-control-ui
 
 - [linkedin/cruise-control](https://github.com/linkedin/cruise-control)
+
 - [Connection to node -1 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)](https://stackoverflow.com/questions/56161345/connection-to-node-1-could-not-be-established-broker-may-not-be-available-or)
-要在 Kafka KAFKA_HOME/config/server.properties 设置 listeners=PLAINTEXT://:9092
+要在 Kafka 服务器的 `KAFKA_HOME/config/server.properties` 设置 `listeners=PLAINTEXT://:9092`
+
 - [Getting "Connection to node -1 could not be established. Broker may not be available." on all brokers](https://github.com/linkedin/cruise-control/issues/143)
-要在 cruise-control/config/cruisecontrol.properties 中添加 cruise.control.metrics.reporter.bootstrap.servers=hadoop1:9092,hadoop2:9092,hadoop3:9092
+要在 `cruise-control/config/cruisecontrol.properties` 中添加 `cruise.control.metrics.reporter.bootstrap.servers=hadoop1:9092,hadoop2:9092,hadoop3:9092`
 
 - [linkedin/cruise-control-ui](https://github.com/linkedin/cruise-control-ui)
 
