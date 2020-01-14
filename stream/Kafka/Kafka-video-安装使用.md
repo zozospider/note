@@ -38,6 +38,9 @@
 # The id of the broker. This must be set to a unique integer for each broker.
 broker.id=0
 
+# 运行端口
+port=9092
+
 # 套接字服务器坚挺的地址, 如果没有配置, 就使用 java.net.InetAddress.getCanonicalHostName() 的返回值
 # The address the socket server listens on. It will get the value returned from 
 # java.net.InetAddress.getCanonicalHostName() if not configured.
@@ -46,6 +49,9 @@ broker.id=0
 #   EXAMPLE:
 #     listeners = PLAINTEXT://your.host.name:9092
 #listeners=PLAINTEXT://:9092
+
+# 建议指定
+listeners=PLAINTEXT://vm017:9092
 
 # 节点的主机名会通知给生产者和消费者. 
 # 如果配置了 "listeners" 就使用 "listeners" 的值, 否则就使用java.net.InetAddress.getCanonicalHostName() 的返回值
@@ -83,6 +89,9 @@ log.dirs=/tmp/kafka-logs
 # parallelism for consumption, but this will also result in more files across
 # the brokers.
 num.partitions=1
+
+# 默认副本数
+default.replication.factor=2
 
 # 用来恢复和清理 data 下数据的线程数量
 # The number of threads per data directory to be used for log recovery at startup and flushing at shutdown.
@@ -134,6 +143,15 @@ zookeeper.connect=vm017:2181,vm06:2181,vm03:2181/kafka_v0
 bin/kafka-server-start.sh -daemon config/server.properties
 #   启用 JMX
 JMX_PORT=9988 bin/kafka-server-start.sh -daemon config/server.properties
+#   启用 JMX
+JMX_PORT=9988 JMX_HOSTNAME=vm017 bin/kafka-server-start.sh -daemon config/server.properties
+
+# 需要在 bin/kafka-run-class.sh 中添加以下内容, 否则默认为 127.0.0.1, 无法被远程调用, 配置方式参考 JMX_PORT:
+if [  $JMX_HOSTNAME ]; then
+  KAFKA_JMX_OPTS="$KAFKA_JMX_OPTS -Djava.rmi.server.hostname=$JMX_HOSTNAME"
+fi
+
+
 
 # 查看所有分区
 bin/kafka-topics.sh --list --zookeeper vm017:2181
