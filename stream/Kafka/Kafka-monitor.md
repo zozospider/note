@@ -15,6 +15,8 @@
 
 - [linkedin/cruise-control-ui](https://github.com/linkedin/cruise-control-ui)
 
+---
+
 # yahoo: kafka-manager
 
 - [yahoo/kafka-manager](https://github.com/yahoo/kafka-manager)
@@ -64,13 +66,9 @@ sonatype-oss-snapshots
 # 如果只是在单个项目中修改的话,在build.sbt里添加 `resolvers += "aliyun" at "http://maven.aliyun.com/nexus/content/groups/public/"`
 ```
 
-
-
-
 ---
 
-
-# kafka-manager 编译终极方案
+## kafka-manager 编译终极方案
 
 
 如果以上都没有用, 建议在 Mac 上连接外网, 然后安装 Homebrew, Java1.8, sbt 进行编译
@@ -204,3 +202,5 @@ yhdeiMac:kafka-manager-2.0.0.2 yh$
 
 连接失败报错时, 需要注意 kafka 服务器 JMX 监听 IP 是否为默认的 127.0.0.1, 需要在 Kafka 启动的时候指定 KAFKA_JMX_OPTS: -Djava.rmi.server.hostname=vm017
 - [Failed to get broker metrics for BrokerIdentity #214  -  captainbupt commented on 24 Mar 2016](https://github.com/yahoo/kafka-manager/issues/214)
+
+---
