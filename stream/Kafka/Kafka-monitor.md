@@ -201,3 +201,6 @@ total 188896
 drwxr-xr-x  3 yh  admin       102  1 13 23:08 scripts
 yhdeiMac:kafka-manager-2.0.0.2 yh$ 
 ```
+
+连接失败报错时, 需要注意 kafka 服务器 JMX 监听 IP 是否为默认的 127.0.0.1, 需要在 Kafka 启动的时候指定 KAFKA_JMX_OPTS: -Djava.rmi.server.hostname=vm017
+- [Failed to get broker metrics for BrokerIdentity #214](https://github.com/yahoo/kafka-manager/issues/214)
