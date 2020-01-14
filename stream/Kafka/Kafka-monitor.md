@@ -19,6 +19,7 @@
 
 - [yahoo/kafka-manager](https://github.com/yahoo/kafka-manager)
 - [kafka-manager简介和安装](https://www.cnblogs.com/frankdeng/p/9584870.html)
+
 ```bash
 # yum 安装 sbt (因为 kafka-manager 需要 sbt 编译)
 [admin@node21 ~]$ curl https://bintray.com/sbt/rpm/rpm > bintray-sbt-rpm.repo
@@ -29,6 +30,7 @@
 配置 maven 镜像
 - [第五章 SBT国内源配置](https://www.jianshu.com/p/a867b2a7c3c8)
 - [maven与sbt修改国内镜像](https://www.cnblogs.com/feiyumo/p/9237517.html)
+
 ```bash
 # 没用
 [repositories] 
@@ -45,7 +47,6 @@ externalResolvers := Resolver.withDefaultResolvers(resolvers.value, mavenCentral
 # 方案 二.2 运行
 
 
-# 有用
 [repositories]
 local
 aliyun-nexus: http://maven.aliyun.com/nexus/content/groups/public/  
@@ -59,8 +60,10 @@ typesafe: http://repo.typesafe.com/typesafe/ivy-releases/, [organization]/[modul
 sonatype-oss-releases
 maven-central
 sonatype-oss-snapshots
+
+# 如果只是在单个项目中修改的话,在build.sbt里添加 `resolvers += "aliyun" at "http://maven.aliyun.com/nexus/content/groups/public/"`
 ```
-如果只是在单个项目中修改的话,在build.sbt里添加 `resolvers += "aliyun" at "http://maven.aliyun.com/nexus/content/groups/public/"`
+
 
 
 
@@ -173,5 +176,28 @@ model contains 604 documentable templates
 [success] All package validations passed
 [info] Your package is ready in /Volumes/files/zz/other/kafka-manager-test/kafka-manager-2.0.0.2/target/universal/kafka-manager-2.0.0.2.zip
 [success] Total time: 474 s, completed 2020-1-13 23:08:22
+yhdeiMac:kafka-manager-2.0.0.2 yh$ 
+...
+
+yhdeiMac:kafka-manager-2.0.0.2 yh$ pwd
+/Volumes/files/zz/other/kafka-manager-test/kafka-manager-2.0.0.2
+yhdeiMac:kafka-manager-2.0.0.2 yh$ ls -l
+total 112
+-rw-r--r--@ 1 yh  admin  11307  4 11  2019 LICENSE
+-rw-r--r--@ 1 yh  admin   8686  4 11  2019 README.md
+drwxr-xr-x@ 9 yh  admin    306  4 11  2019 app
+-rw-r--r--@ 1 yh  admin   4242  4 11  2019 build.sbt
+drwxr-xr-x@ 7 yh  admin    238  4 11  2019 conf
+drwxr-xr-x@ 9 yh  admin    306  4 11  2019 img
+drwxr-xr-x@ 6 yh  admin    204  1 13 22:46 project
+drwxr-xr-x@ 5 yh  admin    170  4 11  2019 public
+-rwxr-xr-x@ 1 yh  admin  21353  4 11  2019 sbt
+drwxr-xr-x@ 4 yh  admin    136  4 11  2019 src
+drwxr-xr-x  6 yh  admin    204  1 13 23:08 target
+drwxr-xr-x@ 5 yh  admin    170  4 11  2019 test
+yhdeiMac:kafka-manager-2.0.0.2 yh$ ls -l target/universal/
+total 188896
+-rw-r--r--  1 yh  admin  96714523  1 13 23:08 kafka-manager-2.0.0.2.zip
+drwxr-xr-x  3 yh  admin       102  1 13 23:08 scripts
 yhdeiMac:kafka-manager-2.0.0.2 yh$ 
 ```
