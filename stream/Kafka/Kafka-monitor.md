@@ -39,6 +39,11 @@ sonatype-oss-releases
 maven-central 
 sonatype-oss-snapshots
 
+# 方案 二.1 项目 build.sbt 增加以下两行
+resolvers += "central" at "http://maven.aliyun.com/nexus/content/groups/public/"
+externalResolvers := Resolver.withDefaultResolvers(resolvers.value, mavenCentral = false)
+# 方案 二.2 运行
+
 
 
 # 有用
