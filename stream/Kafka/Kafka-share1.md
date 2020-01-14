@@ -60,3 +60,6 @@ zero-copy: `transferTo()`;
 要在 cruise-control/config/cruisecontrol.properties 中添加 cruise.control.metrics.reporter.bootstrap.servers=hadoop1:9092,hadoop2:9092,hadoop3:9092
 
 - [linkedin/cruise-control-ui](https://github.com/linkedin/cruise-control-ui)
+
+- [yahoo/kafka-manager](https://github.com/yahoo/kafka-manager)
+- [kafka-manager简介和安装](https://www.cnblogs.com/frankdeng/p/9584870.html)
