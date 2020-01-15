@@ -52,3 +52,8 @@ zero-copy: `transferTo()`;
 - [Kafka主要配置文件参数详解](https://mhl.xyz/Cache/kafka-server-properties.html)
 
 - [LinkedIn使用Kafka进行关键业务消息传输的经验总结](https://mp.weixin.qq.com/s?__biz=MzU3OTgyMDAwNw==&mid=2247488773&amp;idx=1&amp;sn=b2c9ee4622256e0aac204a9db847c654&source=41#wechat_redirect)
+
+
+# new
+
+调优配置: 幂等设置 `enable.idempotence` & `transactional.id`, 详情见生产者源码 `KafkaProducer.java`
