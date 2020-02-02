@@ -30,6 +30,8 @@ Host key verification failed.
 root 用户执行:
 ```
 yum install gcc-c++
+
+gcc --version
 ```
 
 ---
