@@ -22,3 +22,14 @@ Host key verification failed.
 123.207.120.205 ssh-rsa AAAAB3tg7KNfhmYiJBTt4fBD6vkmi7GujfgBcoxKFy5fdtvFcsivv6FfiDYG8q2BcuOfBV13Me2Z2piuEdfdfcvccxzcvc
 193.112.38.200 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDQiMoWXlg/oiN7P5iFAx+3vdVLk8Gq24TPjUDowP22D0CZxxxxxxxxxsxdsrsdfdffccccswe
 ```
+
+---
+
+# 腾讯云安装 gcc
+
+root 用户执行:
+```
+yum install gcc-c++
+```
+
+---
