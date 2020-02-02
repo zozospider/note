@@ -28,7 +28,7 @@ Host key verification failed.
 # 腾讯云安装 gcc
 
 root 用户执行:
-```
+```bash
 yum install gcc-c++
 
 gcc --version
