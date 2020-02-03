@@ -209,4 +209,12 @@
 
 亿速云
 
+__C Programming Language__
+- [C Programming Language, 2nd Edition 2nd Edition](https://www.amazon.com/Programming-Language-2nd-Brian-Kernighan/dp/0131103628)
+- [C程序设计语言（原书第2版·新版 典藏版） [The C Programming Language Second Edition]](https://item.jd.com/12580612.html)
+
+__Advanced Programming in the UNIX Environment__
+- [Advanced Programming in the UNIX Environment, 3rd Edition 3rd Edition](https://www.amazon.com/Advanced-Programming-UNIX-Environment-3rd/dp/0321637739)
+- [UNIX环境高级编程（第3版）](https://e.jd.com/30392983.html)
+
 ---
