@@ -95,6 +95,6 @@ Tips: 本课程不包含图结构, 图论领域主要以算法为主.
 
 # 四. 课程编程环境搭建
 
-使用 Java 8, IntelliJ IDEA
+使用 `Java 8`, `IntelliJ IDEA`
 
 ---
