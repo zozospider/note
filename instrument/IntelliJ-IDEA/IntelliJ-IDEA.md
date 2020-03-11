@@ -135,6 +135,12 @@ spiderxmac:note-hadoop-video1 zoz$
 
 ---
 
+# 将目录设置为模块
+
+- [idea将目录设置为模块](https://blog.csdn.net/m0_37659871/article/details/80669604)
+
+右键项目 -> `Open Module Settings` -> `+` -> `Modules` -> `Import Module` -> 然后选择 `Maven` (如果是 Maven 项目), 然后一路 next 到 Finish
+
 # Tomcat 配置 (设置自动更新资源, 默认首页打开 URL)
 
 - 正常流程: https://www.jianshu.com/p/6a462984ba99
