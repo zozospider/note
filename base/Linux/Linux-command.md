@@ -58,6 +58,11 @@
 netstat -nlpt | grep 8080
 ```
 
+## 查看哪些 IP 连接了当前及其的端口
+```
+netstat -nlap | grep 8080
+```
+
 ---
 
 # 用户名 & 密码
