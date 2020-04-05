@@ -3,7 +3,7 @@
 
 1. 打开 [下载页面](https://www.scala-lang.org/download/2.12.11.html) 下载 	Mac OS X, Unix, Cygwin `scala-2.12.11.tgz` 并解压到 `/Users/zoz/zz/app/scala/scala-2.12.11` 目录
 
-2. 添加环境遍历, 修改 `~/.bash_profile`:
+2. 添加环境遍历, 修改 `~/.bash_profile` (修改后执行 `source ~/.bash_profile` 生效):
 ```bash
 # java
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home
