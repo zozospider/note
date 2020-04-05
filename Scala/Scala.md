@@ -1,7 +1,7 @@
 
 # Scala 安装
 
-1. 打开 [下载页面](https://www.scala-lang.org/download/2.12.11.html) 下载 `scala-2.12.11.tgz - Mac OS X, Unix, Cygwin - 19.83M` 并解压到 `/Users/zoz/zz/app/scala/scala-2.12.11` 目录
+1. 打开 [官方下载页面](https://www.scala-lang.org/download/2.12.11.html) 下载 `scala-2.12.11.tgz - Mac OS X, Unix, Cygwin - 19.83M` 并解压到 `/Users/zoz/zz/app/scala/scala-2.12.11` 目录
 
 2. 添加环境遍历, 修改 `~/.bash_profile` (修改后执行 `source ~/.bash_profile` 生效):
 ```bash
@@ -31,13 +31,13 @@ scala>
 
 # IDEA 添加 Scala 插件
 
-`Prefrences` > `Plugins` > `Browse repositories` > 搜索 `Scala`, 找到 `LANGUAGES Scala` 插件 install > 重启 IDEA
+`Prefrences` -> `Plugins` -> `Browse repositories` -> 搜索 `Scala`, 找到 `LANGUAGES Scala` 插件点击 `install` -> 重启 IDEA
 
 # IDEA 将普通项目修改成 Scala 项目 (否则无法新建 Scala 文件)
 
-1. 选中项目名称右键 > `Add Frameworks Support` > `Scala`, 如果没有则点击 `Create` 并选中 `/Users/zoz/zz/app/scala/scala-2.12.11` > `OK`
+1. 选中项目名称右键 -> `Add Frameworks Support` -> 选中 `Scala`, 右边如果没有选中 Scala 版本则点击 `Create` 并选中 `/Users/zoz/zz/app/scala/scala-2.12.11` -> `OK`
 
-2. `src/main` 目录下新建 `scala` 文件夹, 并右键 `Mark Directory as` > `Sources Root`
+2. `src/main` 目录下新建 `scala` 文件夹, 并右键 `Mark Directory as` -> `Sources Root`
 
 ---
 
@@ -46,10 +46,10 @@ scala>
 - [Library sources not found for scala-library in Intellij](https://blog.csdn.net/mengxpfighting/article/details/79889326)
 - [Library sources not found for scala-library in Intellij](https://stackoverflow.com/questions/28445260/library-sources-not-found-for-scala-library-in-intellij)
 
-1. 打开 [下载页面](https://www.scala-lang.org/download/2.12.11.html) 下载 Sources `scala-sources-2.12.11.tar.gz` 并解压, 改文件夹名称 (注意解压后的文件夹名称为 `scala-2.12.11`, 需要修改为 `scala-sources-2.12.11`)
+1. 打开 [官方下载页面](https://www.scala-lang.org/download/2.12.11.html) 下载 `scala-sources-2.12.11.tar.gz - Sources` 并解压, 修改文件夹名称 (注意解压后的文件夹名称为 `scala-2.12.11`, 需要修改为 `scala-sources-2.12.11`)
 
 2. 拷贝到 `/Users/zoz/zz/app/scala/scala-sources-2.12.11` 目录
 
-3. `File` > `Project structure` -> `Global libraries` -> `scala-sdk-2.12.11` -> `Standard library` -> `Sources` (如果没有则跳过) -> 最下面的左边的 `+` 按钮 -> 选中 `/Users/zoz/zz/app/scala/scala-sources-2.12.11/src` 目录 `open`
+3. `File` -> `Project structure` -> `Global libraries` -> `scala-sdk-2.12.11` -> `Standard library` -> 选中 `Sources` (如果没有则不用选) -> 点击最下面的左边的 `+` 按钮 -> 选中 `/Users/zoz/zz/app/scala/scala-sources-2.12.11/src` 目录 `open` (此时就有 `Sources` 了) -> `OK`
 
 ---
