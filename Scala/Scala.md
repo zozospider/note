@@ -1,4 +1,6 @@
 
+- [Scala 官方文档](https://docs.scala-lang.org/zh-cn/tour/tour-of-scala.html)
+
 # Scala 安装
 
 1. 打开 [官方下载页面](https://www.scala-lang.org/download/2.12.11.html) 下载 `scala-2.12.11.tgz - Mac OS X, Unix, Cygwin - 19.83M` 并解压到 `/Users/zoz/zz/app/scala/scala-2.12.11` 目录
