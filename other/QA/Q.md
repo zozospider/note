@@ -19,3 +19,8 @@
 
 - Kafka 用的哪个版本?
 
+# Java
+
+- 对字符串不可变的理解
+  - [06 - Scala - 变量 & 数据类型](https://www.bilibili.com/video/BV164411Z7KY?p=6) (`15:02`)
+
