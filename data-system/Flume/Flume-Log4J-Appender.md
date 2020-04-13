@@ -32,7 +32,7 @@
 </dependency>
 ```
 
-# 程序 log4j.properties 配置
+# 程序 log4j.properties 配置 - 方式一
 
 以下为 `resources` 资源目录下的 `log4j.properties` 配置:
 ```properties
@@ -48,9 +48,36 @@ log4j.appender.flume.Port = 4141
 log4j.appender.flume.UnsafeMode = true
 ```
 
+# 程序 log4j.properties 配置 - 方式二
+
+```properties
+log4j.rootLogger = INFO,console,infoFile
+
+log4j.logger.flume = INFO,flume
+
+# 输出信息到控制台
+log4j.appender.console = org.apache.log4j.ConsoleAppender
+log4j.appender.console.encoding = UTF-8
+log4j.appender.console.layout = org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern = %d{yyyy-MM-dd HH:mm:ss,SSS} [%t] [%c] [%p] - %m%n
+
+# 输出 INFO 级别以上的日志
+log4j.appender.infoFile = org.apache.log4j.DailyRollingFileAppender
+log4j.appender.infoFile.File = /tmp/info.log
+log4j.appender.infoFile.Appender = true
+log4j.appender.infoFile.Threshold = INFO
+log4j.appender.infoFile.layout = org.apache.log4j.PatternLayout
+log4j.appender.infoFile.layout.ConversionPattern = %d{yyyy-MM-dd HH:mm:ss,SSS} [%t] [%c] [%p] - %m%n
+
+log4j.appender.flume = org.apache.flume.clients.log4jappender.Log4jAppender
+log4j.appender.flume.Hostname = 127.0.0.1
+log4j.appender.flume.Port = 4141
+log4j.appender.flume.UnsafeMode = true
+```
+
 ---
 
-# 程序逻辑
+# 程序逻辑 - 方式一
 
 以下为 `App.class` 程序逻辑:
 ```java
@@ -61,13 +88,39 @@ import org.apache.log4j.Logger;
  */
 public class App {
 
-    private static Logger logger = Logger.getLogger(App.class.getName());
+    private static final Logger flumeLogger = Logger.getLogger("flume");
 
     public static void main(String[] args) throws InterruptedException {
         int index = 0;
         while (true) {
             Thread.sleep(1000);
-            logger.info("value is：" + index++);
+            flumeLogger.info("value is：" + index++);
+        }
+    }
+}
+```
+
+---
+
+# 程序逻辑 - 方式二
+
+以下为 `App.class` 程序逻辑:
+```java
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * 循环打印值，模仿日志输出
+ */
+public class App {
+
+    private static final Logger flumeLogger = LoggerFactory.getLogger("flume");
+
+    public static void main(String[] args) throws InterruptedException {
+        int index = 0;
+        while (true) {
+            Thread.sleep(1000);
+            flumeLogger.info("value is：" + index++);
         }
     }
 }
