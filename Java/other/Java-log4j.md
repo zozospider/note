@@ -92,12 +92,12 @@ import org.slf4j.LoggerFactory;
  */
 public class App {
 
-    private static final Logger stingTLogger = LoggerFactory.getLogger("stingT");
+    private static final Logger stringTLogger = LoggerFactory.getLogger("stringT");
     private static final Logger flumeLogger = LoggerFactory.getLogger("flume");
     private static final Logger clazzLogger = LoggerFactory.getLogger(Clazz.class);
 
     public static void main(String[] args) {
-        stingTLogger.info("I am stringT");
+        stringTLogger.info("I am stringT");
         flumeLogger.info("I am flume");
         clazzLogger.info("I am Clazz");
     }
