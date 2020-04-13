@@ -149,42 +149,52 @@ scp -r remote_user@remote_ip:/remote_path/remote_dir /local_path/local_dir
 
 * `-f`: 在最后且必须
 
-## 常用
+## *.tar
 
-以下为常用格式的解压 & 压缩命令：
-
-`*.tar`
-```
+```bash
+# 解压
 tar -xf File.tar
 
+# 压缩
 tar -cf File.tar Dir
-
 tar -cf File.tar Dir1 Dir2
 ```
 
-`*.tar.gz` / `*.tgz`
-```
+## *.tar.gz / *.tgz
+
+```bash
+# 解压
 tar -xzf File.tar.gz
 tar -xzf File.tar.gz -C Dir
 
+# 压缩
 tar -czf File.tar.gz Dir
 tar -czf File.tar.gz --exclude=tomcat/logs --exclude=tomcat/libs --exclude=tomcat/xiaoshan.txt Dir
+
+# 查看
+tar -tvf File.tar.gz
 ```
 
-`*.zip`
-```
-unzip File.zip
-unzip File.zip -d Dir
+## *.tar.xz
 
-zip File.zip Dir
-```
-
-`*.tar.xz`
-```
+```bash
+# 解压
 xz -dk File.tar.xz
 tar -xf File.tar
 
+# 压缩
 xz -zk Dir
+```
+
+## *.zip
+
+```bash
+# 解压
+unzip File.zip
+unzip File.zip -d Dir
+
+# 压缩
+zip File.zip Dir
 ```
 
 ## lzop
