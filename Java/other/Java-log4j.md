@@ -80,7 +80,32 @@ log4j.appender.flume.UnsafeMode = true
 
 ---
 
-# 程序逻辑
+# 程序逻辑 - 方式一
+
+以下为 `App.class` 程序逻辑:
+```java
+import org.apache.log4j.Logger;
+
+/**
+ * 循环打印值，模仿日志输出
+ */
+public class App {
+
+    private static final Logger stringTLogger = Logger.getLogger("stringT");
+    private static final Logger flumeLogger = Logger.getLogger("flume");
+    private static final Logger clazzLogger = Logger.getLogger(Clazz.class);
+
+    public static void main(String[] args) {
+        stringTLogger.info("I am stringT");
+        flumeLogger.info("I am flume");
+        clazzLogger.info("I am Clazz");
+    }
+}
+```
+
+---
+
+# 程序逻辑 - 方式二
 
 以下为 `App.class` 程序逻辑:
 ```java
