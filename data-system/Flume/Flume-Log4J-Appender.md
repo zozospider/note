@@ -37,6 +37,7 @@
 以下为 `resources` 资源目录下的 `log4j.properties` 配置:
 ```properties
 log4j.rootLogger=INFO,stdout,flume
+
 log4j.appender.stdout = org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.target = System.out
 log4j.appender.stdout.layout = org.apache.log4j.PatternLayout
