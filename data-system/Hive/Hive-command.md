@@ -12,3 +12,9 @@ SHOW PARTITIONS tbl PARTITION(pdate=20191023);
 -- 查看该分区的详细信息
 DESC FORMATTED tbl PARTITION(month='2015-01', day='2015-01-25');
 ```
+
+# 导出数据到本地
+
+```
+hive -e "select * from db_1.tbl_1 where pdate=20200101";" > TBL_20200101.txt
+```
