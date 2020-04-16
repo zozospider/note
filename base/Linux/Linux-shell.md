@@ -408,7 +408,7 @@ done
 ```bash
 #! /bin/bash
 
-start='2020-01-20'
+start='2020-02-20'
 end='2020-04-11'
 
 # 注: 日期范围是 [start, end)
