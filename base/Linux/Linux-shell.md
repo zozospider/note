@@ -404,6 +404,9 @@ end='2020-04-11'
 while [ "${start}" != "${end}" ]
 do
   echo ${start}
+  # 可转换成 %Y%m%d 格式使用
+  date = `date -d "${start}" +%Y%m%d`
+  echo ${date}
   # 日期自增
   start=`date -d "1 day ${start}" +%Y-%m-%d`
 done
@@ -421,6 +424,9 @@ end=`date -d "2020-04-10" +%Y%m%d`
 while [ ${start} -le ${end} ]
 do
   echo ${start}
+  # 可转换成 %Y-%m-%d 格式使用
+  date = `date -d "${start}" +%Y-%m-%d`
+  echo ${date}
   # 日期自增
   start=`date -d "1 day ${start}" +%Y%m%d`
 done
