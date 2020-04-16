@@ -13,6 +13,7 @@
     - [数字性循环](#数字性循环)
     - [字符性循环](#字符性循环)
     - [路径查找](#路径查找)
+    - [日期循环](#日期循环)
 
 ---
 
@@ -390,24 +391,7 @@ done
 
 ## 日期循环
 
-- 方式一 (更灵活)
-
-```bash
-#! /bin/bash
-
-start=`date -d "2020-02-20" +%Y%m%d`
-end=`date -d "2020-04-10" +%Y%m%d`
-
-# 注: 日期范围是 [start, end]
-while [ ${start} -le ${end} ]
-do
-  echo ${start}
-  # 日期自增
-  start=`date -d "1 day ${start}" +%Y%m%d`
-done
-```
-
-- 方式二
+- 方式一
 
 ```bash
 #! /bin/bash
@@ -422,6 +406,23 @@ do
   echo ${start}
   # 日期自增
   start=`date -d "1 day ${start}" +%Y-%m-%d`
+done
+```
+
+- 方式二 (更灵活)
+
+```bash
+#! /bin/bash
+
+start=`date -d "2020-02-20" +%Y%m%d`
+end=`date -d "2020-04-10" +%Y%m%d`
+
+# 注: 日期范围是 [start, end]
+while [ ${start} -le ${end} ]
+do
+  echo ${start}
+  # 日期自增
+  start=`date -d "1 day ${start}" +%Y%m%d`
 done
 ```
 
