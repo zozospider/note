@@ -388,4 +388,37 @@ echo $file is file path \! ;
 done
 ```
 
+## 日期循环
+
+```bash
+#! /bin/bash
+
+start=`date -d "2020-02-20" +%Y%m%d`
+end=`date -d "2020-04-10" +%Y%m%d`
+
+# 注: 日期范围是 [start, end]
+while [ ${start} -le ${end} ]
+do
+  echo ${start}
+  # 日期自增
+  start=`date -d "1 day ${start}" +%Y%m%d`
+done
+```
+
+```bash
+#! /bin/bash
+
+start='2020-01-20'
+end='2020-04-11'
+
+# 注: 日期范围是 [start, end)
+# 注: while 里面的左右条件一定要用 "" 引起来, ' 不行
+while [ "${start}" != "${end}" ]
+do
+  echo ${start}
+  # 日期自增
+  start=`date -d "1 day ${start}" +%Y-%m-%d`
+done
+```
+
 ---
