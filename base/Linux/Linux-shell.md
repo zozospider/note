@@ -390,6 +390,8 @@ done
 
 ## 日期循环
 
+- 方式一 (更灵活)
+
 ```bash
 #! /bin/bash
 
@@ -404,6 +406,8 @@ do
   start=`date -d "1 day ${start}" +%Y%m%d`
 done
 ```
+
+- 方式二
 
 ```bash
 #! /bin/bash
