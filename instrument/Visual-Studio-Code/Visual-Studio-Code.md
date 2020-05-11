@@ -6,3 +6,13 @@
 1. 选中需要排序的内容
 2. Windows: Ctrl + Shift + p / Mac: Alt + Shift + p
 3. 输入: Sort Lines Ascending
+
+---
+
+# 滚动鼠标自动切换选项卡
+
+Code - Preferences - Settings - 搜索并勾选 `workbench.editor.scrollToSwitchTabs`
+
+默认按住 Shift 键, 然后滚动鼠标, 也可切换选项卡
+
+---
