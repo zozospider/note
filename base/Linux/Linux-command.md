@@ -186,6 +186,20 @@ tar -xf File.tar
 xz -zk Dir
 ```
 
+## *.gz
+
+```bash
+# 解压
+gunzip File.gz
+gzip -d File.gz
+gzip -d File.gz Dir
+
+# 压缩
+gzip File
+# 压缩保留原文件
+gzip -k File
+```
+
 ## *.zip
 
 ```bash
