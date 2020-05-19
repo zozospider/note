@@ -16,3 +16,11 @@ Code - Preferences - Settings - 搜索并勾选 `workbench.editor.scrollToSwitch
 默认按住 Shift 键, 然后滚动鼠标, 也可切换选项卡
 
 ---
+
+# 插件 - drawio
+
+- 官网:
+- [drawio](https://app.diagrams.net/)
+- [drawio](http://draw.io/)
+
+vscode 插件搜索 `drawio`, 选择 `eighthundreds.vscode-drawio` 安装.
