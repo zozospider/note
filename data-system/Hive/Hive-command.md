@@ -18,7 +18,13 @@ DESC FORMATTED tbl PARTITION(month='2015-01', day='2015-01-25');
 
 ```sql
 -- 如果为 NULL 则转换
-NVL(null_var, content)
+-- wow
+SELECT NVL(NULL, 'wow');
+
+-- 切割字符串
+-- c
+SELECT SPLIT('a&b&c', '&')[2];
+
 ```
 
 # 导出数据到本地
