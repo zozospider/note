@@ -11,6 +11,14 @@ SHOW PARTITIONS tbl PARTITION(pdate=20191023);
 
 -- 查看该分区的详细信息
 DESC FORMATTED tbl PARTITION(month='2015-01', day='2015-01-25');
+
+```
+
+# SQL
+
+```sql
+-- 如果为 NULL 则转换
+NVL(null_var, content)
 ```
 
 # 导出数据到本地
