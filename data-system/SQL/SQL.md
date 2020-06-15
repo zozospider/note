@@ -23,4 +23,3 @@ REPLACE(str, from_str, to_str);
 SELECT REPLACE('a&b&c', '&', ', ');
 ```
 
-
