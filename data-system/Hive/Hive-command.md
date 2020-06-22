@@ -7,11 +7,13 @@ SHOW PARTITIONS tbl;
 
 -- 条件查询分区
 -- SHOW PARTITIONS tbl PARTITION(partition_desc);
-SHOW PARTITIONS tbl PARTITION(pdate=20191023);
+SHOW PARTITIONS tbl_1 PARTITION(pdate='20191023');
 
 -- 查看该分区的详细信息
-DESC FORMATTED tbl PARTITION(month='2015-01', day='2015-01-25');
+DESC FORMATTED tbl_1 PARTITION(month='2015-01', day='2015-01-25');
 
+-- 增加分区
+ALTER TABLE tbl_1 ADD PARTITION(pdate='20191023', ptype='t1') LOCATION '/db_1/tbl_1/20191023/t1';
 ```
 
 # SQL
