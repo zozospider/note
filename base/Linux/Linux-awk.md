@@ -19,3 +19,8 @@ awk -F '|' '{sum += $5};END {print sum}' file
 ```bash
 cat file | awk -F '|' '{print $6}' | sort | uniq >> result_file
 ```
+
+- 查找某个文件字段数少于某个值的行
+```bash
+cat file | awk -F '|' 'NF<6' | more
+```
