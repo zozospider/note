@@ -10,7 +10,7 @@
 4 10:14 done
 5 8:29 done
 
-uuuuu NO
+uuuuu NOT DONE
 
 ## 2
 6 15:21
