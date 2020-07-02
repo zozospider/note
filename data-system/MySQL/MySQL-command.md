@@ -78,10 +78,21 @@ mysqldump -t -uzozo -p123456 -h127.0.0.1 -P3306 --default-character-set=utf8 --s
 ```
 
 ## 导入表结构 / 数据
-```
+```bash
 mysql -uzozo -p123456 -h127.0.0.1 -P3306 db_1 < db_1_20190218_all.sql
 mysql -uzozo -p123456 -h127.0.0.1 -P3306 db_1 < db_1_20190218_structure.sql
 mysql -uzozo -p123456 -h127.0.0.1 -P3306 db_1 < db_1_20190218_data.sql
+```
+
+## 导出查询结果
+```sql
+-- 需要当前 MySQL 用户对 /tmp/ 目录的写权限
+mysql> select field_1 from db_1.tbl_1 into outfile '/tmp/db_1.tbl_1.xls';
+```
+
+```bash
+# 需要当前 Linux 操作用户对 /tmp/ 目录的写权限
+mysql -uzozo -p123456 -h127.0.0.1 -P3306 -e "select field_1 from db_1.tbl_1;" > /tmp/db_1.tbl_1.xls
 ```
 
 ---
