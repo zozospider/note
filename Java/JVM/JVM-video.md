@@ -10,8 +10,6 @@
 04 10:14 done
 05 8:29 done
 
-uuuuu __NOT DONE__
-
 ## 2
 06 15:21 done
 07 6:23 done
@@ -22,15 +20,21 @@ uuuuu __NOT DONE__
 12 5:16 done
 
 uuuuu __NOT DONE__
- 
+
 ## 3
-13 14:27
-14 11:10
-15 9:14
-16 3:17
-17 5:37
-18 4:32
-19 5:36
-20 3:04
-21 3:03
-22 2:52
+13 14:27 done
+14 11:10 done
+15 9:14 done
+16 3:17 done
+17 5:37 done
+18 4:32 done
+19 5:36 done
+20 3:04 done
+21 3:03 done
+22 2:52 done
+
+uuuuu __NOT DONE__
+
+## 4
+
+
