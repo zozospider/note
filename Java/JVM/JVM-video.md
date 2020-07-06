@@ -2,7 +2,7 @@
 - [尚硅谷2020最新版宋红康JVM教程持续更新中(java虚拟机详解，jvm从入门到精通)](https://www.bilibili.com/video/BV1PJ411n7xZ)
 - [JVM从入门到精通-截屏ppt(期待官方直接放出原版)](https://www.yuque.com/mo_ming/gl7b70/wmih89)
 
-# first time
+# one week
 
 ## 1
 01 9:28 done
@@ -20,7 +20,7 @@
 11 6:23 done
 12 5:16 done
 
-uuuuu __NOT DONE__
+uuuuu __1__
 
 ## 3
 13 14:27 done
@@ -34,7 +34,11 @@ uuuuu __NOT DONE__
 21 3:03 done
 22 2:52 done
 
-uuuuu __NOT DONE__
+uuuuu __2__
+
+------
+
+# two week
 
 ## 4
 23 5:33
@@ -45,4 +49,5 @@ uuuuu __NOT DONE__
 28 4:32
 29 9:41
 
-uuuuu
+uuuuu __1__
+
