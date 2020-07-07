@@ -30,6 +30,7 @@
     - [删除 7 天前的文件](#删除-7-天前的文件)
 - [vi 替换](#vi-替换)
 - [查找过滤](#查找过滤)
+    - [监控结果变化](#监控结果变化)
     - [查找文件](#查找文件)
     - [查找多个文件中的匹配内容](#查找多个文件中的匹配内容)
 - [统计行数](#统计行数)
@@ -458,9 +459,20 @@ find /home/zozo/data/d2 -mtime +7 -name "backup-d2-*.log" -exec rm {} \;
 
 # 查找过滤
 
-排除字符:
-```
+```bash
+# 不区分大小写
+cat file | grep -i word
+# 排除字符
 cat file | grep -v EXCLUDE
+```
+
+## 监控结果变化
+
+```bash
+# 观察命令执行结果, 每 2 秒钟刷新一次 (-n 2), 高亮显示有变化的内容 (-d)
+watch -n 2 -d sh monitor.sh
+watch -n 2 -d 'sh monitor.sh | grep ChannelSize'
+watch -n 2 -d 'sh monitor.sh | grep -i channelsize'
 ```
 
 ## 查找文件
