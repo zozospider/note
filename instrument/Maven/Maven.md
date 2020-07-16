@@ -126,12 +126,18 @@ mvn assembly:assembly
 - `pom.xml` 配置引入本地 jar 包依赖如下:
 
 ```xml
+<properties>
+  <project.basedir>/tmp</project.basedir>
+  <!-- Windows 格式 <project.basedir>D:/tmp</project.basedir> -->
+</properties>
+
 <dependency>
   <groupId>com.zozospider</groupId>
-  <artifactId>test</artifactId>
+  <!-- 多个本地依赖的 artifactId 不能相同 -->
+  <artifactId>test1</artifactId>
   <version>1.0</version>
   <scope>system</scope>
-  <systemPath>${project.basedir}/lib/mallet.jar</systemPath>
+  <systemPath>${project.basedir}/lib/test1.jar</systemPath>
 </dependency>
 ```
 
