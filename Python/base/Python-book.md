@@ -6,3 +6,10 @@
 - [Python Crash Course, 2nd Edition](https://nostarch.com/pythoncrashcourse2e)
 - [Python入门习题大全——索引](https://blog.csdn.net/qq_43479432/article/details/105015033)
 - [ehmatthes/pcc (资源参考)](https://github.com/ehmatthes/pcc)
+
+- [Python 3.8安装matplotlib的方法](https://blog.csdn.net/javelin2005/article/details/104593578)
+- [python安装matplotlib库三种失败情况](https://blog.csdn.net/wanghao77/article/details/105456375)
+
+- [Unofficial Windows Binaries for Python Extension Packages](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pygame)
+- [Unofficial Windows Binaries for Python Extension Packages](https://www.lfd.uci.edu/~gohlke/pythonlibs/#matplotlib)
+- [matplotlib 3.3.0](https://pypi.org/project/matplotlib/)
