@@ -34,6 +34,6 @@ SELECT SPLIT('a&b&c', '&')[2];
 
 # 导出数据到本地
 
-```
-hive -e "select * from db_1.tbl_1 where pdate=20200101";" > TBL_20200101.txt
+```bash
+hive -e "select * from db_1.tbl_1 where pdate='20191023' limit 10"; > TBL_20191023.txt
 ```
