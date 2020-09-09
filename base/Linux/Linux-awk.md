@@ -28,7 +28,6 @@ cat file | awk -F '|' '{if ($10 ~ /[zZ]word/ OR $10 ~ /[zZ]another/) {print $0}}
 cat file | awk -F '|' '{if ($10 ~ /[zZ]word/ OR $10 == "value") {print $0}}' >> result_file
 ### 反向多条件
 cat file | awk -F '|' '{if (!($10 ~ /[zZ]word/ OR $10 == "value")) {print $0}}' >> result_file
-
 ```
 
 - 查找某个文件某个字段总和, 打印总和:
