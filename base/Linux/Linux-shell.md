@@ -16,6 +16,8 @@
     - [字符性循环](#字符性循环)
     - [路径查找](#路径查找)
     - [日期循环](#日期循环)
+- [字符串处理](#字符串处理)
+    - [字符串截取](#字符串截取)
 
 ---
 
@@ -469,6 +471,45 @@ do
   # 日期自增
   start=`date -d "1 day ${start}" +%Y%m%d`
 done
+```
+
+---
+
+
+# 字符串处理
+
+## 字符串截取
+
+- [http://c.biancheng.net/view/1120.html](Shell字符串截取（非常详细）)
+
+| 序号 | 格式 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| 1 | `${string: start :length}` | 从 string 字符串的左边第 start 个字符开始, 向右截取 length 个字符. |
+| 2 | `${string: start}` | 从 string 字符串的左边第 start 个字符开始截取, 直到最后. |
+| 3 | `${string: 0-start :length}` | 从 string 字符串的右边第 start 个字符开始, 向右截取 length 个字符. |
+| 4 | `${string: 0-start}` | 从 string 字符串的右边第 start 个字符开始截取, 直到最后. |
+| 5 | `${string#*chars}` | 从 string 字符串第一次出现 *chars 的位置开始, 截取 *chars 右边的所有字符. |
+| 6 | `${string##*chars}` | 从 string 字符串最后一次出现 *chars 的位置开始, 截取 *chars 右边的所有字符. |
+| 7 | `${string%*chars}` | 从 string 字符串第一次出现 *chars 的位置开始, 截取 *chars 左边的所有字符. |
+| 8 | `${string%%*chars}` | 从 string 字符串最后一次出现 *chars 的位置开始, 截取 *chars 左边的所有字符. |
+
+5, 6, 7, 8 示例如下:
+```bash
+#!/bin/bash
+url="http://c.biancheng.net/index.html"
+echo ${url#*/}    # 结果为 /c.biancheng.net/index.html
+echo ${url##*/}   # 结果为 index.html
+str="---aa+++aa@@@"
+echo ${str#*aa}   # 结果为 +++aa@@@
+echo ${str##*aa}  # 结果为 @@@
+
+#!/bin/bash
+url="http://c.biancheng.net/index.html"
+echo ${url%/*}    # 结果为 http://c.biancheng.net
+echo ${url%%/*}   # 结果为 http:
+str="---aa+++aa@@@"
+echo ${str%aa*}   # 结果为 ---aa+++
+echo ${str%%aa*}  # 结果为 ---
 ```
 
 ---
