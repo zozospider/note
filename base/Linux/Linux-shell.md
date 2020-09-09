@@ -65,17 +65,17 @@ echo y: $y
 
 ```bash
 # 添加元素
-array=()
+arr=()
 for i in `seq 1 10`
 do
-  array[${#array[*]}]=$i
+  arr[${#arr[*]}]=$i
 done
 
-arr_0=${array[0]}
-arr_1=${array[1]}
+arr_0=${arr[0]}
+arr_1=${arr[1]}
 echo arr_0: $arr_0, arr_1: $arr_1
 
-for i in ${array[*]}
+for i in ${arr[*]}
 do
   echo $i
 done
