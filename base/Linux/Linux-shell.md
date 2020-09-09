@@ -71,6 +71,9 @@ do
   array[${#array[*]}]=$i
 done
 
+echo ${arr[0]}
+echo ${arr[1]}
+
 for i in ${array[*]}
 do
   echo $i
