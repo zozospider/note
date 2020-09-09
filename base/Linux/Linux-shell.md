@@ -482,9 +482,8 @@ done
 
 - [http://c.biancheng.net/view/1120.html](Shell字符串截取（非常详细）)
 
-格式
 | 序号 | 格式 | 说明 |
-| :--- | :--- | :--- | :--- | :--- |
+| :--- | :--- | :--- |
 | 1 | `${string: start :length}` | 从 string 字符串的左边第 start 个字符开始, 向右截取 length 个字符. |
 | 2 | `${string: start}` | 从 string 字符串的左边第 start 个字符开始截取, 直到最后. |
 | 3 | `${string: 0-start :length}` | 从 string 字符串的右边第 start 个字符开始, 向右截取 length 个字符. |
