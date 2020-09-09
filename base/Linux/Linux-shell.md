@@ -499,7 +499,7 @@ done
 
 ## 字符串截取
 
-- [http://c.biancheng.net/view/1120.html](Shell字符串截取（非常详细）)
+- [Shell字符串截取（非常详细）](http://c.biancheng.net/view/1120.html)
 
 截取规则如下:
 
