@@ -156,6 +156,7 @@ The complete list is QQ
 ```
 
 ## 变量比较
+
 ```bash
 #!/bin/bash
 # 如果传入的参数个数小于 2, 则退出
@@ -166,6 +167,7 @@ fi
 ```
 
 ### 整数比较
+
 - `-eq`: 等于
   - `if [ "$a" -eq "$b" ]`
 
@@ -245,6 +247,16 @@ if [ "$1" == "$a" ]; then # ok
 # if [ $1 == $a ]; then # can do but not a good style
 # if [ $1==$a ]; then # not ok
   echo "22 var1 == a"
+fi
+```
+
+### 布尔比较
+
+```bash
+#!/bin/sh
+b=true
+if [ "$b" == true ]; then
+  echo "b is true"
 fi
 ```
 
