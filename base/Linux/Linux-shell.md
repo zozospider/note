@@ -2,6 +2,8 @@
 - [source](#source)
 - [sleep](#sleep)
 - [变量与判断](#变量与判断)
+    - [变量赋值注意](#变量赋值注意)
+    - [数组](#数组)
     - [if 语法](#if-语法)
     - [变量类型](#变量类型)
     - [变量比较](#变量比较)
@@ -35,6 +37,43 @@ sleep 1h   # 睡眠 1 小时
 ---
 
 # 变量与判断
+
+## 变量赋值注意
+
+```bash
+# 注意: 使用管道循环赋值无效
+# 以下为无效赋值, 最终结果: x: xx
+x="xx"
+echo "abc" | while read line
+do
+  x=$line
+done
+echo x: $x
+
+# 以下为有效赋值, 最终结果: y: abc
+y="yy"
+for line in echo "abc"
+do
+  y=$line
+done
+echo y: $y
+```
+
+## 数组
+
+```bash
+# 添加元素
+array=()
+for i in `seq 1 10`
+do
+  array[${#array[*]}]=$i
+done
+
+for i in ${array[*]}
+do
+  echo $i
+done
+```
 
 ## if 语法
 
