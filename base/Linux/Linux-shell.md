@@ -71,8 +71,9 @@ do
   array[${#array[*]}]=$i
 done
 
-echo ${arr[0]}
-echo ${arr[1]}
+arr_0=${array[0]}
+arr_1=${array[1]}
+echo arr_0: $arr_0, arr_1: $arr_1
 
 for i in ${array[*]}
 do
