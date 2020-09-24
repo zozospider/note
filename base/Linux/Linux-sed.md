@@ -53,8 +53,20 @@ echo ${line#${line%_*}_}
 # 替换
 
 ```bash
-# 无反斜杠的处理方式: old content -> new content
-sed -in-place -e 's/old content/new content/g' file
-# 有反斜杠的处理方式: old/content -> new/content
-sed -in-place -e 's#old/content#new/content#g' file
+# 静态替换
+## 无反斜杠的处理方式: old content -> new content
+sed -in-place -e "s/old content/new content/g" file
+## 有反斜杠的处理方式: old/content -> new/content
+sed -in-place -e "s#old/content#new/content#g" file
+
+# 变量替换
+## 无反斜杠的处理方式: old content -> new content
+old="old content"
+new="new content"
+sed -in-place -e "s/${old}/${new}/g" file
+
+## 有反斜杠的处理方式: old/content -> new/content
+old="old/content"
+new="new/content"
+# TODO
 ```
