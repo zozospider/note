@@ -1,5 +1,5 @@
 
-查找删除:
+# 查找删除
 
 ```bash
 # 删除 file 中匹配 delcontent 的行
@@ -50,3 +50,11 @@ echo ${line%_${line#*_}} # aa
 echo ${line#${line%_*}_}
 ```
 
+# 替换
+
+```bash
+# 无反斜杠的处理方式: old content -> new content
+sed -in-place -e 's/old content/new content/g' file
+# 有反斜杠的处理方式: old/content -> new/content
+sed -in-place -e 's#old/content#new/content#g' file
+```
