@@ -568,10 +568,11 @@ echo ${str%%aa*}  # 结果为 ---
 date +%Y%m%d
 date +%Y-%m-%d
 date +%Y_%m_%d
-
 date +%Y%m%d%H%M%S
 date +%Y-%m-%d-%H-%M-%S
 date +%Y_%m_%d_%H_%M_%S
+date +%Y-%m-%d_%H_%M_%S
+date +%Y-%m-%d_%H:%M:%S
 ```
 
 ---
