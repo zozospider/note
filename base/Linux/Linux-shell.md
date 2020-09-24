@@ -578,20 +578,20 @@ DATE=$(date +"%Y-%m-%d %H:%M:%S")
 
 # 以下时间单位加或者不加 `s` 都可以, 如 `2 day` 或 `2 days` 都可以
 # 2 秒前
-date +"%Y-%m-%d %H:%M:%S" --date="1 seconds ago"
+date +"%Y-%m-%d %H:%M:%S" --date="2 seconds ago"
 # 2 分钟前
-date +"%Y-%m-%d %H:%M:%S" --date="1 minutes ago"
+date +"%Y-%m-%d %H:%M:%S" --date="2 minutes ago"
 # 2 小时前
-date +"%Y-%m-%d %H:%M:%S" --date="1 hours ago"
+date +"%Y-%m-%d %H:%M:%S" --date="2 hours ago"
 # 2 天前
-date +"%Y-%m-%d %H:%M:%S" --date="1 days ago"
+date +"%Y-%m-%d %H:%M:%S" --date="2 days ago"
 # 2 周前
-date +"%Y-%m-%d %H:%M:%S" --date="1 weeks ago"
+date +"%Y-%m-%d %H:%M:%S" --date="2 weeks ago"
 # 2 个月前
-date +"%Y-%m-%d %H:%M:%S" --date="1 months ago"
+date +"%Y-%m-%d %H:%M:%S" --date="2 months ago"
 # 2 年前
-date +"%Y-%m-%d %H:%M:%S" --date="1 years ago"
-DATE=$(date +"%Y-%m-%d %H:%M:%S" --date="1 years ago")
+date +"%Y-%m-%d %H:%M:%S" --date="2 years ago"
+DATE=$(date +"%Y-%m-%d %H:%M:%S" --date="2 years ago")
 
 # 2 秒后
 date +"%Y-%m-%d %H:%M:%S" --date="2 seconds"
