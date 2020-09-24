@@ -449,6 +449,28 @@ echo $file is file path \! ;
 done
 ```
 
+## 循环文件内容
+
+```bash
+# 1,2,3
+# ONE,TWO,THREE
+cat file | while read line
+do
+  # a,b,c
+  echo $line
+  # 按 `,` 切割每一行内容
+  IFS=","
+  arr=($line)
+
+  a=${arr[0]}
+  b=${arr[1]}
+  c=${arr[2]}
+
+  # a: 1, b: 2, c: 3
+  echo "a: $a, b: $b, c: $c"
+done
+```
+
 ## 日期循环
 
 - 方式一
