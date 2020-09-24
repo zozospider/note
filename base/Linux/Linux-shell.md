@@ -573,6 +573,46 @@ date +%Y-%m-%d-%H-%M-%S
 date +%Y_%m_%d_%H_%M_%S
 date +%Y-%m-%d_%H_%M_%S
 date +%Y-%m-%d_%H:%M:%S
+date +"%Y-%m-%d %H:%M:%S"
+DATE=$(date +"%Y-%m-%d %H:%M:%S")
+
+# 以下时间单位加或者不加 `s` 都可以, 如 `2 day` 或 `2 days` 都可以
+# 2 秒前
+date +"%Y-%m-%d %H:%M:%S" --date="1 seconds ago"
+# 2 分钟前
+date +"%Y-%m-%d %H:%M:%S" --date="1 minutes ago"
+# 2 小时前
+date +"%Y-%m-%d %H:%M:%S" --date="1 hours ago"
+# 2 天前
+date +"%Y-%m-%d %H:%M:%S" --date="1 days ago"
+# 2 周前
+date +"%Y-%m-%d %H:%M:%S" --date="1 weeks ago"
+# 2 个月前
+date +"%Y-%m-%d %H:%M:%S" --date="1 months ago"
+# 2 年前
+date +"%Y-%m-%d %H:%M:%S" --date="1 years ago"
+DATE=$(date +"%Y-%m-%d %H:%M:%S" --date="1 years ago")
+
+# 2 秒后
+date +"%Y-%m-%d %H:%M:%S" --date="2 seconds"
+# 2 分钟后
+date +"%Y-%m-%d %H:%M:%S" --date="2 minutes"
+# 2 小时后
+date +"%Y-%m-%d %H:%M:%S" --date="2 hours"
+# 2 天后
+date +"%Y-%m-%d %H:%M:%S" --date="2 days"
+# 2 周后
+date +"%Y-%m-%d %H:%M:%S" --date="2 weeks"
+# 2 个月后
+date +"%Y-%m-%d %H:%M:%S" --date="2 months"
+# 2 年后
+date +"%Y-%m-%d %H:%M:%S" --date="2 years"
+DATE=$(date +"%Y-%m-%d %H:%M:%S" --date="2 years")
+
+# 某个时间参数的 2 天前
+# 注意: 传入的 ${DATE} 格式必须为 `%Y%m%d %H:%M:%S`, 转化后的格式随意
+DATE=$(date +"%Y%m%d %H:%M:%S")
+DATE_TMP=$(date +"%Y-%m-%d_%H-%M-%S" --date="${DATE} 2 days ago")
 ```
 
 ---
