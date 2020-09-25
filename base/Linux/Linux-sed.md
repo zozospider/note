@@ -53,20 +53,37 @@ echo ${line#${line%_*}_}
 # 替换
 
 ```bash
+# sed 替换模式中的特殊字符包括: # ? \ . [ ] ^ $ / 等
+
 # 静态替换
-## 无反斜杠的处理方式: old content -> new content
-sed -in-place -e "s/old content/new content/g" file
-## 有反斜杠的处理方式: old/content -> new/content
-sed -in-place -e "s#old/content#new/content#g" file
+## 无特殊字符: old content -> new content
+## 或者: sed -in-place -e "s/old content/new content/g" file
+sed -i "s/old content/new content/g" file
+
+## 有特殊字符 (无 `#` 号): old/content -> new/content
+## 或者: sed -in-place -e "s#old/content#new/content#g" file
+sed -i "s#old/content#new/content#g" file
+
+## 有特殊字符 (无 `?` 号): old/content -> new/content
+## 或者: sed -in-place -e "s?old/content?new/content?g" file
+sed -i "s?old/content?new/content?g" file
 
 # 变量替换
-## 无反斜杠的处理方式: old content -> new content
+## 无特殊字符: old content -> new content
 old="old content"
 new="new content"
-sed -in-place -e "s/${old}/${new}/g" file
+# 或者: sed -in-place -e "s/${old}/${new}/g" file
+sed -i "s/${old}/${new}/g" file
 
-## 有反斜杠的处理方式: old/content -> new/content
+## 有特殊字符 (无 `#` 号): old/content -> new/content
 old="old/content"
 new="new/content"
-# TODO
+## 或者: sed -in-place -e "s#${old}#${new}#g" file
+sed -i "s#${old}#${new}#g" file
+
+## 有特殊字符 (无 `?` 号): old/content -> new/content
+old="old/content"
+new="new/content"
+# 或者: sed -in-place -e "s?${old}?${new}?g" file
+sed -i "s?${old}?${new}?g" file
 ```
