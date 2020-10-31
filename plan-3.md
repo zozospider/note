@@ -2,14 +2,45 @@
 
 _TODO_
 
-# 时间线
 
-_TODO_
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # plan-3
 
 - __算法: 数据结构与算法__
-  - [算法与数据结构体系课](https://class.imooc.com/sale/datastructure)
+  - [算法与数据结构体系课](https://class.imooc.com/sale/datastructure) **ING**
   - [深度实战玩转算法](https://coding.imooc.com/class/138.html)
   - [玩转算法系列--图论精讲 面试升职必备（Java版）](https://coding.imooc.com/class/370.html)
   - [算法（第4版）](https://book.douban.com/subject/19952400/)
@@ -24,6 +55,8 @@ _TODO_
     - [专为程序员设计的高等数学课](https://coding.imooc.com/class/427.html)
     - [专为程序员设计的线性代数课程](https://coding.imooc.com/class/260.html)
     - [专为程序员设计的统计课](https://coding.imooc.com/class/371.html)
+    - [线性代数](https://space.bilibili.com/88461692/channel/detail?cid=9450)
+    - [微积分的本质](https://space.bilibili.com/88461692/channel/detail?cid=13407)
   - **机器学习**
     - [Python3入门机器学习 经典算法与应用 轻松入行人工智能](https://coding.imooc.com/class/169.html)
     - [Google老师亲授 TensorFlow2.0 入门到进阶](https://coding.imooc.com/class/344.html)
@@ -37,6 +70,7 @@ _TODO_
     - [大数据必会的scala教程，零基础小白玩转scala【共20章持续更新中】](https://www.bilibili.com/video/BV1Q5411t74z)
   - **Spark**
     - [尚硅谷大数据Spark-2019版最新](https://www.bilibili.com/video/BV174411X7Pk)
+    - [尚硅谷大数据Spark](https://www.bilibili.com/video/BV1bb411L7xF)
     - [2020年黑马程序员大数据自学教程Spark从零到精通完整版【共11天视频+笔记+源码】](https://www.bilibili.com/video/BV1ui4y1V7Cf)
   - **Flink**
     - [尚硅谷Flink教程(课堂实录flink大数据框架从入门到精通)](https://www.bilibili.com/video/BV1gJ411Q72x)
@@ -54,6 +88,7 @@ _TODO_
   - **Java 多线程**
     - [Java并发核心知识体系精讲](https://coding.imooc.com/class/362.html)
     - [玩转Java并发工具，精通JUC，成为并发多面手](https://coding.imooc.com/class/409.html)
+    - [尚硅谷JUC源码讲授实战教程完整版(java juc线程精讲)](https://www.bilibili.com/video/BV14W411u7gB)
   - __**JVM**__
     - [理论+实战 构建完整JVM知识体系](https://coding.imooc.com/class/429.html)
     - [尚硅谷2020最新版宋红康JVM教程更新至中篇(java虚拟机详解，jvm从入门到精通)](https://www.bilibili.com/video/BV1PJ411n7xZ)
@@ -101,6 +136,12 @@ _TODO_
 - [尚硅谷超经典Redis教程,redis实战,阳哥版从入门到精通](https://www.bilibili.com/videoBV1oW411u75R)
 - [java基础教程全面讲解百度地图的原理与案例应用](https://www.bilibili.com/video/BV1Wa4y1e7AK)
 - [Java面试热点问题，synchronized原理剖析与优化](https://www.bilibili.com/video/BV1aJ411V763)
+- [Java面试热门内容精讲之——并发编程volatile](https://www.bilibili.com/video/BV1BJ411j7qb)
+- [尚硅谷经典Java面试题第一季(java面试精讲)](https://www.bilibili.com/video/BV1Eb411P7bP)
+- [尚硅谷Java大厂面试题第二季(java面试必学，周阳主讲)](https://www.bilibili.com/video/BV18b411M7xz)
+- [尚硅谷2020最新版Java面试题第三季（java大厂面试题，周阳主讲）](https://www.bilibili.com/video/BV1Hy4y1B78T)
 - [java基础教程虚拟机性能分析和故障解决工具](https://www.bilibili.com/video/BV1N741127Wt)
 - [智能机器人软件开发教程基础，从helloworld到神经网络](https://www.bilibili.com/video/BV1L4411v7fB)
 - [360°解读机器学习经典算法——聚类算法](https://www.bilibili.com/video/BV1jb411p7ZF)
+- [【计算机科学速成课】[40集全/精校] - Crash Course Computer Science](https://www.bilibili.com/video/BV1EW411u7th)
+- [Head First 设计模式（中文版）](https://book.douban.com/subject/2243615/)
