@@ -145,3 +145,4 @@ _TODO_
 - [360°解读机器学习经典算法——聚类算法](https://www.bilibili.com/video/BV1jb411p7ZF)
 - [【计算机科学速成课】[40集全/精校] - Crash Course Computer Science](https://www.bilibili.com/video/BV1EW411u7th)
 - [Head First 设计模式（中文版）](https://book.douban.com/subject/2243615/)
+- [掌握Java项目面试武功心法，面试弯道超车](https://coding.imooc.com/class/413.html)
