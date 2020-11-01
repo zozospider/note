@@ -199,6 +199,20 @@
 
 ---
 
+# 知识体系参考
+
+- 算法
+  - 算法与数据结构
+- 人工智能
+  - 机器学习 & 深度学习
+- 大数据
+  - ZooKeeper & Spark & Hadoop & Kafka & Elasticsearch
+- 计算机基础 & 编程 & Other
+  - 操作系统 & 数据库 & Java & Python & Scala & C
+  - 测试 & 虚拟化 & 微服务
+
+---
+
 亿速云
 
 __C Programming Language__
