@@ -50,6 +50,10 @@ _TODO_
 
 ## 人工智能: Python & 爬虫 & 数学 & 机器学习
 
+**Python**
+  - [你的第一本Python基础入门书](https://www.imooc.com/read/46)
+  - [手把手教你把Python应用到实际开发 不再空谈语法](https://coding.imooc.com/class/240.html)
+
 **爬虫**
   - [Python爬虫工程师从入门到进阶](https://coding.imooc.com/class/325.html)
   - [畅销3年的Python分布式爬虫课程 Scrapy打造搜索引擎（2020版）](https://coding.imooc.com/class/92.html)
@@ -71,7 +75,7 @@ _TODO_
 
 ---
 
-## 大数据: Scala & Spark & Flink & HBase & Elasticsearch & ZooKeeper & Hadoop & Kafka & 项目 & 其他
+## 大数据: Scala & Spark & Flink & HBase & Elasticsearch & ZooKeeper & Hadoop & Kafka & 大数据项目 & 大数据相关
 
 **Scala**
   - [大数据之Scala](https://www.bilibili.com/video/BV164411Z7KY)
@@ -105,12 +109,12 @@ _TODO_
   - [【大数据】Kafka全套教程 从源码到面试真题by海波](https://www.youtube.com/playlist?list=PLmOn9nNkQxJEDjzl0iBYZ3WuXUuUStxZl)
   - [Kafka多维度系统精讲，从入门到熟练掌握](https://coding.imooc.com/class/434.html)
 
-**项目**
+**大数据项目**
   - [尚硅谷大数据项目数据仓库,电商数仓V2.0新版](https://www.bilibili.com/video/BV1df4y1U79z)
   - [尚硅谷机器学习和推荐系统项目实战教程全套完整版(初学者零基础快速入门)](https://www.bilibili.com/video/BV1R4411N78S)
   - [大数据教程手把手教你智数电商项目实战](https://www.bilibili.com/video/BV1ef4y1B7KX)
 
-**其他**
+**大数据相关**
   - [大数据基础丨小白快速掌握CDH安装与部署](https://www.bilibili.com/video/BV1PT4y1J7nW)
   - [尚硅谷HA教程(大数据ha快速入门)](https://www.bilibili.com/video/BV1zb411P7KY)
   - [大数据Impala教程丨构建高性能交互式SQL分析平台](https://www.bilibili.com/video/BV1AK411M7Gg)
@@ -123,7 +127,7 @@ _TODO_
 
 ---
 
-## 其他: Java 多线程 & JVM & Java 相关 & 随便看
+## 其他: Java 多线程 & JVM & Java 相关 & 其他
 
 **Java 多线程**
   - [Java并发核心知识体系精讲](https://coding.imooc.com/class/362.html)
