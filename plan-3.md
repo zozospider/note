@@ -41,7 +41,7 @@ _TODO_
 
 ## 算法: 数据结构与算法
 
-- [算法与数据结构体系课](https://class.imooc.com/sale/datastructure) **ING**
+- [算法与数据结构体系课](https://class.imooc.com/sale/datastructure) 🙂
 - [深度实战玩转算法](https://coding.imooc.com/class/138.html)
 - [玩转算法系列--图论精讲 面试升职必备（Java版）](https://coding.imooc.com/class/370.html)
 - [算法（第4版）](https://book.douban.com/subject/19952400/)
