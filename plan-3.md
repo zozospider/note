@@ -53,6 +53,9 @@ _TODO_
 **Python**
   - [你的第一本Python基础入门书](https://www.imooc.com/read/46)
   - [手把手教你把Python应用到实际开发 不再空谈语法](https://coding.imooc.com/class/240.html)
+  - [微软官方 Python 入门教程【开眼看世界，最适合的可能就在身边】](https://www.bilibili.com/video/BV1nE41127zQ)
+  - [微软官方 Python 进阶教程【完结撒花｜双语熟肉】](https://www.bilibili.com/video/BV1WT4y137cD)
+  - [【机器学习】微软官方 Python 高阶教程【完结撒花｜双语熟肉】](https://www.bilibili.com/video/BV1qa4y1Y7CD)
 
 **爬虫**
   - [Python爬虫工程师从入门到进阶](https://coding.imooc.com/class/325.html)
