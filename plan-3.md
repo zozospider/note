@@ -71,6 +71,7 @@ _TODO_
   - [微积分的本质](https://space.bilibili.com/88461692/channel/detail?cid=13407)
 
 **机器学习**
+  - [GitHub microsoft/ai-edu](https://github.com/microsoft/ai-edu)
   - [Python3入门机器学习 经典算法与应用 轻松入行人工智能](https://coding.imooc.com/class/169.html)
   - [Google老师亲授 TensorFlow2.0 入门到进阶](https://coding.imooc.com/class/344.html)
   - [Python3入门人工智能 掌握机器学习+深度学习 提升实战能力](https://coding.imooc.com/class/418.html)
