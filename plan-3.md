@@ -51,6 +51,8 @@ _TODO_
 ## 人工智能: Python & 爬虫 & 数学 & 机器学习
 
 **Python**
+  - [Python 入门语法教程](http://www.imooc.com/wiki/pythonlesson1)
+  - [Python 进阶应用教程](http://www.imooc.com/wiki/pythonlesson2)
   - [你的第一本Python基础入门书](https://www.imooc.com/read/46)
   - [手把手教你把Python应用到实际开发 不再空谈语法](https://coding.imooc.com/class/240.html)
   - [微软官方 Python 入门教程【开眼看世界，最适合的可能就在身边】](https://www.bilibili.com/video/BV1nE41127zQ)
@@ -58,6 +60,7 @@ _TODO_
   - [【机器学习】微软官方 Python 高阶教程【完结撒花｜双语熟肉】](https://www.bilibili.com/video/BV1qa4y1Y7CD)
 
 **爬虫**
+  - [Python 原生爬虫教程](http://www.imooc.com/wiki/pythonspider)
   - [Python爬虫工程师从入门到进阶](https://coding.imooc.com/class/325.html)
   - [畅销3年的Python分布式爬虫课程 Scrapy打造搜索引擎（2020版）](https://coding.imooc.com/class/92.html)
   - [移动端Python爬虫实战-2020版](https://coding.imooc.com/class/283.html)
@@ -72,6 +75,7 @@ _TODO_
 
 **机器学习**
   - [GitHub microsoft/ai-edu](https://github.com/microsoft/ai-edu)
+  - [Tensorflow 入门教程](http://www.imooc.com/wiki/tensorflow)
   - [Python3入门机器学习 经典算法与应用 轻松入行人工智能](https://coding.imooc.com/class/169.html)
   - [Google老师亲授 TensorFlow2.0 入门到进阶](https://coding.imooc.com/class/344.html)
   - [Python3入门人工智能 掌握机器学习+深度学习 提升实战能力](https://coding.imooc.com/class/418.html)
@@ -79,7 +83,7 @@ _TODO_
 
 ---
 
-## 大数据: Scala & Spark & Flink & HBase & Elasticsearch & ZooKeeper & Hadoop & Kafka & 大数据项目 & 大数据相关
+## 大数据: Scala & Spark & Flink & HBase & Elasticsearch & Zookeeper & Hadoop & Kafka & 大数据项目 & 大数据相关
 
 **Scala**
   - [大数据之Scala](https://www.bilibili.com/video/BV164411Z7KY)
@@ -105,7 +109,8 @@ _TODO_
   - [超系统学习Lucene全文检索技术](https://www.bilibili.com/video/BV1eJ411q7nw)
   - [elastic stack从入门到实践【快速掌握先进的搜索、数据收集、分析技术java进阶教程】](https://www.bilibili.com/video/BV1R4411C7Tf)
 
-**ZooKeeper**
+**Zookeeper**
+  - [Zookeeper 入门教程](http://www.imooc.com/wiki/Zookeeper)
   - [Zookeeper源码分析](https://coding.imooc.com/class/361.html)
   - [java基础进阶教程3天深入学习分布式事务应用及解决方案](https://www.bilibili.com/video/BV1GJ411m73n)
 
@@ -134,11 +139,14 @@ _TODO_
 ## 其他: Java 多线程 & JVM & Java 相关 & 其他
 
 **Java 多线程**
+  - [Java 并发原理入门教程](http://www.imooc.com/wiki/concurrencylesson)
+  - [Java 并发工具](http://www.imooc.com/wiki/ctoolslesson)
   - [Java并发核心知识体系精讲](https://coding.imooc.com/class/362.html)
   - [玩转Java并发工具，精通JUC，成为并发多面手](https://coding.imooc.com/class/409.html)
   - [尚硅谷JUC源码讲授实战教程完整版(java juc线程精讲)](https://www.bilibili.com/video/BV14W411u7gB)
 
 **JVM**
+  - [JVM 入门教程](http://www.imooc.com/wiki/jvm)
   - [理论+实战 构建完整JVM知识体系](https://coding.imooc.com/class/429.html)
   - [尚硅谷2020最新版宋红康JVM教程更新至中篇(java虚拟机详解，jvm从入门到精通)](https://www.bilibili.com/video/BV1PJ411n7xZ)
 
@@ -164,5 +172,6 @@ _TODO_
 - [智能机器人软件开发教程基础，从helloworld到神经网络](https://www.bilibili.com/video/BV1L4411v7fB)
 - [360°解读机器学习经典算法——聚类算法](https://www.bilibili.com/video/BV1jb411p7ZF)
 - [【计算机科学速成课】[40集全/精校] - Crash Course Computer Science](https://www.bilibili.com/video/BV1EW411u7th)
+- [设计模式入门教程](http://www.imooc.com/wiki/Designlesson)
 - [Head First 设计模式（中文版）](https://book.douban.com/subject/2243615/)
 - [慕课教程](http://www.imooc.com/wiki/)
