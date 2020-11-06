@@ -54,6 +54,8 @@ _TODO_
   - [Python 入门语法教程](http://www.imooc.com/wiki/pythonlesson1)
   - [Python 进阶应用教程](http://www.imooc.com/wiki/pythonlesson2)
   - [你的第一本Python基础入门书](https://www.imooc.com/read/46)
+  - [Head First Python (中文版·第2版）](https://book.douban.com/subject/30203158/)
+  - [Python编程 从入门到实践（第2版）](https://book.douban.com/subject/35196328/)
   - [手把手教你把Python应用到实际开发 不再空谈语法](https://coding.imooc.com/class/240.html)
   - [微软官方 Python 入门教程【开眼看世界，最适合的可能就在身边】](https://www.bilibili.com/video/BV1nE41127zQ)
   - [微软官方 Python 进阶教程【完结撒花｜双语熟肉】](https://www.bilibili.com/video/BV1WT4y137cD)
