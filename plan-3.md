@@ -86,7 +86,7 @@ _TODO_
 
 ---
 
-## 大数据: Scala & Spark & Flink & HBase & Elasticsearch & Zookeeper & Hadoop & Kafka & 大数据项目 & 大数据相关
+## 大数据: Scala & Spark & Flink & HBase & Kudu & Elasticsearch & Zookeeper & Hadoop & Kafka & 大数据项目 & 大数据相关
 
 **Scala**
   - [大数据之Scala](https://www.bilibili.com/video/BV164411Z7KY)
@@ -106,6 +106,9 @@ _TODO_
 **HBase**
   - [尚硅谷HBase教程(hbase框架快速入门)](https://www.bilibili.com/video/BV1Y4411B7jy)
   - [HBase+Spring Boot实战分布式文件存储](https://coding.imooc.com/class/205.html)
+
+**Kudu**
+  - [大数据NoSQL数据库Kudu丨构建高性能随机读写访问的数据存储系统](https://www.bilibili.com/video/BV1kv411y7yL)
 
 **Elasticsearch**
   - [Elastic Stack从入门到实践](https://coding.imooc.com/class/181.html)
