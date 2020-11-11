@@ -224,3 +224,10 @@ __Advanced Programming in the UNIX Environment__
 - [UNIX环境高级编程（第3版）](https://e.jd.com/30392983.html)
 
 ---
+
+- [写代码用哪种字体看起来最舒适？](https://www.zhihu.com/question/32058777)
+从可读性和美观综合考量，
+macOS 上 Menlo字体
+windows上 consolas字体
+linux上 dejavu san mono字体
+本人有强迫症，以上是长期更换体验后的最终选择
