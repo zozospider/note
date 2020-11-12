@@ -48,7 +48,7 @@ _TODO_
 
 ---
 
-## 人工智能: Python & 爬虫 & 数学 & 机器学习
+## 人工智能: Python & 数学 & 机器学习
 
 **Python**
   - [Python 入门语法教程](http://www.imooc.com/wiki/pythonlesson1)
@@ -61,16 +61,13 @@ _TODO_
   - [微软官方 Python 进阶教程【完结撒花｜双语熟肉】](https://www.bilibili.com/video/BV1WT4y137cD)
   - [【机器学习】微软官方 Python 高阶教程【完结撒花｜双语熟肉】](https://www.bilibili.com/video/BV1qa4y1Y7CD)
 
-**爬虫**
-  - [Python 原生爬虫教程](http://www.imooc.com/wiki/pythonspider)
-  - [Python爬虫工程师从入门到进阶](https://coding.imooc.com/class/325.html)
-  - [畅销3年的Python分布式爬虫课程 Scrapy打造搜索引擎（2020版）](https://coding.imooc.com/class/92.html)
-  - [移动端Python爬虫实战-2020版](https://coding.imooc.com/class/283.html)
-  - [2020年最新大数据实战教程|反爬虫系统项目实战（Lua+Spark+Redis+Hadoop框架）](https://www.bilibili.com/video/BV1u54y1Q7iY)
-
 **数学**
   - [专为程序员设计的高等数学课](https://coding.imooc.com/class/427.html)
   - [专为程序员设计的线性代数课程](https://coding.imooc.com/class/260.html)
+  - [Head First Statistics: A Brain-Friendly Guide 1st Edition](https://www.amazon.com/Head-First-Statistics-Brain-Friendly-Guide/dp/0596527586)
+  - [深入浅出统计学](https://book.douban.com/subject/7056708/)
+  - [Head First 统计学](https://github.com/usiege/Documents/blob/master/Coding%20Books/Head%20First%20%E7%BB%9F%E8%AE%A1%E5%AD%A6.pdf)
+  - [Head First Algebra: A Learner's Guide to Algebra I 1st Edition](https://www.amazon.com/Head-First-Algebra-Learners-Guide-dp-0596514867/dp/0596514867)
   - [专为程序员设计的统计课](https://coding.imooc.com/class/371.html)
   - [线性代数](https://space.bilibili.com/88461692/channel/detail?cid=9450)
   - [微积分的本质](https://space.bilibili.com/88461692/channel/detail?cid=13407)
@@ -142,7 +139,7 @@ _TODO_
 
 ---
 
-## 其他: Java 多线程 & JVM & Java 相关 & 其他
+## 其他: Java 多线程 & JVM & Java 相关 & 爬虫 & 其他
 
 **Java 多线程**
   - [Java 并发原理入门教程](http://www.imooc.com/wiki/concurrencylesson)
@@ -165,6 +162,13 @@ _TODO_
   - [尚硅谷Java大厂面试题第二季(java面试必学，周阳主讲)](https://www.bilibili.com/video/BV18b411M7xz)
   - [尚硅谷2020最新版Java面试题第三季（java大厂面试题，周阳主讲）](https://www.bilibili.com/video/BV1Hy4y1B78T)
   - [掌握Java项目面试武功心法，面试弯道超车](https://coding.imooc.com/class/413.html)
+
+**爬虫**
+  - [Python 原生爬虫教程](http://www.imooc.com/wiki/pythonspider)
+  - [Python爬虫工程师从入门到进阶](https://coding.imooc.com/class/325.html)
+  - [畅销3年的Python分布式爬虫课程 Scrapy打造搜索引擎（2020版）](https://coding.imooc.com/class/92.html)
+  - [移动端Python爬虫实战-2020版](https://coding.imooc.com/class/283.html)
+  - [2020年最新大数据实战教程|反爬虫系统项目实战（Lua+Spark+Redis+Hadoop框架）](https://www.bilibili.com/video/BV1u54y1Q7iY)
 
 **其他**
 
