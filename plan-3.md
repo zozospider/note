@@ -48,7 +48,7 @@ _TODO_
 
 ---
 
-## 人工智能: Python & 数学 & 机器学习
+## 人工智能: Python & 数学 & 数据分析和挖掘 & 机器学习
 
 **Python**
   - [Python 入门语法教程](http://www.imooc.com/wiki/pythonlesson1)
@@ -71,6 +71,13 @@ _TODO_
   - [专为程序员设计的统计课](https://coding.imooc.com/class/371.html)
   - [线性代数](https://space.bilibili.com/88461692/channel/detail?cid=9450)
   - [微积分的本质](https://space.bilibili.com/88461692/channel/detail?cid=13407)
+
+**数据分析和挖掘**
+  - [深入浅出数据分析](https://book.douban.com/subject/20381154/)
+  - [利用Python进行数据分析 原书第2版](https://book.douban.com/subject/30283996/)
+  - [Python数据分析入门与实践](https://coding.imooc.com/class/156.html)
+  - [人人都能学会数据分析](https://class.imooc.com/sale/dataanalysis)
+  - [Python3数据分析与挖掘建模实战](https://coding.imooc.com/class/185.html)
 
 **机器学习**
   - [GitHub microsoft/ai-edu](https://github.com/microsoft/ai-edu)
