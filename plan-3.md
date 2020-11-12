@@ -193,3 +193,5 @@ _TODO_
 - [Head First 设计模式（中文版）](https://book.douban.com/subject/2243615/)
 - [慕课教程](http://www.imooc.com/wiki/)
 - [牛客网](https://www.nowcoder.com/)
+
+看书的时候读出来？有利于理解？费曼学习法？自己教自己？
