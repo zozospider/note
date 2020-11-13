@@ -195,6 +195,7 @@ _TODO_
 - [深入浅出程序设计（中文版）](https://book.douban.com/subject/10518092/)
 - [Head First 软件开发（中文版）](https://book.douban.com/subject/4604857/)
 - [深入浅出PMP（中文版）](https://book.douban.com/subject/4209569/)
+- [Google 开源项目风格指南 (中文版)](https://zh-google-styleguide.readthedocs.io/en/latest/contents/)
 - [慕课教程](http://www.imooc.com/wiki/)
 - [牛客网](https://www.nowcoder.com/)
 
