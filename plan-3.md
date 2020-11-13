@@ -200,5 +200,6 @@ _TODO_
 - [Google 开源项目风格指南 (中文版)](https://zh-google-styleguide.readthedocs.io/en/latest/contents/)
 - [慕课教程](http://www.imooc.com/wiki/)
 - [牛客网](https://www.nowcoder.com/)
+- __学英语, 练书法__
 
 看书的时候读出来？有利于理解？费曼学习法？自己教自己？
