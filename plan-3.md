@@ -51,6 +51,8 @@ _TODO_
 ## 人工智能: Python & 数学 & 数据分析和挖掘 & 机器学习
 
 **Python**
+  - [PEP 8 -- Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/)
+  - [PEP 257 -- Docstring Conventions](https://www.python.org/dev/peps/pep-0257/)
   - [Python 入门语法教程](http://www.imooc.com/wiki/pythonlesson1)
   - [Python 进阶应用教程](http://www.imooc.com/wiki/pythonlesson2)
   - [你的第一本Python基础入门书](https://www.imooc.com/read/46)
