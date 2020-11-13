@@ -191,6 +191,10 @@ _TODO_
 - [【计算机科学速成课】[40集全/精校] - Crash Course Computer Science](https://www.bilibili.com/video/BV1EW411u7th)
 - [设计模式入门教程](http://www.imooc.com/wiki/Designlesson)
 - [Head First 设计模式（中文版）](https://book.douban.com/subject/2243615/)
+- [深入浅出面向对象分析与设计（中文版）](https://book.douban.com/subject/3530721/)
+- [深入浅出程序设计（中文版）](https://book.douban.com/subject/10518092/)
+- [Head First 软件开发（中文版）](https://book.douban.com/subject/4604857/)
+- [深入浅出PMP（中文版）](https://book.douban.com/subject/4209569/)
 - [慕课教程](http://www.imooc.com/wiki/)
 - [牛客网](https://www.nowcoder.com/)
 
