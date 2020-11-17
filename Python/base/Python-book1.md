@@ -8,6 +8,8 @@ export FLASK_DEBUG=1
 python3 xxx.py
 ```
 
+# 第七章 使用数据库
+
 ```sql
 CREATE DATABASE vsearchlogDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE vsearchlogDB;
