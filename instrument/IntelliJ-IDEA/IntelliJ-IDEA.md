@@ -82,7 +82,7 @@ bogon:note-distributed-zookeeper-video zoz$
 
 - [IntelliJ-IDEA 提交代码到 Github](https://github.com/FatliTalk/blog/issues/11)
 - [IntelliJ-IDEA 提交代码到 Github-2](https://blog.csdn.net/rongxiang111/article/details/78120126)
-- [git上传本地Intellij idea 项目到github](https://blog.csdn.net/u010237107/article/details/50910879)
+- [git 上传本地 Intellij idea 项目到 github](https://blog.csdn.net/u010237107/article/details/50910879)
 
 
 1. CVS - import into Version Control - Share Project on GitHub
