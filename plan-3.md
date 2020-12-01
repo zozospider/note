@@ -1,6 +1,6 @@
 # 本周任务
 
-_TODO_
+算法与数据结构体系课
 
 
 
@@ -39,7 +39,7 @@ _TODO_
 
 # plan-3
 
-## 算法: 数据结构与算法
+## 算法 (1_MONTH): 数据结构与算法
 
 - [算法与数据结构体系课](https://class.imooc.com/sale/datastructure) 😶
 - [深度实战玩转算法](https://coding.imooc.com/class/138.html)
@@ -48,7 +48,7 @@ _TODO_
 
 ---
 
-## 人工智能: Python & 数学 & 数据分析和挖掘 & 机器学习
+## 人工智能 (2_MONTH): Python & 数学 & 数据分析和挖掘 & 机器学习
 
 **Python**
   - [PEP 8 -- Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/)
@@ -92,7 +92,7 @@ _TODO_
 
 ---
 
-## 大数据: Scala & Spark & Flink & HBase & Kudu & Elasticsearch & Zookeeper & Hadoop & Kafka & 大数据项目 & 大数据相关
+## 大数据 (2_MONTH): Scala & Spark & Flink & HBase & Kudu & Elasticsearch & Zookeeper & Hadoop & Kafka & 大数据项目 & 大数据相关
 
 **Scala**
   - [大数据之Scala](https://www.bilibili.com/video/BV164411Z7KY)
@@ -148,7 +148,7 @@ _TODO_
 
 ---
 
-## 其他: Java 多线程 & JVM & Java 相关 & 爬虫 & 其他
+## 其他 (1_MONTH): Java 多线程 & JVM & Java 相关 & 爬虫 & 其他
 
 **Java 多线程**
   - [Java 并发原理入门教程](http://www.imooc.com/wiki/concurrencylesson)
