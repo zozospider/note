@@ -78,6 +78,9 @@
 **Kudu**
   - [大数据NoSQL数据库Kudu丨构建高性能随机读写访问的数据存储系统](https://www.bilibili.com/video/BV1kv411y7yL)
 
+**Druid**
+  - [Druid](https://druid.apache.org/)
+
 **Elasticsearch**
   - [Elastic Stack从入门到实践](https://coding.imooc.com/class/181.html)
   - [超系统学习Lucene全文检索技术](https://www.bilibili.com/video/BV1eJ411q7nw)
