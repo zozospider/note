@@ -35,19 +35,73 @@
 # proxy list
 alias proxy='export all_proxy=socks5://127.0.0.1:1086'
 alias unproxy='unset all_proxy'
+
+alias http_proxy='export http_proxy=socks5://127.0.0.1:1086'
+alias https_proxy='export https_proxy=socks5://127.0.0.1:1086'
+alias un_http_proxy='unset http_proxy'
+alias un_https_proxy='unset https_proxy'
 ```
 
 ## 开启和关闭
 
 ```bash
-# 开启
+# proxy
+## 开启
 proxy
-# 验证
+## 验证
 curl cip.cc
-# 关闭
+## 关闭
 unproxy
-# 验证
+## 验证
 curl cip.cc
+
+# http_proxy
+## 开启
+http_proxy
+## 验证
+curl http://cip.cc
+## 关闭
+un_http_proxy
+## 验证
+curl http://cip.cc
+
+# https_proxy
+## 开启
+https_proxy
+## 验证
+curl https://cip.cc
+## 关闭
+un_https_proxy
+## 验证
+curl https://cip.cc
+```
+
+## 注意
+
+### Homebrew use proxy
+
+Homebrew 安装的时候, 开启 proxy 没问题
+
+### pip use proxy
+
+- [Python's requests “Missing dependencies for SOCKS support” when using SOCKS5 from Terminal](https://stackoverflow.com/questions/38794015/pythons-requests-missing-dependencies-for-socks-support-when-using-socks5-fro)
+
+- pip 安装的时候
+  - 开启 `all_proxy` 报错
+  - 开启 `https_proxy` 报错
+  - 开启 `http_proxy` 不会报错
+
+可以尝试以下解决方案:
+```bash
+# 测试有效
+unset all_proxy
+# 未测试
+pip3 install pysocks
+# 未测试
+pip install request[socks]
+# 未测试
+pip install -U requests[socks]
+
 ```
 
 # Homebrew
