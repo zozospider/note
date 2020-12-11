@@ -55,7 +55,7 @@ DESC log;
 
 ## 记录
 
-## Python 安装 Mariadb 驱动 - 工作外网机 Mac 环境
+## Python 安装 Mariadb 驱动 - xx Mac 环境
 
 ```bash
 yhdeiMac:tmp yh$ brew install mariadb-connector-c
@@ -256,4 +256,82 @@ Successfully installed mariadb-1.0.4
 WARNING: You are using pip version 20.2.3; however, version 20.2.4 is available.
 You should consider upgrading via the '/Library/Frameworks/Python.framework/Versions/3.9/bin/python3 -m pip install --upgrade pip' command.
 yhdeiMac:tmp yh$ 
+```
+
+
+
+## Python 安装 Mariadb 驱动 - Mac 环境
+
+```bash
+spiderxmac:~ zoz$ brew install mariadb-connector-c
+Updating Homebrew...
+==> Auto-updated Homebrew!
+Updated 1 tap (homebrew/core).
+==> Updated Formulae
+Updated 3 formulae.
+
+==> Downloading https://homebrew.bintray.com/bottles/openssl%401.1-1.1.1i.catalina.bottle.tar.gz
+==> Downloading from https://d29vzk4ow07wi7.cloudfront.net/066b9f114617872e77fa3d4afee2337daabc2c181d
+######################################################################## 100.0%
+==> Downloading https://homebrew.bintray.com/bottles/mariadb-connector-c-3.1.11.catalina.bottle.tar.g
+==> Downloading from https://d29vzk4ow07wi7.cloudfront.net/a6c670fce92617a9d00943243b33a72b70477cad27
+######################################################################## 100.0%
+==> Installing dependencies for mariadb-connector-c: openssl@1.1
+==> Installing mariadb-connector-c dependency: openssl@1.1
+==> Pouring openssl@1.1-1.1.1i.catalina.bottle.tar.gz
+==> Caveats
+A CA file has been bootstrapped using certificates from the system
+keychain. To add additional certificates, place .pem files in
+  /usr/local/etc/openssl@1.1/certs
+
+and run
+  /usr/local/opt/openssl@1.1/bin/c_rehash
+
+openssl@1.1 is keg-only, which means it was not symlinked into /usr/local,
+because macOS provides LibreSSL.
+
+If you need to have openssl@1.1 first in your PATH run:
+  echo 'export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"' >> /Users/zoz/.bash_profile
+
+For compilers to find openssl@1.1 you may need to set:
+  export LDFLAGS="-L/usr/local/opt/openssl@1.1/lib"
+  export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include"
+
+==> Summary
+🍺  /usr/local/Cellar/openssl@1.1/1.1.1i: 8,067 files, 18.5MB
+==> Installing mariadb-connector-c
+==> Pouring mariadb-connector-c-3.1.11.catalina.bottle.tar.gz
+🍺  /usr/local/Cellar/mariadb-connector-c/3.1.11: 32 files, 1.4MB
+==> Caveats
+==> openssl@1.1
+A CA file has been bootstrapped using certificates from the system
+keychain. To add additional certificates, place .pem files in
+  /usr/local/etc/openssl@1.1/certs
+
+and run
+  /usr/local/opt/openssl@1.1/bin/c_rehash
+
+openssl@1.1 is keg-only, which means it was not symlinked into /usr/local,
+because macOS provides LibreSSL.
+
+If you need to have openssl@1.1 first in your PATH run:
+  echo 'export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"' >> /Users/zoz/.bash_profile
+
+For compilers to find openssl@1.1 you may need to set:
+  export LDFLAGS="-L/usr/local/opt/openssl@1.1/lib"
+  export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include"
+
+spiderxmac:~ zoz$ 
+spiderxmac:~ zoz$ 
+spiderxmac:~ zoz$ python3 -m pip install --user mariadb
+Collecting mariadb
+  Downloading mariadb-1.0.5.tar.gz (67 kB)
+     |████████████████████████████████| 67 kB 322 kB/s 
+Using legacy 'setup.py install' for mariadb, since package 'wheel' is not installed.
+Installing collected packages: mariadb
+    Running setup.py install for mariadb ... done
+Successfully installed mariadb-1.0.5
+WARNING: You are using pip version 20.2.3; however, version 20.3.1 is available.
+You should consider upgrading via the '/Library/Frameworks/Python.framework/Versions/3.9/bin/python3 -m pip install --upgrade pip' command.
+spiderxmac:~ zoz$ 
 ```
