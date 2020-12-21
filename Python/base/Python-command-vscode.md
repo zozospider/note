@@ -14,7 +14,7 @@ Open Python File -> Extensions -> Python (Microsoft) -> Install
 
 ## Linter
 
-安装好 Python 插件后, 右下角会出现 Linter pylint is not installed 提示, 先选择左下角的 Python 版本, 再点击 Install, 此时 Linter 就会帮助提示语法错误.
+安装好 Python 插件后, 右下角会出现 Linter pylint is not installed 提示, 先选择左下角的 Python 版本, 再点击 Install, 此时 Linter 就会帮助提示语法错误
 
 可以通过: Open Python File -> View -> Command Palette -> Select Linter -> Pylint (默认, 推荐) 选择 Linter 的类型
 
