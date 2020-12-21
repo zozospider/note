@@ -51,6 +51,6 @@ File -> Preferences -> Settings -> Code-runner: Executor Map -> Edit in settings
 
 tips 1: 默认的配置在 defaultSettings.json 文件中 (可通过 View -> Command Palette -> Open Default Settings (JSON) 打开)
 
-tips 2: 用户自定义的配置在 settings.json 文件中 (可通过 View -> Command Palette -> Open Settings (JSON) 打开), 其中用户自定义的 settings.json 包括当前用户的 settings.json (`C:\Users\thisi\AppData\Roaming\Code\User\settings.json`) 和当前工作区的 settings.json (`D:\zz\code\none_ide\code_with_mosh_python_getting_started\.vscode\settings.json`)
+tips 2: 自定义的配置在 settings.json 文件中 (可通过 View -> Command Palette -> Open Settings (JSON) 打开), 其中自定义的 settings.json 包括当前用户的 settings.json (`C:\Users\thisi\AppData\Roaming\Code\User\settings.json`) 和当前工作区的 settings.json (`D:\zz\code\none_ide\code_with_mosh_python_getting_started\.vscode\settings.json`)
 
 ---
