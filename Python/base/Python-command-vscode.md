@@ -1,4 +1,22 @@
 
+# 常规
+
+## Windows
+
+- 跳到行首: Home
+- 跳到行尾: End
+- 跳到文件头部: Ctrl + Home
+- 跳到文件尾部: Ctrl + End
+- 移动一行 / 多行: Alt + Up / Alt + Down
+- 复制一行 / 多行: Shift + Alt + Up / Shift + Alt + Down
+- 添加 / 取消注释一行 / 多行: Ctrl + /
+
+## Mac
+
+_TODO_
+
+---
+
 # Terminal
 
 打开 Terminal 方式:
