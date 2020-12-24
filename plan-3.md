@@ -46,6 +46,7 @@
 **机器学习**
   - [GitHub microsoft/ai-edu](https://github.com/microsoft/ai-edu)
   - [机器学习实战：基于Scikit-Learn、Keras和TensorFlow（原书第2版）](https://book.douban.com/subject/35218199/)
+  - [自然语言处理实战](https://book.douban.com/subject/35197669/)
   - [Tensorflow 入门教程](http://www.imooc.com/wiki/tensorflow)
   - [Python3入门机器学习 经典算法与应用 轻松入行人工智能](https://coding.imooc.com/class/169.html)
   - [Google老师亲授 TensorFlow2.0 入门到进阶](https://coding.imooc.com/class/344.html)
