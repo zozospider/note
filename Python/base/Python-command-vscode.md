@@ -54,3 +54,16 @@ tips 1: 默认的配置在 defaultSettings.json 文件中 (可通过 View -> Com
 tips 2: 自定义的配置在 settings.json 文件中 (可通过 View -> Command Palette -> Open Settings (JSON) 打开), 其中自定义的 settings.json 包括当前用户的 settings.json (`C:\Users\thisi\AppData\Roaming\Code\User\settings.json`) 和当前工作区的 settings.json (`D:\zz\code\none_ide\code_with_mosh_python_getting_started\.vscode\settings.json`)
 
 ---
+
+# Debug
+
+Open Python File -> Run -> create a launch.json file -> 不做任何修改(此时当前工作空间的 .vscode 文件夹下会多一个 launch.json 配置文件) -> 下拉框中选择 Python: Current File 即可
+
+以下为 Debug 快捷键:
+- 添加断点 (Add Breakpoint): F9
+- 运行程序 / 下一个断点 (Continue): F5
+- 下一步 (Step Over): F10
+- 进入函数 (Step Into): F11
+- 跳出函数 (Step Out): Shift + F11
+
+---
