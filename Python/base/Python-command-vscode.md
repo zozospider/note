@@ -61,6 +61,10 @@ Open Python File -> Extensions -> Code Runner (Jun Han) -> Install
 
 可以通过快捷键 Ctrl + Alt + N 运行当前 Python 文件
 
+如果需要每次运行都清空之前的结果 (默认不清空):
+
+File > Preferences > Settings > Code-runner: Clear Previous Output -> 勾选, 以后自动运行 Python 之前都会先清空之前的结果
+
 ## For Mac
 
 此插件调用的是 python -u 命令, 在 Windows 上没问题, 但是 Mac 中的 python 命令一般是调用 python 2, 要使用 python 3, 需要执行以下操作:
