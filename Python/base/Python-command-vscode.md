@@ -63,6 +63,8 @@ Open Python File -> Extensions -> Code Runner (Jun Han) -> Install
 
 可通过快捷键 Ctrl + Alt + M 停止当前运行的 Python 程序
 
+可通过快捷键 Ctrl + J 隐藏显示运行结果的 OUTPUT Panel
+
 如果需要每次运行都清空之前的结果 (默认不清空):
 
 File > Preferences > Settings > Code-runner: Clear Previous Output -> 勾选, 以后自动运行 Python 之前都会先清空之前的结果
