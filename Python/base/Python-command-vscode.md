@@ -59,7 +59,9 @@ Open Python File -> View -> Command Palette -> Format Document -> Formatter auto
 
 Open Python File -> Extensions -> Code Runner (Jun Han) -> Install
 
-可以通过快捷键 Ctrl + Alt + N 运行当前 Python 文件
+可通过快捷键 Ctrl + Alt + N 运行当前 Python 文件
+
+可通过快捷键 Ctrl + Alt + M 停止当前运行的 Python 程序
 
 如果需要每次运行都清空之前的结果 (默认不清空):
 
