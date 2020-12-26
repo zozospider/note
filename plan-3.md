@@ -26,6 +26,7 @@
   - [【机器学习】微软官方 Python 高阶教程【完结撒花｜双语熟肉】](https://www.bilibili.com/video/BV1qa4y1Y7CD)
 
 **数学**
+  - [数学之美（第三版）](https://book.douban.com/subject/35033507/)
   - [专为程序员设计的高等数学课](https://coding.imooc.com/class/427.html)
   - [专为程序员设计的线性代数课程](https://coding.imooc.com/class/260.html)
   - [Head First Statistics: A Brain-Friendly Guide 1st Edition](https://www.amazon.com/Head-First-Statistics-Brain-Friendly-Guide/dp/0596527586)
