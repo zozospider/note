@@ -10,6 +10,7 @@
 - 移动一行 / 多行: Alt + Up / Alt + Down
 - 复制一行 / 多行: Shift + Alt + Up / Shift + Alt + Down
 - 添加 / 取消注释一行 / 多行: Ctrl + /
+- 修改变量名: F2
 
 ## Mac
 
