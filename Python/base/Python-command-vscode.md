@@ -10,7 +10,9 @@
 - 移动一行 / 多行: Alt + Up / Alt + Down
 - 复制一行 / 多行: Shift + Alt + Up / Shift + Alt + Down
 - 添加 / 取消注释一行 / 多行: Ctrl + /
-- 修改变量名: F2
+- 修改变量名: F2 修改后 Enter
+  - 第一次修改按 Enter 后, 会提示 Refactoring library rope is not installed. Install?, 点击 Yes 安装后重试
+  - tips: 如果下载超时, 可尝试断开外网
 
 ## Mac
 
