@@ -108,13 +108,17 @@ File -> Preferences -> Settings -> Extensions -> Run Code configuration -> Execu
 
 选择左下角的 Python 版本 -> Enter interpreter path -> C:\Users\thisi\.virtualenvs\Python_Package_Index-yN2Nq_6L\Scripts\python.exe -> 此时左下角的 Python 版本变成了虚拟环境的 Python
 
-2. Fomatting code:
+2. Linter:
+
+右下角会出现 Linter pylint is not installed? 提示 -> Yes
+
+3. Fomatting code:
 
 保存文件后, 右下角会出现 Formatter autopep8 is not installed. Install? 提示 -> Yes
 
-3. Linter:
+4. 没有 Linter 或 Fomatting code 提示:
 
-如果语法提示没有提示或生效, 重启下 VSCode, 然后保存一个有语法问题的 Python 文件, 右下角会出现 Linter pylint is not installed 提示, 先选择左下角的 Python 版本, 再点击 Install, 此时 Linter 就会帮助提示语法错误
+如果语法提示没有提示或生效, 重启下 VSCode, 然后保存一个有语法问题的 Python 文件, 右下角会出现提示, 先选择左下角的 Python 版本, 再点击 Install
 
 ## 切换回去
 
