@@ -25,7 +25,7 @@ python3 -m pip list --user --uptodate
 python3 -m pip list --uptodate
 ```
 
-# 安装模块
+# 安装包
 
 ```bash
 # 安装 (Mac)
@@ -58,11 +58,20 @@ dir C:\Users\thisi\AppData\Roaming\Python\Python39\site-packages
 
 ---
 
-# 卸载模块
+# 更新包
 
 ```bash
-# 卸载模块 (Mac) (好像不要加 --user?)
+python -m pip install --upgrade SomePackage
+```
+
+---
+
+# 卸载包
+
+```bash
+# 卸载包只会卸载当前包, 不会卸载它的依赖包
+# 卸载包 (Mac) (好像不要加 --user?)
 python3 -m pip uninstall SomeProject
-# 卸载模块 (Windows) (不要加 --user)
+# 卸载包 (Windows) (不要加 --user)
 python -m pip uninstall SomeProject
 ```
