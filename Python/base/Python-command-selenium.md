@@ -1,4 +1,9 @@
-# 一. 安装包
+
+- [Selenium with Python](https://selenium-python.readthedocs.io/)
+
+# 使用
+
+## 一. 安装包
 
 ```bash
 # 安装包 (Windows)
@@ -7,7 +12,7 @@ python -m pip install --user selenium
 
 ---
 
-# 二. 安装浏览器驱动
+## 二. 安装浏览器驱动
 
 驱动可用于自动执行浏览器行为, 安装步骤如下:
 
@@ -19,7 +24,7 @@ python -m pip install --user selenium
 
 ---
 
-# 三. 编码
+## 三. 编码
 
 通过以下代码可以自动打开浏览器:
 
@@ -29,3 +34,7 @@ from selenium import webdriver
 browser = webdriver.Chrome()
 browser.get("https://github.com")
 ```
+
+详细代码见: `xxx\code_with_mosh_python_getting_started\Popular Python Packages\Browser Automation.py`
+
+---
