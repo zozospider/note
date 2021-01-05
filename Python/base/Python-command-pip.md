@@ -75,3 +75,25 @@ python3 -m pip uninstall SomeProject
 # 卸载包 (Windows) (不要加 --user)
 python -m pip uninstall SomeProject
 ```
+
+---
+
+# 包列表
+
+```bash
+# 安装 (Mac)
+python3 -m pip install --user SomeProject
+# 安装 (Windows)
+python -m pip install --user SomeProject
+```
+
+```bash
+# 网络: 发送 HTTP 请求
+requests
+# 发送短信公司提供的包: https://www.twilio.com/
+twilio
+# 爬虫: 从 HTML 和 XML 文件中提取信息
+beautifulsoup4
+# 自动化测试的包: 参考 Python-command-selenium.md
+selenium
+```
