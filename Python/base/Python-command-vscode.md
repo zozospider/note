@@ -68,19 +68,29 @@ Open Python File -> Extensions -> Code Runner (Jun Han) -> Install
 
 可通过快捷键 Ctrl + J 隐藏显示运行结果的 OUTPUT Panel
 
+## 清空结果
+
 如果需要每次运行都清空之前的结果 (默认不清空):
 
 File > Preferences > Settings > Code-runner: Clear Previous Output -> 勾选, 以后自动运行 Python 之前都会先清空之前的结果
+
+## 乱码
+
+如果 OUTPUT 显示的为乱码则:
+
+File -> Preferences -> Settings -> Extensions -> Run Code configuration -> Executor Map -> Edit in settings.json -> 点击后会在自定义的 settings.json 文件中增加一个 "code-runner.executorMap": {...} 配置, 修改其中的 "python": "python -u" 为 "python": "set PYTHONIOENCODING=utf8 && python -u"
 
 ## For Mac
 
 此插件调用的是 python -u 命令, 在 Windows 上没问题, 但是 Mac 中的 python 命令一般是调用 python 2, 要使用 python 3, 需要执行以下操作:
 
-File -> Preferences -> Settings -> Extensions -> Run Code configuration -> Executor Map -> Edit in settings.json -> 点击后会在自定义的 settings.json 文件中增加一个 "code-runner.executorMap": {...} 配置, 修改其中的 "python": "python -u" 为 "python": "python3" 保存即可
+File -> Preferences -> Settings -> Extensions -> Run Code configuration -> Executor Map -> Edit in settings.json -> 点击后会在自定义的 settings.json 文件中增加一个 "code-runner.executorMap": {...} 配置, 修改其中的 "python": "python -u" 为 "python": "set PYTHONIOENCODING=utf8 && python3" 保存即可
 
-tips 1: 默认的配置在 defaultSettings.json 文件中 (可通过 View -> Command Palette -> Open Default Settings (JSON) 打开)
+## tips
 
-tips 2: 自定义的配置在 settings.json 文件中 (可通过 View -> Command Palette -> Open Settings (JSON) 打开), 其中自定义的 settings.json 包括当前用户的 settings.json (`C:\Users\thisi\AppData\Roaming\Code\User\settings.json`) 和当前工作区的 settings.json (`D:\zz\code\none_ide\code_with_mosh_python_getting_started\.vscode\settings.json`)
+1. 默认的配置在 defaultSettings.json 文件中 (可通过 View -> Command Palette -> Open Default Settings (JSON) 打开)
+
+2. 自定义的配置在 settings.json 文件中 (可通过 View -> Command Palette -> Open Settings (JSON) 打开), 其中自定义的 settings.json 包括当前用户的 settings.json (`C:\Users\thisi\AppData\Roaming\Code\User\settings.json`) 和当前工作区的 settings.json (`D:\zz\code\none_ide\code_with_mosh_python_getting_started\.vscode\settings.json`)
 
 ---
 
@@ -100,7 +110,7 @@ C:\Users\thisi\.virtualenvs\Python_Package_Index-yN2Nq_6L
 
 2. 修改 Code Runner 配置:
 
-File -> Preferences -> Settings -> Extensions -> Run Code configuration -> Executor Map -> Edit in settings.json -> 点击后会在自定义的 settings.json 文件中增加一个 "code-runner.executorMap": {...} 配置, 修改其中的 "python": "python -u" 为 "python": "C:\\Users\\thisi\\.virtualenvs\\Python_Package_Index-yN2Nq_6L\\Scripts\\python -u" 保存即可
+File -> Preferences -> Settings -> Extensions -> Run Code configuration -> Executor Map -> Edit in settings.json -> 点击后会在自定义的 settings.json 文件中增加一个 "code-runner.executorMap": {...} 配置, 修改其中的 "python": "python -u" 为 "python": "set PYTHONIOENCODING=utf8 && C:\\Users\\thisi\\.virtualenvs\\Python_Package_Index-yN2Nq_6L\\Scripts\\python -u" 保存即可
 
 ## 配置 Python 路径, Linter, Fomatting code 插件
 
