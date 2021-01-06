@@ -85,6 +85,7 @@ python -m pip uninstall SomeProject
 python3 -m pip install --user SomeProject
 # 安装 (Windows)
 python -m pip install --user SomeProject
+pipenv install SomeProject
 ```
 
 ```bash
@@ -104,4 +105,6 @@ openpyxl
 # Math: Heavily used in scientific computations (data science and machine learning)
 # Numpy provides multidimensional array that are super fast and take less memory, plus they support various kinds of mathematical operations than regular python lists don't
 numpy
+# Web
+Django
 ```
