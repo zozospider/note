@@ -102,5 +102,6 @@ pypdf2
 # Excel
 openpyxl
 # Math: Heavily used in scientific computations (data science and machine learning)
+# Numpy provides multidimensional array that are super fast and take less memory, plus they support various kinds of mathematical operations than regular python lists don't
 numpy
 ```
