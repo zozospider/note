@@ -101,4 +101,6 @@ selenium
 pypdf2
 # Excel
 openpyxl
+# Math: Heavily used in scientific computations (data science and machine learning)
+numpy
 ```
