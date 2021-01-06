@@ -94,7 +94,11 @@ requests
 twilio
 # 爬虫: 从 HTML 和 XML 文件中提取信息
 beautifulsoup4
-# 自动化测试的包: https://selenium-python.readthedocs.io/
+# 测试: 自动化测试的包: https://selenium-python.readthedocs.io/
 # 参考 Python-command-selenium.md
 selenium
+# PDF
+pypdf2
+# Excel
+openpyxl
 ```
