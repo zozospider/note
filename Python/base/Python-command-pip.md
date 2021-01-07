@@ -105,6 +105,7 @@ openpyxl
 # Math: Heavily used in scientific computations (data science and machine learning)
 # Numpy provides multidimensional array that are super fast and take less memory, plus they support various kinds of mathematical operations than regular python lists don't
 numpy
-# Web
+# Web: Django 包和 Django 的语法提示包
 Django
+pylint-django
 ```
