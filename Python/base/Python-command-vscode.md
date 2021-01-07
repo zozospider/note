@@ -128,7 +128,7 @@ File -> Preferences -> Settings -> Extensions -> Run Code configuration -> Execu
 
 4. 没有 Linter 或 Fomatting code 提示:
 
-如果语法提示没有提示或生效, 重启下 VSCode, 然后保存一个有语法问题的 Python 文件, 右下角会出现提示, 先选择左下角的 Python 版本, 再点击 Install
+如果语法提示没有提示或生效, 重启下 VSCode, 然后打开一个有语法问题的 Python 文件, 然后选择 View -> Command Paletted -> Python: Select Linter -> pylint, 再保存文件 (或者重启后保存文件), 此时右下角会出现提示, 先选择左下角的 Python 版本, 再点击 Install
 
 ## 切换回去
 
