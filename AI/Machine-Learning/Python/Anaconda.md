@@ -38,6 +38,22 @@
 
 # 创建 Notebook
 
-选择需要创建 Notebook 的文件夹, 然后点击右上角的 New -> Python3, 此时会打开一个新的标签页, 将顶部的 `Untitled` 改名成 `HelloWorld` 后, 会在当前文件夹中创建一个 `HelloWorld.ipynb` 文件和 `.ipynb_checkpoints` 文件夹, `HelloWorld.ipynb` 文件即为 Jupyter Notebook 源文件
+选择需要创建 Notebook 的文件夹, 然后点击右上角的 New -> Python3, 此时会打开一个新的标签页, 将顶部的 `Untitled` 改名成 `HelloWorld` 后, 会在当前文件夹中创建一个 `HelloWorld.ipynb` 文件和 `.ipynb_checkpoints` 文件夹, `HelloWorld.ipynb` 文件即为 Jupyter Notebook 源文件 (包含代码, 运行输出结果等)
+
+---
+
+# Jupyter Notebook 快捷键
+
+- Command Mode (press Esc to enable)
+  - H: 查看所有快捷键
+  - A: insert cell above (在上面插入 cell)
+  - B: insert cell below (在下面插入 cell)
+  - D,D: delete selected cells (删除选中的 cell)
+
+- Edit Mode (press Enter to enable)
+  - Esc: enter command mode (从编辑模式编程选中模式)
+  - Tab: code completion or indent (代码提示)
+  - Shift-Tab: tooltip (查看代码说明)
+  - Ctrl-/: comment (注释 or 取消注释)
 
 ---
