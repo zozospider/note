@@ -22,3 +22,11 @@
 4. 点击下方弹出的的 Relaunch 重启 Chrome
 
 ---
+
+# Chrome 很慢
+
+如果 Chrome 上网很慢 (比如网页中加载不出图片, 视频打不开等) 但是其他浏览器很快, 可以考虑进行以下操作:
+
+Settings -> Privacy and security -> Security -> Use secure DNS (关掉)
+
+---
