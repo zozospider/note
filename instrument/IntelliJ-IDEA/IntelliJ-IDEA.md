@@ -21,7 +21,7 @@ Help > Keymap Refrence
 
 # 代码提示快捷键 (Windows)
 
-默认的 `ctrl + space` 快捷键被切换输入法占用, 需要修改为 `alt + /`
+Windows 上代码提示默认的 `ctrl + space` 快捷键被切换输入法占用, 需要修改为 `alt + /`
 
 - [Intellij IDEA 代码提示快捷键修改（智能感知）](https://blog.csdn.net/leo3070/article/details/77712522)
 
