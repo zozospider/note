@@ -23,6 +23,14 @@ Help > Keymap Refrence
 
 ## 代码提示快捷键 (Windows)
 
+### 方法参数提示
+
+`Ctrl+P`
+
+### 代码建议
+
+__tips__: 如果不想改快捷键, 可以尝试使用 `ctrl + alt + space` / `ctrl + shift + space`
+
 Windows 上代码提示默认的 `ctrl + space` 快捷键被切换输入法占用, 需要修改为 `alt + /`
 
 - [Intellij IDEA 代码提示快捷键修改（智能感知）](https://blog.csdn.net/leo3070/article/details/77712522)
