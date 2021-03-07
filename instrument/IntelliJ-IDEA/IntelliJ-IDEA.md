@@ -19,11 +19,23 @@
 
 Help > Keymap Refrence
 
-# 代码提示快捷键 (Windows)
+# 快捷键
+
+## 代码提示快捷键 (Windows)
 
 Windows 上代码提示默认的 `ctrl + space` 快捷键被切换输入法占用, 需要修改为 `alt + /`
 
 - [Intellij IDEA 代码提示快捷键修改（智能感知）](https://blog.csdn.net/leo3070/article/details/77712522)
+
+## 自动创建变量
+
+变量后写上 .var 默认创建变量名 (也可通过 `Ctrl + Alt + V` 自动生成变量)
+
+- [IntelliJ IDEA自动补全变量名称和属性名称的快捷键](https://blog.csdn.net/cats_miao/article/details/81511812)
+
+另外, 在 __Scala__ 中如果需要自动勾选 Specify type (加上变量类型)
+
+- [idea中Scala自动勾选Specify type](https://blog.csdn.net/chinese_coder/article/details/112172647)
 
 # 无法下载源码
 
