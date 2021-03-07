@@ -19,7 +19,7 @@
 
 Help > Keymap Refrence
 
-# 代码提示快捷键
+# 代码提示快捷键 (Windows)
 
 默认的 `ctrl + space` 快捷键被切换输入法占用, 需要修改为 `alt + /`
 
