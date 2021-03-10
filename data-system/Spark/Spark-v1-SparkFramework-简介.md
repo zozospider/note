@@ -7,4 +7,4 @@
   - Spark MLib
   - SPark GraphX
 
-![image](https://raw.githubusercontent.com/zozospider/note/master/data-system/Spark/Spark-v1-SparkFramework-简介/Spark核心模块.png)
+![image](https://github.com/zozospider/note/blob/master/data-system/Spark/Spark-v1-SparkFramework-简介/Spark核心模块.png)
