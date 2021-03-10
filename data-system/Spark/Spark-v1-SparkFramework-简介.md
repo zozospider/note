@@ -11,6 +11,6 @@
   - Spark MLib: 机器学习
   - SPark GraphX: 图计算
 
-![image](https://github.com/zozospider/note/blob/master/data-system/Spark/Spark-v1-SparkFramework-简介/Spark核心模块.png)
+![image](https://github.com/zozospider/note/blob/master/data-system/Spark/Spark-V1-SparkFramework-简介/Spark核心模块.png)
 
 ---
