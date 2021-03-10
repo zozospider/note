@@ -32,6 +32,18 @@ PATH
 
 # 打包
 
+## scope
+
+```xml
+<dependency>
+    <groupId>org.apache.spark</groupId>
+    <artifactId>spark-core_2.12</artifactId>
+    <version>3.1.1</version>
+    <!-- provided 意味着打包的时候可以不用包进去 (假定目标的容器已经提供了这个 jar 包) -->
+    <scope>provided</scope>
+</dependency>
+```
+
 ## 生成 jar 包排除文件
 
 ```xml
