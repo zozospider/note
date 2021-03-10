@@ -32,6 +32,32 @@ Did not find winutils.exe: {}
 java.io.FileNotFoundException: java.io.FileNotFoundException: HADOOP_HOME and hadoop.home.dir are unset.
 ```
 
+- 5. 在项目的 `resources` 目录下新建 `log4j.properties` 文件, 修改日志级别为 `INFO` / `WARN` / `ERROR` 即可控制输出的日志:
+```properties
+log4j.rootCategory=WARN, console
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.target=System.err
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d{yy/MM/dd HH:mm:ss} %p %c{1}: %m%n
+
+# Set the default spark-shell log level to ERROR. When running the spark-shell, the
+# log level for this class is used to overwrite the root logger's log level, so that
+# the user can have different defaults for the shell and regular Spark apps.
+log4j.logger.org.apache.spark.repl.Main=ERROR
+
+# Settings to quiet third party logs that are too verbose
+log4j.logger.org.spark_project.jetty=ERROR
+log4j.logger.org.spark_project.jetty.util.component.AbstractLifeCycle=ERROR
+log4j.logger.org.apache.spark.repl.SparkIMain$exprTyper=ERROR
+log4j.logger.org.apache.spark.repl.SparkILoop$SparkILoopInterpreter=ERROR
+log4j.logger.org.apache.parquet=ERROR
+log4j.logger.parquet=ERROR
+
+# SPARK-9183: Settings to avoid annoying messages when looking up nonexistent UDFs in SparkSQL with Hive support
+log4j.logger.org.apache.hadoop.hive.metastore.RetryingHMSHandler=FATAL
+log4j.logger.org.apache.hadoop.hive.ql.exec.FunctionRegistry=ERROR
+```
+
 ---
 
 # 2. WordCount
