@@ -28,3 +28,4 @@
   - video
     - [尚硅谷2021迎新版大数据Spark从入门到精通](https://www.bilibili.com/video/BV11A411L7CK)
   - site
+    - [RDD Programming Guide](http://spark.apache.org/docs/latest/rdd-programming-guide.html)
