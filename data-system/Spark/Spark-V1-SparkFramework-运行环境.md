@@ -116,9 +116,13 @@ Pi is roughly 3.143311143311143
 
 # 3. 独立部署 (Standalone) 环境
 
+TODO
+
 ---
 
 # 4. YARN 环境
+
+TODO
 
 ---
 
