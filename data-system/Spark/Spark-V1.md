@@ -6,7 +6,7 @@
     - [SparkFramework-简介](https://github.com/zozospider/note/blob/master/data-system/Spark/Spark-V1-SparkFramework-简介.md)
     - [SparkFramework-快速上手](https://github.com/zozospider/note/blob/master/data-system/Spark/Spark-V1-SparkFramework-快速上手.md)
     - [SparkFramework-运行环境](https://github.com/zozospider/note/blob/master/data-system/Spark/Spark-V1-SparkFramework-运行环境.md)
-    - SparkFramework-核心组件
+    - [SparkFramework-核心概念](https://github.com/zozospider/note/blob/master/data-system/Spark/Spark-V1-SparkFramework-核心概念.md)
   - SparkCore
     - SparkCore-分布式计算模拟
     - SparkCore-核心编程

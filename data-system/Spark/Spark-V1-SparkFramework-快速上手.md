@@ -33,6 +33,7 @@ java.io.FileNotFoundException: java.io.FileNotFoundException: HADOOP_HOME and ha
 ```
 
 - 5. 在项目的 `resources` 目录下新建 `log4j.properties` 文件, 修改日志级别为 `INFO` / `WARN` / `ERROR` 即可控制输出的日志:
+
 ```properties
 log4j.rootCategory=WARN, console
 log4j.appender.console=org.apache.log4j.ConsoleAppender
