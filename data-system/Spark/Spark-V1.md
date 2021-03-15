@@ -9,7 +9,7 @@
     - [SparkFramework-核心概念](https://github.com/zozospider/note/blob/master/data-system/Spark/Spark-V1-SparkFramework-核心概念.md)
   - SparkCore
     - SparkCore-分布式计算模拟
-    - SparkCore-核心编程
+    - [SparkCore-核心编程](https://github.com/zozospider/note/blob/master/data-system/Spark/Spark-V1-SparkCore-核心编程.md)
     - SparkCore-案例实操
     - SparkCore-工程化代码
   - SparkKernelAndSourceCode
