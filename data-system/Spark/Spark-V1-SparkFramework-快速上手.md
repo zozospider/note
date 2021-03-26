@@ -21,6 +21,12 @@
 
 <dependency>
     <groupId>org.apache.spark</groupId>
+    <artifactId>spark-yarn_2.12</artifactId>
+    <version>3.1.1</version>
+</dependency>
+
+<dependency>
+    <groupId>org.apache.spark</groupId>
     <artifactId>spark-streaming_2.12</artifactId>
     <version>3.1.1</version>
 </dependency>
