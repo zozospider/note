@@ -19,6 +19,7 @@
     - SparkKernelAndSourceCode-shuffle
     - SparkKernelAndSourceCode-内存管理
   - SparkSQL
+    - [SparkSQL-核心编程](https://github.com/zozospider/note/blob/master/data-system/Spark/Spark-V1-SparkSQL-核心编程.md)
   - SparkStreaming
 
 - code
