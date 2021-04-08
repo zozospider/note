@@ -283,3 +283,74 @@ scala>
 ```
 
 ---
+
+# 数据读取与保存
+
+## load
+
+```bash
+# 读取 .parquet 格式
+scala> val df = spark.read.load("../examples/src/main/resources/users.parquet")
+df: org.apache.spark.sql.DataFrame = [name: string, favorite_color: string ... 1 more field]
+
+scala> df.show
++------+--------------+----------------+
+|  name|favorite_color|favorite_numbers|
++------+--------------+----------------+
+|Alyssa|          null|  [3, 9, 15, 20]|
+|   Ben|           red|              []|
++------+--------------+----------------+
+
+# 保存 .parquet 格式
+scala> df.write.save("../data/test-sparksql/users.parquet.output")
+
+# ------
+
+# 读取 json 格式
+# scala> val df = spark.read.json("../data/test-sparksql/user.json")
+scala> val df = spark.read.format("json").load("../data/test-sparksql/user.json")
+df: org.apache.spark.sql.DataFrame = [age: bigint, username: string]
+
+scala> df.show
++---+--------+
+|age|username|
++---+--------+
+| 30|zhangsan|
+| 20|    lisi|
+| 40|  wangwu|
++---+--------+
+
+scala> spark.sql("select * from json.`../data/test-sparksql/user.json`").show
++---+--------+
+|age|username|
++---+--------+
+| 30|zhangsan|
+| 20|    lisi|
+| 40|  wangwu|
++---+--------+
+
+# 保存 json 文件
+scala> df.write.format("json").save("../data/test-sparksql/user.json.output")
+# 保存多个 json 文件到同一个目录下
+df.write.format("json").mode("append").save("../data/test-sparksql/user.json.output")
+# 清空原来目录下的内容, 生成一个新的 json 文件
+scala> df.write.format("json").mode("overwrite").save("../data/test-sparksql/user.json.output")
+# 如果目录存在则忽略, 不存在则生成一个新的 json 文件
+scala> df.write.format("json").mode("ignore").save("../data/test-sparksql/user.json.output")
+
+# ------
+
+# 读取 csv
+scala> val df = spark.read.format("csv").option("sep", ";").option("inferSchema", "true").option("header", "true").load("../examples/src/main/resources/people.csv")
+df: org.apache.spark.sql.DataFrame = [name: string, age: int ... 1 more field]
+
+scala> df.show
++-----+---+---------+
+| name|age|      job|
++-----+---+---------+
+|Jorge| 30|Developer|
+|  Bob| 32|Developer|
++-----+---+---------+
+```
+
+---
