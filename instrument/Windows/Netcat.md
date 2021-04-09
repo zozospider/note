@@ -12,7 +12,7 @@
 
 下载地址 https://eternallybored.org/misc/netcat/
 
-2. 解压
+2. 解压到目录: D:\zz\other\software\netcat-win32-1.12
 
 3. cmd 运行命令, 即可向本地的 9999 端口发送数据
 
