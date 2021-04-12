@@ -31,6 +31,13 @@ source ~/.bash_profile
 yum -y install tree
 ```
 
+# 安装 netcat
+
+在 root 用户下运行如下命令:
+```
+yum install nc
+```
+
 # Python
 
 

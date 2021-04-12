@@ -192,3 +192,13 @@ spiderxmac:note-hadoop-video1 zoz$
 - [IDEA 多线程Debug (所有断点都必须是 Thread 类型)](https://blog.csdn.net/u011781521/article/details/79251819)
 
 ---
+
+# 本地运行 main() 方法带参数
+
+1. 配置:
+
+Run -> Edit Configurations -> Program arguments -> 填写参数如: `--hostname localhost --port 7777` -> OK
+
+2. 运行
+
+Run - Run xxx
