@@ -25,4 +25,11 @@
     <artifactId>flink-clients_2.12</artifactId>
     <version>1.12.2</version>
 </dependency>
+
+<!-- https://mvnrepository.com/artifact/org.apache.flink/flink-connector-kafka -->
+<dependency>
+    <groupId>org.apache.flink</groupId>
+    <artifactId>flink-connector-kafka_2.12</artifactId>
+    <version>1.12.2</version>
+</dependency>
 ```
