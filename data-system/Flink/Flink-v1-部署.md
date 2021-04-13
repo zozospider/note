@@ -93,7 +93,7 @@ Maven -> Lifecycle -> compile & package, 打包后的 jar 包在 target/flink-v1
 
 2. 上传 Jar:
 
-- a. 浏览器访问http://111.230.233.137:8081/
+- a. 浏览器访问 http://111.230.233.137:8081/
 - b. Submit New Job
 - c. Uploaded Jars -> Add New -> 上传 Jar
 
