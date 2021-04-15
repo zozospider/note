@@ -33,8 +33,22 @@
     <version>1.12.2</version>
 </dependency>
 
+<!-- https://mvnrepository.com/artifact/org.apache.flink/flink-connector-elasticsearch-base -->
+<dependency>
+    <groupId>org.apache.flink</groupId>
+    <artifactId>flink-connector-elasticsearch-base_2.12</artifactId>
+    <version>1.12.2</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.apache.flink/flink-connector-jdbc -->
+<dependency>
+    <groupId>org.apache.flink</groupId>
+    <artifactId>flink-connector-jdbc_2.12</artifactId>
+    <version>1.12.2</version>
+</dependency>
+
 <!-- https://mvnrepository.com/artifact/org.apache.bahir/flink-connector-redis -->
-<!-- 目前还没有 scala 2.12 的版本, 不过影响不大, 将就用 -->
+<!-- 目前还没有 scala 2.12 的版本, 影响就是引用的某些 Flink 的类会出现两个相同的, 一个是在 2.12 的包里, 另一个是在 2.11 的包里, 所以不推荐使用 -->
 <dependency>
     <groupId>org.apache.bahir</groupId>
     <artifactId>flink-connector-redis_2.11</artifactId>
