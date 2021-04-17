@@ -41,6 +41,8 @@
 
 * [../Zookeeper-video](https://github.com/zozospider/note/blob/master/distributed/ZooKeeper/ZooKeeper-video.md)
 
+* [ZooKeeper-cli: the ZooKeeper command line interface](https://zookeeper.apache.org/doc/r3.6.3/zookeeperCLI.html)
+
 ---
 
 # ZooKeeper 常用命令行操作
@@ -96,7 +98,10 @@ numChildren = 1
 
 ## get 命令
 
-`get`: 当前节点的数据。
+`get` / `get -s`: 当前节点的数据。
+
+tips: 新版本中 `get` 只返回节点保存的数据, `get -s` 返回所有信息.
+
 * cZxid: 为节点分配的 id。
 * ctime: 创建时间。
 * mZxid: 修改后的节点分配的 id。
