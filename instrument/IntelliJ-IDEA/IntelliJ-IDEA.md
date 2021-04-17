@@ -52,6 +52,10 @@ Windows 上代码提示默认的 `ctrl + space` 快捷键被切换输入法占�
 mvn dependency:resolve -Dclassifier=sources
 ```
 
+# maven 无法导入, 没反应
+
+如果是导入旧版本的包没有任何反应还报错, 但是在 https://mvnrepository.com/ 中又能搜到此版本, 可能是国内镜像未收集此版本, 尝试将 idea 配置的 MAVEN_HOME/conf/setting.xml 中的镜像去掉, 用默认的 MAVEN 主机地址重新导入
+
 # 文件编码
 
 默认采用系统默认编码，修改方式为：
