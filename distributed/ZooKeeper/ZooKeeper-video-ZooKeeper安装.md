@@ -33,12 +33,15 @@ echo 3 > /home/zozo/app/zookeeper/zookeeper-3.4.13-data/myid
 
 ## ./conf/zoo.cfg 配置
 
+其他配置如 `snapCount`, `commitLogCount` 等参考: https://zookeeper.apache.org/doc/r3.6.3/zookeeperAdmin.html
+
 * `tickTime`: 用于计算时间的单元，其他配置为该数值的整数倍。如 session 超时：N * tickTime。
 * `initLimit`: 用于集群，从节点连接并同步到 Master 节点的初始化连接时间（tickTime 的倍数）。
 * `syncLimit`: 用于集群，Master 节点与从节点之间发送消息，请求和应答的时间长度（心跳机制）（tickTime 的倍数）。
 * `dataDir`: 数据目录。
 * `dataLogDir`: 日志目录，默认和 dataDir 共享。
 * `clientPort`: 连接服务器的端口，默认 2181。
+* `snapCount`: 多少次事务请求生成一个快照文件
 
 ```properties
 # The number of milliseconds of each tick
@@ -59,6 +62,9 @@ clientPort=2181
 # the maximum number of client connections.
 # increase this if you need to handle more clients
 #maxClientCnxns=60
+
+snapCount=10
+
 #
 # Be sure to read the maintenance section of the 
 # administrator guide before turning on autopurge.
@@ -72,6 +78,8 @@ clientPort=2181
 #autopurge.purgeInterval=1
 
 # 伪分布式需要修改端口, 防止冲突
+# 2888: 服务期间数据通信接口
+# 3888: Leader 选举通信接口
 server.1=vm017:2888:3888
 server.2=vm06:2888:3888
 server.3=vm03:2888:3888
