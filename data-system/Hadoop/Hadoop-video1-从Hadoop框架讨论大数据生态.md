@@ -106,10 +106,14 @@
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/data-system/Hadoop/Hadoop-video1-从Hadoop框架讨论大数据生态/大数据技术生态体系.PNG)
 
+![image](https://raw.githubusercontent.com/zozospider/note/master/data-system/Hadoop/Hadoop-video1-从Hadoop框架讨论大数据生态/大数据技术生态体系-3v.PNG)
+
 ---
 
 # 推荐系统框架图
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/data-system/Hadoop/Hadoop-video1-从Hadoop框架讨论大数据生态/推荐系统项目架构.PNG)
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/data-system/Hadoop/Hadoop-video1-从Hadoop框架讨论大数据生态/推荐系统项目架构-3v.PNG)
 
 ---
