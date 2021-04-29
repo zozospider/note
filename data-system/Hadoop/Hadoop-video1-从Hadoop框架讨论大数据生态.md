@@ -92,6 +92,8 @@
 - __Map 阶段__: 并行处理输入数据.
 - __Reduce 阶段__: 对 Map 结果进行汇总.
 
+![image](https://raw.githubusercontent.com/zozospider/note/master/data-system/Hadoop/Hadoop-video1-从Hadoop框架讨论大数据生态/MapReduce架构-3v.png)
+
 ---
 
 # 大数据技术生态体系
