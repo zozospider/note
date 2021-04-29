@@ -96,6 +96,12 @@
 
 ---
 
+# HDFS YARN MapReduce 三者之间的关系
+
+![image](https://raw.githubusercontent.com/zozospider/note/master/data-system/Hadoop/Hadoop-video1-从Hadoop框架讨论大数据生态/HDFS-YARN-MapReduce关系-3v.png)
+
+---
+
 # 大数据技术生态体系
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/data-system/Hadoop/Hadoop-video1-从Hadoop框架讨论大数据生态/大数据技术生态体系.PNG)
