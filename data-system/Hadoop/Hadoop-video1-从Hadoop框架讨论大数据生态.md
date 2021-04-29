@@ -79,6 +79,8 @@
 
 ![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-从Hadoop框架讨论大数据生态/YARN架构.png)
 
+![image](https://github.com/zozospider/note/blob/master/data-system/Hadoop/Hadoop-video1-从Hadoop框架讨论大数据生态/YARN架构-3v.png)
+
 以下为官网图片:
 
 ![image](https://raw.githubusercontent.com/zozospider/note/master/data-system/Hadoop/Hadoop-video1-从Hadoop框架讨论大数据生态/yarn_architecture.gif)
