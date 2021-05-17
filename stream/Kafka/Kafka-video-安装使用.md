@@ -154,50 +154,45 @@ fi
 
 
 # 查看所有分区
-bin/kafka-topics.sh --list --zookeeper vm017:2181
 bin/kafka-topics.sh --list --zookeeper vm017:2181/kafka_v0
 # 删除一个分区
-bin/kafka-topics.sh --delete --zookeeper vm017:2181 --topic topic1
-bin/kafka-topics.sh --delete --zookeeper vm017:2181/kafka_v0 --topic topic1
+bin/kafka-topics.sh --delete --topic topic1 --zookeeper vm017:2181/kafka_v0
 # 创建一个分区
-bin/kafka-topics.sh --create --zookeeper vm017:2181 --partitions 3 --replication-factor 2 --topic topic1
-bin/kafka-topics.sh --create --zookeeper vm017:2181/kafka_v0 --partitions 3 --replication-factor 2 --topic topic1
+bin/kafka-topics.sh --create --partitions 3 --replication-factor 2 --topic topic1 --zookeeper vm017:2181/kafka_v0
+bin/kafka-topics.sh --create --partitions 3 --replication-factor 2 --topic topic1 --bootstrap-server vm017:9092
 # 查看一个分区
-bin/kafka-topics.sh --describe --zookeeper vm017:2181 --topic topic1
-bin/kafka-topics.sh --describe --zookeeper vm017:2181/kafka_v0 --topic topic1
+bin/kafka-topics.sh --describe --topic topic1 --zookeeper vm017:2181/kafka_v0
+bin/kafka-topics.sh --describe --topic topic1 --bootstrap-server localhost:9092
 
 # 查看所有消费者组
-bin/kafka-consumer-groups.sh --bootstrap-server vm017:9092 --list
+bin/kafka-consumer-groups.sh --list --bootstrap-server vm017:9092
 # 查看一个消费者组
-bin/kafka-consumer-groups.sh --bootstrap-server vm017:9092 --describe --group group1
+bin/kafka-consumer-groups.sh --describe --group group1 --bootstrap-server vm017:9092
 # 查看消费情况
-bin/kafka-consumer-offset-checker.sh --zookeeper vm017:2181 --group group1
-bin/kafka-consumer-offset-checker.sh --zookeeper vm017:2181/kafka_v0 --group group1
+bin/kafka-consumer-offset-checker.sh --group group1 --zookeeper vm017:2181/kafka_v0
 # 查看消费者组中所有活动成员列表和分配的分区
-bin/kafka-consumer-groups.sh --bootstrap-server vm017:9092 --describe --group group1 --members --verbose
-bin/kafka-consumer-groups.sh --bootstrap-server vm017:9092 --describe --group group1 --state
+bin/kafka-consumer-groups.sh --describe --group group1 --members --verbose --bootstrap-server vm017:9092
+bin/kafka-consumer-groups.sh --describe --group group1 --state --bootstrap-server vm017:9092
 # 删除消费者组
-bin/kafka-consumer-groups.sh --bootstrap-server vm017:9092 --delete --group group1 --group group2
+bin/kafka-consumer-groups.sh --delete --group group1 --group group2 --bootstrap-server vm017:9092
 
 # 控制台生产数据
-bin/kafka-console-producer.sh --broker-list vm017:9092 --topic topic1
+bin/kafka-console-producer.sh --topic topic1 --broker-list vm017:9092
 # 控制台消费数据 (new)
-bin/kafka-console-consumer.sh --bootstrap-server vm017:9092 --topic topic1 --from-beginning
-# 控制台消费数据 (new) (指定消费者组)
-bin/kafka-console-consumer.sh --bootstrap-server vm017:9092 --topic topic1 --from-beginning --consumer.config config/consumer.properties
+bin/kafka-console-consumer.sh --topic topic1 --from-beginning --bootstrap-server vm017:9092
+# 控制台消费数据 (new - 指定消费者组)
+bin/kafka-console-consumer.sh --topic topic1 --from-beginning --consumer.config config/consumer.properties --bootstrap-server vm017:9092
 
 # 控制台消费数据 (old)
-bin/kafka-console-consumer.sh --zookeeper vm017:2181 --topic topic1 --from-beginning
-bin/kafka-console-consumer.sh --zookeeper vm017:2181/kafka_v0 --topic topic1 --from-beginning
+bin/kafka-console-consumer.sh --topic topic1 --from-beginning --zookeeper vm017:2181/kafka_v0
 # 控制台消费数据 (old) (指定消费者组)
-bin/kafka-console-consumer.sh --zookeeper vm017:2181 --topic topic1 --from-beginning --consumer.config config/consumer.properties
-bin/kafka-console-consumer.sh --zookeeper vm017:2181/kafka_v0 --topic topic1 --from-beginning --consumer.config config/consumer.properties
+bin/kafka-console-consumer.sh --topic topic1 --from-beginning --consumer.config config/consumer.properties --zookeeper vm017:2181/kafka_v0
 
 # 配额: http://kafka.apache.org/documentation/#quotas
 # 为 (user = user1, client-id = clientA) 配置自定义配额:
-bin/kafka-configs.sh  --zookeeper localhost:2181 --alter --add-config 'producer_byte_rate=1024,consumer_byte_rate=2048,request_percentage=200' --entity-type users --entity-name user1 --entity-type clients --entity-name clientA
+bin/kafka-configs.sh --alter --add-config 'producer_byte_rate=1024,consumer_byte_rate=2048,request_percentage=200' --entity-type users --entity-name user1 --entity-type clients --entity-name clientA --zookeeper localhost:2181
 # 为 user = user1 配置自定义配额:
-bin/kafka-configs.sh  --zookeeper localhost:2181 --alter --add-config 'producer_byte_rate=1024,consumer_byte_rate=2048,request_percentage=200' --entity-type users --entity-name user1
+bin/kafka-configs.sh --alter --add-config 'producer_byte_rate=1024,consumer_byte_rate=2048,request_percentage=200' --entity-type users --entity-name user1 --zookeeper localhost:2181
 
 # 监控
 bin/kafka-run-class.sh kafka.tools.JmxTool --help
@@ -263,7 +258,7 @@ first
 
 运行如下命令创建一个名为 first 的 Topic, 设置 3 个 partition 分区, 2 个 replication-factor 副本因子:
 ```
-[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --create --zookeeper 172.16.0.6:2181 --partitions 3 --replication-factor 2 --topic first
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --create --partitions 3 --replication-factor 2 --topic first --zookeeper 172.16.0.6:2181
 Created topic "first".
 ```
 
@@ -368,7 +363,7 @@ logs
 
 执行如下命令查看名为 `first` 的 Topic 信息:
 ```
-[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --describe --zookeeper 172.16.0.6:2181 --topic first
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --describe --topic first --zookeeper 172.16.0.6:2181
 Topic:first	PartitionCount:3	ReplicationFactor:2	Configs:
 	Topic: first	Partition: 0	Leader: 3	Replicas: 3,1	Isr: 3,1
 	Topic: first	Partition: 1	Leader: 1	Replicas: 1,2	Isr: 1,2
@@ -391,7 +386,7 @@ Topic:first	PartitionCount:3	ReplicationFactor:2	Configs:
 [zozo@VM_0_3_centos kafka_2.12-2.1.0]$ jps
 26003 Jps
 23850 QuorumPeerMain
-[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --describe --zookeeper 172.16.0.6:2181 --topic first
+[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --describe --topic first --zookeeper 172.16.0.6:2181
 Topic:first	PartitionCount:3	ReplicationFactor:2	Configs:
 	Topic: first	Partition: 0	Leader: 1	Replicas: 3,1	Isr: 1
 	Topic: first	Partition: 1	Leader: 1	Replicas: 1,2	Isr: 1,2
@@ -408,7 +403,7 @@ Topic:first	PartitionCount:3	ReplicationFactor:2	Configs:
 26771 Jps
 23850 QuorumPeerMain
 26731 Kafka
-[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --describe --zookeeper 172.16.0.6:2181 --topic first
+[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --describe --topic first --zookeeper 172.16.0.6:2181
 Topic:first	PartitionCount:3	ReplicationFactor:2	Configs:
 	Topic: first	Partition: 0	Leader: 1	Replicas: 3,1	Isr: 1,3
 	Topic: first	Partition: 1	Leader: 1	Replicas: 1,2	Isr: 1,2
@@ -431,9 +426,9 @@ Topic:first	PartitionCount:3	ReplicationFactor:2	Configs:
 
 - 创建 Topic 时, 当指定的 Partition 数量大于 Broker 机器数量时, 可以创建成功, 如下:
 ```
-[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --create --zookeeper 172.16.0.6:2181 --partitions 4 --replication-factor 2 --topic second
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --create --partitions 4 --replication-factor 2 --topic second --zookeeper 172.16.0.6:2181
 Created topic "second".
-[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --describe --zookeeper 172.16.0.6:2181 --topic second
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --describe --topic second --zookeeper 172.16.0.6:2181
 Topic:second	PartitionCount:4	ReplicationFactor:2	Configs:
 	Topic: second	Partition: 0	Leader: 2	Replicas: 2,1	Isr: 2,1
 	Topic: second	Partition: 1	Leader: 3	Replicas: 3,2	Isr: 3,2
@@ -445,7 +440,7 @@ Topic:second	PartitionCount:4	ReplicationFactor:2	Configs:
 
 - 创建 Topic 时, 当指定的 replication-factor 数量大于 Broker 机器数量时, 会创建失败, 如下:
 ```
-[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --create --zookeeper 172.16.0.6:2181 --partitions 3 --replication-factor 4 --topic third
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --create --partitions 3 --replication-factor 4 --topic third --zookeeper 172.16.0.6:2181
 Error while executing topic command : Replication factor: 4 larger than available brokers: 3.
 [2019-02-26 21:14:46,048] ERROR org.apache.kafka.common.errors.InvalidReplicationFactorException: Replication factor: 4 larger than available brokers: 3.
  (kafka.admin.TopicCommand$)
@@ -457,7 +452,7 @@ Error while executing topic command : Replication factor: 4 larger than availabl
 
 运行如下命令删除名为 `first` 的 Topic:
 ```
-[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --zookeeper 172.16.0.6:2181 --delete --topic first
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-topics.sh --delete --topic first --zookeeper 172.16.0.6:2181
 Topic first is marked for deletion.
 Note: This will have no impact if delete.topic.enable is not set to true.
 ```
@@ -491,7 +486,7 @@ logs
 
 通过连接 kafka 的 broker 进行生产:
 ```
-[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ bin/kafka-console-producer.sh --broker-list 172.16.0.6:9092 --topic first
+[zozo@VM_0_3_centos kafka_2.12-2.1.0]$ bin/kafka-console-producer.sh --topic first --broker-list 172.16.0.6:9092
 >hello
 >why
 ```
@@ -500,7 +495,7 @@ logs
 
 通过连接 kafka 的 server 进行消费, 其中, `--from-beginning` 表示从头开始读:
 ```
-[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-console-consumer.sh --bootstrap-server 172.16.0.6:9092 --topic first --from-beginning
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-console-consumer.sh --topic first --from-beginning --bootstrap-server 172.16.0.6:9092
 hello
 why
 ```
@@ -558,7 +553,7 @@ drwxrwxr-x 2 zozo zozo   4096 2月  26 21:12 second-3
 
 通过连接 ZooKeeper 进行消费 (新版本已废除, 会报如下错误):
 ```
-[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-console-consumer.sh --zookeeper 172.16.0.6:2181 --topic first --from-beginning
+[zozo@VM_0_6_centos kafka_2.12-2.1.0]$ bin/kafka-console-consumer.sh --topic first --from-beginning --zookeeper 172.16.0.6:2181
 zookeeper is not a recognized option
 Option                                   Description
 ------                                   -----------
