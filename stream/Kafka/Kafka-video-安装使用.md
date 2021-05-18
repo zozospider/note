@@ -155,8 +155,10 @@ fi
 
 # 查看所有分区
 bin/kafka-topics.sh --list --zookeeper vm017:2181/kafka_v0
+bin/kafka-topics.sh --list --bootstrap-server vm017:9092
 # 删除一个分区
 bin/kafka-topics.sh --delete --topic topic1 --zookeeper vm017:2181/kafka_v0
+bin/kafka-topics.sh --delete --topic topic1 --bootstrap-server vm017:9092
 # 创建一个分区
 bin/kafka-topics.sh --create --partitions 3 --replication-factor 2 --topic topic1 --zookeeper vm017:2181/kafka_v0
 bin/kafka-topics.sh --create --partitions 3 --replication-factor 2 --topic topic1 --bootstrap-server vm017:9092
@@ -165,6 +167,7 @@ bin/kafka-topics.sh --describe --topic topic1 --zookeeper vm017:2181/kafka_v0
 bin/kafka-topics.sh --describe --topic topic1 --bootstrap-server localhost:9092
 
 # 查看所有消费者组
+bin/kafka-consumer-groups.sh --list --zookeeper vm017:2181/kafka_v0
 bin/kafka-consumer-groups.sh --list --bootstrap-server vm017:9092
 # 查看一个消费者组
 bin/kafka-consumer-groups.sh --describe --group group1 --bootstrap-server vm017:9092
