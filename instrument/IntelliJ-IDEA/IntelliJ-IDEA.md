@@ -51,6 +51,8 @@ Windows 上代码提示默认的 `ctrl + space` 快捷键被切换输入法占�
 ```
 mvn dependency:resolve -Dclassifier=sources
 ```
+或者尝试更改 Maven 版本试试
+
 
 # maven 无法导入, 没反应
 
